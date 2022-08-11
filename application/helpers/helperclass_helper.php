@@ -7,4 +7,7 @@ class HelperClass{
     const prefix = 'STU-0000';
     const imgPrefix = 'IMG-';
     const uploadImgDir = 'assets/uploads/';
+
+
+
 }

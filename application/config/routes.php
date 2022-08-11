@@ -13,12 +13,19 @@ $studentRoutesArr = [
     'list',
     'addStudent',
     'saveStudent',
+    'updateStudent',
 ];
 
 foreach($studentRoutesArr as $stRoute)
 {
     $route[$baseStudent.$stRoute] = "StudentController"."/".$stRoute;
 }
+
+// get routes of student
+
+$route[$baseStudent."viewStudent/(:any)"] = "StudentController/viewStudent/$1";
+$route[$baseStudent."editStudent/(:any)"] = "StudentController/editStudent/$1";
+$route[$baseStudent."deleteStudent/(:any)"] = "StudentController/deleteStudent/$1";
 
 // Ajax routes
 $baseAjax = 'ajax/';

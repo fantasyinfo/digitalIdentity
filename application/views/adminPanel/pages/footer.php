@@ -34,34 +34,6 @@
 <script src="<?= base_url() .$data['adminPanelUrl']?>dist/js/adminlte.js"></script>
 <!-- Custom Logic -->
 <script src="<?= base_url() .$data['adminPanelUrl']?>dist/js/custom.js"></script>
-<script>
-  console.log(ajaxUrl);
- 
-    var dataTableAjax = $("#listDatatable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      dom: 'Bfrtip',
-        buttons: [
-            'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
-        ],
-        serverSide: true,
-        searching: true,
-        ajax : {
-          method: 'post',
-          url: ajaxUrl,
-          data : '',
-          error: function ()
-          {
-            console.log('something went wrong.');
-          }
-        }
-    });
 
-
-  dataTableAjax.draw();
-</script>
 </body>
 </html>

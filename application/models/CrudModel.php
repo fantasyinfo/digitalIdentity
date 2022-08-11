@@ -11,13 +11,7 @@ class CrudModel extends CI_Model
 		$this->load->database();
 	}
 
-  /**
-     * insert function
-     *
-     * @param string $tableName enter table name
-     * @param array $params paramertsers in array with key value pairs
-     * @return void return the true or false
-     */
+
     public function insert($tableName = "", $params = array())
     {
         if (!empty($tableName) && !empty($params)) {
@@ -46,6 +40,33 @@ class CrudModel extends CI_Model
         }
     }
 
+    public function update($tableName, $params,$stuId)
+    {
+        if (!empty($tableName) && !empty($params) && !empty($stuId)) {
+
+            $this->tableName    = $tableName;
+            $this->student_id   = $stuId;
+
+            $keys               = array_keys($params);
+            $values             = array_values($params);
+
+            $combine = "";
+            for ($i = 0; $i < count($params); $i++) {
+                $combine .= "$keys[$i] = " . "'$values[$i]'" . " , ";
+            }
+            $combine = rtrim($combine, ' , ');
+
+            $sql = 'UPDATE ' . $this->tableName . ' SET ' . $combine . ' WHERE id = ' . $this->student_id . ' ';
+            if($this->db->query($sql))
+            {
+                return true;
+            }else 
+            {
+                return false;
+            }
+            
+        }
+    }
 
     public function getUserId()
     {
@@ -57,8 +78,7 @@ class CrudModel extends CI_Model
 
     public function uploadImg(array $file,$id = '')
     {
-       // print_r($file);
-        // Set preference 
+       
         $errors= array();
         $file_name = HelperClass::imgPrefix . $id ."-".$file['image']['name'];
         $file_size =$file['image']['size'];
@@ -88,211 +108,177 @@ class CrudModel extends CI_Model
     }
 
 
-
-    /**
-     * udpate student function
-     *
-     * @param string $tableName
-     * @param array $params
-     * @param string $student_id
-     * @return void
-     */
-    public function update($tableName = "", $params = array(), $student_id = "")
+    public function showAllStudents($tableName,$data = '')
     {
-        if (!empty($tableName) && !empty($params) && !empty($student_id)) {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+            $condition = '';
 
-
-            $this->tableName    = $tableName;
-            $this->student_id   = $student_id;
-
-            $keys               = array_keys($params);
-            $values             = array_values($params);
-
-
-            $combine = "";
-            for ($i = 0; $i < count($params); $i++) {
-                $combine .= "$keys[$i] = " . "'$values[$i]'" . " , ";
-            }
-            $combine = rtrim($combine, ' , ');
-
-
-            $sql = 'UPDATE ' . $this->tableName . ' SET ' . $combine . ' WHERE _id = ' . $this->student_id . ' ';
-
-            if ($this->conn->exec($sql)) {
-                $data   = array();
-                $sql    = "SELECT * FROM $this->tableName WHERE _id = $this->student_id";
-                $stmt   = $this->conn->query($sql);
-                if ($stmt->execute()) {
-                    $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                    $row                    = $stmt->fetch();
-                    $newArr['_id']          = $row['_id'];
-                    $newArr['_name']        = $row['_name'];
-                    $newArr['_email_id']    = $row['_email_id'];
-                    $newArr['_created_at']  = date('d-m-Y', strtotime($row['_created_at']));
-                    array_push($data, $newArr);
+            if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
+            {
+                if(!empty($data['studentName']))
+                {
+                    $condition .= " AND s.name LIKE '%{$data['studentName']}%' ";
                 }
-                array_push($this->messageArr, $this->pushArr(200, 'Student Updated Successfully', $data));
-            } else {
-                array_push($this->messageArr, $this->pushArr(404, 'Student Not Updated! Error'));
+                if(!empty($data['studentClass']))
+                {
+                    $condition .= " AND c.className LIKE '%{$data['studentClass']}%' ";
+                }
+                if(!empty($data['studentMobile']))
+                {
+                    $condition .= " AND s.mobile = '{$data['studentMobile']}' ";
+                }
+                if(!empty($data['studentUserId']))
+                {
+                    $condition .= " AND s.user_id = '{$data['studentUserId']}' ";
+                }
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND s.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                }
+            
+                if(!empty($data['search']['value']))
+                {
+                    $condition .= " 
+                    OR s.name LIKE '%{$data['search']['value']}%' 
+                    OR c.className LIKE '%{$data['search']['value']}%' 
+                    OR s.mobile LIKE '%{$data['search']['value']}%' 
+                    OR s.user_id LIKE '%{$data['search']['value']}%' 
+                    ";
+                }
             }
-        }
+      
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+            }else
+            {
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+            }
+
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['user_id'];
+                $subArr[] = $d[$i]['mobile'];
+                $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'];
+
+                  if($d[$i]['status'] == 'Active')
+                    {
+                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
+                    }else{
+                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
+                    };
+
+                $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
+                $subArr[] = '
+                <a href="viewStudent/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
+                <a href="editStudent/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
+                <a href="deleteStudent/'.$d[$i]['id'].'" class="btn btn-danger" 
+                onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
+
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> count($sendArr),
+            "recordsFiltered"=> count($sendArr),
+            "data"=>$sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+        
     }
 
-    /**
-     * showAllStudents function
-     *
-     * @param string $tableName = table name to fetch all data
-     * @return void
-     */
-    public function showAllStudents($tableName = "")
+
+    public function singleStudent($tableName,$id)
     {
-        if (!empty($tableName)) {
-
-            $this->tableName = $tableName;
-
-            $sql             = 'SELECT * FROM ' . $this->tableName . '';
-            $stmt            = $this->conn->query($sql);
-            $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $totalResults    =  $stmt->rowCount();
-            $newArr          = array();
-            if ($totalResults > 0) {
-                while ($row     = $stmt->fetchAll()) {
-                    $newArr[]   = $row;
-                }
-                array_push($this->messageArr, $this->pushArr(200, 'Data Found Successfully', $newArr));
-            } else {
-                array_push($this->messageArr, $this->pushArr(404, 'Data Not Found! Error'));
-            }
-        }
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
     }
 
-
-    /**
-     * showing single data function
-     *
-     * @param string table name
-     * @param string student id
-     * @return void
-     */
-    public function showSingleStudent($tableName = "", $student_id = "")
+    public function viewSingleStudentAllData($tableName,$id)
     {
-        if (!empty($tableName)) {
-
-            $this->tableName    = $tableName;
-            $this->student_id   = $this->sanitizeInput($student_id);
-            $sql    = 'SELECT * FROM ' . $this->tableName . ' WHERE _id = ' . $this->student_id . '';
-            $stmt   = $this->conn->query($sql);
-            $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $totalResults =  $stmt->rowCount();
-            $newArr = array();
-            if ($totalResults > 0) {
-                while ($row     = $stmt->fetch()) {
-                    $newArr[]   = $row;
-                }
-                array_push($this->messageArr, $this->pushArr(200, 'Data Found Successfully', $newArr));
-            } else {
-                array_push($this->messageArr, $this->pushArr(404, 'Data Not Found! Error'));
-            }
-        }
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+        return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+        LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+        LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+        LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+        LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+        WHERE s.status != 0 AND s.id = {$id} ORDER BY s.id DESC LIMIT 1")->result_array();
     }
 
-    /**
-     * deleting the studend data function
-     *
-     * @param string table name
-     * @param string student id
-     * @return void
-     */
+    public function allClass($tableName)
+    {
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT id,className FROM " . $this->tableName)->result_array();
+    }
+    public function allSection($tableName)
+    {
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT id,sectionName FROM " . $this->tableName)->result_array();
+    }
+    public function allCity($tableName)
+    {
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT id,cityName FROM " . $this->tableName)->result_array();
+    }
+    public function allState($tableName)
+    {
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT id,stateName FROM " . $this->tableName)->result_array();
+    }
+
     public function deleteStudent($tableName = "", $student_id = "")
     {
         if (!empty($tableName)) {
             $this->tableName    = $tableName;
             $this->student_id   = $this->sanitizeInput($student_id);
-            $sql    = 'DELETE FROM ' . $this->tableName . ' WHERE _id = ' . $this->student_id . '';
-            $stmt   = $this->conn->query($sql);
-            if ($stmt->execute()) {
-                array_push($this->messageArr, $this->pushArr(200, 'Student Deleted Successfully'));
-            } else {
-                array_push($this->messageArr, $this->pushArr(404, 'Student Not Deleted!! Error'));
+            $sql    = 'DELETE FROM ' . $this->tableName . ' WHERE id = ' . $this->student_id . '';
+            if($this->db->query($sql))
+            {
+                return true;
+            }else 
+            {
+                return false;
             }
         }
     }
 
 
-    public function paginationResult($tableName = "", $limit = null)
-    {
-        $page = 1;
-        $offset = 0;
-        $this->tableName = $tableName;
-
-        $totalSTMT = $this->conn->prepare("SELECT * FROM $this->tableName");
-        $totalSTMT->execute();
-        $totalRecord = $totalSTMT->rowCount();
-        $totalPages = ceil($totalRecord / $limit);
-
-
-        if (isset($_GET['page'])) {
-            if ($_GET['page'] <= 1) {
-                $_GET['page'] = 1;
-            }
-
-            if ($_GET['page'] > $totalPages) {
-                $_GET['page'] = $totalPages;
-            }
-            $page = $this->sanitizeInput($_GET['page']);
-        }
-
-        $offset = ($page - 1) * $limit;
-
-        $sql = "SELECT * FROM $this->tableName ";
-
-        if ($limit != null) {
-            $sql .= " LIMIT $offset, $limit";
-        }
-
-
-        $stmt =  $this->conn->prepare($sql);
-        if ($stmt->execute()) {
-            $data =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-            array_push($this->messageArr, $this->pushArr(200, 'Data Found', $data));
-        } else {
-            array_push($this->messageArr, $this->pushArr(404, 'Data Not Found!! Error'));
-        }
-    }
-
-
-
-    /**
-     * showMessage function return the json object with message, 
-     *
-     * @return void
-     */
     public function showMessage()
     {
         echo json_encode($this->messageArr);
     }
 
-    /**
-     * sanitizing the cooming data from user function
-     *
-     * @param string / integer $input
-     * @return void
-     */
+ 
     public function sanitizeInput($input)
     {
         return htmlspecialchars(strip_tags(trim($input)));
     }
 
-    /**
-     * pushing the error or success msg with data and status code function
-     *
-     * @param string $code
-     * @param string $msg
-     * @param array $data (optional)
-     * @return void
-     */
+
     public function pushArr($code = "", $msg = "", $data = array())
     {
 
