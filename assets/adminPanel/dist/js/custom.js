@@ -98,10 +98,12 @@ $(document).ready(function(){
             'csvHtml5',
             'pdfHtml5'
         ],
-        lengthMenu: [50,100,500,1000,2000,5000,10000,50000,100000],
+        lengthMenu: [10,50,100,500,1000,2000,5000,10000,50000,100000],
+        pageLength: 10,
         processing: true,
         serverSide: true,
-        // searching: true,
+        searching: false,
+        paging: true,
         ajax : {
           method: 'post',
           url: ajaxUrlForStudentList,

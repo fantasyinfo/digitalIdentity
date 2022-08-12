@@ -27,12 +27,12 @@ class CrudModel extends CI_Model
             $keys   =  implode(', ', $keys);
             $values =  implode("','", $values);
 
-           $sql    = 'INSERT INTO ' . $this->tableName . ' (' . $keys . ') VALUES (' . "'$values'" . ') ';
+            $sql    = 'INSERT INTO ' . $this->tableName . ' (' . $keys . ') VALUES (' . "'$values'" . ') ';
           
             $this->db->query($sql);
             if($this->db->insert_id() != '')
             {
-                return true;
+                return $this->db->insert_id();
             }else 
             {
                 return false;
@@ -157,6 +157,12 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
                 WHERE s.status != 0 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
+                $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 $condition ORDER BY s.id DESC";
             }else
             {
                 $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
@@ -165,8 +171,17 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
                 WHERE s.status != 0 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 ORDER BY s.id DESC";
             }
 
+
+            $tCount = $this->db->query($countSql)->result_array();
 
             $sendArr = [];
             for($i=0;$i<count($d);$i++)
@@ -200,8 +215,8 @@ class CrudModel extends CI_Model
 
         $dataTableArr = [
             "draw"=> $data['draw'],
-            "recordsTotal"=> count($sendArr),
-            "recordsFiltered"=> count($sendArr),
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
             "data"=>$sendArr
         ];
 

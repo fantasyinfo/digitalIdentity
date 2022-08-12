@@ -6,4 +6,5 @@ class Table{
     const sectionTable = 'section';
     const cityTable = 'city';
     const stateTable = 'state';
+    const qrcodeTable = 'qrcode';
 }

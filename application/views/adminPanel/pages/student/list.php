@@ -70,6 +70,7 @@
           <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Showing All Students Data</h3>
+                <a href="<?=base_url('student/addStudent')?>" class="btn btn-primary ml-4">Add New Student</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">

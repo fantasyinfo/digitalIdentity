@@ -41,10 +41,36 @@ class StudentModel extends CI_Model
         $insertArr['image'] = $fileName;
       }
     
-
-        if($this->CrudModel->insert(Table::studentTable,$insertArr))
+        $insertId = $this->CrudModel->insert(Table::studentTable,$insertArr);
+        if($insertId)
         {
-            return true;
+          // insert qrcode data
+          $qrDataArr = [];
+          $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
+          $qrDataArr['uniqueValue'] = $insertArr['user_id'];
+          $qrDataArr['type'] = HelperClass::userType['Student'];
+          $qrDataArr['user_id'] = $insertId;
+
+          $qrInsertId = $this->CrudModel->insert(Table::qrcodeTable,$qrDataArr);
+          if($qrInsertId)
+          {
+            $updateArr['u_qr_id'] = $qrInsertId;
+            if($this->CrudModel->update(Table::studentTable,$updateArr,$insertId))
+            {
+              return true;
+            }else
+            {
+              echo $this->db->last_query();
+              die();
+              return false;
+            }
+          }else
+          {
+            echo $this->db->last_query();
+            die();
+            return false;
+          }
+         
         }else
         {
             return false;
