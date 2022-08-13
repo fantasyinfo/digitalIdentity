@@ -37,6 +37,9 @@ $(document).ready(function(){
             city: {
               required: true
             },
+            pincode: {
+              required: true
+            },
             roll_no: {
               required: true
             },
@@ -61,6 +64,7 @@ $(document).ready(function(){
             address: "Please add your address",
             state: "Please select your state",
             city: "Please select your city",
+            pincode: "Please enter pincode",
             image: "Please add student image",
             roll_no: "Please add roll no",
           },

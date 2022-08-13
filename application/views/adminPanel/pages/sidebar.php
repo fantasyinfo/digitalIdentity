@@ -35,8 +35,8 @@
           <li class="nav-header">STUDENTS</li>
          
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+            <a href="<?=base_url()?>student/list" class="nav-link">
+              <i class="nav-icon fa-solid fa-user"></i>
               <p>
                 Students
                 <i class="fas fa-angle-left right"></i>
@@ -44,23 +44,23 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/mailbox/mailbox.html" class="nav-link">
+                <a href="<?=base_url()?>student/list" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?=base_url()?>student/addStudent" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="pages/mailbox/compose.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Compose</p>
-                </a>
-              </li>
-              <li class="nav-item">
+             <!--  <li class="nav-item">
                 <a href="pages/mailbox/read-mail.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Read</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
  

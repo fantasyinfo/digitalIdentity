@@ -3,13 +3,14 @@
 class HelperClass
 {
     const brandName = 'Digitalfied';
-    const brandUrl = 'www.digitalfied.com';
+    const brandUrl = 'https://www.digitalfied.com';
 
-    const prefix = 'STU0000';
-    const imgPrefix = 'IMG-';
+    const prefix = 'stu0000';
+    const imgPrefix = 'img-';
     const uploadImgDir = 'assets/uploads/';
-    const qrcodeUrl = 'digitalfied.in';
-    const schoolPrefix = 'DVM-'; // Deep Vidya Mandir
+    const qrcodeUrl = 'https://qverify.in';
+    const schoolPrefix = 'dvm-'; // Deep Vidya Mandir
+    const fullPathQR = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix;
     const userType = [
         'Student' => '1',
         'Teacher' => '2',

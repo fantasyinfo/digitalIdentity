@@ -141,7 +141,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <div class="form-group">
                             <label for="address">Address</label>
                             <input type="text" name="address" class="form-control" id="address" value="<?=$sd['address'];?>">
@@ -195,6 +195,12 @@
                           }
                           ?>
                         </select>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" name="pincode" class="form-control" id="pincode" value="<?=$sd['pincode'];?>">
+                          </div>
                         </div>
                       </div>
                       

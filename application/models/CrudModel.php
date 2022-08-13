@@ -150,7 +150,7 @@ class CrudModel extends CI_Model
                 }
             }
       
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -165,7 +165,7 @@ class CrudModel extends CI_Model
                 WHERE s.status != 0 $condition ORDER BY s.id DESC";
             }else
             {
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -194,7 +194,7 @@ class CrudModel extends CI_Model
                 $subArr[] = $d[$i]['user_id'];
                 $subArr[] = $d[$i]['mobile'];
                 $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
-                $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'];
+                $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
 
                   if($d[$i]['status'] == 'Active')
                     {
@@ -230,6 +230,18 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         $this->tableName = $tableName;
        return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
+    }
+
+    public function showStudentProfile($tableName,$userId)
+    {
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+        return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+        LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+        LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+        LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+        LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+        WHERE s.status != 0 AND s.user_id = '{$userId}' ORDER BY s.id DESC LIMIT 1")->result_array();
     }
 
     public function viewSingleStudentAllData($tableName,$id)

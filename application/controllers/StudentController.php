@@ -77,6 +77,8 @@ class StudentController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/footer');
 	}
 
+	
+
 	public function saveStudent()
 	{
 		if (isset($_POST['submit'])) {

@@ -29,6 +29,7 @@ class StudentModel extends CI_Model
       $insertArr['address'] = $post['address'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['city_id'] = $post['city'];
+      $insertArr['pincode'] = $post['pincode'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['image'] = '';
 
@@ -96,6 +97,7 @@ class StudentModel extends CI_Model
       $insertArr['state_id'] = $post['state'];
       $insertArr['city_id'] = $post['city'];
       $insertArr['state_id'] = $post['state'];
+      $insertArr['pincode'] = $post['pincode'];
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 
@@ -130,6 +132,14 @@ class StudentModel extends CI_Model
     public function singleStudent($id)
     {
       return $this->CrudModel->singleStudent(Table::studentTable,$id);
+    }
+    public function showStudentProfile()
+    {
+        if(isset($_GET['stuid']))
+        {
+          $userId = explode(HelperClass::schoolPrefix,$_GET['stuid']);
+          return $this->CrudModel->showStudentProfile(Table::studentTable,$userId[1]);
+        }
     }
     public function viewSingleStudentAllData($id)
     {

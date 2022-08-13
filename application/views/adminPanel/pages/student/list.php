@@ -83,7 +83,7 @@
                     <th>User Id</th>
                     <th>Mobile</th>
                     <th>Class - Section</th>
-                    <th>State - City</th>
+                    <th>State - City - Pincode</th>
                     <th>Status</th>
                     <th>Date of Birth</th>
                     <th>Action</th>

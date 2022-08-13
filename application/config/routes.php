@@ -2,8 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
- $route['default_controller'] = 'AdminController';
-$route['/'] = 'AdminController/index';
+ $route['default_controller'] = 'FrontController';
+ $route['/'] = 'FrontController/index';
+ // front-end routes
+
+
+
+
+ // admin panel routes
+ $route['/adminPanel'] = 'AdminController/index';
 
 
 

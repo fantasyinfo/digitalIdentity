@@ -37,7 +37,7 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">All * Field Are Mandatory</h3>
+                  <h3 class="card-title">Add Correct Details</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -105,7 +105,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                             <label for="address">Address</label>
                             <input type="text" name="address" class="form-control" id="address" placeholder="Enter address">
@@ -140,6 +140,12 @@
                           }
                           ?>
                         </select>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" name="pincode" class="form-control" id="pincode" placeholder="Enter pincode">
+                          </div>
                         </div>
                       </div>
                   
