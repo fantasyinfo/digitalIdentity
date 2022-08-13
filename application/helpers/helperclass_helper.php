@@ -6,6 +6,7 @@ class HelperClass
     const brandUrl = 'https://www.digitalfied.com';
 
     const prefix = 'stu0000';
+    const tecPrefix = 'tec0000';
     const imgPrefix = 'img-';
     const uploadImgDir = 'assets/uploads/';
     const qrcodeUrl = 'https://qverify.in';

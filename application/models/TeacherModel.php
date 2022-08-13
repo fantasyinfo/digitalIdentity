@@ -1,6 +1,6 @@
 <?php
 
-class StudentModel extends CI_Model
+class TeacherModel extends CI_Model
 {
 
 	public function __construct()
@@ -9,23 +9,23 @@ class StudentModel extends CI_Model
     $this->load->model('CrudModel');
 	}
 
-    public function saveStudent(array $post,array $files = [])
+    public function saveTeacher(array $post,array $files = [])
     {
        
-
       $insertArr = [];
       $insertArr['u_qr_id'] = '';
       $insertArr['name'] = $post['name'];
-      $insertArr['user_id'] = $this->CrudModel->getUserId(Table::studentTable);
+      $insertArr['user_id'] = $this->CrudModel->getTeacherId(Table::teacherTable);
       $insertArr['class_id'] = $post['class'];
       $insertArr['section_id'] = $post['section'];
-      $insertArr['roll_no'] = $post['roll_no'];
       $insertArr['gender'] = $post['gender'];
       $insertArr['mother_name'] = $post['mother'];
       $insertArr['father_name'] = $post['father'];
       $insertArr['mobile'] = $post['mobile'];
+      $insertArr['password'] = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".rand(000000000,999999999)),0,6) ;
       $insertArr['email'] = $post['email'];
       $insertArr['dob'] = $post['dob'];
+      $insertArr['doj'] = $post['doj'];
       $insertArr['address'] = $post['address'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['city_id'] = $post['city'];
@@ -42,21 +42,21 @@ class StudentModel extends CI_Model
         $insertArr['image'] = $fileName;
       }
     
-        $insertId = $this->CrudModel->insert(Table::studentTable,$insertArr);
+        $insertId = $this->CrudModel->insert(Table::teacherTable,$insertArr);
         if($insertId)
         {
           // insert qrcode data
           $qrDataArr = [];
           $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
           $qrDataArr['uniqueValue'] = $insertArr['user_id'];
-          $qrDataArr['type'] = HelperClass::userType['Student'];
+          $qrDataArr['type'] = HelperClass::userType['Teacher'];
           $qrDataArr['user_id'] = $insertId;
 
           $qrInsertId = $this->CrudModel->insert(Table::qrcodeTable,$qrDataArr);
           if($qrInsertId)
           {
             $updateArr['u_qr_id'] = $qrInsertId;
-            if($this->CrudModel->update(Table::studentTable,$updateArr,$insertId))
+            if($this->CrudModel->update(Table::teacherTable,$updateArr,$insertId))
             {
               return true;
             }else
@@ -79,20 +79,20 @@ class StudentModel extends CI_Model
 
     }
 
-    public function updateStudent(array $post,array $files = [])
+    public function updateTeacher(array $post,array $files = [])
     {
     
       $insertArr = [];
       $insertArr['name'] = $post['name'];
       $insertArr['class_id'] = $post['class'];
       $insertArr['section_id'] = $post['section'];
-      $insertArr['roll_no'] = $post['roll_no'];
       $insertArr['gender'] = $post['gender'];
       $insertArr['mother_name'] = $post['mother'];
       $insertArr['father_name'] = $post['father'];
       $insertArr['mobile'] = $post['mobile'];
       $insertArr['email'] = $post['email'];
       $insertArr['dob'] = $post['dob'];
+      $insertArr['doj'] = $post['doj'];
       $insertArr['address'] = $post['address'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['city_id'] = $post['city'];
@@ -101,7 +101,7 @@ class StudentModel extends CI_Model
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 
-      $stuId = $post['stuId'];
+      $tecId = $post['tecId'];
 
       $fileName = "";
       if(!empty($files['image']['tmp_name']))
@@ -111,7 +111,7 @@ class StudentModel extends CI_Model
         $insertArr['image'] = $fileName;
       }
     
-        if($this->CrudModel->update(Table::studentTable,$insertArr,$stuId))
+        if($this->CrudModel->update(Table::teacherTable,$insertArr,$tecId))
         {
             return true;
         }else
@@ -121,34 +121,34 @@ class StudentModel extends CI_Model
 
     }
 
-    public function listStudents($post)
+    public function listTeacher($post)
     {
       if(isset($post))
       {
-       return $this->CrudModel->showAllStudents(Table::studentTable,$post);
+       return $this->CrudModel->showAllTeachers(Table::teacherTable,$post);
       }
     }
 
-    public function singleStudent($id)
+    public function singleTeacher($id)
     {
-      return $this->CrudModel->singleStudent(Table::studentTable,$id);
+      return $this->CrudModel->singleTeacher(Table::teacherTable,$id);
     }
-    public function showStudentProfile()
+    public function showTeacherProfile()
     {
         if(isset($_GET['stuid']))
         {
           $userId = explode(HelperClass::schoolPrefix,$_GET['stuid']);
-          return $this->CrudModel->showStudentProfile(Table::studentTable,$userId[1]);
+          return $this->CrudModel->showStudentProfile(Table::teacherTable,$userId[1]);
         }
     }
-    public function viewSingleStudentAllData($id)
+    public function viewSingleTeacherAllData($id)
     {
-      return $this->CrudModel->viewSingleStudentAllData(Table::studentTable,$id);
+      return $this->CrudModel->viewSingleStudentAllData(Table::teacherTable,$id);
     }
 
-    public function deleteStudent($id)
+    public function deleteTeacher($id)
     {
-      return $this->CrudModel->deleteStudent(Table::studentTable,$id);
+      return $this->CrudModel->deleteStudent(Table::teacherTable,$id);
     }
 
     public function allClass(){

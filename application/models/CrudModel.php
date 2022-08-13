@@ -68,13 +68,20 @@ class CrudModel extends CI_Model
         }
     }
 
-    public function getUserId()
+    public function getUserId($tableName)
     {
-        $dd = $this->db->query("SELECT user_id FROM " .Table::studentTable ." WHERE user_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
+        $this->tableName    = $tableName;
+        $dd = $this->db->query("SELECT user_id FROM " .$this->tableName ." WHERE user_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
         $id = explode(HelperClass::prefix,$dd[0]['user_id']);
         return HelperClass::prefix . ($id[1] + 1);
     }
-
+    public function getTeacherId($tableName)
+    {
+        $this->tableName    = $tableName;
+        $dd = $this->db->query("SELECT user_id FROM " .$this->tableName ." WHERE user_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
+        $id = explode(HelperClass::tecPrefix,$dd[0]['user_id']);
+        return HelperClass::tecPrefix . ($id[1] + 1);
+    }
 
     public function uploadImg(array $file,$id = '')
     {
@@ -223,9 +230,131 @@ class CrudModel extends CI_Model
         echo json_encode($dataTableArr);
         
     }
+    public function showAllTeachers($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+            $condition = '';
+
+            if(isset($data['teacherName']) || isset($data['teacherClass']) || isset($data['teacherMobile']) || isset($data['teacherUserId']) || isset($data['teacherFromDate']) || isset($data['teacherToDate']))
+            {
+                if(!empty($data['teacherName']))
+                {
+                    $condition .= " AND s.name LIKE '%{$data['teacherName']}%' ";
+                }
+                if(!empty($data['teacherClass']))
+                {
+                    $condition .= " AND c.className LIKE '%{$data['teacherClass']}%' ";
+                }
+                if(!empty($data['teacherMobile']))
+                {
+                    $condition .= " AND s.mobile = '{$data['teacherMobile']}' ";
+                }
+                if(!empty($data['teacherUserId']))
+                {
+                    $condition .= " AND s.user_id = '{$data['teacherUserId']}' ";
+                }
+                if(!empty($data['teacherFromDate']) && !empty($data['teacherToDate']))
+                {
+                    $condition .= " AND s.created_at BETWEEN '{$data['teacherFromDate']}' AND  '{$data['teacherToDate']}' ";
+                }
+            
+                if(!empty($data['search']['value']))
+                {
+                    $condition .= " 
+                    OR s.name LIKE '%{$data['search']['value']}%' 
+                    OR c.className LIKE '%{$data['search']['value']}%' 
+                    OR s.mobile LIKE '%{$data['search']['value']}%' 
+                    OR s.user_id LIKE '%{$data['search']['value']}%' 
+                    ";
+                }
+            }
+      
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 $condition ORDER BY s.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 0 ORDER BY s.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['user_id'];
+                $subArr[] = $d[$i]['mobile'];
+                $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
+
+                  if($d[$i]['status'] == 'Active')
+                    {
+                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
+                    }else{
+                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
+                    };
+
+                $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
+                $subArr[] = '
+                <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
+                <a href="editTeacher/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
+                <a href="deleteTeacher/'.$d[$i]['id'].'" class="btn btn-danger" 
+                onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
+
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
 
 
     public function singleStudent($tableName,$id)
+    {
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
+    }
+
+    public function singleTeacher($tableName,$id)
     {
         $dir = base_url().HelperClass::uploadImgDir;
         $this->tableName = $tableName;

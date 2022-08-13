@@ -22,7 +22,7 @@ class StudentController extends CI_Controller
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'list');
-		$this->load->view($this->viewDir . 'pages/footer');
+		//$this->load->view($this->viewDir . 'pages/footer');
 	}
 
 	public function addStudent()
@@ -102,9 +102,13 @@ class StudentController extends CI_Controller
 	public function deleteStudent($id)
 	{
 		$studentData = $this->StudentModel->singleStudent($id);
-		if ($this->StudentModel->deleteStudent($id)) {
-			$dir = HelperClass::uploadImgDir . @$studentData[0]['image'];
+	
+		$exp = explode(HelperClass::uploadImgDir,@$studentData[0]['image']);
+			$dir = $_SERVER['DOCUMENT_ROOT'].'/'.HelperClass::uploadImgDir . @$exp[1];
 			unlink(@$dir);
+			die();
+		if ($this->StudentModel->deleteStudent($id)) {
+			
 			$this->list();
 		} else {
 			$this->addStudent();

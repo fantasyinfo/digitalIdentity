@@ -63,7 +63,31 @@
               </li> -->
             </ul>
           </li>
- 
+          <li class="nav-header">TEACHERS</li>
+         
+         <li class="nav-item">
+           <a href="<?=base_url()?>teacher/list" class="nav-link">
+             <i class="nav-icon fa-solid fa-user"></i>
+             <p>
+               Teachers
+               <i class="fas fa-angle-left right"></i>
+             </p>
+           </a>
+           <ul class="nav nav-treeview">
+             <li class="nav-item">
+               <a href="<?=base_url()?>teacher/list" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>List</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="<?=base_url()?>teacher/addTeacher" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Add</p>
+               </a>
+             </li>
+           </ul>
+         </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

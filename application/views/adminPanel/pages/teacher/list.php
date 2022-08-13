@@ -36,19 +36,19 @@
         
           <div class="form-group col-md-2">
           <label >Name</label>
-            <input type="text" class="form-control" id="studentName" placeholder="Search by name">
+            <input type="text" class="form-control" id="teacherName" placeholder="Search by name">
           </div>
           <div class="form-group col-md-2">
           <label >Class</label>
-            <input type="text" class="form-control" id="studentClass" placeholder="Search by class">
+            <input type="text" class="form-control" id="teacherClass" placeholder="Search by class">
           </div>
           <div class="form-group col-md-2">
           <label >Mobile No</label>
-            <input type="number" class="form-control" id="studentMobile" placeholder="Search by mobile">
+            <input type="number" class="form-control" id="teacherMobile" placeholder="Search by mobile">
           </div>
           <div class="form-group col-md-2">
           <label >User Id</label>
-            <input type="text" class="form-control" id="studentUserId" placeholder="Search by Student UserId">
+            <input type="text" class="form-control" id="teacherUserId" placeholder="Search by teacher UserId">
           </div>
           <div class="form-group col-md-2">
             <label >From Date</label>
@@ -59,7 +59,7 @@
             <input type="date" class="form-control" id="toDate">
           </div>
           <div class="form-group col-md-2">
-            <button id="search" class="btn btn-primary">Submit</button>
+            <button id="searchTeacher" class="btn btn-primary">Submit</button>
             <button onclick="window.location.reload();" class="btn btn-warning">Clear</button>
           </div>
           <!-- <div class="form-group col-md-2">
@@ -69,12 +69,12 @@
           <div class="col-md-12">
           <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Showing All Students Data</h3>
-                <a href="<?=base_url('student/addStudent')?>" class="btn btn-primary ml-4">Add New Student</a>
+                <h3 class="card-title">Showing All Teachers Data</h3>
+                <a href="<?=base_url('teacher/addTeacher')?>" class="btn btn-primary ml-4">Add New Teacher</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="listDatatable" class="table table-bordered table-striped">
+                <table id="listDatatableTeacher" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Id</th>
@@ -113,58 +113,60 @@
 </div>
 <?php $this->load->view("adminPanel/pages/footer.php");?>
 <!-- ./wrapper -->
-<script>
-  var ajaxUrlForStudentList = '<?= base_url() . 'ajax/listStudentsAjax'?>';
-   // datatable student list intilizing
- loadStudentDataTable();
 
-function loadStudentDataTable(sn = '',sc = '',sm = '',si = '',fd = '',td = '')
-{
-   $("#listDatatable").DataTable({
-     "responsive": true, "lengthChange": true, "autoWidth": true,
-     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-       dom: 'lBfrtip',
-       buttons: [
-           'copyHtml5',
-           'excelHtml5',
-           'csvHtml5',
-           'pdfHtml5'
-       ],
-       lengthMenu: [10,50,100,500,1000,2000,5000,10000,50000,100000],
-       pageLength: 10,
-       processing: true,
-       serverSide: true,
-       searching: false,
-       paging: true,
-       ajax : {
-         method: 'post',
-         url: ajaxUrlForStudentList,
-         data : {
-           studentName: sn,
-           studentClass: sc,
-           studentMobile: sm,
-           studentUserId: si,
-           studentFromDate: fd,
-           studentToDate: td,
-         },
-         error: function ()
-         {
-           console.log('something went wrong.');
+  <script>
+  var ajaxUrlForTeacherList = '<?= base_url() . 'ajax/listTeachersAjax'?>';
+    // datatable for teacher
+    loadTeacherDataTable();
+  function loadTeacherDataTable(sn = '',sc = '',sm = '',si = '',fd = '',td = '')
+  {
+     $("#listDatatableTeacher").DataTable({
+       "responsive": true, "lengthChange": true, "autoWidth": true,
+       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+         dom: 'lBfrtip',
+         buttons: [
+             'copyHtml5',
+             'excelHtml5',
+             'csvHtml5',
+             'pdfHtml5'
+         ],
+         lengthMenu: [10,50,100,500,1000,2000,5000,10000,50000,100000],
+         pageLength: 10,
+         processing: true,
+         serverSide: true,
+         searching: false,
+         paging: true,
+         ajax : {
+           method: 'post',
+           url: ajaxUrlForTeacherList,
+           data : {
+             teacherName: sn,
+             teacherClass: sc,
+             teacherMobile: sm,
+             teacherUserId: si,
+             teacherFromDate: fd,
+             teacherToDate: td,
+           },
+           error: function ()
+           {
+             console.log('something went wrong.');
+           }
          }
-       }
-   });
-}
+     });
+  }
+ 
+   $("#searchTeacher").click(function(e){
+     e.preventDefault();
+     $("#listDatatableTeacher").DataTable().destroy();
+     loadTeacherDataTable(
+       $("#teacherName").val(),
+       $("#teacherClass").val(),
+       $("#teacherMobile").val(),
+       $("#teacherUserId").val(),
+       $("#fromDate").val(),
+       $("#toDate").val(),
+       );
+   })
+  </script>
 
- $("#search").click(function(e){
-   e.preventDefault();
-   $("#listDatatable").DataTable().destroy();
-   loadStudentDataTable(
-     $("#studentName").val(),
-     $("#studentClass").val(),
-     $("#studentMobile").val(),
-     $("#studentUserId").val(),
-     $("#fromDate").val(),
-     $("#toDate").val(),
-     );
- })
-</script>
+
