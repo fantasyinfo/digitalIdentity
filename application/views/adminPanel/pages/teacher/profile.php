@@ -11,7 +11,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <?php 
-    $sd = $data['studentData'][0];
+    $sd = $data['teacherData'][0];
     //print_r($sd);
     
     ?>
@@ -56,7 +56,7 @@
               </div>
               <div class="card mt-3">
                 <?php
-                $string = HelperClass::fullPathQR."stu00002";
+                $string = HelperClass::fullPathQR.$sd['user_id'];
               $google_chart_api_url = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=".$string."&choe=UTF-8";
                 // let's display the generated QR code
                   echo "<img src='".$google_chart_api_url."' alt='".$string."'>";
@@ -97,15 +97,7 @@
                     ?>
                     </div>
                   </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Roll No</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                    <?=$sd['roll_no'];?>
-                    </div>
-                  </div>
+                  
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">

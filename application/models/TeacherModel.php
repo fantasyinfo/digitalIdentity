@@ -143,7 +143,7 @@ class TeacherModel extends CI_Model
     }
     public function viewSingleTeacherAllData($id)
     {
-      return $this->CrudModel->viewSingleStudentAllData(Table::teacherTable,$id);
+      return $this->CrudModel->viewSingleTeacherAllData(Table::teacherTable,$id);
     }
 
     public function deleteTeacher($id)

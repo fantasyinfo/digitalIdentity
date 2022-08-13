@@ -66,7 +66,7 @@ class TeacherController extends CI_Controller
 
 		$dataArr = [
 			'pageTitle' => 'View Teacher',
-			'TeacherData' => $this->TeacherModel->viewSingleTeacherAllData($id),
+			'teacherData' => $this->TeacherModel->viewSingleTeacherAllData($id),
 			'adminPanelUrl' => $this->adminPanelURL,
 			// 'submitFormUrl' => base_url('Teacher/updateTeacher'),
 			// 'class' => $this->TeacherModel->allClass(),

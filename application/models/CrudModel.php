@@ -385,6 +385,17 @@ class CrudModel extends CI_Model
         WHERE s.status != 0 AND s.id = {$id} ORDER BY s.id DESC LIMIT 1")->result_array();
     }
 
+    public function viewSingleTeacherAllData($tableName,$id)
+    {
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+        return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+        LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+        LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+        LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+        LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+        WHERE s.status != 0 AND s.id = {$id} ORDER BY s.id DESC LIMIT 1")->result_array();
+    }
     public function allClass($tableName)
     {
         $this->tableName = $tableName;
