@@ -18,4 +18,21 @@ class HelperClass
         'Staff' => '3',
         'Principal' => '4',
     ];
+
+    public static function APIresponse($status = 200, $msg = '',$data = '')
+    {
+        $sendArr = [];
+        $sendArr['statusCode'] = $status;
+        $sendArr['message'] = $msg;
+        if(!empty($data))
+        {
+            $sendArr['data'] = $data;
+        }
+        echo json_encode($sendArr);die();
+    }
+
+    public static function generateRandomToken()
+    {
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".rand(000000000,999999999)),1,40) ;
+    }
 }

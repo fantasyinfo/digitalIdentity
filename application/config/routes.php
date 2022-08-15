@@ -58,14 +58,6 @@ $route[$baseTeacher."editTeacher/(:any)"] = "TeacherController/editTeacher/$1";
 $route[$baseTeacher."deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$1";
 
 
-
-
-
-
-
-
-
-
 // Ajax routes
 $baseAjax = 'ajax/';
 $ajaxRoutesArr = [
@@ -84,6 +76,23 @@ foreach($ajaxRoutesArr as $ajRoute)
 // qr code list
 $route['listQR'] = 'AjaxController/listQR';
 $route['listQRCodeAjax'] = 'AjaxController/listQRCodeAjax';
+
+
+// api routes
+$baseAPI = 'api/v1/';
+$apiRoutesArr = [
+    'login', 
+    'showStudentsForAttendence'
+];
+
+foreach($apiRoutesArr as $apiRoute)
+{
+    $route[$baseAPI.$apiRoute] = "APIController"."/".$apiRoute;
+}
+
+
+
+
 
 
 

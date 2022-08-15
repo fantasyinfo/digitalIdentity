@@ -8,4 +8,6 @@ class Table{
     const cityTable = 'city';
     const stateTable = 'state';
     const qrcodeTable = 'qrcode';
+    const attendenceTable = 'attendence';
+    const departureTable = 'departure';
 }

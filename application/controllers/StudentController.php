@@ -102,13 +102,8 @@ class StudentController extends CI_Controller
 	public function deleteStudent($id)
 	{
 		$studentData = $this->StudentModel->singleStudent($id);
-	
-		$exp = explode(HelperClass::uploadImgDir,@$studentData[0]['image']);
-			$dir = $_SERVER['DOCUMENT_ROOT'].'/'.HelperClass::uploadImgDir . @$exp[1];
-			unlink(@$dir);
-			die();
+		unlink(@$studentData[0]['image']);
 		if ($this->StudentModel->deleteStudent($id)) {
-			
 			$this->list();
 		} else {
 			$this->addStudent();

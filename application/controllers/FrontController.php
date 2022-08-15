@@ -16,14 +16,22 @@ class FrontController extends CI_Controller {
 	
 	public function index()
 	{
-		$dataArr = [
-			'pageTitle' => 'HomePage',
-			'studentData' => $this->StudentModel->showStudentProfile(),
-			'adminPanelUrl' => $this->adminPanelURL,
-		];
+		if(isset($_GET['stuid']))
+		{
+			$dataArr = [
+				'pageTitle' => 'HomePage',
+				'studentData' => $this->StudentModel->showStudentProfile(),
+				'adminPanelUrl' => $this->adminPanelURL,
+			];
+			
+			$this->load->view($this->frontViewDir .'pages/header',['data' => $dataArr]);
+			$this->load->view($this->frontViewDir .'index');
+			$this->load->view($this->frontViewDir .'pages/footer');
+		}else
+		{
+			//header("Location: ".HelperClass::brandUrl."");
+		}
+	
 		
-		$this->load->view($this->frontViewDir .'pages/header',['data' => $dataArr]);
-		$this->load->view($this->frontViewDir .'index');
-		$this->load->view($this->frontViewDir .'pages/footer');
 	}
 }
