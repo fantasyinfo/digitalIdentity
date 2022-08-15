@@ -70,7 +70,8 @@ $route[$baseTeacher."deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$
 $baseAjax = 'ajax/';
 $ajaxRoutesArr = [
     'listStudentsAjax',
-    'listTeachersAjax'
+    'listTeachersAjax',
+    
 ];
 
 foreach($ajaxRoutesArr as $ajRoute)
@@ -80,8 +81,9 @@ foreach($ajaxRoutesArr as $ajRoute)
 
 
 
-
-
+// qr code list
+$route['listQR'] = 'AjaxController/listQR';
+$route['listQRCodeAjax'] = 'AjaxController/listQRCodeAjax';
 
 
 

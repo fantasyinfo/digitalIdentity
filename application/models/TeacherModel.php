@@ -45,32 +45,34 @@ class TeacherModel extends CI_Model
         $insertId = $this->CrudModel->insert(Table::teacherTable,$insertArr);
         if($insertId)
         {
+          return true;
+          die();
           // insert qrcode data
-          $qrDataArr = [];
-          $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
-          $qrDataArr['uniqueValue'] = $insertArr['user_id'];
-          $qrDataArr['type'] = HelperClass::userType['Teacher'];
-          $qrDataArr['user_id'] = $insertId;
+          // $qrDataArr = [];
+          // $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
+          // $qrDataArr['uniqueValue'] = $insertArr['user_id'];
+          // $qrDataArr['type'] = HelperClass::userType['Teacher'];
+          // $qrDataArr['user_id'] = $insertId;
 
-          $qrInsertId = $this->CrudModel->insert(Table::qrcodeTable,$qrDataArr);
-          if($qrInsertId)
-          {
-            $updateArr['u_qr_id'] = $qrInsertId;
-            if($this->CrudModel->update(Table::teacherTable,$updateArr,$insertId))
-            {
-              return true;
-            }else
-            {
-              echo $this->db->last_query();
-              die();
-              return false;
-            }
-          }else
-          {
-            echo $this->db->last_query();
-            die();
-            return false;
-          }
+          // $qrInsertId = $this->CrudModel->insert(Table::qrcodeTable,$qrDataArr);
+          // if($qrInsertId)
+          // {
+          //   $updateArr['u_qr_id'] = $qrInsertId;
+          //   if($this->CrudModel->update(Table::teacherTable,$updateArr,$insertId))
+          //   {
+          //     return true;
+          //   }else
+          //   {
+          //     echo $this->db->last_query();
+          //     die();
+          //     return false;
+          //   }
+          // }else
+          // {
+          //   echo $this->db->last_query();
+          //   die();
+          //   return false;
+          // }
          
         }else
         {
