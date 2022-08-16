@@ -24,9 +24,16 @@ class FrontController extends CI_Controller {
 				'adminPanelUrl' => $this->adminPanelURL,
 			];
 			
-			$this->load->view($this->frontViewDir .'pages/header',['data' => $dataArr]);
-			$this->load->view($this->frontViewDir .'index');
-			$this->load->view($this->frontViewDir .'pages/footer');
+			if(isset($dataArr['studentData']) && !empty($dataArr['studentData']))
+			{
+				$this->load->view($this->frontViewDir .'pages/header',['data' => $dataArr]);
+				$this->load->view($this->frontViewDir .'index');
+				$this->load->view($this->frontViewDir .'pages/footer');
+			}else
+			{
+				$this->load->view($this->frontViewDir .'404');
+			}
+			
 		}else
 		{
 			//header("Location: ".HelperClass::brandUrl."");

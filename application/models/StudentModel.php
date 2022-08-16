@@ -138,7 +138,7 @@ class StudentModel extends CI_Model
         if(isset($_GET['stuid']))
         {
           $userId = explode(HelperClass::schoolPrefix,$_GET['stuid']);
-          return $this->CrudModel->showStudentProfile(Table::studentTable,$userId[1]);
+          return $this->CrudModel->showStudentProfile(Table::studentTable,@$userId[1]);
         }
     }
     public function viewSingleStudentAllData($id)
