@@ -82,7 +82,9 @@ $route['listQRCodeAjax'] = 'AjaxController/listQRCodeAjax';
 $baseAPI = 'api/v1/';
 $apiRoutesArr = [
     'login', 
-    'showStudentsForAttendence'
+    'showStudentsForAttendence',
+    'submitAttendence',
+    'showSubmitAttendenceData'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

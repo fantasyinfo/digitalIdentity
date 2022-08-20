@@ -17,6 +17,7 @@ class APIController extends CI_Controller
 		$this->load->model('APIModel');
 	}
 
+	// app login
 	public function login()
 	{
 		$this->checkAPIRequest();
@@ -24,12 +25,33 @@ class APIController extends CI_Controller
 		$userId = $apiData['userId'];
 		$passWord = $apiData['password'];
 		$uerType = $apiData['userType'];
-		$userData = $this->APIModel->login($userId,$passWord,$uerType);
-		return HelperClass::APIresponse($status = 200, $msg = 'Login Successfully.',$userData);
+		$userData = $this->APIModel->login($userId, $passWord, $uerType);
+
+		$responseData = [];
+		$responseData["teacherId"] = @$userData[0]["teacherId"];
+		$responseData["name"] = @$userData[0]["name"];
+		$responseData["user_id"] = @$userData[0]["user_id"];
+		$responseData["gender"] = @$userData[0]["gender"];
+		$responseData["mother_name"] = @$userData[0]["mother_name"];
+		$responseData["father_name"] = @$userData[0]["father_name"];
+		$responseData["mobile"] = @$userData[0]["mobile"];
+		$responseData["email"] = @$userData[0]["email"];
+		$responseData["address"] = @$userData[0]["address"];
+		$responseData["dob"] = @$userData[0]["dob"];
+		$responseData["doj"] = @$userData[0]["doj"];
+		$responseData["pincode"] = @$userData[0]["pincode"];
+		$responseData["image"] = @$userData[0]["image"];
+		$responseData["className"] = @$userData[0]["className"];
+		$responseData["sectionName"] = @$userData[0]["sectionName"];
+		$responseData["stateName"] = @$userData[0]["stateName"];
+		$responseData["cityName"] = @$userData[0]["cityName"];
+		$responseData["auth_token"] = @$userData[0]["auth_token"];
+
+		return HelperClass::APIresponse( 200, 'Login Successfully.', $responseData);
 	}
 
 
-
+	// show list of students for attendence
 	public function showStudentsForAttendence()
 	{
 		$this->checkAPIRequest();
@@ -38,10 +60,53 @@ class APIController extends CI_Controller
 		$uerType = $apiData['userType'];
 		$className = $apiData['className'];
 		$sectionName = $apiData['sectionName'];
-		$loginUser = $this->APIModel->validateLogin($authToken,$uerType);
-		$allStudents = $this->APIModel->showAllStudentForAttendence($loginUser[0]['userType'],$className,$sectionName);
-		return HelperClass::APIresponse($status = 200, $msg = 'Login Successfully.',$allStudents);
+		$loginUser = $this->APIModel->validateLogin($authToken, $uerType);
+		$allStudents = $this->APIModel->showAllStudentForAttendence($loginUser[0]['userType'], $className, $sectionName);
+		return HelperClass::APIresponse(200, 'Login Successfully.', $allStudents);
+	}
 
+
+	// submit attendence of students
+	public function submitAttendence()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$className = $apiData['className'];
+		$sectionName = $apiData['sectionName'];
+		$attendenceData = $apiData['attendenceData'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$currentDateTime = date('d-m-Y h:i:s');
+		for ($i = 0; $i < count($attendenceData); $i++) {
+			$stu_id = $attendenceData[$i]['stu_id'];
+			$attendenceStatus = $attendenceData[$i]['attendence'];
+			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus, $currentDateTime);
+			if (!$insertAttendeceRecord) {
+				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
+			}
+		}
+
+		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime);
+	}
+
+
+
+	// showSubmitAttendenceData
+	public function showSubmitAttendenceData()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$className = $apiData['className'];
+		$sectionName = $apiData['sectionName'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$currentDateTime = date('d-m-Y h:i:s');
+		$data = $this->APIModel->showSubmitAttendenceData($className, $sectionName);
+
+		return HelperClass::APIresponse(200, 'Attendence Data For today date ' . $currentDateTime, $data);
 	}
 
 
@@ -50,6 +115,8 @@ class APIController extends CI_Controller
 
 
 
+
+	// check api request is post method
 	public function checkAPIRequest()
 	{
 		// errors
@@ -66,13 +133,13 @@ class APIController extends CI_Controller
 		// check method is post
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 			return HelperClass::APIresponse($status = 500, $msg = 'Only POST Method is Allowed');
-	   	}
+		}
 	}
 
+	// collect all api data 
 	public function getAPIData()
 	{
 		$d = file_get_contents('php://input');
-		return json_decode($d,TRUE);
+		return json_decode($d, TRUE);
 	}
-
 }

@@ -9,6 +9,7 @@ class APIModel extends CI_Model
     $this->load->model('CrudModel');
 	}
 
+  // login
     public function login($id,$password,$type)
     {
       $dir = base_url().HelperClass::uploadImgDir;
@@ -39,10 +40,11 @@ class APIModel extends CI_Model
         return $userData;
       }else
       {
-        return HelperClass::APIresponse($status = 500, $msg = 'User Not Found. Please Use Correct Details.');
+        return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
       }
     }
 
+    // validate login
     public function validateLogin($authToken,$type)
     {
       if($type == 'Teacher')
@@ -55,7 +57,7 @@ class APIModel extends CI_Model
             return $userData;
           }else
           {
-            return HelperClass::APIresponse($status = 500, $msg = 'Auth Token Not Match. Please Use Correct Details.');
+            return HelperClass::APIresponse(500, 'Auth Token Not Match. Please Use Correct Details.');
           }
       }else if($type == 'Staff')
       {
@@ -70,6 +72,7 @@ class APIModel extends CI_Model
     }
 
 
+    // show students for attendence
     public function showAllStudentForAttendence($type,$class,$section)
     {
       if($type == 'Teacher')
@@ -85,7 +88,7 @@ class APIModel extends CI_Model
           return $studentsData;
         }else
         {
-          return HelperClass::APIresponse($status = 500, $msg = 'Students Not Found. Please Use Correct Details.');
+          return HelperClass::APIresponse(500, 'Students Not Found. Please Use Correct Details.');
         }
       }else if($type == 'Staff')
       {
@@ -94,6 +97,78 @@ class APIModel extends CI_Model
       {
         //
       }
-  }
+    }
+
+
+    // save attendence
+    public function submitAttendence($stu_id,$stu_class,$stu_section,$login_user_id,$login_user_type,$attendenceStatus,$dateTime)
+    {
+      $currentDate = date_create()->format('Y-m-d');
+      if($login_user_type == 'Teacher')
+      {
+       
+
+        $d = $this->db->query("SELECT stu_id FROM ".Table::attendenceTable." WHERE att_date = '$currentDate' AND stu_id = '$stu_id' LIMIT 1")->result_array();
+
+        if(!empty($d))
+        {
+          return HelperClass::APIresponse(500, 'Attendence Already Submited for this Student id today.' . $d[0]['stu_id']);
+        }
+
+        $insertArr = [
+          "stu_id" => $stu_id,
+          "stu_class" => $stu_class,
+          "stu_section" => $stu_section,
+          "login_user_id" => $login_user_id,
+          "login_user_type" => $login_user_type,
+          "attendenceStatus" => $attendenceStatus,
+          "dateTime" =>date_create()->format('Y-m-d h:i:s'),
+          "att_date" =>date_create()->format('Y-m-d'),
+        ];
+        
+
+
+
+
+
+
+        $insertId = $this->CrudModel->insert(Table::attendenceTable,$insertArr);
+        if(!empty($insertId))
+        {
+          return true;
+        }else
+        {
+          return false;
+        }
+      }else if($login_user_type == 'Staff')
+      {
+        //
+      }else if ($login_user_type == 'Principal')
+      {
+        //
+      }
+    }
+
+
+    // showSubmitAttendenceData
+    public function showSubmitAttendenceData($className, $sectionName)
+    {
+      $currentDate = date_create()->format('Y-m-d');
+      $dir = base_url().HelperClass::uploadImgDir;
+      $d = $this->db->query("SELECT at.attendenceStatus, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM ".Table::attendenceTable." at 
+      LEFT JOIN ".Table::studentTable." stu ON at.stu_id = stu.id
+      LEFT JOIN ".Table::classTable." cls ON stu.class_id = cls.id
+      LEFT JOIN ".Table::sectionTable." sec ON stu.section_id = sec.id
+      WHERE at.att_date = '$currentDate' AND at.stu_class = '$className' AND at.stu_section = '$sectionName' ")->result_array();
+
+        if(!empty($d))
+        {
+          return $d;
+        }else
+        {
+          return HelperClass::APIresponse(500, 'Today Attendence Data Not Found for class ' . $className . ' and section ' . $sectionName);
+        }
+     
+    }
 
 }
