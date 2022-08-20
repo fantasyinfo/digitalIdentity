@@ -59,6 +59,7 @@ class APIController extends CI_Controller
 		// headers
 		header('Access-Control-Allow-Origin: *');
 		header('Content-Type: multipart/form-data');
+		header('Content-Type: application/json');
 		header("Access-Control-Allow-Methods: POST");
 		header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 		header("Access-Control-Allow-Headers: Authentication, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Allow-Origin");

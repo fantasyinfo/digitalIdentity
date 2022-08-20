@@ -135,11 +135,11 @@ class CrudModel extends CI_Model
                 }
                 if(!empty($data['studentMobile']))
                 {
-                    $condition .= " AND s.mobile = '{$data['studentMobile']}' ";
+                    $condition .= " AND s.mobile LIKE '%{$data['studentMobile']}%' ";
                 }
                 if(!empty($data['studentUserId']))
                 {
-                    $condition .= " AND s.user_id = '{$data['studentUserId']}' ";
+                    $condition .= " AND s.user_id LIKE '%{$data['studentUserId']}%' ";
                 }
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
@@ -250,11 +250,11 @@ class CrudModel extends CI_Model
                 }
                 if(!empty($data['teacherMobile']))
                 {
-                    $condition .= " AND s.mobile = '{$data['teacherMobile']}' ";
+                    $condition .= " AND s.mobile LIKE '%{$data['teacherMobile']}%' ";
                 }
                 if(!empty($data['teacherUserId']))
                 {
-                    $condition .= " AND s.user_id = '{$data['teacherUserId']}' ";
+                    $condition .= " AND s.user_id LIKE '%{$data['teacherUserId']}%' ";
                 }
                 if(!empty($data['teacherFromDate']) && !empty($data['teacherToDate']))
                 {
