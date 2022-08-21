@@ -62,7 +62,7 @@ class APIController extends CI_Controller
 		$sectionName = $apiData['sectionName'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $uerType);
 		$allStudents = $this->APIModel->showAllStudentForAttendence($loginUser[0]['userType'], $className, $sectionName);
-		return HelperClass::APIresponse(200, 'Login Successfully.', $allStudents);
+		return HelperClass::APIresponse(200, 'All Students Lists For Attendence.', $allStudents);
 	}
 
 
@@ -82,7 +82,7 @@ class APIController extends CI_Controller
 		for ($i = 0; $i < count($attendenceData); $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
-			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus, $currentDateTime);
+			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus);
 			if (!$insertAttendeceRecord) {
 				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -90,8 +90,6 @@ class APIController extends CI_Controller
 
 		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime);
 	}
-
-
 
 	// showSubmitAttendenceData
 	public function showSubmitAttendenceData()
@@ -109,8 +107,82 @@ class APIController extends CI_Controller
 		return HelperClass::APIresponse(200, 'Attendence Data For today date ' . $currentDateTime, $data);
 	}
 
+	// submit departure of students
+	public function submitDeparture()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$className = $apiData['className'];
+		$sectionName = $apiData['sectionName'];
+		$departureData = $apiData['departureData'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$currentDateTime = date('d-m-Y h:i:s');
+
+		for ($i = 0; $i < count($departureData); $i++) {
+			// ignore if the student not present today
+			if($departureData[$i]['attendenceStatus'] == 0)
+			{
+				continue;
+			}
+			
+			$attendenceId = $departureData[$i]['attendenceId'];
+			 $stu_id = $departureData[$i]['studentId'];
+			$departureStatus = '1';
+			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserId, $loginuserType, $departureStatus);
+			if (!$insertDepartureRecord) {
+				return HelperClass::APIresponse(500, 'Departure Not Updated Successfully beacuse ' . $this->db->last_query());
+			}
+		}
+
+		return HelperClass::APIresponse(200, 'Departure Updated Successfully at ' . $currentDateTime);
+	}
 
 
+	// showSubmitDepartureData
+	public function showSubmitDepartureData()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$className = $apiData['className'];
+		$sectionName = $apiData['sectionName'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$currentDateTime = date('d-m-Y h:i:s');
+		$data = $this->APIModel->showSubmitDepartureData($className, $sectionName);
+
+		return HelperClass::APIresponse(200, 'Departure Data For today date ' . $currentDateTime, $data);
+	}
+
+
+
+
+	// fetching all classes
+	public function allClasses()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$data = $this->APIModel->allClasses();
+		return HelperClass::APIresponse(200, 'All Classes Data.', $data);
+	}
+
+	// fetching all sections
+	public function allSections()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$data = $this->APIModel->allSections();
+		return HelperClass::APIresponse(200, 'All Sections Data', $data);
+	}
 
 
 

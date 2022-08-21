@@ -84,7 +84,11 @@ $apiRoutesArr = [
     'login', 
     'showStudentsForAttendence',
     'submitAttendence',
-    'showSubmitAttendenceData'
+    'showSubmitAttendenceData',
+    'allClasses',
+    'allSections',
+    'submitDeparture',
+    'showSubmitDepartureData'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
