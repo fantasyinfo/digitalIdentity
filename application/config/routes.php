@@ -68,7 +68,8 @@ $masterRoutesArr = [
     'cityMaster',
     'stateMaster',
     'classMaster',
-    'sectionMaster'
+    'sectionMaster',
+    'subjectMaster'
     
 ];
 
@@ -126,6 +127,7 @@ $apiRoutesArr = [
     'showSubmitAttendenceData',
     'allClasses',
     'allSections',
+    'allSubjects',
     'submitDeparture',
     'showSubmitDepartureData'
 ];

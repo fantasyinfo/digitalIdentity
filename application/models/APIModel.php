@@ -23,20 +23,45 @@ class APIModel extends CI_Model
         LEFT JOIN " . Table::cityTable . " ct ON ct.id =  t.city_id
         WHERE t.user_id = '$id' AND t.password = '$password' AND t.status = '1'
         ";
+
+
+        $userData = $this->db->query($sql)->result_array();
+        if (!empty($userData)) {
+          $authToken = HelperClass::generateRandomToken();
+          $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id'");
+          $responseData = [];
+          $responseData["teacherId"] = @$userData[0]["teacherId"];
+          $responseData["name"] = @$userData[0]["name"];
+          $responseData["user_id"] = @$userData[0]["user_id"];
+          $responseData["gender"] = @$userData[0]["gender"];
+          $responseData["mother_name"] = @$userData[0]["mother_name"];
+          $responseData["father_name"] = @$userData[0]["father_name"];
+          $responseData["mobile"] = @$userData[0]["mobile"];
+          $responseData["email"] = @$userData[0]["email"];
+          $responseData["address"] = @$userData[0]["address"];
+          $responseData["dob"] = @$userData[0]["dob"];
+          $responseData["doj"] = @$userData[0]["doj"];
+          $responseData["pincode"] = @$userData[0]["pincode"];
+          $responseData["image"] = @$userData[0]["image"];
+          $responseData["className"] = @$userData[0]["className"];
+          $responseData["sectionName"] = @$userData[0]["sectionName"];
+          $responseData["stateName"] = @$userData[0]["stateName"];
+          $responseData["cityName"] = @$userData[0]["cityName"];
+          $responseData["authToken"] = @$authToken;
+          $responseData["userType"] = @$type;
+          return $responseData;
+        } else {
+          return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+        }
+
+
+
     } else if ($type == 'Staff') {
       //
     } else if ($type == 'Principal') {
       //
     }
-    $userData = $this->db->query($sql)->result_array();
-    if (!empty($userData)) {
-      $authToken = HelperClass::generateRandomToken();
-      $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id'");
-      $userData[0]['auth_token'] = $authToken;
-      return $userData;
-    } else {
-      return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
-    }
+   
   }
 
   // validate login
@@ -209,4 +234,11 @@ class APIModel extends CI_Model
   {
     return  $this->CrudModel->allSection(Table::sectionTable);
   }
+  // fetching all subjects
+  public function allSubjects()
+  {
+    return  $this->CrudModel->allSubjects(Table::subjectTable);
+  }
+
+
 }

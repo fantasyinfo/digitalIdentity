@@ -37,4 +37,12 @@ class HelperClass
     {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".rand(000000000,999999999)),1,40) ;
     }
+
+    public static function prePrintR($arr)
+    {
+        echo '<pre>';
+        print_r($arr);
+        echo '</pre>';
+        die();
+    }
 }

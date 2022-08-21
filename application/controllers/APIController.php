@@ -26,28 +26,7 @@ class APIController extends CI_Controller
 		$passWord = $apiData['password'];
 		$uerType = $apiData['userType'];
 		$userData = $this->APIModel->login($userId, $passWord, $uerType);
-
-		$responseData = [];
-		$responseData["teacherId"] = @$userData[0]["teacherId"];
-		$responseData["name"] = @$userData[0]["name"];
-		$responseData["user_id"] = @$userData[0]["user_id"];
-		$responseData["gender"] = @$userData[0]["gender"];
-		$responseData["mother_name"] = @$userData[0]["mother_name"];
-		$responseData["father_name"] = @$userData[0]["father_name"];
-		$responseData["mobile"] = @$userData[0]["mobile"];
-		$responseData["email"] = @$userData[0]["email"];
-		$responseData["address"] = @$userData[0]["address"];
-		$responseData["dob"] = @$userData[0]["dob"];
-		$responseData["doj"] = @$userData[0]["doj"];
-		$responseData["pincode"] = @$userData[0]["pincode"];
-		$responseData["image"] = @$userData[0]["image"];
-		$responseData["className"] = @$userData[0]["className"];
-		$responseData["sectionName"] = @$userData[0]["sectionName"];
-		$responseData["stateName"] = @$userData[0]["stateName"];
-		$responseData["cityName"] = @$userData[0]["cityName"];
-		$responseData["auth_token"] = @$userData[0]["auth_token"];
-
-		return HelperClass::APIresponse( 200, 'Login Successfully.', $responseData);
+		return HelperClass::APIresponse( 200, 'Login Successfully.', $userData);
 	}
 
 
@@ -185,6 +164,17 @@ class APIController extends CI_Controller
 	}
 
 
+	// fetching all subjects
+	public function allSubjects()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$data = $this->APIModel->allSubjects();
+		return HelperClass::APIresponse(200, 'All Subjects Data', $data);
+	}
 
 
 

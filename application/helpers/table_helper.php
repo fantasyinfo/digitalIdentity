@@ -5,6 +5,7 @@ class Table{
     const teacherTable = 'teachers';
     const classTable = 'class';
     const sectionTable = 'section';
+    const subjectTable = 'subject';
     const cityTable = 'city';
     const stateTable = 'state';
     const qrcodeTable = 'qrcode';

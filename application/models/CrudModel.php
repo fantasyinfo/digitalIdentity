@@ -416,6 +416,11 @@ class CrudModel extends CI_Model
         $this->tableName = $tableName;
        return $d = $this->db->query("SELECT id,stateName FROM " . $this->tableName)->result_array();
     }
+    public function allSubjects($tableName)
+    {
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT id,subjectName FROM " . $this->tableName)->result_array();
+    }
 
     public function deleteStudent($tableName = "", $student_id = "")
     {
