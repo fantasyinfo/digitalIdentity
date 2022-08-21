@@ -55,12 +55,6 @@
                   <p>Add</p>
                 </a>
               </li>
-             <!--  <li class="nav-item">
-                <a href="pages/mailbox/read-mail.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Read</p>
-                </a>
-              </li> -->
             </ul>
           </li>
           <li class="nav-header">TEACHERS</li>
@@ -86,6 +80,45 @@
                  <p>Add</p>
                </a>
              </li>
+           </ul>
+         </li>
+
+         <li class="nav-header">MASTERS</li>
+         
+         <li class="nav-item">
+           <a href="<?=base_url()?>master/" class="nav-link">
+             <i class="nav-icon fa-solid fa-user"></i>
+             <p>
+               Masters
+               <i class="fas fa-angle-left right"></i>
+             </p>
+           </a>
+           <ul class="nav nav-treeview">
+             <li class="nav-item">
+               <a href="<?=base_url()?>master/cityMaster" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>City Master</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="<?=base_url()?>master/stateMaster" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>State Master</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="<?=base_url()?>master/classMaster" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Class Master</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="<?=base_url()?>master/sectionMaster" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Section Master</p>
+               </a>
+             </li>
+          
            </ul>
          </li>
         </ul>

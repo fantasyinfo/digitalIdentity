@@ -58,6 +58,45 @@ $route[$baseTeacher."editTeacher/(:any)"] = "TeacherController/editTeacher/$1";
 $route[$baseTeacher."deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$1";
 
 
+
+
+
+// master routes
+
+$baseMaster = "master/";
+$masterRoutesArr = [
+    'cityMaster',
+    'stateMaster',
+    'classMaster',
+    'sectionMaster'
+    
+];
+
+foreach($masterRoutesArr as $masRoute)
+{
+    $route[$baseMaster.$masRoute] = "MasterController"."/".$masRoute;
+}
+
+// get routes of Teacher
+
+$route[$baseMaster."viewTeacher/(:any)"] = "MasterController/viewTeacher/$1";
+$route[$baseMaster."editTeacher/(:any)"] = "MasterController/editTeacher/$1";
+$route[$baseMaster."deleteTeacher/(:any)"] = "MasterController/deleteTeacher/$1";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Ajax routes
 $baseAjax = 'ajax/';
 $ajaxRoutesArr = [
