@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
+    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = 1")->result_array();
 
 
     // edit and delete action

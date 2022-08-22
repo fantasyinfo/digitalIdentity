@@ -8,7 +8,10 @@ class Table{
     const subjectTable = 'subject';
     const cityTable = 'city';
     const stateTable = 'state';
+    const weekTable = 'week';
+    const timeTableHoursTable = 'tthours';
     const qrcodeTable = 'qrcode';
     const attendenceTable = 'attendence';
     const departureTable = 'departure';
+    const teacherSubjectsTable = 'teachersubjects';
 }

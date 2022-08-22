@@ -69,7 +69,10 @@ $masterRoutesArr = [
     'stateMaster',
     'classMaster',
     'sectionMaster',
-    'subjectMaster'
+    'subjectMaster',
+    'weekMaster',
+    'hourMaster',
+    'teacherSubjectsMaster',
     
 ];
 

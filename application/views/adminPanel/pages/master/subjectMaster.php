@@ -151,6 +151,7 @@
               <div class="card card-primary">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit subject</h3>
+                  
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->

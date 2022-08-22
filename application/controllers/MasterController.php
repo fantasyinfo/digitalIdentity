@@ -62,4 +62,35 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->masterDir . 'subjectMaster');
 	}
+
+	public function weekMaster()
+	{
+		$dataArr = [
+			'pageTitle' => 'Week Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'weekMaster');
+	}
+
+	public function hourMaster()
+	{
+		$dataArr = [
+			'pageTitle' => 'Hour Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'hourMaster');
+	}
+
+	public function teacherSubjectsMaster()
+	{
+		$dataArr = [
+			'pageTitle' => 'Teacher Subjects Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'teacherSubjectsMaster');
+	}
+
 }

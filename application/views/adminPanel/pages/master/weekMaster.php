@@ -10,88 +10,88 @@
 
     $this->load->library('session');
 
-  // fetching section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = 1")->result_array();
+  // fetching city data
+    $weekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE status = 1")->result_array();
 
 
     // edit and delete action
     if(isset($_GET['action']))
     {
-      // fetch section for edit the  section 
+      // fetch city for edit the  city 
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editweekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE id='$editId' AND status = 1")->result_array();
       }
 
-      // delete the section
+      // delete the city
       if($_GET['action'] == 'delete')
       {
         $deleteId = $_GET['delete_id'];
-        $deletesectionData = $this->db->query("DELETE FROM " . Table::sectionTable . " WHERE id='$deleteId'");
-        if($deletesectionData)
+        $deleteweekData = $this->db->query("DELETE FROM " . Table::weekTable . " WHERE id='$deleteId'");
+        if($deleteweekData)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'section Deleted Successfully',
+            'msg' => 'week Deleted Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'section Not Deleted Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'week Not Deleted Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/sectionMaster");
+        header("Refresh:3 ".base_url()."master/weekMaster");
       }
 
 
     }
 
 
-    // insert new section
+    // insert new city
     if(isset($_POST['submit']))
     {
-      $sectionName = $_POST['sectionName'];
-      $insertNewsection = $this->db->query("INSERT INTO " . Table::sectionTable . " (sectionName) VALUES ('$sectionName')");
-      if($insertNewsection)
+      $weekName = $_POST['weekName'];
+      $insertNewCity = $this->db->query("INSERT INTO " . Table::weekTable . " (weekName) VALUES ('$weekName')");
+      if($insertNewCity)
       {
         $msgArr = [
           'class' => 'success',
-          'msg' => 'New section Added Successfully',
+          'msg' => 'New week Added Successfully',
         ];
         $this->session->set_userdata($msgArr);
       }else
       {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'section Not Added Due to this Error. ' . $this->db->last_query(),
+          'msg' => 'week Not Added Due to this Error. ' . $this->db->last_query(),
         ];
         $this->session->set_userdata($msgArr);
       }
       header("Refresh:3");
     }
 
-    // update exiting section
+    // update exiting city
     if(isset($_POST['update']))
     {
-      $sectionName = $_POST['sectionName'];
-      $sectionEditId = $_POST['updatesectionId'];
-      $updatesection = $this->db->query("UPDATE " . Table::sectionTable . " SET sectionName = '$sectionName' WHERE id = '$sectionEditId'");
-      if($updatesection)
+      $weekName = $_POST['weekName'];
+      $weekEditId = $_POST['updateweekId'];
+      $updateweek = $this->db->query("UPDATE " . Table::weekTable . " SET weekName = '$weekName' WHERE id = '$weekEditId'");
+      if($updateweek)
       {
         $msgArr = [
           'class' => 'success',
-          'msg' => 'section Updated Successfully',
+          'msg' => 'week Updated Successfully',
         ];
         $this->session->set_userdata($msgArr);
       }else
       {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'section Not Updated Due to this Error. ' . $this->db->last_query(),
+          'msg' => 'week Not Updated Due to this Error. ' . $this->db->last_query(),
         ];
         $this->session->set_userdata($msgArr);
       }
@@ -99,7 +99,7 @@
     }
 
 
-    // print_r($sectionData);
+    // print_r($cityData);
 
 
     ?>
@@ -150,7 +150,8 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add / Edit section</h3>
+                  <h3 class="card-title">Add / Edit week</h3>
+                  
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -162,13 +163,13 @@
                     <?php 
                     if(isset($_GET['action']) && $_GET['action'] == 'edit')
                     {?>
-                     <input type="hidden" name="updatesectionId" value="<?=$editId?>">
+                     <input type="hidden" name="updateweekId" value="<?=$editId?>">
                     <?php }
                     
                     ?>
                       <div class="row">
                         <div class="form-group col-md-3">
-                          <input type="text" name="sectionName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editsectionData[0]['sectionName'];}?>" class="form-control" id="name" placeholder="Enter section name" required>
+                          <input type="text" name="weekName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editweekData[0]['weekName'];}?>" class="form-control" id="name" placeholder="Enter week name" required>
                         </div>
                         <div class="form-group col-md-3">
                           <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
@@ -187,27 +188,27 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title">Showing All section Data</h3>
+                      <h3 class="card-title">Showing All week Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="sectionDataTable" class="table table-bordered table-striped">
+                      <table id="weekDataTable" class="table table-bordered table-striped">
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>section Id</th>
-                            <th>section Name</th>
+                            <th>week Id</th>
+                            <th>week Name</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <?php if (isset($sectionData)) {
+                          <?php if (isset($weekData)) {
                             $i = 0;
-                            foreach ($sectionData as $cn) { ?>
+                            foreach ($weekData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
-                                <td><?= $cn['sectionName'];?></td>
+                                <td><?= $cn['weekName'];?></td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
@@ -250,5 +251,5 @@
     // var ajaxUrl = '<?= base_url() . 'ajax/listStudentsAjax' ?>';
 
 
-    $("#sectionDataTable").DataTable();
+    $("#weekDataTable").DataTable();
   </script>

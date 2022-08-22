@@ -10,88 +10,90 @@
 
     $this->load->library('session');
 
-  // fetching section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = 1")->result_array();
+  // fetching city data
+    $timeTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1")->result_array();
 
 
     // edit and delete action
     if(isset($_GET['action']))
     {
-      // fetch section for edit the  section 
+      // fetch city for edit the  city 
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editHourData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE id='$editId' AND status = 1")->result_array();
       }
 
-      // delete the section
+      // delete the city
       if($_GET['action'] == 'delete')
       {
         $deleteId = $_GET['delete_id'];
-        $deletesectionData = $this->db->query("DELETE FROM " . Table::sectionTable . " WHERE id='$deleteId'");
-        if($deletesectionData)
+        $deleteHourData = $this->db->query("DELETE FROM " . Table::timeTableHoursTable . " WHERE id='$deleteId'");
+        if($deleteHourData)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'section Deleted Successfully',
+            'msg' => 'Hour Deleted Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'section Not Deleted Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'Hour Not Deleted Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/sectionMaster");
+        header("Refresh:3 ".base_url()."master/hourMaster");
       }
 
 
     }
 
 
-    // insert new section
+    // insert new city
     if(isset($_POST['submit']))
     {
-      $sectionName = $_POST['sectionName'];
-      $insertNewsection = $this->db->query("INSERT INTO " . Table::sectionTable . " (sectionName) VALUES ('$sectionName')");
-      if($insertNewsection)
+      $start_time = $_POST['start_time'];
+      $end_time = $_POST['end_time'];
+      $insertNewTime = $this->db->query("INSERT INTO " . Table::timeTableHoursTable . " (start_time, end_time) VALUES ('$start_time','$end_time')");
+      if($insertNewTime)
       {
         $msgArr = [
           'class' => 'success',
-          'msg' => 'New section Added Successfully',
+          'msg' => 'New Time Added Successfully',
         ];
         $this->session->set_userdata($msgArr);
       }else
       {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'section Not Added Due to this Error. ' . $this->db->last_query(),
+          'msg' => 'Time Not Added Due to this Error. ' . $this->db->last_query(),
         ];
         $this->session->set_userdata($msgArr);
       }
       header("Refresh:3");
     }
 
-    // update exiting section
+    // update exiting city
     if(isset($_POST['update']))
     {
-      $sectionName = $_POST['sectionName'];
-      $sectionEditId = $_POST['updatesectionId'];
-      $updatesection = $this->db->query("UPDATE " . Table::sectionTable . " SET sectionName = '$sectionName' WHERE id = '$sectionEditId'");
-      if($updatesection)
+      $start_time = $_POST['start_time'];
+      $end_time = $_POST['end_time'];
+      $updateHourId = $_POST['updateHourId'];
+      $updateHour = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET start_time = '$start_time', end_time = '$end_time' WHERE id = '$updateHourId'");
+      if($updateHour)
       {
         $msgArr = [
           'class' => 'success',
-          'msg' => 'section Updated Successfully',
+          'msg' => 'Hour Updated Successfully',
         ];
         $this->session->set_userdata($msgArr);
       }else
       {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'section Not Updated Due to this Error. ' . $this->db->last_query(),
+          'msg' => 'Hour Not Updated Due to this Error. ' . $this->db->last_query(),
         ];
         $this->session->set_userdata($msgArr);
       }
@@ -99,7 +101,7 @@
     }
 
 
-    // print_r($sectionData);
+    // print_r($cityData);
 
 
     ?>
@@ -150,7 +152,8 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add / Edit section</h3>
+                  <h3 class="card-title">Add / Edit Hours</h3>
+                  
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -162,13 +165,16 @@
                     <?php 
                     if(isset($_GET['action']) && $_GET['action'] == 'edit')
                     {?>
-                     <input type="hidden" name="updatesectionId" value="<?=$editId?>">
+                     <input type="hidden" name="updateHourId" value="<?=$editId?>">
                     <?php }
                     
                     ?>
                       <div class="row">
                         <div class="form-group col-md-3">
-                          <input type="text" name="sectionName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editsectionData[0]['sectionName'];}?>" class="form-control" id="name" placeholder="Enter section name" required>
+                          <input type="time" name="start_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['start_time'];}?>" class="form-control" id="name"  required>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input type="time" name="end_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['end_time'];}?>" class="form-control" id="name"  required>
                         </div>
                         <div class="form-group col-md-3">
                           <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
@@ -187,27 +193,29 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title">Showing All section Data</h3>
+                      <h3 class="card-title">Showing All Hours Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="sectionDataTable" class="table table-bordered table-striped">
+                      <table id="hourDataTable" class="table table-bordered table-striped">
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>section Id</th>
-                            <th>section Name</th>
+                            <th>Hours Id</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <?php if (isset($sectionData)) {
+                          <?php if (isset($timeTableData)) {
                             $i = 0;
-                            foreach ($sectionData as $cn) { ?>
+                            foreach ($timeTableData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
-                                <td><?= $cn['sectionName'];?></td>
+                                <td><?= $cn['start_time'];?></td>
+                                <td><?= $cn['end_time'];?></td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
@@ -247,8 +255,6 @@
   <?php $this->load->view("adminPanel/pages/footer.php");?>
   <!-- ./wrapper -->
   <script>
-    // var ajaxUrl = '<?= base_url() . 'ajax/listStudentsAjax' ?>';
 
-
-    $("#sectionDataTable").DataTable();
+    $("#hourDataTable").DataTable();
   </script>
