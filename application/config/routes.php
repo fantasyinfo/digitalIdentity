@@ -73,6 +73,7 @@ $masterRoutesArr = [
     'weekMaster',
     'hourMaster',
     'teacherSubjectsMaster',
+    'timeTableSheduleMaster',
     
 ];
 

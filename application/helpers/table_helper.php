@@ -14,4 +14,5 @@ class Table{
     const attendenceTable = 'attendence';
     const departureTable = 'departure';
     const teacherSubjectsTable = 'teachersubjects';
+    const classSheduleTable = 'classshedule';
 }
