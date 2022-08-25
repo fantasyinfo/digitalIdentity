@@ -12,6 +12,7 @@ class FrontController extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('StudentModel');
+		$this->load->library('session');
 	}
 	
 	public function index()
@@ -31,14 +32,35 @@ class FrontController extends CI_Controller {
 				$this->load->view($this->frontViewDir .'pages/footer');
 			}else
 			{
-				$this->load->view($this->frontViewDir .'404');
+				$dataArr = [
+					'pageTitle' => 'Login',
+					'adminPanelUrl' => $this->adminPanelURL,
+				];
+				$this->load->view('adminPanel/index',['data' => $dataArr]);
+			
 			}
 			
 		}else
 		{
+			$dataArr = [
+				'pageTitle' => 'Login',
+				'adminPanelUrl' => $this->adminPanelURL,
+			];
+			$this->load->view('adminPanel/index',['data' => $dataArr]);
+			
 			//header("Location: ".HelperClass::brandUrl."");
 		}
 	
 		
+	}
+
+	public function logout()
+	{
+		$this->session->unset_userdata('name');
+		$this->session->unset_userdata('email');
+		$this->session->unset_userdata('user_type');
+		$this->session->unset_userdata('userData');
+
+		$this->load->view('adminPanel/index');
 	}
 }

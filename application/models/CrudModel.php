@@ -9,6 +9,7 @@ class CrudModel extends CI_Model
 	public function __construct()
 	{
 		$this->load->database();
+        $this->load->library('session');
 	}
 
 
@@ -460,5 +461,22 @@ class CrudModel extends CI_Model
             $pushArr['data'] = $data;
         }
         return $pushArr;
+    }
+
+
+    public function checkIsLogin()
+    {
+        if(empty($this->session->userdata('name')) || empty($this->session->userdata('email')) || empty($this->session->userdata('user_type')) || empty($this->session->userdata('userData')))
+        {
+            $msgArr = [
+                'class' => 'danger',
+                'msg' => 'Please Login first to access that page.',
+              ];
+              $this->session->set_userdata($msgArr);
+            return false;
+        }else
+        {
+            return true;
+        }
     }
 }

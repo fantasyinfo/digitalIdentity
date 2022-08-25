@@ -30,10 +30,9 @@
 
     // shedule data
      $sheduleData = $this->db->query("
-     SELECT cST.shedule_json, cST.id, ct.className,st.sectionName FROM " . Table::classSheduleTable . " cST 
+     SELECT cST.shedule_json, cST.id, ct.className,st.sectionName,cST.status FROM " . Table::classSheduleTable . " cST 
      JOIN ".Table::classTable." ct ON ct.id = cST.class_id
-     JOIN ".Table::sectionTable." st ON st.id = cST.section_id
-     WHERE cST.status = 1 ORDER BY cST.id DESC
+     JOIN ".Table::sectionTable." st ON st.id = cST.section_id ORDER BY cST.id DESC
      ")->result_array();
 
 
@@ -43,7 +42,7 @@
       if ($_GET['action'] == 'edit') {
         $editId = $_GET['edit_id'];
         $editClassShedule = $this->db->query("SELECT * FROM " . Table::classSheduleTable . " 
-        WHERE status = 1 AND id = '$editId' ORDER BY id DESC LIMIT 1")->result_array();
+        WHERE id = '$editId' ORDER BY id DESC LIMIT 1")->result_array();
         //HelperClass::prePrintR($editClassShedule);
       }
 
@@ -61,6 +60,30 @@
           $msgArr = [
             'class' => 'danger',
             'msg' => 'Class Time Table Not Deleted Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
+      }
+
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::classSheduleTable . " SET status = '$status' WHERE id = '$updateId'");
+
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Class Time Table Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Class Time Table Status Not Updated Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
@@ -114,7 +137,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-     header("Refresh:3");
+      header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
     }
 
     // update exiting city
@@ -163,7 +186,7 @@
         
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
     }
 
 
@@ -380,6 +403,7 @@
                                         <?php } } ?>
                                          
                                       </td>
+                                    
                                       <td>
                                       <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                         echo 'update';
@@ -431,6 +455,7 @@
                             <th>Class Name</th>
                             <th>Section Names</th>
                             <th>Shedule</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -475,8 +500,15 @@
                                         
                                       }
                                     }
-                                    ?></td>
+                                    ?>
+                                </td>
                                 <td>
+                                      <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                          class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                          <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
+                                <td>
+                                  
                                   <a href="?action=edit&edit_id=<?= $cn['id']; ?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
                                 </td>

@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $weekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE status = 1")->result_array();
+    $weekData = $this->db->query("SELECT * FROM " . Table::weekTable . " ")->result_array();
 
 
     // edit and delete action
@@ -21,7 +21,7 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editweekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editweekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE id='$editId' ")->result_array();
       }
 
       // delete the city
@@ -47,6 +47,29 @@
         header("Refresh:3 ".base_url()."master/weekMaster");
       }
 
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::weekTable . " SET status = '$status' WHERE id = '$updateId'");
+
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Week Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Week Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 ".base_url()."master/weekMaster");
+      }
 
     }
 
@@ -71,7 +94,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/weekMaster");
     }
 
     // update exiting city
@@ -95,7 +118,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/weekMaster");
     }
 
 
@@ -196,8 +219,9 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>week Id</th>
-                            <th>week Name</th>
+                            <th>Week Id</th>
+                            <th>Week Name</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -209,6 +233,11 @@
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
                                 <td><?= $cn['weekName'];?></td>
+                                <td>
+                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>

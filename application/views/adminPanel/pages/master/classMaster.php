@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = 1")->result_array();
+    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " ")->result_array();
 
 
     // edit and delete action
@@ -21,7 +21,7 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editclassData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editclassData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE id='$editId' ")->result_array();
       }
 
       // delete the city
@@ -47,6 +47,31 @@
         header("Refresh:3 ".base_url()."master/classMaster");
       }
 
+      
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::classTable . " SET status = '$status' WHERE id = '$updateId'");
+
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Class Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Class Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 ".base_url()."master/classMaster");
+      }
+      
 
     }
 
@@ -71,7 +96,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/classMaster");
     }
 
     // update exiting city
@@ -95,7 +120,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/classMaster");
     }
 
 
@@ -195,8 +220,9 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>class Id</th>
-                            <th>class Name</th>
+                            <th>Class Id</th>
+                            <th>Class Name</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -208,6 +234,11 @@
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
                                 <td><?= $cn['className'];?></td>
+                                <td>
+                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>

@@ -15,4 +15,7 @@ class Table{
     const departureTable = 'departure';
     const teacherSubjectsTable = 'teachersubjects';
     const classSheduleTable = 'classshedule';
+    const userTable = 'users';
+    const adminPanelMenuTable = 'admin_panel_menu';
+    const panelMenuPermissionTable = 'panel_menu_permission';
 }

@@ -13,10 +13,20 @@ class TeacherController extends CI_Controller
 		parent::__construct();
 		$this->load->model('StudentModel');
 		$this->load->model('TeacherModel');
+		$this->load->model('CrudModel');
+	}
+
+	public function loginCheck()
+	{
+		if(!$this->CrudModel->checkIsLogin())
+		{
+			header('Location: '.base_url());
+		}
 	}
 
 	public function list()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Teacher List',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -28,7 +38,7 @@ class TeacherController extends CI_Controller
 
 	public function addTeacher()
 	{
-		
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Add New Teacher',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -45,7 +55,7 @@ class TeacherController extends CI_Controller
 
 	public function editTeacher($id)
 	{
-
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Edit Teacher',
 			'teacherData' => $this->TeacherModel->singleTeacher($id),
@@ -63,7 +73,7 @@ class TeacherController extends CI_Controller
 
 	public function viewTeacher($id)
 	{
-
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'View Teacher',
 			'teacherData' => $this->TeacherModel->viewSingleTeacherAllData($id),
@@ -83,6 +93,7 @@ class TeacherController extends CI_Controller
 
 	public function saveTeacher()
 	{
+		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->TeacherModel->saveTeacher($_POST, $_FILES)) {
 				$this->list();
@@ -93,6 +104,7 @@ class TeacherController extends CI_Controller
 	}
 	public function updateTeacher()
 	{
+		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->TeacherModel->updateTeacher($_POST, $_FILES)) {
 				$this->list();
@@ -103,6 +115,7 @@ class TeacherController extends CI_Controller
 	}
 	public function deleteTeacher($id)
 	{
+		$this->loginCheck();
 		$TeacherData = $this->TeacherModel->singleTeacher($id);
 		if ($this->TeacherModel->deleteTeacher($id)) {
 			$dir = HelperClass::uploadImgDir . @$TeacherData[0]['image'];

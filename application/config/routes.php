@@ -3,14 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
  $route['default_controller'] = 'FrontController';
- $route['/'] = 'FrontController/index';
+ $route['/'] = 'FrontController/index'; // login or studentview
+ $route['logout'] = 'FrontController/logout'; // logout
  // front-end routes
 
 
 
 
  // admin panel routes
- $route['/adminPanel'] = 'AdminController/index';
+ $route['adminPanel'] = 'AdminController/index';
+
 
 
 
@@ -74,6 +76,7 @@ $masterRoutesArr = [
     'hourMaster',
     'teacherSubjectsMaster',
     'timeTableSheduleMaster',
+    'panelUserMaster',
     
 ];
 
@@ -84,9 +87,8 @@ foreach($masterRoutesArr as $masRoute)
 
 // get routes of Teacher
 
-$route[$baseMaster."viewTeacher/(:any)"] = "MasterController/viewTeacher/$1";
-$route[$baseMaster."editTeacher/(:any)"] = "MasterController/editTeacher/$1";
-$route[$baseMaster."deleteTeacher/(:any)"] = "MasterController/deleteTeacher/$1";
+$route[$baseMaster."editPermission/(:any)/(:any)"] = "MasterController/editPermission/$1/$2"; // user_id / user_type
+
 
 
 

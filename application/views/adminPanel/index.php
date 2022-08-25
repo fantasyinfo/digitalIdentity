@@ -1,50 +1,178 @@
+<?php
+$data = [] ;
+$data['pageTitle'] = 'Login';
+$data['adminPanelUrl'] = 'assets/adminPanel/';
 
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
-  <!-- Navbar -->
-<?php include ("pages/navbar.php");?>
-  <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
-  <?php include ("pages/sidebar.php");?>
+?>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0"><?=$data['pageTitle']?> </h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active"><?=$data['pageTitle']?> </li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+<!DOCTYPE html>
+<html lang="en">
 
-    <!-- Main content -->
-    <div class="content">
-      <div class="container-fluid">
-      
-        <!-- /.row -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><?= $data['pageTitle'] ?></title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+   <link rel="stylesheet" href="<?= base_url() . $data['adminPanelUrl'] ?>plugins/fontawesome-free/css/all.min.css"> 
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?= base_url() . $data['adminPanelUrl'] ?>dist/css/adminlte.min.css">
+
+</head>
+
+<?php 
+
+$this->load->library('session');
+
+
+// if the user is login then redirect to dashboard
+if(!empty($this->session->userdata('name')) && !empty($this->session->userdata('email')) && !empty($this->session->userdata('user_type')) && !empty($this->session->userdata('userData')))
+{
+  header("Refresh:0 url=adminPanel");
+}
+
+
+if(isset($_POST['submit']))
+{
+  $email = HelperClass::sanitizeInput($_POST['email']);
+  $password = HelperClass::sanitizeInput($_POST['password']);
+
+  $userData = $this->db->query("SELECT * FROM " . Table::userTable . " WHERE email = '$email' AND status = 1 LIMIT 1")->result_array();
+
+  if($userData)
+  {
+    $pass = $userData[0]['password'];
+    $salt = $userData[0]['salt'];
+
+    $dbPass = HelperClass::decode($pass,$salt);
+
+    if($dbPass == $password)
+    {
+
+      $userArr = [];
+      $userArr['name'] = $userData[0]['name'];
+      $userArr['email'] = $userData[0]['email'];
+      $userArr['user_type'] = $userData[0]['user_type'];
+
+      $userArr['userData'] = [
+        'name' => $userData[0]['name'],
+        'email' => $userData[0]['email'],
+        'user_type' => $userData[0]['user_type'],
+      ];
+      $this->session->set_userdata($userArr);
+
+      $msgArr = [
+        'class' => 'success',
+        'msg' => 'Login successfull, redirect you to dashboard.',
+      ];
+      $this->session->set_userdata($msgArr);
+
+      header("Refresh:3 url=adminPanel");
+    }else
+    {
+      $msgArr = [
+        'class' => 'danger',
+        'msg' => 'Password does\'t matched, please use correct password.',
+      ];
+      $this->session->set_userdata($msgArr);
+    }
+
+  }else
+  {
+    $msgArr = [
+      'class' => 'danger',
+      'msg' => 'Email id does\'t matched, please use correct email.',
+    ];
+    $this->session->set_userdata($msgArr);
+  }
+
+  
+}
+
+
+
+?>
+
+
+
+<body class="hold-transition login-page">
+  <div class="container">
+    <div class="row">
+
+      <div class="mx-auto col-md-4 mt-5">
+        <div class="login-box">
+
+          <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+              <a href="#" class="h1"><b>Digital</b>fied</a>
+            </div>
+            <div class="card-body">
+            <?php 
+              if(!empty($this->session->userdata('msg')))
+              {?>
+
+              <div class="alert alert-<?=$this->session->userdata('class')?> alert-dismissible fade show" role="alert">
+                <?=$this->session->userdata('msg')?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <?php
+              $this->session->unset_userdata('class') ;
+              $this->session->unset_userdata('msg') ;
+              }
+              ?>
+              <p class="login-box-msg">Sign in to start your session</p>
+
+              <form action="" method="post" >
+                <div class="input-group mb-3">
+                  <input type="email" name="email" class="form-control" placeholder="Email" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="password" name="password" class="form-control" placeholder="Password" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+            
+                  <div class="col-4">
+                    <button type="submit" name="submit" class="btn btn-primary btn-block">Sign In</button>
+                  </div>
+                  <!-- /.col -->
+                </div>
+              </form>
+         
+            </div>
+
+
+            <!-- /.card-body -->
+          </div>
+
+        </div>
       </div>
-      <!-- /.container-fluid -->
+
+
+
     </div>
-    <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
+</body>
+</html>
+  <!-- /.login-box -->
+  <?php
+ // include("pages/footer.php");
 
-  <!-- Control Sidebar -->
-
-  <!-- /.control-sidebar -->
-
-  <?php include ("pages/footer-copyright.php");?>
-</div>
-<!-- ./wrapper -->
-
+  ?>

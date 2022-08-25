@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = 1")->result_array();
+    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " ")->result_array();
 
 
     // edit and delete action
@@ -21,7 +21,7 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId' ")->result_array();
       }
 
       // delete the section
@@ -47,7 +47,29 @@
         header("Refresh:3 ".base_url()."master/sectionMaster");
       }
 
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::sectionTable . " SET status = '$status' WHERE id = '$updateId'");
 
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Section Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Section Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 ".base_url()."master/sectionMaster");
+      }
     }
 
 
@@ -71,7 +93,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/sectionMaster");
     }
 
     // update exiting section
@@ -95,7 +117,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/sectionMaster");
     }
 
 
@@ -195,8 +217,9 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>section Id</th>
-                            <th>section Name</th>
+                            <th>Section Id</th>
+                            <th>Section Name</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -208,6 +231,11 @@
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
                                 <td><?= $cn['sectionName'];?></td>
+                                <td>
+                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>

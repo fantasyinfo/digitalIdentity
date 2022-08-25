@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $stateData = $this->db->query("SELECT * FROM " . Table::stateTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
+    $stateData = $this->db->query("SELECT * FROM " . Table::stateTable . "  ORDER BY id DESC")->result_array();
 
 
     // edit and delete action
@@ -21,7 +21,7 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editStateData = $this->db->query("SELECT * FROM " . Table::stateTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editStateData = $this->db->query("SELECT * FROM " . Table::stateTable . " WHERE id='$editId' ")->result_array();
       }
 
       // delete the city
@@ -47,6 +47,29 @@
         header("Refresh:3 ".base_url()."master/stateMaster");
       }
 
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::stateTable . " SET status = '$status' WHERE id = '$updateId'");
+
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'State Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'State Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 ".base_url()."master/stateMaster");
+      }
 
     }
 
@@ -71,7 +94,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/stateMaster");
     }
 
     // update exiting city
@@ -95,7 +118,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/stateMaster");
     }
 
 
@@ -197,6 +220,7 @@
                             <th>Id</th>
                             <th>State Id</th>
                             <th>State Name</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -208,6 +232,11 @@
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
                                 <td><?= $cn['stateName'];?></td>
+                                <td>
+                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>

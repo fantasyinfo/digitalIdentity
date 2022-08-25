@@ -7,6 +7,7 @@ class StudentModel extends CI_Model
 	{
 		$this->load->database();
     $this->load->model('CrudModel');
+   
 	}
 
     public function saveStudent(array $post,array $files = [])

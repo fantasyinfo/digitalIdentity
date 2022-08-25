@@ -12,10 +12,20 @@ class StudentController extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('StudentModel');
+		$this->load->model('CrudModel');
+	}
+
+	public function loginCheck()
+	{
+		if(!$this->CrudModel->checkIsLogin())
+		{
+			header('Location: '.base_url());
+		}
 	}
 
 	public function list()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Student List',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -27,6 +37,7 @@ class StudentController extends CI_Controller
 
 	public function addStudent()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Add New Student',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -43,7 +54,7 @@ class StudentController extends CI_Controller
 
 	public function editStudent($id)
 	{
-
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Edit Student',
 			'studentData' => $this->StudentModel->singleStudent($id),
@@ -61,7 +72,7 @@ class StudentController extends CI_Controller
 
 	public function viewStudent($id)
 	{
-
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'View Student',
 			'studentData' => $this->StudentModel->viewSingleStudentAllData($id),
@@ -81,6 +92,7 @@ class StudentController extends CI_Controller
 
 	public function saveStudent()
 	{
+		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->StudentModel->saveStudent($_POST, $_FILES)) {
 				$this->list();
@@ -91,6 +103,7 @@ class StudentController extends CI_Controller
 	}
 	public function updateStudent()
 	{
+		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->StudentModel->updateStudent($_POST, $_FILES)) {
 				$this->list();
@@ -101,6 +114,7 @@ class StudentController extends CI_Controller
 	}
 	public function deleteStudent($id)
 	{
+		$this->loginCheck();
 		$studentData = $this->StudentModel->singleStudent($id);
 		unlink(@$studentData[0]['image']);
 		if ($this->StudentModel->deleteStudent($id)) {

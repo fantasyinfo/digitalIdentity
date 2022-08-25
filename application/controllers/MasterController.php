@@ -11,10 +11,20 @@ class MasterController extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('CrudModel');
+	}
+
+	public function loginCheck()
+	{
+		if(!$this->CrudModel->checkIsLogin())
+		{
+			header('Location: '.base_url());
+		}
 	}
 
 	public function cityMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'City Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -25,6 +35,7 @@ class MasterController extends CI_Controller
 
 	public function stateMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'State Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -35,6 +46,7 @@ class MasterController extends CI_Controller
 
 	public function classMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Class Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -45,6 +57,7 @@ class MasterController extends CI_Controller
 
 	public function sectionMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Section Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -55,6 +68,7 @@ class MasterController extends CI_Controller
 
 	public function subjectMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Subject Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -65,6 +79,7 @@ class MasterController extends CI_Controller
 
 	public function weekMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Week Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -75,6 +90,7 @@ class MasterController extends CI_Controller
 
 	public function hourMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Hour Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -85,6 +101,7 @@ class MasterController extends CI_Controller
 
 	public function teacherSubjectsMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Teacher Subjects Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -96,11 +113,36 @@ class MasterController extends CI_Controller
 
 	public function timeTableSheduleMaster()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'Time Table Shedule Master',
 			'adminPanelUrl' => $this->adminPanelURL
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->masterDir . 'timeTableSheduleMaster');
+	}
+
+	public function panelUserMaster()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Panel User Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'panelUserMaster');
+	}
+
+	public function editPermission($id,$userType)
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Panel User Master',
+			'adminPanelUrl' => $this->adminPanelURL,
+			'id' => $id,
+			'userType' => $userType
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'editPermission');
 	}
 }

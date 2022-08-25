@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $timeTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1")->result_array();
+    $timeTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " ")->result_array();
 
 
     // edit and delete action
@@ -21,7 +21,7 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editHourData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE id='$editId' AND status = 1")->result_array();
+        $editHourData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE id='$editId' ")->result_array();
       }
 
       // delete the city
@@ -41,6 +41,30 @@
           $msgArr = [
             'class' => 'danger',
             'msg' => 'Hour Not Deleted Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 ".base_url()."master/hourMaster");
+      }
+
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET status = '$status' WHERE id = '$updateId'");
+
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Hour Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Hour Status Not Updated Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
@@ -72,7 +96,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/hourMaster");
     }
 
     // update exiting city
@@ -97,7 +121,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/hourMaster");
     }
 
 
@@ -204,6 +228,7 @@
                             <th>Hours Id</th>
                             <th>Start Time</th>
                             <th>End Time</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -216,6 +241,11 @@
                                 <td><?= $cn['id'];?></td>
                                 <td><?= $cn['start_time'];?></td>
                                 <td><?= $cn['end_time'];?></td>
+                                <td>
+                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>

@@ -148,6 +148,12 @@
                  <p>Time Table Master</p>
                </a>
              </li>
+             <li class="nav-item">
+               <a href="<?=base_url()?>master/panelUserMaster" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Panel User Master</p>
+               </a>
+             </li>
            </ul>
          </li>
         </ul>

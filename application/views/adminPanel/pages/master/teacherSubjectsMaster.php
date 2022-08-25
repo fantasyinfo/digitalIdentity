@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $teachersSubjetsData = $this->db->query("SELECT DISTINCT(tst.teacher_id), tst.id,tst.subject_ids, CONCAT(tt.name, ' - ' ,tt.user_id) teacherName,tt.id as teacherId FROM " . Table::teacherSubjectsTable . " tst LEFT JOIN ".Table::teacherTable." tt ON tst.teacher_id = tt.id WHERE tst.status = 1 ORDER BY tst.id DESC")->result_array();
+    $teachersSubjetsData = $this->db->query("SELECT DISTINCT(tst.teacher_id), tst.status, tst.id,tst.subject_ids, CONCAT(tt.name, ' - ' ,tt.user_id) teacherName,tt.id as teacherId FROM " . Table::teacherSubjectsTable . " tst LEFT JOIN ".Table::teacherTable." tt ON tst.teacher_id = tt.id  ORDER BY tst.id DESC")->result_array();
 
     $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
     $subjectsData = $this->db->query("SELECT id, subjectName FROM " . Table::subjectTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
@@ -51,6 +51,29 @@
         header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
       }
 
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::teacherSubjectsTable . " SET status = '$status' WHERE id = '$updateId'");
+
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Teachers Subjects Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Teachers Subjects Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
+      }
 
     }
 
@@ -79,7 +102,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
     }
 
     // update exiting city
@@ -104,7 +127,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
     }
 
 
@@ -261,6 +284,7 @@
                             <th>Id</th>
                             <th>Teacher Name - User Id</th>
                             <th>Subjects Names</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -304,6 +328,11 @@
                                   
                                  //$cn['cityName'];
                                  ?></td>
+                                  <td>
+                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                </td>
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
