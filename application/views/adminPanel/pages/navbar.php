@@ -10,7 +10,7 @@
     <ul class="navbar-nav ml-auto">
   
       <li class="nav-item">
-        <a class="nav-link" href="logout" role="button">
+        <a class="nav-link" href="<?= base_url() . 'logout'?>" role="button">
          Logout
         </a>
       </li>

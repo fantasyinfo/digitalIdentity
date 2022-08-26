@@ -34,7 +34,7 @@ $this->load->library('session');
 // if the user is login then redirect to dashboard
 if(!empty($this->session->userdata('name')) && !empty($this->session->userdata('email')) && !empty($this->session->userdata('user_type')) && !empty($this->session->userdata('userData')))
 {
-  header("Refresh:0 url=adminPanel");
+  //header("Refresh:0 url=adminPanel");
 }
 
 
@@ -56,11 +56,13 @@ if(isset($_POST['submit']))
     {
 
       $userArr = [];
+      $userArr['id'] = $userData[0]['id'];
       $userArr['name'] = $userData[0]['name'];
       $userArr['email'] = $userData[0]['email'];
       $userArr['user_type'] = $userData[0]['user_type'];
 
       $userArr['userData'] = [
+        'id' => $userData[0]['id'],
         'name' => $userData[0]['name'],
         'email' => $userData[0]['email'],
         'user_type' => $userData[0]['user_type'],

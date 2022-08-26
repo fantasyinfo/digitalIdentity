@@ -466,7 +466,7 @@ class CrudModel extends CI_Model
 
     public function checkIsLogin()
     {
-        if(empty($this->session->userdata('name')) || empty($this->session->userdata('email')) || empty($this->session->userdata('user_type')) || empty($this->session->userdata('userData')))
+        if(empty($this->session->userdata('id')) || empty($this->session->userdata('name')) || empty($this->session->userdata('email')) || empty($this->session->userdata('user_type')) || empty($this->session->userdata('userData')))
         {
             $msgArr = [
                 'class' => 'danger',
@@ -476,6 +476,7 @@ class CrudModel extends CI_Model
             return false;
         }else
         {
+            
             return true;
         }
     }
