@@ -135,7 +135,13 @@ $apiRoutesArr = [
     'allSections',
     'allSubjects',
     'submitDeparture',
-    'showSubmitDepartureData'
+    'showSubmitDepartureData',
+    'showStudentDetails',
+    'addExam',
+    'showAllExam',
+    'showSingleExam',
+    'updateExam',
+    'addResult'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

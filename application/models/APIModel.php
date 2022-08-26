@@ -25,43 +25,39 @@ class APIModel extends CI_Model
         ";
 
 
-        $userData = $this->db->query($sql)->result_array();
-        if (!empty($userData)) {
-          $authToken = HelperClass::generateRandomToken();
-          $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id'");
-          $responseData = [];
-          $responseData["teacherId"] = @$userData[0]["teacherId"];
-          $responseData["name"] = @$userData[0]["name"];
-          $responseData["user_id"] = @$userData[0]["user_id"];
-          $responseData["gender"] = @$userData[0]["gender"];
-          $responseData["mother_name"] = @$userData[0]["mother_name"];
-          $responseData["father_name"] = @$userData[0]["father_name"];
-          $responseData["mobile"] = @$userData[0]["mobile"];
-          $responseData["email"] = @$userData[0]["email"];
-          $responseData["address"] = @$userData[0]["address"];
-          $responseData["dob"] = @$userData[0]["dob"];
-          $responseData["doj"] = @$userData[0]["doj"];
-          $responseData["pincode"] = @$userData[0]["pincode"];
-          $responseData["image"] = @$userData[0]["image"];
-          $responseData["className"] = @$userData[0]["className"];
-          $responseData["sectionName"] = @$userData[0]["sectionName"];
-          $responseData["stateName"] = @$userData[0]["stateName"];
-          $responseData["cityName"] = @$userData[0]["cityName"];
-          $responseData["authToken"] = @$authToken;
-          $responseData["userType"] = @$type;
-          return $responseData;
-        } else {
-          return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
-        }
-
-
-
+      $userData = $this->db->query($sql)->result_array();
+      if (!empty($userData)) {
+        $authToken = HelperClass::generateRandomToken();
+        $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id'");
+        $responseData = [];
+        $responseData["teacherId"] = @$userData[0]["teacherId"];
+        $responseData["name"] = @$userData[0]["name"];
+        $responseData["user_id"] = @$userData[0]["user_id"];
+        $responseData["gender"] = @$userData[0]["gender"];
+        $responseData["mother_name"] = @$userData[0]["mother_name"];
+        $responseData["father_name"] = @$userData[0]["father_name"];
+        $responseData["mobile"] = @$userData[0]["mobile"];
+        $responseData["email"] = @$userData[0]["email"];
+        $responseData["address"] = @$userData[0]["address"];
+        $responseData["dob"] = @$userData[0]["dob"];
+        $responseData["doj"] = @$userData[0]["doj"];
+        $responseData["pincode"] = @$userData[0]["pincode"];
+        $responseData["image"] = @$userData[0]["image"];
+        $responseData["className"] = @$userData[0]["className"];
+        $responseData["sectionName"] = @$userData[0]["sectionName"];
+        $responseData["stateName"] = @$userData[0]["stateName"];
+        $responseData["cityName"] = @$userData[0]["cityName"];
+        $responseData["authToken"] = @$authToken;
+        $responseData["userType"] = @$type;
+        return $responseData;
+      } else {
+        return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+      }
     } else if ($type == 'Staff') {
       //
     } else if ($type == 'Principal') {
       //
     }
-   
   }
 
   // validate login
@@ -205,23 +201,260 @@ class APIModel extends CI_Model
     }
   }
 
-   // showSubmitAttendenceData
-   public function showSubmitDepartureData($className, $sectionName)
-   {
-     $currentDate = date_create()->format('Y-m-d');
-     $dir = base_url() . HelperClass::uploadImgDir;
-     $d = $this->db->query("SELECT dt.id as departureId, dt.departureStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::departureTable . " dt
+  // showSubmitAttendenceData
+  public function showSubmitDepartureData($className, $sectionName)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $d = $this->db->query("SELECT dt.id as departureId, dt.departureStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::departureTable . " dt
        LEFT JOIN " . Table::studentTable . " stu ON dt.stu_id = stu.id
        LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
        LEFT JOIN " . Table::sectionTable . " sec ON stu.section_id = sec.id
        WHERE dt.dept_date = '$currentDate' AND dt.stu_class = '$className' AND dt.stu_section = '$sectionName' ")->result_array();
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'Today Departure Data Not Found for class ' . $className . ' and section ' . $sectionName);
+    }
+  }
+
+// showStudentDetils
+  public function showStudentDetails($classId,$sectionId,$qrCode,$studentId)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $condition = '';
+    if(!empty($classId) && !empty($sectionId) && !empty($studentId))
+    {
+      $condition.=" AND s.id = '{$studentId}' AND ss.id = '{$sectionId}' AND c.id = '{$classId}' ";
+    }else
+    {
+      $condition.= " AND q.qrcodeUrl = '$qrCode' ";
+    }
+
+    $sql = "SELECT s.*, 
+    CONCAT('$dir',s.image) as image,
+    if(s.status = '1', 'Active','InActive')as status,
+    c.className,
+    ss.sectionName,
+    st.stateName,
+    ct.cityName,
+    q.uniqueValue, q.qrcodeUrl,
+    examt.exam_name, examt.date_of_exam, examt.min_marks,examt.max_marks,
+    CONCAT(rt.marks ,' Out of ', examt.max_marks) as examMarks,
+    rt.result_date,rt.remarks,rt.marks,if(rt.status = '1','Pass', 'Fail') as resultStatus,
+    subt.subjectName
+    FROM " .Table::studentTable." s
+    LEFT JOIN ".Table::qrcodeTable." q ON q.uniqueValue = s.user_id
+    LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+    LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+    LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+    LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+    LEFT JOIN ".Table::resultTable." rt ON rt.student_id = s.id
+    LEFT JOIN ".Table::examTable." examt ON rt.exam_id = examt.id
+    LEFT JOIN ".Table::subjectTable." subt ON subt.id = examt.subject_id
+    WHERE s.status = '1' $condition 
+    ORDER BY s.id DESC";
+
+    $d = $this->db->query($sql)->result_array();
+
+    if (!empty($d)) {
+      $returnArr = [];
+      $returnArr['studentId'] = @$d[0]['id'];
+      $returnArr['u_qr_id'] =@$d[0]['u_qr_id'];
+      $returnArr['uniqueValue'] = @$d[0]['uniqueValue'];
+      $returnArr['qrcodeUrl'] = @$d[0]['qrcodeUrl'];
+      $returnArr['name'] = @$d[0]['name'];
+      $returnArr['user_id'] = @$d[0]['user_id'];
+      $returnArr['class_id'] = @$d[0]['className'];
+      $returnArr['section_id'] = @$d[0]['sectionName'];
+      $returnArr['roll_no'] = @$d[0]['roll_no'];
+      $returnArr['gender'] = (@$d[0]['gender'] == '1') ? 'Male' : 'Female';
+      $returnArr['mother_name'] = @$d[0]['mother_name'];
+      $returnArr['father_name'] = @$d[0]['father_name'];
+      $returnArr['mobile'] = @$d[0]['mobile'];
+      $returnArr['email'] = @$d[0]['email'];
+      $returnArr['dob'] = @$d[0]['dob'];
+      $returnArr['address'] = @$d[0]['address'];
+      $returnArr['cityName'] = @$d[0]['cityName'];
+      $returnArr['stateName'] = @$d[0]['stateName'];
+      $returnArr['pincode'] = @$d[0]['pincode'];
+      $returnArr['status'] = @$d[0]['status'];
+      $returnArr['image'] = @$d[0]['image'];
+
+      $returnArr['resultData'] = [];
+      $totalData = count($d);
+      for($i=0;$i < $totalData; $i++)
+      {
+        $subArr = [];
+        $subArr['exam_name'] = @$d[$i]['exam_name'];
+        $subArr['exam_date'] = @$d[$i]['date_of_exam'];
+        $subArr['subjectName'] = @$d[$i]['subjectName'];
+        $subArr['max_marks'] = @$d[$i]['max_marks'];
+        $subArr['min_marks'] = @$d[$i]['min_marks'];
+        $subArr['exam_name'] = @$d[$i]['exam_name'];
+        $subArr['result_date'] = @$d[$i]['result_date'];
+        $subArr['marksRecived'] = @$d[$i]['marks'];
+        $subArr['examMarks'] = @$d[$i]['examMarks'];
+        $subArr['resultStatus'] = @$d[$i]['resultStatus'];
+        $subArr['remarks'] = @$d[$i]['remarks'];
+        array_push($returnArr['resultData'],$subArr);
+      }
+
+      return $returnArr;
+    } else {
+      return HelperClass::APIresponse(500, 'No Data Found for this Student.');
+    }
+  }
+
+
+  // add Exam
+  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks)
+  {
+    //$currentDate = date_create()->format('Y-m-d');
+    if ($loginuserType == 'Teacher') {
+
+      $insertArr = [
+        "class_id" => $classId,
+        "section_id" => $sectionId,
+        "subject_id" => $subjectId,
+        "exam_name" => $examName . " Date: " . $examDate,
+        "date_of_exam" => $examDate,
+        "max_marks" => $maxMarks,
+        "min_marks" => $minMarks,
+        "login_user_id" => $loginUserId,
+        "login_user_type" => $loginuserType,
+      ];
+
+      $insertId = $this->CrudModel->insert(Table::examTable, $insertArr);
+      if (!empty($insertId)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if ($loginuserType == 'Staff') {
+      //
+    } else if ($loginuserType == 'Principal') {
+      //
+    }
+  }
+  // updateExam
+  public function updateExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $examId)
+  {
+    //$currentDate = date_create()->format('Y-m-d');
+    if ($loginuserType == 'Teacher') {
+
+      $updateArr = [
+        "class_id" => $classId,
+        "section_id" => $sectionId,
+        "subject_id" => $subjectId,
+        "exam_name" => $examName . " Date: " . $examDate,
+        "date_of_exam" => $examDate,
+        "max_marks" => $maxMarks,
+        "min_marks" => $minMarks,
+        "login_user_id" => $loginUserId,
+        "login_user_type" => $loginuserType,
+      ];
+
+      $update = $this->CrudModel->update(Table::examTable, $updateArr, $examId);
+      if (!empty($update)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if ($loginuserType == 'Staff') {
+      //
+    } else if ($loginuserType == 'Principal') {
+      //
+    }
+  }
+
+
+  // showAllExam
+  public function showAllExam($classId, $sectionId, $subjectId = '')
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $condition = '';
+    if (!empty($subjectId)) {
+      $condition .= " AND e.subject_id = $subjectId ";
+    }
+
+    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName FROM " . Table::examTable . " e
+      INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
+      INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
+      INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
+      WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.status = '1'")->result_array();
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'No Exams found for this class');
+    }
+  }
+
+  // showSingleExam
+  public function showSingleExam($classId, $sectionId, $subjectId = '', $examId)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $condition = '';
+    if (!empty($subjectId)) {
+      $condition .= " AND e.subject_id = $subjectId ";
+    }
+
+    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName FROM " . Table::examTable . " e
+      INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
+      INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
+      INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
+      WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.id = '$examId' AND e.status = '1'")->result_array();
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'No Exams found for this class');
+    }
+  }
+
+
+   // save attendence
+   public function addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId)
+   {
+     $currentDate = date_create()->format('Y-m-d');
+     if ($loginuserType == 'Teacher') {
  
-     if (!empty($d)) {
-       return $d;
-     } else {
-       return HelperClass::APIresponse(500, 'Today Departure Data Not Found for class ' . $className . ' and section ' . $sectionName);
+       $d = $this->db->query("SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' LIMIT 1")->result_array();
+ 
+       if (!empty($d)) {
+         return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
+       }
+ 
+       $insertArr = [
+         "exam_id" => $examId,
+         "marks" => $marks,
+         "remarks" => ($reMarks) ? $reMarks : "",
+         "resultStatus" => $resultStatus,
+         "student_id" => $studentId,
+         "login_user_type" => $loginuserType,
+         "login_user_id" => $loginUserId,
+         "result_date" => $resultDate,
+       ];
+
+ 
+       $insertId = $this->CrudModel->insert(Table::resultTable, $insertArr);
+       if (!empty($insertId)) {
+         return true;
+       } else {
+         return false;
+       }
+     } else if ($loginuserType == 'Staff') {
+       //
+     } else if ($loginuserType == 'Principal') {
+       //
      }
    }
+
 
   // fetching all classes
   public function allClasses()
@@ -239,6 +472,4 @@ class APIModel extends CI_Model
   {
     return  $this->CrudModel->allSubjects(Table::subjectTable);
   }
-
-
 }

@@ -58,7 +58,8 @@ class APIController extends CI_Controller
 		$attendenceData = $apiData['attendenceData'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$currentDateTime = date('d-m-Y h:i:s');
-		for ($i = 0; $i < count($attendenceData); $i++) {
+		$totalAttenData = count($attendenceData);
+		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
 			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus);
@@ -100,7 +101,8 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$currentDateTime = date('d-m-Y h:i:s');
 
-		for ($i = 0; $i < count($departureData); $i++) {
+		$totalDepStu = count($departureData);
+		for ($i = 0; $i < $totalDepStu; $i++) {
 			// ignore if the student not present today
 			if($departureData[$i]['attendenceStatus'] == 0)
 			{
@@ -134,6 +136,174 @@ class APIController extends CI_Controller
 		$data = $this->APIModel->showSubmitDepartureData($className, $sectionName);
 
 		return HelperClass::APIresponse(200, 'Departure Data For today date ' . $currentDateTime, $data);
+	}
+
+
+	// addExam
+	public function addExam()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = $apiData['subjectId'];
+		$examDate = $apiData['examDate'];
+		$examName = $apiData['examName'];
+		$maxMarks = $apiData['maxMarks'];
+		$minMarks = $apiData['minMarks'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+
+		$addNewExam = $this->APIModel->addExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks);
+
+		if (!$addNewExam) {
+			return HelperClass::APIresponse(500, 'Exam Not Added Successfully beacuse ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'New Exam Added Successfully');
+		}
+		
+	}
+
+	
+	// show all Exams
+	public function showAllExam()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		// $loginUserId = $apiData['loginUserId'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = (@$apiData['subjectId']) ? @$apiData['subjectId'] : ''; // optional
+		// $examDate = $apiData['examDate'];
+		// $examName = $apiData['examName'];
+		// $maxMarks = $apiData['maxMarks'];
+		// $minMarks = $apiData['minMarks'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+
+		$allExamList = $this->APIModel->showAllExam($classId,$sectionId,$subjectId);
+
+		if (!$allExamList) {
+			return HelperClass::APIresponse(500, 'No Exam Found For This Class');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Exam List.',$allExamList);
+		}
+		
+	}
+
+
+	// showSingleExam
+
+
+	public function showSingleExam()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = ($apiData['subjectId']) ? $apiData['subjectId'] : ''; // optional
+		$examId = $apiData['examId'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+
+		$singleExamData = $this->APIModel->showSingleExam($classId,$sectionId,$subjectId,$examId);
+
+		if (!$singleExamData) {
+			return HelperClass::APIresponse(500, 'No Exam Found For This Class');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Exam Data.',$singleExamData);
+		}
+		
+	}
+
+
+	// upateExam
+	public function updateExam()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = $apiData['subjectId'];
+		$examDate = $apiData['examDate'];
+		$examName = $apiData['examName'];
+		$maxMarks = $apiData['maxMarks'];
+		$minMarks = $apiData['minMarks'];
+		$examId = $apiData['examId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+
+		$addNewExam = $this->APIModel->updateExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$examId);
+
+		if (!$addNewExam) {
+			return HelperClass::APIresponse(500, 'Exam Not Updated Successfully beacuse ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Exam Updated Successfully');
+		}
+		
+	}
+
+	// addResult
+	public function addResult()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$resultDate = $apiData['resultDate'];
+		$examId = $apiData['examId'];
+		$results = $apiData['results'];
+		$totalResults = count($results);
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+
+		for($i=0;$i<$totalResults;$i++)
+		{
+			$studentId = $results[$i]['studentId'];
+			$marks = $results[$i]['marks'];
+			$reMarks = @$results[$i]['reMarks'];
+			$resultStatus = @$results[$i]['resultStatus'];
+
+			$addExamResult = $this->APIModel->addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId);
+		}
+
+		if (!$addExamResult) {
+			return HelperClass::APIresponse(500, 'Result Not Added Successfully beacuse ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Result Updated Successfully');
+		}
+		
+	}
+
+
+
+	// showStudentDetails
+	public function showStudentDetails()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$classId = @$apiData['classId'];
+		$sectionId = @$apiData['sectionId'];
+		$qrCode = @$apiData['qrCode'];
+		$studentId = @$apiData['studentId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$data = $this->APIModel->showStudentDetails($classId,$sectionId,$qrCode,$studentId);
+		return HelperClass::APIresponse(200, 'Student Details.', $data);
 	}
 
 

@@ -18,4 +18,6 @@ class Table{
     const userTable = 'users';
     const adminPanelMenuTable = 'admin_panel_menu';
     const panelMenuPermissionTable = 'panel_menu_permission';
+    const examTable = 'exam';
+    const resultTable = 'result';
 }
