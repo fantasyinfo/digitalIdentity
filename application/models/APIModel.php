@@ -319,7 +319,7 @@ class APIModel extends CI_Model
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
-        "exam_name" => $examName . " Date: " . $examDate,
+        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000,9999),
         "date_of_exam" => $examDate,
         "max_marks" => $maxMarks,
         "min_marks" => $minMarks,
@@ -349,7 +349,7 @@ class APIModel extends CI_Model
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
-        "exam_name" => $examName . " Date: " . $examDate,
+        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000,9999),
         "date_of_exam" => $examDate,
         "max_marks" => $maxMarks,
         "min_marks" => $minMarks,
@@ -395,7 +395,7 @@ class APIModel extends CI_Model
   }
 
   // showSingleExam
-  public function showSingleExam($classId, $sectionId, $subjectId = '', $examId)
+  public function showSingleExam($classId, $sectionId,  $examId, $subjectId = '')
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;

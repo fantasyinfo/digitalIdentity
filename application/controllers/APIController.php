@@ -213,7 +213,7 @@ class APIController extends CI_Controller
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 
-		$singleExamData = $this->APIModel->showSingleExam($classId,$sectionId,$subjectId,$examId);
+		$singleExamData = $this->APIModel->showSingleExam($classId,$sectionId,$examId,$subjectId);
 
 		if (!$singleExamData) {
 			return HelperClass::APIresponse(500, 'No Exam Found For This Class');
