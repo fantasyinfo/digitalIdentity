@@ -15,12 +15,13 @@ class APIModel extends CI_Model
     $dir = base_url() . HelperClass::uploadImgDir;
     if ($type == 'Teacher') {
       $sql = "
-        SELECT t.id as teacherId, t.name, t.user_id,if(t.gender = 1, 'Male', 'Female') as gender, t.mother_name, t.father_name,t.mobile,t.email,t.address,t.dob,t.doj,t.pincode,CONCAT('$dir',t.image) as image,c.className,ss.sectionName,st.stateName,ct.cityName
+        SELECT t.id as teacherId,t.class_id,t.section_id, t.name, t.user_id,if(t.gender = 1, 'Male', 'Female') as gender, t.mother_name, t.father_name,t.mobile,t.email,t.address,t.dob,t.doj,t.pincode,CONCAT('$dir',t.image) as image,c.className,ss.sectionName,st.stateName,ct.cityName,tst.subject_ids
         FROM " . Table::teacherTable . " t
         LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
         LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
         LEFT JOIN " . Table::stateTable . " st ON st.id =  t.state_id
         LEFT JOIN " . Table::cityTable . " ct ON ct.id =  t.city_id
+        LEFT JOIN " . Table::teacherSubjectsTable . " tst ON tst.teacher_id =  t.id
         WHERE t.user_id = '$id' AND t.password = '$password' AND t.status = '1'
         ";
 
@@ -49,6 +50,29 @@ class APIModel extends CI_Model
         $responseData["cityName"] = @$userData[0]["cityName"];
         $responseData["authToken"] = @$authToken;
         $responseData["userType"] = @$type;
+
+        // total count of students
+        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"],$userData[0]["section_id"])) ? $this->countStudentViaClassAndSection($userData[0]["class_id"],$userData[0]["section_id"]) : null;
+
+        // subjects of teachers
+        $responseData["teacherSubjects"] = [];
+        $subjectsArr = json_decode(@$userData[0]['subject_ids'],TRUE);
+        $totalSub = count(@$subjectsArr);
+        if(isset($totalSub))
+        {
+          for($i=0;$i<$totalSub;$i++)
+          {
+            $subArr = [];
+            $sub = $this->db->query("SELECT id,subjectName from ".Table::subjectTable." WHERE id = '{$subjectsArr[$i]}' AND status = '1'")->result_array();
+            if(isset($sub))
+            {
+              $subArr['subjectId'] = $sub[0]['id'];
+              $subArr['subjectName'] = $sub[0]['subjectName'];
+            }
+            array_push($responseData["teacherSubjects"],$subArr);
+          }
+        }
+        
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
@@ -102,6 +126,15 @@ class APIModel extends CI_Model
     }
   }
 
+  public function countStudentViaClassAndSection($class_id,$section_id)
+  {
+   $totalStudents =  $this->db->query("SELECT count(1) as count FROM ". Table::studentTable ." WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1'")->result_array();
+   if (!empty($totalStudents)) {
+    return $totalStudents[0]['count'];
+  } else {
+    return false;
+  }
+  }
 
   // save attendence
   public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus)
