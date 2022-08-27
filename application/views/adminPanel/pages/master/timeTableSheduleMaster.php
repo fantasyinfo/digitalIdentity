@@ -94,7 +94,9 @@
 
     // insert new city
     if (isset($_POST['submit'])) {
-       //HelperClass::prePrintR($_POST);
+     
+      
+
 
         $jsonArr = [];
         if(isset($_POST['timeHour']))
@@ -102,6 +104,21 @@
             $subArr = [];
             $subArr['class'] = $_POST['class'];
             $subArr['section'] = $_POST['section'];
+
+            $alreadyTimeTable = $this->db->query("SELECT * FROM " . Table::classSheduleTable . " WHERE class_id = '{$_POST['class']}' AND section_id = '{$_POST['section']}'")->result_array();
+
+            if(!empty($alreadyTimeTable))
+            {
+                $msgArr = [
+                  'class' => 'danger',
+                  'msg' => 'This Class Time Table is already inserted, Please Edit That',
+                ];
+                $this->session->set_userdata($msgArr);
+                header('Location: timeTableSheduleMaster');
+                exit(0);
+            }
+
+
             $subArr['timeTable'] = [];
             for($i=0;$i < count($_POST['timeHour']); $i++)
             {

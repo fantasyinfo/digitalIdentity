@@ -77,7 +77,8 @@ $masterRoutesArr = [
     'teacherSubjectsMaster',
     'timeTableSheduleMaster',
     'panelUserMaster',
-    'notificationMaster'
+    'notificationMaster',
+    'feesMaster'
     
 ];
 

@@ -78,6 +78,21 @@
     if(isset($_POST['submit']))
     {
       $stateName = $_POST['stateName'];
+
+      $alreadyState = $this->db->query("SELECT * FROM " . Table::stateTable . " WHERE stateName = '$stateName'")->result_array();
+
+      if(!empty($alreadyState))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This State is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: stateMaster');
+          exit(0);
+      }
+
+
       $insertNewCity = $this->db->query("INSERT INTO " . Table::stateTable . " (stateName) VALUES ('$stateName')");
       if($insertNewCity)
       {

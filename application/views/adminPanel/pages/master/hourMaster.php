@@ -80,6 +80,23 @@
     {
       $start_time = $_POST['start_time'];
       $end_time = $_POST['end_time'];
+
+      $alreadyTimeTable = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE start_time = '$start_time' AND end_time = '$end_time'")->result_array();
+
+      if(!empty($alreadyTimeTable))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This Hour is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: hourMaster');
+          exit(0);
+      }
+
+
+
+
       $insertNewTime = $this->db->query("INSERT INTO " . Table::timeTableHoursTable . " (start_time, end_time) VALUES ('$start_time','$end_time')");
       if($insertNewTime)
       {

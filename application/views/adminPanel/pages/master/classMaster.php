@@ -80,6 +80,23 @@
     if(isset($_POST['submit']))
     {
       $className = $_POST['className'];
+
+
+      $alreadyClassName = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE className = '$className'")->result_array();
+
+      if(!empty($alreadyClassName))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This Class is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: classMaster');
+          exit(0);
+      }
+
+
+
       $insertNewCity = $this->db->query("INSERT INTO " . Table::classTable . " (className) VALUES ('$className')");
       if($insertNewCity)
       {

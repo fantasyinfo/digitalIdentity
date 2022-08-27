@@ -78,6 +78,22 @@
     if(isset($_POST['submit']))
     {
       $weekName = $_POST['weekName'];
+
+      $alreadyWeek = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE weekName = '$weekName'")->result_array();
+
+      if(!empty($alreadyWeek))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This Week is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: weekMaster');
+          exit(0);
+      }
+
+
+
       $insertNewCity = $this->db->query("INSERT INTO " . Table::weekTable . " (weekName) VALUES ('$weekName')");
       if($insertNewCity)
       {

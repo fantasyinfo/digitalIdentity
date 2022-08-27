@@ -78,6 +78,21 @@
     if(isset($_POST['submit']))
     {
       $subjectName = $_POST['subjectName'];
+
+      $alreadySubject = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE subjectName = '$subjectName'")->result_array();
+
+      if(!empty($alreadySubject))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This Subject is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: subjectMaster');
+          exit(0);
+      }
+
+
       $insertNewCity = $this->db->query("INSERT INTO " . Table::subjectTable . " (subjectName) VALUES ('$subjectName')");
       if($insertNewCity)
       {

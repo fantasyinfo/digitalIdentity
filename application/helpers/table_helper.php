@@ -21,4 +21,5 @@ class Table{
     const examTable = 'exam';
     const resultTable = 'result';
     const pushNotificationTable = 'push_notification';
+    const feesTable = 'fees';
 }

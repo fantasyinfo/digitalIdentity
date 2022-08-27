@@ -79,6 +79,21 @@
     if(isset($_POST['submit']))
     {
       $cityName = $_POST['cityName'];
+
+
+      $alreadyCity = $this->db->query("SELECT * FROM " . Table::cityTable . " WHERE cityName = '$cityName'")->result_array();
+
+      if(!empty($alreadyCity))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This City is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: cityMaster');
+          exit(0);
+      }
+
       $insertNewCity = $this->db->query("INSERT INTO " . Table::cityTable . " (cityName) VALUES ('$cityName')");
       if($insertNewCity)
       {

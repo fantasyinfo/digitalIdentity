@@ -84,6 +84,21 @@
       // HelperClass::prePrintR($_POST);
 
       $teacherId = $_POST['teacherId'];
+
+      $alreadyTeacherSubjects = $this->db->query("SELECT * FROM " . Table::teacherSubjectsTable . " WHERE teacher_id = '$teacherId'")->result_array();
+
+      if(!empty($alreadyTeacherSubjects))
+      {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'This Teacher\'s Subject is already inserted, Please Edit That',
+          ];
+          $this->session->set_userdata($msgArr);
+          header('Location: teacherSubjectsMaster');
+          exit(0);
+      }
+
+
       $subjectIds = json_encode($_POST['subjectIds']);
 
       $insertTeacherSubjects = $this->db->query("INSERT INTO " . Table::teacherSubjectsTable . " (teacher_id,subject_ids) VALUES ('$teacherId','$subjectIds')");

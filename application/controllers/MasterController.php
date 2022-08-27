@@ -150,10 +150,21 @@ class MasterController extends CI_Controller
 	{
 		$this->loginCheck();
 		$dataArr = [
-			'pageTitle' => 'Panel User Master',
+			'pageTitle' => 'Notification Master',
 			'adminPanelUrl' => $this->adminPanelURL
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->masterDir . 'notificationMaster');
+	}
+
+	public function feesMaster()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Fees Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'feesMaster');
 	}
 }

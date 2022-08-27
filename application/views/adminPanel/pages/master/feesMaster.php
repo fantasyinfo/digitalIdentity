@@ -10,133 +10,138 @@
 
     $this->load->library('session');
 
-  // fetching section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " ")->result_array();
+  // fetching city data
+    $feesData = $this->db->query("SELECT * FROM " . Table::feesTable . " ORDER BY id DESC")->result_array();
 
+    // classes
+    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' ORDER BY id DESC")->result_array();
 
     // edit and delete action
     if(isset($_GET['action']))
     {
-      // fetch section for edit the  section 
+      // fetch city for edit the  city 
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId' ")->result_array();
+        $editCityData = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE id='$editId'")->result_array();
       }
 
-      // delete the section
+      // delete the city
       if($_GET['action'] == 'delete')
       {
         $deleteId = $_GET['delete_id'];
-        $deletesectionData = $this->db->query("DELETE FROM " . Table::sectionTable . " WHERE id='$deleteId'");
-        if($deletesectionData)
+        $deleteCityData = $this->db->query("DELETE FROM " . Table::feesTable . " WHERE id='$deleteId'");
+        if($deleteCityData)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'section Deleted Successfully',
+            'msg' => 'Fees Deleted Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'section Not Deleted Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'Fees Not Deleted Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/sectionMaster");
+        header("Refresh:3 ".base_url()."master/feesMaster");
       }
 
       if($_GET['action'] == 'status')
       {
         $status = $_GET['status'];
         $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::sectionTable . " SET status = '$status' WHERE id = '$updateId'");
+        $updateStatus = $this->db->query("UPDATE " . Table::feesTable . " SET status = '$status' WHERE id = '$updateId'");
 
         if($updateStatus)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'Section Status Updated Successfully',
+            'msg' => 'Fees Status Updated Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'Section Status Not Updated Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'Fees Status Not Updated Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/sectionMaster");
+        header("Refresh:3 ".base_url()."master/feesMaster");
       }
+
     }
 
 
-    // insert new section
+    // insert new city
     if(isset($_POST['submit']))
     {
-      $sectionName = $_POST['sectionName'];
+      $classId = $_POST['classId'];
+      $feesAmt = $_POST['fees_amt'];
 
-      $alreadySection = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE sectionName = '$sectionName'")->result_array();
+      $alreadyFees = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '$classId'")->result_array();
 
-      if(!empty($alreadySection))
+      if(!empty($alreadyFees))
       {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'This Section is already inserted, Please Edit That',
+            'msg' => 'This Class Fees is already inserted, Please Edit That',
           ];
           $this->session->set_userdata($msgArr);
-          header('Location: sectionMaster');
+          header('Location: feesMaster');
           exit(0);
       }
 
-
-      $insertNewsection = $this->db->query("INSERT INTO " . Table::sectionTable . " (sectionName) VALUES ('$sectionName')");
-      if($insertNewsection)
+      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (class_id,fees_amt) VALUES ('$classId','$feesAmt')");
+      if($insertNewFees)
       {
+      
         $msgArr = [
           'class' => 'success',
-          'msg' => 'New section Added Successfully',
+          'msg' => 'New Fees Added Successfully',
         ];
         $this->session->set_userdata($msgArr);
       }else
       {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'section Not Added Due to this Error. ' . $this->db->last_query(),
+          'msg' => 'Fees Not Added Due to this Error. ' . $this->db->last_query(),
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/sectionMaster");
+      header("Refresh:3 ".base_url()."master/feesMaster");
     }
 
-    // update exiting section
+    // update exiting city
     if(isset($_POST['update']))
     {
-      $sectionName = $_POST['sectionName'];
-      $sectionEditId = $_POST['updatesectionId'];
-      $updatesection = $this->db->query("UPDATE " . Table::sectionTable . " SET sectionName = '$sectionName' WHERE id = '$sectionEditId'");
-      if($updatesection)
+      $classId = $_POST['classId'];
+      $feesAmt = $_POST['fees_amt'];
+      $cityEditId = $_POST['updateCityId'];
+      $updateFees = $this->db->query("UPDATE " . Table::feesTable . " SET class_id = '$classId',fees_amt = '$feesAmt' WHERE id = '$cityEditId'");
+      if($updateFees)
       {
         $msgArr = [
           'class' => 'success',
-          'msg' => 'section Updated Successfully',
+          'msg' => 'Fees Updated Successfully',
         ];
         $this->session->set_userdata($msgArr);
       }else
       {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'section Not Updated Due to this Error. ' . $this->db->last_query(),
+          'msg' => 'Fees Not Updated Due to this Error. ' . $this->db->last_query(),
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/sectionMaster");
+      header("Refresh:3 ".base_url()."master/feesMaster");
     }
 
 
-    // print_r($sectionData);
+    // print_r($cityData);
 
 
     ?>
@@ -187,7 +192,7 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add / Edit section</h3>
+                  <h3 class="card-title">Add / Edit Fees</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -199,16 +204,39 @@
                     <?php 
                     if(isset($_GET['action']) && $_GET['action'] == 'edit')
                     {?>
-                     <input type="hidden" name="updatesectionId" value="<?=$editId?>">
+                     <input type="hidden" name="updateCityId" value="<?=$editId?>">
                     <?php }
                     
                     ?>
                       <div class="row">
-                        <div class="form-group col-md-3">
-                          <input type="text" name="sectionName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editsectionData[0]['sectionName'];}?>" class="form-control" id="name" placeholder="Enter section name" required>
+                      <div class="form-group col-md-6">
+                        <label>Select Class </label>
+                        <select name="classId" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+                          <?php 
+                          if(isset($classData))
+                          {
+                            $selectedClass = '';
+                            foreach($classData as $class)
+                            { 
+                              if(isset($editTeachersSubjectData) && $editTeachersSubjectData[0]['teacher_id'] == $class['id'])
+                              {
+                                $selectedClass = 'selected';
+                              }
+                              ?>
+                              <option <?= $selectedClass?> value="<?=$class['id']?>"><?=$class['className']?></option>
+                           <?php }
+                          }
+                          
+                          ?>
+                          
+                        </select>
                         </div>
-                        <div class="form-group col-md-3">
-                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
+                        <div class="form-group col-md-6">
+                        <label>Please Enter Fees Amount in Indian Rupees </label>
+                          <input type="number" name="fees_amt" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['fees_amt'];}?>" class="form-control" id="name" placeholder="Enter Fees Amount" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary btn-lg btn-block">Submit</button>
                         </div>
                       </div>
                     </form>
@@ -224,28 +252,32 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title">Showing All section Data</h3>
+                      <h3 class="card-title">Showing All Class Fees</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="sectionDataTable" class="table table-bordered table-striped">
+                      <table id="cityDataTable" class="table table-bordered table-striped">
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>Section Id</th>
-                            <th>Section Name</th>
+                            <th>Fees Id</th>
+                            <th>Class Name</th>
+                            <th>Fees Amount</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <?php if (isset($sectionData)) {
+                          <?php if (isset($feesData)) {
                             $i = 0;
-                            foreach ($sectionData as $cn) { ?>
+                            foreach ($feesData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
-                                <td><?= $cn['sectionName'];?></td>
+                                <td><?php $cf = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE id='{$cn['class_id']}' AND status = '1'")->result_array();
+                                echo $cf[0]['className'];?>
+                                </td>
+                                <td>₹ <?= number_format($cn['fees_amt'],2);?>/- </td>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
@@ -293,5 +325,5 @@
     // var ajaxUrl = '<?= base_url() . 'ajax/listStudentsAjax' ?>';
 
 
-    $("#sectionDataTable").DataTable();
+    $("#cityDataTable").DataTable();
   </script>
