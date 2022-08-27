@@ -480,4 +480,109 @@ class CrudModel extends CI_Model
             return true;
         }
     }
+
+    public function sendFirebaseNotification ($to = '', $notif = ''){
+
+            // FCM API Url
+            $url = 'https://fcm.googleapis.com/fcm/send';
+          
+            // Put your Server Key here
+            $apiKey = "AAAAPb7Be5g:APA91bG5Xy_UX66wmiyKY3d9Dp_LiK5qA9_aHDDMousl9hehj6f53UQeMeAExMAuonyHizy3eI5wz0sndS9xQkIpwhwyro89DKxzvv6TLJeCmNb-t2ANcvXTYb0mS1nFNNZ8jL39sC8D";
+          
+            // Compile headers in one variable
+            $headers = array (
+              'Authorization:key= ' . $apiKey,
+              'Content-Type:application/json'
+            );
+          
+            // Add notification content to a variable for easy reference
+            $notifData = [
+              'title' => "Test Title",
+              'body' => "Test notification body",
+              //  "image": "url-to-image",//Optional
+              'click_action' => "activities.NotifHandlerActivity" //Action/Activity - Optional
+            ];
+          
+            $dataPayload = ['to'=> 'My Name', 
+            'points'=>80, 
+            'other_data' => 'This is extra payload'
+            ];
+          
+            // Create the api body
+            $apiBody = [
+              'notification' => $notifData,
+              'data' => $dataPayload, //Optional
+              'time_to_live' => 600, // optional - In Seconds
+              'to' => '/dashboard/newtopic'
+              //'registration_ids' = ID ARRAY
+            //   'to' => 'cc3y906oCS0:APA91bHhifJikCe-6q_5EXTdkAu57Oy1bqkSExZYkBvL6iKCq2hq3nrqKWymoxfTJRnzMSqiUkrWh4uuzzEt3yF5KZTV6tLQPOe9MCepimPDGTkrO8lyDy79O5sv046-etzqCGmKsKT4'
+            ];
+          
+            // Initialize curl with the prepared headers and body
+            $ch = curl_init();
+            curl_setopt ($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt ($ch, CURLOPT_POST, true);
+            curl_setopt ($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt ($ch, CURLOPT_POSTFIELDS, json_encode($apiBody));
+
+          
+            // Execute call and save result
+            $result = curl_exec($ch);
+
+            if(curl_errno($ch)){
+                echo 'Request Error:' . curl_error($ch);
+                die();
+            }
+
+            print($result);
+            // Close curl after call
+            curl_close($ch);
+          
+            return $result;
+         
+    }
+
+
+    // c2ZpBUhNQiI:APA91bFf_o-N5jdY41dORhyvnAfzLT5fuAvUV97fn-o6WOZ6xnQ0ugOCuM0vaCf_R1q4eC548GKcWwCV9RDBMBmY8KLttn8_zb8XKmpYCJxRwN3s3JwfknoYE7IUMaLr5cKphuIQjJzp
+    
+    public function sendWebPush($title, $body)
+    {
+        $token = "eKvXhMbkDTg:APA91bE4RrD5zLy_0PB8Ai871giToE3-LXMwVuj1BKGJoSCXAapuZmKIK90cXTZLyQ8GdKw0O6UgQ6sIxStQK_BX2ObqBpaO5DJ-OjcswH0lVF747gDv66VGl6QBVupctg99p4FNisCg";  
+        $from = "AAAAPb7Be5g:APA91bG5Xy_UX66wmiyKY3d9Dp_LiK5qA9_aHDDMousl9hehj6f53UQeMeAExMAuonyHizy3eI5wz0sndS9xQkIpwhwyro89DKxzvv6TLJeCmNb-t2ANcvXTYb0mS1nFNNZ8jL39sC8D";
+        $msg = array
+              (
+                'body'  => "$body",
+                'title' => "$title",
+                'receiver' => 'erw',
+                'icon'  => "https://image.flaticon.com/icons/png/512/270/270014.png",/*Default Icon*/
+                'sound' => 'mySound'/*Default sound*/
+              );
+
+        $fields = array
+                (
+                    'to'        => $token,
+                    'notification'  => $msg
+                );
+
+        $headers = array
+                (
+                    'Authorization: key=' . $from,
+                    'Content-Type: application/json'
+                );
+        //#Send Reponse To FireBase Server 
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch );
+        //print_r($result);
+        curl_close( $ch );
+    }
+    
 }

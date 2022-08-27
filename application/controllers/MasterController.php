@@ -145,4 +145,15 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->masterDir . 'editPermission');
 	}
+
+	public function notificationMaster()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Panel User Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'notificationMaster');
+	}
 }

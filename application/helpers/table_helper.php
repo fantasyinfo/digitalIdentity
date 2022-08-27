@@ -20,4 +20,5 @@ class Table{
     const panelMenuPermissionTable = 'panel_menu_permission';
     const examTable = 'exam';
     const resultTable = 'result';
+    const pushNotificationTable = 'push_notification';
 }

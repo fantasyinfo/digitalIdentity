@@ -85,7 +85,7 @@ class APIModel extends CI_Model
   {
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
-      $studentsData = $this->db->query("SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, c.className,ss.sectionName 
+      $studentsData = $this->db->query("SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, c.id as classId, c.className,ss.sectionName , ss.id as sectionId
         FROM " . Table::studentTable . " stu 
         LEFT JOIN " . Table::classTable . " c ON c.id =  stu.class_id
         LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  stu.section_id

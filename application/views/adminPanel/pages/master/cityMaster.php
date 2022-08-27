@@ -9,6 +9,7 @@
     <?php $this->load->view("adminPanel/pages/sidebar.php");
 
     $this->load->library('session');
+    $this->load->model('CrudModel');
 
   // fetching city data
     $cityData = $this->db->query("SELECT * FROM " . Table::cityTable . " ORDER BY id DESC")->result_array();
@@ -81,6 +82,7 @@
       $insertNewCity = $this->db->query("INSERT INTO " . Table::cityTable . " (cityName) VALUES ('$cityName')");
       if($insertNewCity)
       {
+      
         $msgArr = [
           'class' => 'success',
           'msg' => 'New City Added Successfully',

@@ -1,3 +1,5 @@
+
+
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
@@ -33,8 +35,17 @@
     
         <?php 
         //HelperClass::prePrintR($this->session->userdata());
+
+          
+				// $to = "/topics/tournaments";
+    
+				// $notification = array(
+				// 	'title' => "New tournament!!",
+				// 	'body' => "A new tournament is ready, Join now or miss out"
+				// );
         
-        
+         //$this->CrudModel->sendWebPush('Student Updated','Hey New Student Updated Succesfully');
+
         ?>
           <!--/.col (right) -->
         </div>
