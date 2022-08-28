@@ -167,4 +167,40 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->masterDir . 'feesMaster');
 	}
+
+	public function submitFeesMaster()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Fees Submit Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'submitFeesMaster');
+	}
+
+	public function monthMaster()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Months Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'monthMaster');
+	}
+
+
+
+	// this is only for super admin
+	public function givePermissionMaster()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Permision Provider Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'givePermissionMaster');
+	}
 }

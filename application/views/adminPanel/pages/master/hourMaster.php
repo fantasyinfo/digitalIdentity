@@ -11,7 +11,7 @@
     $this->load->library('session');
 
   // fetching city data
-    $timeTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " ")->result_array();
+    $timeTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status != '4'")->result_array();
 
 
     // edit and delete action
@@ -21,14 +21,14 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editHourData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE id='$editId' ")->result_array();
+        $editHourData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE id='$editId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
       }
 
       // delete the city
       if($_GET['action'] == 'delete')
       {
         $deleteId = $_GET['delete_id'];
-        $deleteHourData = $this->db->query("DELETE FROM " . Table::timeTableHoursTable . " WHERE id='$deleteId'");
+        $deleteHourData = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET status = '4' WHERE id='$deleteId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
         if($deleteHourData)
         {
           $msgArr = [
@@ -51,7 +51,7 @@
       {
         $status = $_GET['status'];
         $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET status = '$status' WHERE id = '$updateId'");
+        $updateStatus = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET status = '$status'  WHERE id = '$updateId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
         if($updateStatus)
         {
@@ -78,10 +78,11 @@
     // insert new city
     if(isset($_POST['submit']))
     {
+      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
       $start_time = $_POST['start_time'];
       $end_time = $_POST['end_time'];
 
-      $alreadyTimeTable = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE start_time = '$start_time' AND end_time = '$end_time'")->result_array();
+      $alreadyTimeTable = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE start_time = '$start_time' AND end_time = '$end_time' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
       if(!empty($alreadyTimeTable))
       {
@@ -97,7 +98,7 @@
 
 
 
-      $insertNewTime = $this->db->query("INSERT INTO " . Table::timeTableHoursTable . " (start_time, end_time) VALUES ('$start_time','$end_time')");
+      $insertNewTime = $this->db->query("INSERT INTO " . Table::timeTableHoursTable . " (schoolUniqueCode, start_time, end_time) VALUES ('$schoolUniqueCode','$start_time','$end_time')");
       if($insertNewTime)
       {
         $msgArr = [
@@ -122,7 +123,7 @@
       $start_time = $_POST['start_time'];
       $end_time = $_POST['end_time'];
       $updateHourId = $_POST['updateHourId'];
-      $updateHour = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET start_time = '$start_time', end_time = '$end_time' WHERE id = '$updateHourId'");
+      $updateHour = $this->db->query("UPDATE " . Table::timeTableHoursTable . " SET start_time = '$start_time', end_time = '$end_time' WHERE id = '$updateHourId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if($updateHour)
       {
         $msgArr = [
@@ -242,7 +243,7 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>Hours Id</th>
+                            <!-- <th>Hours Id</th> -->
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Status</th>
@@ -255,7 +256,7 @@
                             foreach ($timeTableData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['start_time'];?></td>
                                 <td><?= $cn['end_time'];?></td>
                                 <td>

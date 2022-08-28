@@ -16,63 +16,63 @@
 
 
     // edit and delete action
-    if(isset($_GET['action']))
-    {
-      // fetch city for edit the  city 
-      if($_GET['action'] == 'edit')
-      {
-        $editId = $_GET['edit_id'];
-        $editCityData = $this->db->query("SELECT * FROM " . Table::cityTable . " WHERE id='$editId'")->result_array();
-      }
+    // if(isset($_GET['action']))
+    // {
+ 
+    //   if($_GET['action'] == 'edit')
+    //   {
+    //     $editId = $_GET['edit_id'];
+    //     $editCityData = $this->db->query("SELECT * FROM " . Table::cityTable . " WHERE id='$editId'")->result_array();
+    //   }
 
-      // delete the city
-      if($_GET['action'] == 'delete')
-      {
-        $deleteId = $_GET['delete_id'];
-        $deleteCityData = $this->db->query("DELETE FROM " . Table::cityTable . " WHERE id='$deleteId'");
-        if($deleteCityData)
-        {
-          $msgArr = [
-            'class' => 'success',
-            'msg' => 'City Deleted Successfully',
-          ];
-          $this->session->set_userdata($msgArr);
-        }else
-        {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'City Not Deleted Due to this Error. ' . $this->db->last_query(),
-          ];
-          $this->session->set_userdata($msgArr);
-        }
-        header("Refresh:3 ".base_url()."master/cityMaster");
-      }
 
-      if($_GET['action'] == 'status')
-      {
-        $status = $_GET['status'];
-        $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::cityTable . " SET status = '$status' WHERE id = '$updateId'");
+    //   if($_GET['action'] == 'delete')
+    //   {
+    //     $deleteId = $_GET['delete_id'];
+    //     $deleteCityData = $this->db->query("DELETE FROM " . Table::cityTable . " WHERE id='$deleteId'");
+    //     if($deleteCityData)
+    //     {
+    //       $msgArr = [
+    //         'class' => 'success',
+    //         'msg' => 'City Deleted Successfully',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }else
+    //     {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'City Not Deleted Due to this Error. ' . $this->db->last_query(),
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }
+    //     header("Refresh:3 ".base_url()."master/cityMaster");
+    //   }
 
-        if($updateStatus)
-        {
-          $msgArr = [
-            'class' => 'success',
-            'msg' => 'City Status Updated Successfully',
-          ];
-          $this->session->set_userdata($msgArr);
-        }else
-        {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'City Status Not Updated Due to this Error. ' . $this->db->last_query(),
-          ];
-          $this->session->set_userdata($msgArr);
-        }
-        header("Refresh:3 ".base_url()."master/cityMaster");
-      }
+    //   if($_GET['action'] == 'status')
+    //   {
+    //     $status = $_GET['status'];
+    //     $updateId = $_GET['edit_id'];
+    //     $updateStatus = $this->db->query("UPDATE " . Table::cityTable . " SET status = '$status' WHERE id = '$updateId'");
 
-    }
+    //     if($updateStatus)
+    //     {
+    //       $msgArr = [
+    //         'class' => 'success',
+    //         'msg' => 'City Status Updated Successfully',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }else
+    //     {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'City Status Not Updated Due to this Error. ' . $this->db->last_query(),
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }
+    //     header("Refresh:3 ".base_url()."master/cityMaster");
+    //   }
+
+    // }
 
 
     // insert new city
@@ -115,28 +115,28 @@
     }
 
     // update exiting city
-    if(isset($_POST['update']))
-    {
-      $cityName = $_POST['cityName'];
-      $cityEditId = $_POST['updateCityId'];
-      $updateCity = $this->db->query("UPDATE " . Table::cityTable . " SET cityName = '$cityName' WHERE id = '$cityEditId'");
-      if($updateCity)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'City Updated Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'City Not Updated Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:3 ".base_url()."master/cityMaster");
-    }
+    // if(isset($_POST['update']))
+    // {
+    //   $cityName = $_POST['cityName'];
+    //   $cityEditId = $_POST['updateCityId'];
+    //   $updateCity = $this->db->query("UPDATE " . Table::cityTable . " SET cityName = '$cityName' WHERE id = '$cityEditId'");
+    //   if($updateCity)
+    //   {
+    //     $msgArr = [
+    //       'class' => 'success',
+    //       'msg' => 'City Updated Successfully',
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }else
+    //   {
+    //     $msgArr = [
+    //       'class' => 'danger',
+    //       'msg' => 'City Not Updated Due to this Error. ' . $this->db->last_query(),
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }
+    //   header("Refresh:3 ".base_url()."master/cityMaster");
+    // }
 
 
     // print_r($cityData);
@@ -235,10 +235,10 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>City Id</th>
+                            <!-- <th>City Id</th> -->
                             <th>City Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <!-- <th>Status</th> -->
+                            <!-- <th>Action</th> -->
                           </tr>
                         </thead>
                         <tbody>
@@ -247,17 +247,17 @@
                             foreach ($cityData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['cityName'];?></td>
-                                <td>
+                                <!-- <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td>
-                                <td>
+                                </td> -->
+                                <!-- <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td>
+                                </td> -->
                               </tr>
                           <?php  }
                           } ?>

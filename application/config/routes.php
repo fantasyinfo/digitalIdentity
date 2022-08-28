@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
  $route['default_controller'] = 'FrontController';
  $route['/'] = 'FrontController/index'; // login or studentview
+ $route['register'] = 'FrontController/register'; // register
  $route['logout'] = 'FrontController/logout'; // logout
  // front-end routes
 
@@ -78,7 +79,10 @@ $masterRoutesArr = [
     'timeTableSheduleMaster',
     'panelUserMaster',
     'notificationMaster',
-    'feesMaster'
+    'feesMaster',
+    'submitFeesMaster',
+    'monthMaster',
+    'givePermissionMaster' // only for super Admin
     
 ];
 
@@ -111,6 +115,7 @@ $baseAjax = 'ajax/';
 $ajaxRoutesArr = [
     'listStudentsAjax',
     'listTeachersAjax',
+    'showStudentViaClassAndSectionId'
     
 ];
 

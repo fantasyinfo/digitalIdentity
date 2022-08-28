@@ -14,6 +14,7 @@ class TeacherController extends CI_Controller
 		$this->load->model('StudentModel');
 		$this->load->model('TeacherModel');
 		$this->load->model('CrudModel');
+		$this->load->library('session');
 	}
 
 	public function loginCheck()
@@ -89,16 +90,24 @@ class TeacherController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/footer');
 	}
 
-	
-
 	public function saveTeacher()
 	{
 		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->TeacherModel->saveTeacher($_POST, $_FILES)) {
-				$this->list();
+				$msgArr = [
+					'class' => 'success',
+					'msg' => 'New Teacher Added Successfully.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				redirect(base_url('teacher/list'));
 			} else {
-				$this->addTeacher();
+				$msgArr = [
+					'class' => 'danger',
+					'msg' => 'There is some issue, maybe this teacher is already register or some technical issue.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				 redirect(base_url('teacher/list'));
 			}
 		}
 	}
@@ -107,24 +116,40 @@ class TeacherController extends CI_Controller
 		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->TeacherModel->updateTeacher($_POST, $_FILES)) {
-				$this->list();
+				$msgArr = [
+					'class' => 'success',
+					'msg' => 'Teacher Updated Successfully.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				redirect(base_url('teacher/list'));
 			} else {
-				$this->addTeacher();
+				$msgArr = [
+					'class' => 'danger',
+					'msg' => 'There is some issue, teacher not updated or some technical issue.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				redirect(base_url('teacher/list'));
 			}
 		}
 	}
 	public function deleteTeacher($id)
 	{
 		$this->loginCheck();
-		$TeacherData = $this->TeacherModel->singleTeacher($id);
 		if ($this->TeacherModel->deleteTeacher($id)) {
-			$dir = HelperClass::uploadImgDir . @$TeacherData[0]['image'];
-			unlink(@$dir);
-			$this->list();
+			$msgArr = [
+				'class' => 'success',
+				'msg' => 'Teacher Deleted Successfully.',
+			  ];
+			 $this->session->set_userdata($msgArr);
+			redirect(base_url('teacher/list'));
 		} else {
-			$this->addTeacher();
+			$msgArr = [
+				'class' => 'danger',
+				'msg' => 'There is some issue, teacher not deleted or some technical issue.',
+			  ];
+			 $this->session->set_userdata($msgArr);
+			redirect(base_url('teacher/list'));
 		}
-		
 	}
 
 

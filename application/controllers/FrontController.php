@@ -54,14 +54,26 @@ class FrontController extends CI_Controller {
 		
 	}
 
+	public function register()
+	{
+
+		$dataArr = [
+			'pageTitle' => 'Register',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view('adminPanel/register',['data' => $dataArr]);
+		
+	}
+
 	public function logout()
 	{
 		$this->session->unset_userdata('id');
 		$this->session->unset_userdata('name');
 		$this->session->unset_userdata('email');
 		$this->session->unset_userdata('user_type');
+		$this->session->unset_userdata('schoolUniqueCode');
 		$this->session->unset_userdata('userData');
 
-		$this->load->view('adminPanel/index');
+		redirect(base_url());
 	}
 }

@@ -29,6 +29,20 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+
+	public function showStudentViaClassAndSectionId()
+	{
+		if(isset($_POST))
+		{
+			//HelperClass::prePrintR($_POST);
+			echo $this->StudentModel->showStudentViaClassAndSectionId($_POST);
+		}
+	}
+
+
+
+
+
 	public function listQR()
 	{
 		$dataArr = [

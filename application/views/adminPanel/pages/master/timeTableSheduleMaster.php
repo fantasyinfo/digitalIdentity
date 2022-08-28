@@ -20,10 +20,10 @@
     $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = 1")->result_array();
 
     // hours data
-    $hoursTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1")->result_array();
+    $hoursTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
     // teachers data
-    $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
+    $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
     // week data
     $weekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE status = 1")->result_array();
@@ -32,7 +32,9 @@
      $sheduleData = $this->db->query("
      SELECT cST.shedule_json, cST.id, ct.className,st.sectionName,cST.status FROM " . Table::classSheduleTable . " cST 
      JOIN ".Table::classTable." ct ON ct.id = cST.class_id
-     JOIN ".Table::sectionTable." st ON st.id = cST.section_id ORDER BY cST.id DESC
+     JOIN ".Table::sectionTable." st ON st.id = cST.section_id 
+     WHERE cST.status != '4' AND cST.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+     ORDER BY cST.id DESC
      ")->result_array();
 
 
@@ -42,14 +44,14 @@
       if ($_GET['action'] == 'edit') {
         $editId = $_GET['edit_id'];
         $editClassShedule = $this->db->query("SELECT * FROM " . Table::classSheduleTable . " 
-        WHERE id = '$editId' ORDER BY id DESC LIMIT 1")->result_array();
+        WHERE id = '$editId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
         //HelperClass::prePrintR($editClassShedule);
       }
 
       // delete the city
       if ($_GET['action'] == 'delete') {
         $deleteId = $_GET['delete_id'];
-        $deleteCityData = $this->db->query("DELETE FROM " . Table::classSheduleTable . " WHERE id='$deleteId'");
+        $deleteCityData = $this->db->query("UPDATE " . Table::classSheduleTable . " SET status = '4' WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
         if ($deleteCityData) {
           $msgArr = [
             'class' => 'success',
@@ -70,7 +72,7 @@
       {
         $status = $_GET['status'];
         $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::classSheduleTable . " SET status = '$status' WHERE id = '$updateId'");
+        $updateStatus = $this->db->query("UPDATE " . Table::classSheduleTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
         if($updateStatus)
         {
@@ -95,9 +97,7 @@
     // insert new city
     if (isset($_POST['submit'])) {
      
-      
-
-
+    
         $jsonArr = [];
         if(isset($_POST['timeHour']))
         {
@@ -105,7 +105,7 @@
             $subArr['class'] = $_POST['class'];
             $subArr['section'] = $_POST['section'];
 
-            $alreadyTimeTable = $this->db->query("SELECT * FROM " . Table::classSheduleTable . " WHERE class_id = '{$_POST['class']}' AND section_id = '{$_POST['section']}'")->result_array();
+            $alreadyTimeTable = $this->db->query("SELECT * FROM " . Table::classSheduleTable . " WHERE class_id = '{$_POST['class']}' AND section_id = '{$_POST['section']}'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
             if(!empty($alreadyTimeTable))
             {
@@ -137,9 +137,9 @@
 
         $cClassId = $jsonArr[0]['class'];
         $sSectionId = $jsonArr[0]['section'];
-
-       $insertClassShedule = $this->db->query("INSERT INTO " . Table::classSheduleTable . " (class_id,section_id,shedule_json)
-        VALUES ('$cClassId','$sSectionId','$obj')");
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+       $insertClassShedule = $this->db->query("INSERT INTO " . Table::classSheduleTable . " (schoolUniqueCode,class_id,section_id,shedule_json)
+        VALUES ('$schoolUniqueCode','$cClassId','$sSectionId','$obj')");
 
       if ($insertClassShedule) {
         $msgArr = [
@@ -161,7 +161,7 @@
     if (isset($_POST['update'])) {
 
       $updateSheduleId= $_POST['updateSheduleId'];
-
+      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
       $jsonArr = [];
       if(isset($_POST['timeHour']))
       {
@@ -188,7 +188,7 @@
       $sSectionId = $jsonArr[0]['section'];
 
 
-      $teacherSubjectsEditId = $this->db->query("UPDATE " . Table::classSheduleTable . " SET class_id = '$cClassId',section_id = '$sSectionId', shedule_json = '$obj' WHERE id = '$updateSheduleId'");
+      $teacherSubjectsEditId = $this->db->query("UPDATE " . Table::classSheduleTable . " SET class_id = '$cClassId',section_id = '$sSectionId', shedule_json = '$obj' WHERE id = '$updateSheduleId' AND schoolUniqueCode = '$schoolUniqueCode'");
       if ($teacherSubjectsEditId) {
         $msgArr = [
           'class' => 'success',
@@ -494,11 +494,11 @@
                                     if (isset($sheduleJsonArr)) {
                                     
                                       foreach ($sheduleJsonArr as $subArr) {
-                                        $timeArr = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1 AND id='{$subArr['time']}'")->result_array();
+                                        $timeArr = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1 AND id='{$subArr['time']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
                                         $subectArr = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE status = 1 AND id='{$subArr['subject']}'")->result_array();
 
-                                        $teacherArr = $this->db->query("SELECT * FROM " . Table::teacherTable . " WHERE status = 1 AND id='{$subArr['teacher']}'")->result_array();
+                                        $teacherArr = $this->db->query("SELECT * FROM " . Table::teacherTable . " WHERE status = 1 AND id='{$subArr['teacher']}'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
                                         for($a=0;$a<count($timeArr);$a++)
                                         {

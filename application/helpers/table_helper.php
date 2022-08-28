@@ -1,6 +1,7 @@
 <?php
 
 class Table{
+    const schoolMasterTable = 'schoolmaster';
     const studentTable = 'students';
     const teacherTable = 'teachers';
     const classTable = 'class';
@@ -10,7 +11,9 @@ class Table{
     const stateTable = 'state';
     const weekTable = 'week';
     const timeTableHoursTable = 'tthours';
-    const qrcodeTable = 'qrcode';
+    const qrcodeTable = 'qrcode_students';
+    const qrcodeSchoolsTable = 'qrcode_schools';
+    const qrcodeTeachersTable = 'qrcode_teachers';
     const attendenceTable = 'attendence';
     const departureTable = 'departure';
     const teacherSubjectsTable = 'teachersubjects';
@@ -22,4 +25,6 @@ class Table{
     const resultTable = 'result';
     const pushNotificationTable = 'push_notification';
     const feesTable = 'fees';
+    const feesForStudentTable = 'feesforstudent';
+    const monthTable = 'month';
 }

@@ -15,6 +15,7 @@ class StudentModel extends CI_Model
        
 
       $insertArr = [];
+      $insertArr['schoolUniqueCode'] = $_SESSION['schoolUniqueCode'];
       $insertArr['u_qr_id'] = '';
       $insertArr['name'] = $post['name'];
       $insertArr['user_id'] = $this->CrudModel->getUserId(Table::studentTable);
@@ -35,6 +36,16 @@ class StudentModel extends CI_Model
       $insertArr['image'] = '';
 
 
+      // check if the student is already registerd with us
+      $already = $this->db->query("SELECT * FROM ".Table::studentTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}'")->result_array();
+
+
+      if(!empty($already[0]))
+      {
+        return false;
+      }
+
+
       $fileName = "";
       if(!empty($files['image']))
       {
@@ -48,6 +59,7 @@ class StudentModel extends CI_Model
         {
           // insert qrcode data
           $qrDataArr = [];
+          $qrDataArr['schoolUniqueCode'] = $_SESSION['schoolUniqueCode'];
           $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
           $qrDataArr['uniqueValue'] = $insertArr['user_id'];
           $qrDataArr['type'] = HelperClass::userType['Student'];
@@ -74,7 +86,8 @@ class StudentModel extends CI_Model
           }
          
         }else
-        {
+        { echo $this->db->last_query();
+          die();
             return false;
         }
 
@@ -165,5 +178,23 @@ class StudentModel extends CI_Model
       return $this->CrudModel->allState(Table::stateTable);
     }
 
+
+    public function showStudentViaClassAndSectionId(array $p)
+    {
+      if(!empty($p))
+      {
+        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status = '1'")->result_array();
+        $html = '';
+        if(!empty($d))
+        {
+          foreach($d as $dd)
+          {
+           $html .= "<option value='{$dd['id']}'>{$dd['name']}</option>";
+          }
+          return json_encode($html);
+        }
+        return json_encode($sql);
+      }
+    }
 
 }

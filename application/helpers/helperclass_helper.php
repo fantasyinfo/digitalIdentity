@@ -7,6 +7,7 @@ class HelperClass
 
     const prefix = 'stu0000';
     const tecPrefix = 'tec0000';
+    const schoolIDPrefix = 'sch0000';
     const imgPrefix = 'img-';
     const uploadImgDir = 'assets/uploads/';
     const qrcodeUrl = 'https://qverify.in';
@@ -19,6 +20,7 @@ class HelperClass
         'Teacher' => '2',
         'Staff' => '3',
         'Principal' => '4',
+        'School' => '5'
     ];
     const userTypeForPanel = [
         'Admin' => '1',
@@ -114,5 +116,54 @@ class HelperClass
     public static function sanitizeInput($d)
     {
         return strip_tags(trim($d));
+    }
+
+
+
+    public static function sendEmail($to, $subject, $msg)
+    {
+        include 'assets/smtp/PHPMailerAutoload.php';
+        $mail = new PHPMailer();
+        $mail->SMTPDebug = 3;
+        $mail->IsSMTP();
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = "587";
+        $mail->IsHTML(true);
+        //$mail->addAttachment('sample.pdf');
+        $mail->CharSet = 'UTF-8';
+        $mail->Username = "digitalfied@gmail.com";
+        $mail->Password = 'fmyvsyeieegzroqc';
+        $mail->SetFrom("EMAIL");
+        $mail->Subject = $subject;
+        $mail->Body = $msg;
+        $mail->AddAddress($to);
+        $mail->SMTPOptions = array('ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => false
+        ));
+        $mail->Send();
+
+        // if (!$mail->Send()) {
+           // echo $mail->ErrorInfo;
+        // } else {
+        //    // echo 'Sent';
+        // }
+    }
+
+
+
+    public static function checkIfItsACEOAccount()
+    {
+        if($_SESSION['name'] != 'Super CEO Account' && $_SESSION['email'] != 'superCEO@digitalfied.in' && $_SESSION['user_type'] != 'SuperCEO' && $_SESSION['schoolUniqueCode'] != '963852')
+        {
+            return false;
+
+        }else
+        {
+            return true;
+        }
     }
 }

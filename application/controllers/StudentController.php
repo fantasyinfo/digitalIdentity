@@ -13,6 +13,7 @@ class StudentController extends CI_Controller
 		parent::__construct();
 		$this->load->model('StudentModel');
 		$this->load->model('CrudModel');
+		$this->load->library('session');
 	}
 
 	public function loginCheck()
@@ -95,9 +96,19 @@ class StudentController extends CI_Controller
 		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->StudentModel->saveStudent($_POST, $_FILES)) {
-				$this->list();
+				$msgArr = [
+					'class' => 'success',
+					'msg' => 'New Student Added Successfully.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				redirect(base_url('student/list'));
 			} else {
-				$this->addStudent();
+				$msgArr = [
+					'class' => 'danger',
+					'msg' => 'There is some issue, maybe this student is already register or some technical issue.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				 redirect(base_url('student/add'));
 			}
 		}
 	}
@@ -106,21 +117,39 @@ class StudentController extends CI_Controller
 		$this->loginCheck();
 		if (isset($_POST['submit'])) {
 			if ($this->StudentModel->updateStudent($_POST, $_FILES)) {
-				$this->list();
+				$msgArr = [
+					'class' => 'success',
+					'msg' => 'Student Updated Added Successfully.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				redirect(base_url('student/list'));
 			} else {
-				$this->addStudent();
+				$msgArr = [
+					'class' => 'danger',
+					'msg' => 'There is some issue, student not updated or some technical issue.',
+				  ];
+				 $this->session->set_userdata($msgArr);
+				 redirect(base_url('student/list'));
 			}
 		}
 	}
 	public function deleteStudent($id)
 	{
 		$this->loginCheck();
-		$studentData = $this->StudentModel->singleStudent($id);
-		unlink(@$studentData[0]['image']);
 		if ($this->StudentModel->deleteStudent($id)) {
-			$this->list();
+			$msgArr = [
+				'class' => 'success',
+				'msg' => 'Student Deleted Successfully.',
+			  ];
+			 $this->session->set_userdata($msgArr);
+			redirect(base_url('student/list'));
 		} else {
-			$this->addStudent();
+			$msgArr = [
+				'class' => 'danger',
+				'msg' => 'There is some issue, student not deleted or some technical issue.',
+			  ];
+			 $this->session->set_userdata($msgArr);
+			redirect(base_url('student/list'));
 		}
 		
 	}

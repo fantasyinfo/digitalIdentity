@@ -74,20 +74,20 @@
     .requestPermission()
     .then(function () {
     //MsgElem.innerHTML = "Notification permission granted." 
-      console.log("Notification permission granted.");
+      //console.log("Notification permission granted.");
 
         // get the token in the form of promise
       return messaging.getToken()
     })
     .then(function(token) {
     // print the token on the HTML page     
-      console.log(token);
+      //console.log(token);
       
       
       
     })
     .catch(function (err) {
-      console.log("Unable to get permission to notify.", err);
+     console.log("Unable to get permission to notify.", err);
     });
 
     messaging.onMessage(function(payload) {
@@ -98,7 +98,7 @@
             icon: payload.notification.icon,
             tag: "Dummy"
         });
-        console.log(payload.notification);
+       // console.log(payload.notification);
     });
 
         //firebase.initializeApp(config);
@@ -110,7 +110,7 @@
 
     // On child added to db
     database.on('child_added', function(data) {
-      console.log("Comming");
+     // console.log("Comming");
         if(Notification.permission!=='default'){
             var notify;
             

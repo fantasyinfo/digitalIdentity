@@ -13,6 +13,7 @@ class TeacherModel extends CI_Model
     {
        
       $insertArr = [];
+      $insertArr['schoolUniqueCode'] = $_SESSION['schoolUniqueCode'];
       $insertArr['u_qr_id'] = '';
       $insertArr['name'] = $post['name'];
       $insertArr['user_id'] = $this->CrudModel->getTeacherId(Table::teacherTable);
@@ -33,6 +34,18 @@ class TeacherModel extends CI_Model
       $insertArr['state_id'] = $post['state'];
       $insertArr['image'] = '';
 
+      
+      // check if the teacher is already registerd with us
+      $already = $this->db->query("SELECT * FROM ".Table::teacherTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}''")->result_array();
+
+
+      if(!empty($already))
+      {
+        return false;
+      }
+
+
+
 
       $fileName = "";
       if(!empty($files['image']))
@@ -45,34 +58,35 @@ class TeacherModel extends CI_Model
         $insertId = $this->CrudModel->insert(Table::teacherTable,$insertArr);
         if($insertId)
         {
-          return true;
-          die();
-          // insert qrcode data
-          // $qrDataArr = [];
-          // $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
-          // $qrDataArr['uniqueValue'] = $insertArr['user_id'];
-          // $qrDataArr['type'] = HelperClass::userType['Teacher'];
-          // $qrDataArr['user_id'] = $insertId;
+          // return true;
+          // die();
+          //insert qrcode data
+          $qrDataArr = [];
+          $qrDataArr['schoolUniqueCode'] = $_SESSION['schoolUniqueCode'];
+          $qrDataArr['qrcodeUrl'] = HelperClass::qrcodeUrl . "?tecid=" . HelperClass::schoolPrefix . $insertArr['user_id'];
+          $qrDataArr['uniqueValue'] = $insertArr['user_id'];
+          $qrDataArr['type'] = HelperClass::userType['Teacher'];
+          $qrDataArr['user_id'] = $insertId;
 
-          // $qrInsertId = $this->CrudModel->insert(Table::qrcodeTable,$qrDataArr);
-          // if($qrInsertId)
-          // {
-          //   $updateArr['u_qr_id'] = $qrInsertId;
-          //   if($this->CrudModel->update(Table::teacherTable,$updateArr,$insertId))
-          //   {
-          //     return true;
-          //   }else
-          //   {
-          //     echo $this->db->last_query();
-          //     die();
-          //     return false;
-          //   }
-          // }else
-          // {
-          //   echo $this->db->last_query();
-          //   die();
-          //   return false;
-          // }
+          $qrInsertId = $this->CrudModel->insert(Table::qrcodeTeachersTable,$qrDataArr);
+          if($qrInsertId)
+          {
+            $updateArr['u_qr_id'] = $qrInsertId;
+            if($this->CrudModel->update(Table::teacherTable,$updateArr,$insertId))
+            {
+              return true;
+            }else
+            {
+              echo $this->db->last_query();
+              die();
+              return false;
+            }
+          }else
+          {
+            echo $this->db->last_query();
+            die();
+            return false;
+          }
          
         }else
         {

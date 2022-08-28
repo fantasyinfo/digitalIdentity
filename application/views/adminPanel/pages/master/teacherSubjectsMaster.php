@@ -11,9 +11,14 @@
     $this->load->library('session');
 
   // fetching city data
-    $teachersSubjetsData = $this->db->query("SELECT DISTINCT(tst.teacher_id), tst.status, tst.id,tst.subject_ids, CONCAT(tt.name, ' - ' ,tt.user_id) teacherName,tt.id as teacherId FROM " . Table::teacherSubjectsTable . " tst LEFT JOIN ".Table::teacherTable." tt ON tst.teacher_id = tt.id  ORDER BY tst.id DESC")->result_array();
+    $teachersSubjetsData = $this->db->query("SELECT DISTINCT(tst.teacher_id), tst.status, tst.id,tst.subject_ids, CONCAT(tt.name, ' - ' ,tt.user_id) teacherName,tt.id as teacherId FROM " . Table::teacherSubjectsTable . " tst 
+    LEFT JOIN ".Table::teacherTable." tt ON tst.teacher_id = tt.id AND tt.schoolUniqueCode = ".$_SESSION['schoolUniqueCode']." 
+    WHERE tst.status != '4'  AND tst.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+     ORDER BY tst.id DESC")->result_array();
 
-    $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
+    $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 AND schoolUniqueCode = ".$_SESSION['schoolUniqueCode']." ORDER BY id DESC")->result_array();
+
+
     $subjectsData = $this->db->query("SELECT id, subjectName FROM " . Table::subjectTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
 
     // edit and delete action
@@ -23,7 +28,10 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editTeachersSubjectData = $this->db->query("SELECT DISTINCT(tst.teacher_id), tst.id,tst.subject_ids, CONCAT(tt.name, ' - ' ,tt.user_id) teacherName,tt.id as teacherId FROM " . Table::teacherSubjectsTable . " tst LEFT JOIN ".Table::teacherTable." tt ON tst.teacher_id = tt.id WHERE tst.status = 1 AND tst.id = '$editId' ORDER BY tst.id DESC LIMIT 1")->result_array();
+        $editTeachersSubjectData = $this->db->query("SELECT DISTINCT(tst.teacher_id), tst.id,tst.subject_ids, CONCAT(tt.name, ' - ' ,tt.user_id) teacherName,tt.id as teacherId FROM " . Table::teacherSubjectsTable . " tst 
+        LEFT JOIN ".Table::teacherTable." tt ON tst.teacher_id = tt.id AND tt.schoolUniqueCode = ".$_SESSION['schoolUniqueCode']." 
+        WHERE tst.status = 1 AND tst.id = '$editId' AND tst.status != '4'  AND tst.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+        ORDER BY tst.id DESC LIMIT 1")->result_array();
 
         
       }
@@ -32,7 +40,7 @@
       if($_GET['action'] == 'delete')
       {
         $deleteId = $_GET['delete_id'];
-        $deleteCityData = $this->db->query("DELETE FROM " . Table::teacherSubjectsTable . " WHERE id='$deleteId'");
+        $deleteCityData = $this->db->query("UPDATE " . Table::teacherSubjectsTable . " SET status = '4' WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
         if($deleteCityData)
         {
           $msgArr = [
@@ -55,7 +63,7 @@
       {
         $status = $_GET['status'];
         $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::teacherSubjectsTable . " SET status = '$status' WHERE id = '$updateId'");
+        $updateStatus = $this->db->query("UPDATE " . Table::teacherSubjectsTable . " SET status = '$status' WHERE id = '$updateId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
         if($updateStatus)
         {
@@ -84,8 +92,8 @@
       // HelperClass::prePrintR($_POST);
 
       $teacherId = $_POST['teacherId'];
-
-      $alreadyTeacherSubjects = $this->db->query("SELECT * FROM " . Table::teacherSubjectsTable . " WHERE teacher_id = '$teacherId'")->result_array();
+      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+      $alreadyTeacherSubjects = $this->db->query("SELECT * FROM " . Table::teacherSubjectsTable . " WHERE teacher_id = '$teacherId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
       if(!empty($alreadyTeacherSubjects))
       {
@@ -101,7 +109,7 @@
 
       $subjectIds = json_encode($_POST['subjectIds']);
 
-      $insertTeacherSubjects = $this->db->query("INSERT INTO " . Table::teacherSubjectsTable . " (teacher_id,subject_ids) VALUES ('$teacherId','$subjectIds')");
+      $insertTeacherSubjects = $this->db->query("INSERT INTO " . Table::teacherSubjectsTable . " (schoolUniqueCode,teacher_id,subject_ids) VALUES ('$schoolUniqueCode','$teacherId','$subjectIds')");
       if($insertTeacherSubjects)
       {
         $msgArr = [
@@ -126,7 +134,7 @@
       $teacherId = $_POST['teacherId'];
       $subjectIds = json_encode($_POST['subjectIds']);
       $teacherSubjectsEditId = $_POST['updateCityId'];
-      $updateCity = $this->db->query("UPDATE " . Table::teacherSubjectsTable . " SET subject_ids = '$subjectIds' WHERE id = '$teacherSubjectsEditId'");
+      $updateCity = $this->db->query("UPDATE " . Table::teacherSubjectsTable . " SET subject_ids = '$subjectIds' WHERE id = '$teacherSubjectsEditId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if($teacherSubjectsEditId)
       {
         $msgArr = [

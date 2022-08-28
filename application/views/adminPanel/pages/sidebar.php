@@ -8,7 +8,11 @@
 
   <?php
 
+
+$checkPermission = (HelperClass::checkIfItsACEOAccount()) ? true : false;
+
 $currentPage = $_SERVER['PATH_INFO'];
+
 
 
   $this->load->library('session');
@@ -19,7 +23,7 @@ $currentPage = $_SERVER['PATH_INFO'];
 
   $exitingPermission = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$_SESSION['id']}' AND user_type = '{$_SESSION['user_type']}' AND status = '1'")->result_array();
 
-  $exitingPermission = json_decode( $exitingPermission[0]['permissions'],TRUE);
+  @$exitingPermission = json_decode( @$exitingPermission[0]['permissions'],TRUE);
   ?>
   <!-- Sidebar -->
   <div class="sidebar">
@@ -57,7 +61,10 @@ $currentPage = $_SERVER['PATH_INFO'];
                       $active = '';
                     }
                     
-                    if(isset($exitingPermission))
+                    if($checkPermission)
+                    {
+                      $display = 'block';
+                    }else if (isset($exitingPermission))
                     {
                      
                       for($i=0;$i<count($exitingPermission);$i++)

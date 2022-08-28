@@ -15,127 +15,127 @@
 
 
     // edit and delete action
-    if(isset($_GET['action']))
-    {
-      // fetch city for edit the  city 
-      if($_GET['action'] == 'edit')
-      {
-        $editId = $_GET['edit_id'];
-        $editweekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE id='$editId' ")->result_array();
-      }
+    // if(isset($_GET['action']))
+    // {
+    
+    //   if($_GET['action'] == 'edit')
+    //   {
+    //     $editId = $_GET['edit_id'];
+    //     $editweekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE id='$editId' ")->result_array();
+    //   }
 
-      // delete the city
-      if($_GET['action'] == 'delete')
-      {
-        $deleteId = $_GET['delete_id'];
-        $deleteweekData = $this->db->query("DELETE FROM " . Table::weekTable . " WHERE id='$deleteId'");
-        if($deleteweekData)
-        {
-          $msgArr = [
-            'class' => 'success',
-            'msg' => 'week Deleted Successfully',
-          ];
-          $this->session->set_userdata($msgArr);
-        }else
-        {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'week Not Deleted Due to this Error. ' . $this->db->last_query(),
-          ];
-          $this->session->set_userdata($msgArr);
-        }
-        header("Refresh:3 ".base_url()."master/weekMaster");
-      }
+ 
+    //   if($_GET['action'] == 'delete')
+    //   {
+    //     $deleteId = $_GET['delete_id'];
+    //     $deleteweekData = $this->db->query("DELETE FROM " . Table::weekTable . " WHERE id='$deleteId'");
+    //     if($deleteweekData)
+    //     {
+    //       $msgArr = [
+    //         'class' => 'success',
+    //         'msg' => 'week Deleted Successfully',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }else
+    //     {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'week Not Deleted Due to this Error. ' . $this->db->last_query(),
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }
+    //     header("Refresh:3 ".base_url()."master/weekMaster");
+    //   }
 
-      if($_GET['action'] == 'status')
-      {
-        $status = $_GET['status'];
-        $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::weekTable . " SET status = '$status' WHERE id = '$updateId'");
+    //   if($_GET['action'] == 'status')
+    //   {
+    //     $status = $_GET['status'];
+    //     $updateId = $_GET['edit_id'];
+    //     $updateStatus = $this->db->query("UPDATE " . Table::weekTable . " SET status = '$status' WHERE id = '$updateId'");
 
-        if($updateStatus)
-        {
-          $msgArr = [
-            'class' => 'success',
-            'msg' => 'Week Status Updated Successfully',
-          ];
-          $this->session->set_userdata($msgArr);
-        }else
-        {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'Week Status Not Updated Due to this Error. ' . $this->db->last_query(),
-          ];
-          $this->session->set_userdata($msgArr);
-        }
-        header("Refresh:3 ".base_url()."master/weekMaster");
-      }
+    //     if($updateStatus)
+    //     {
+    //       $msgArr = [
+    //         'class' => 'success',
+    //         'msg' => 'Week Status Updated Successfully',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }else
+    //     {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'Week Status Not Updated Due to this Error. ' . $this->db->last_query(),
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }
+    //     header("Refresh:3 ".base_url()."master/weekMaster");
+    //   }
 
-    }
+    // }
 
 
     // insert new city
-    if(isset($_POST['submit']))
-    {
-      $weekName = $_POST['weekName'];
+    // if(isset($_POST['submit']))
+    // {
+    //   $weekName = $_POST['weekName'];
 
-      $alreadyWeek = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE weekName = '$weekName'")->result_array();
+    //   $alreadyWeek = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE weekName = '$weekName'")->result_array();
 
-      if(!empty($alreadyWeek))
-      {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'This Week is already inserted, Please Edit That',
-          ];
-          $this->session->set_userdata($msgArr);
-          header('Location: weekMaster');
-          exit(0);
-      }
+    //   if(!empty($alreadyWeek))
+    //   {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'This Week is already inserted, Please Edit That',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //       header('Location: weekMaster');
+    //       exit(0);
+    //   }
 
 
 
-      $insertNewCity = $this->db->query("INSERT INTO " . Table::weekTable . " (weekName) VALUES ('$weekName')");
-      if($insertNewCity)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'New week Added Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'week Not Added Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:3 ".base_url()."master/weekMaster");
-    }
+    //   $insertNewCity = $this->db->query("INSERT INTO " . Table::weekTable . " (weekName) VALUES ('$weekName')");
+    //   if($insertNewCity)
+    //   {
+    //     $msgArr = [
+    //       'class' => 'success',
+    //       'msg' => 'New week Added Successfully',
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }else
+    //   {
+    //     $msgArr = [
+    //       'class' => 'danger',
+    //       'msg' => 'week Not Added Due to this Error. ' . $this->db->last_query(),
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }
+    //   header("Refresh:3 ".base_url()."master/weekMaster");
+    // }
 
-    // update exiting city
-    if(isset($_POST['update']))
-    {
-      $weekName = $_POST['weekName'];
-      $weekEditId = $_POST['updateweekId'];
-      $updateweek = $this->db->query("UPDATE " . Table::weekTable . " SET weekName = '$weekName' WHERE id = '$weekEditId'");
-      if($updateweek)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'week Updated Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'week Not Updated Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:3 ".base_url()."master/weekMaster");
-    }
+    
+    // if(isset($_POST['update']))
+    // {
+    //   $weekName = $_POST['weekName'];
+    //   $weekEditId = $_POST['updateweekId'];
+    //   $updateweek = $this->db->query("UPDATE " . Table::weekTable . " SET weekName = '$weekName' WHERE id = '$weekEditId'");
+    //   if($updateweek)
+    //   {
+    //     $msgArr = [
+    //       'class' => 'success',
+    //       'msg' => 'week Updated Successfully',
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }else
+    //   {
+    //     $msgArr = [
+    //       'class' => 'danger',
+    //       'msg' => 'week Not Updated Due to this Error. ' . $this->db->last_query(),
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }
+    //   header("Refresh:3 ".base_url()."master/weekMaster");
+    // }
 
 
     // print_r($cityData);
@@ -189,14 +189,15 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add / Edit week</h3>
+                  Week Master
+                  <!-- <h3 class="card-title">Add / Edit week</h3> -->
                   
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
 
 
-                <div class="row">
+                <!-- <div class="row">
                   <div class="card-body">
                     <form method="post" action="">
                     <?php 
@@ -216,8 +217,8 @@
                       </div>
                     </form>
                   </div>
-                  <!-- /.card -->
-                </div>
+
+                </div> -->
                 <!--/.col (left) -->
                 <!-- right column -->
               </div>
@@ -235,10 +236,10 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>Week Id</th>
+                            <!-- <th>Week Id</th> -->
                             <th>Week Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <!-- <th>Status</th>
+                            <th>Action</th> -->
                           </tr>
                         </thead>
                         <tbody>
@@ -247,17 +248,17 @@
                             foreach ($weekData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['weekName'];?></td>
-                                <td>
+                                <!-- <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td>
-                                <td>
+                                </td> -->
+                                <!-- <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td>
+                                </td> -->
                               </tr>
                           <?php  }
                           } ?>

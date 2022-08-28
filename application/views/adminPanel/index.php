@@ -13,11 +13,10 @@ $data['adminPanelUrl'] = 'assets/adminPanel/';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= $data['pageTitle'] ?></title>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons -->
-   <link rel="stylesheet" href="<?= base_url() . $data['adminPanelUrl'] ?>plugins/fontawesome-free/css/all.min.css"> 
+
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
@@ -41,9 +40,10 @@ if(!empty($this->session->userdata('name')) && !empty($this->session->userdata('
 if(isset($_POST['submit']))
 {
   $email = HelperClass::sanitizeInput($_POST['email']);
+  $schoolUniqueCode = HelperClass::sanitizeInput($_POST['schoolUniqueCode']);
   $password = HelperClass::sanitizeInput($_POST['password']);
 
-  $userData = $this->db->query("SELECT * FROM " . Table::userTable . " WHERE email = '$email' AND status = 1 LIMIT 1")->result_array();
+  $userData = $this->db->query("SELECT * FROM " . Table::userTable . " WHERE email = '$email' AND schoolUniqueCode = '$schoolUniqueCode' AND status = 1 LIMIT 1")->result_array();
 
   if($userData)
   {
@@ -60,12 +60,14 @@ if(isset($_POST['submit']))
       $userArr['name'] = $userData[0]['name'];
       $userArr['email'] = $userData[0]['email'];
       $userArr['user_type'] = $userData[0]['user_type'];
+      $userArr['schoolUniqueCode'] = $userData[0]['schoolUniqueCode'];
 
       $userArr['userData'] = [
         'id' => $userData[0]['id'],
         'name' => $userData[0]['name'],
         'email' => $userData[0]['email'],
         'user_type' => $userData[0]['user_type'],
+        'schoolUniqueCode' => $userData[0]['schoolUniqueCode'],
       ];
       $this->session->set_userdata($userArr);
 
@@ -89,7 +91,7 @@ if(isset($_POST['submit']))
   {
     $msgArr = [
       'class' => 'danger',
-      'msg' => 'Email id does\'t matched, please use correct email.',
+      'msg' => 'Email id and School Code does\'t matched, please use correct email.',
     ];
     $this->session->set_userdata($msgArr);
   }
@@ -133,6 +135,14 @@ if(isset($_POST['submit']))
               <p class="login-box-msg">Sign in to start your session</p>
 
               <form action="" method="post" >
+              <div class="input-group mb-3">
+                  <input type="text" name="schoolUniqueCode" class="form-control" placeholder="School Code" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fa-solid fa-address-card"></span>
+                    </div>
+                  </div>
+                </div>
                 <div class="input-group mb-3">
                   <input type="email" name="email" class="form-control" placeholder="Email" required>
                   <div class="input-group-append">
@@ -160,7 +170,7 @@ if(isset($_POST['submit']))
          
             </div>
 
-
+            <p class="login-box-msg"><a href="<?= base_url() . 'register';?>">Register Your School Now!! Enjoy All Benefits</a></p>
             <!-- /.card-body -->
           </div>
 

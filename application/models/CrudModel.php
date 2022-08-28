@@ -76,6 +76,19 @@ class CrudModel extends CI_Model
         $id = explode(HelperClass::prefix,$dd[0]['user_id']);
         return HelperClass::prefix . ($id[1] + 1);
     }
+
+    public function getSchoolId($tableName)
+    {
+        $this->tableName    = $tableName;
+        $dd = $this->db->query("SELECT user_id FROM " .$this->tableName ." WHERE user_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
+        $id = explode(HelperClass::schoolIDPrefix,$dd[0]['user_id']);
+        return HelperClass::schoolIDPrefix . ($id[1] + 1);
+    }
+
+
+
+
+
     public function getTeacherId($tableName)
     {
         $this->tableName    = $tableName;
@@ -122,7 +135,7 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            $condition = '';
+            $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
 
             if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
             {
@@ -163,14 +176,14 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 $condition ORDER BY s.id DESC";
+                WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
                 $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
@@ -178,14 +191,14 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 ORDER BY s.id DESC";
+                WHERE s.status != 4 ORDER BY s.id DESC";
             }
 
 
@@ -237,7 +250,7 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            $condition = '';
+            $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
 
             if(isset($data['teacherName']) || isset($data['teacherClass']) || isset($data['teacherMobile']) || isset($data['teacherUserId']) || isset($data['teacherFromDate']) || isset($data['teacherToDate']))
             {
@@ -278,14 +291,14 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 $condition ORDER BY s.id DESC";
+                WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
                 $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
@@ -293,14 +306,14 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-                WHERE s.status != 0 ORDER BY s.id DESC";
+                WHERE s.status != 4 ORDER BY s.id DESC";
             }
 
 
@@ -428,7 +441,7 @@ class CrudModel extends CI_Model
         if (!empty($tableName)) {
             $this->tableName    = $tableName;
             $this->student_id   = $this->sanitizeInput($student_id);
-            $sql    = 'DELETE FROM ' . $this->tableName . ' WHERE id = ' . $this->student_id . '';
+            $sql    = "UPDATE " . $this->tableName . " SET status = '4' WHERE id = " . $this->student_id . " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
             if($this->db->query($sql))
             {
                 return true;
@@ -584,5 +597,13 @@ class CrudModel extends CI_Model
         //print_r($result);
         curl_close( $ch );
     }
+
+    public function getUniqueIdForSchool()
+    {
+       return  substr(str_shuffle(123456789),0,3).substr(str_shuffle(time()),0,3);
+    }
+
+
+
     
 }

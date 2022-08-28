@@ -15,65 +15,65 @@
 
 
     // edit and delete action
-    if(isset($_GET['action']))
-    {
-      // fetch city for edit the  city 
-      if($_GET['action'] == 'edit')
-      {
-        $editId = $_GET['edit_id'];
-        $editclassData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE id='$editId' ")->result_array();
-      }
+    // if(isset($_GET['action']))
+    // {
 
-      // delete the city
-      if($_GET['action'] == 'delete')
-      {
-        $deleteId = $_GET['delete_id'];
-        $deleteclassData = $this->db->query("DELETE FROM " . Table::classTable . " WHERE id='$deleteId'");
-        if($deleteclassData)
-        {
-          $msgArr = [
-            'class' => 'success',
-            'msg' => 'class Deleted Successfully',
-          ];
-          $this->session->set_userdata($msgArr);
-        }else
-        {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'class Not Deleted Due to this Error. ' . $this->db->last_query(),
-          ];
-          $this->session->set_userdata($msgArr);
-        }
-        header("Refresh:3 ".base_url()."master/classMaster");
-      }
+    //   if($_GET['action'] == 'edit')
+    //   {
+    //     $editId = $_GET['edit_id'];
+    //     $editclassData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE id='$editId' ")->result_array();
+    //   }
+
+
+    //   if($_GET['action'] == 'delete')
+    //   {
+    //     $deleteId = $_GET['delete_id'];
+    //     $deleteclassData = $this->db->query("DELETE FROM " . Table::classTable . " WHERE id='$deleteId'");
+    //     if($deleteclassData)
+    //     {
+    //       $msgArr = [
+    //         'class' => 'success',
+    //         'msg' => 'class Deleted Successfully',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }else
+    //     {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'class Not Deleted Due to this Error. ' . $this->db->last_query(),
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }
+    //     header("Refresh:3 ".base_url()."master/classMaster");
+    //   }
 
       
-      if($_GET['action'] == 'status')
-      {
-        $status = $_GET['status'];
-        $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::classTable . " SET status = '$status' WHERE id = '$updateId'");
+    //   if($_GET['action'] == 'status')
+    //   {
+    //     $status = $_GET['status'];
+    //     $updateId = $_GET['edit_id'];
+    //     $updateStatus = $this->db->query("UPDATE " . Table::classTable . " SET status = '$status' WHERE id = '$updateId'");
 
-        if($updateStatus)
-        {
-          $msgArr = [
-            'class' => 'success',
-            'msg' => 'Class Status Updated Successfully',
-          ];
-          $this->session->set_userdata($msgArr);
-        }else
-        {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'Class Status Not Updated Due to this Error. ' . $this->db->last_query(),
-          ];
-          $this->session->set_userdata($msgArr);
-        }
-        header("Refresh:3 ".base_url()."master/classMaster");
-      }
+    //     if($updateStatus)
+    //     {
+    //       $msgArr = [
+    //         'class' => 'success',
+    //         'msg' => 'Class Status Updated Successfully',
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }else
+    //     {
+    //       $msgArr = [
+    //         'class' => 'danger',
+    //         'msg' => 'Class Status Not Updated Due to this Error. ' . $this->db->last_query(),
+    //       ];
+    //       $this->session->set_userdata($msgArr);
+    //     }
+    //     header("Refresh:3 ".base_url()."master/classMaster");
+    //   }
       
 
-    }
+    // }
 
 
     // insert new city
@@ -117,28 +117,28 @@
     }
 
     // update exiting city
-    if(isset($_POST['update']))
-    {
-      $className = $_POST['className'];
-      $classEditId = $_POST['updateclassId'];
-      $updateclass = $this->db->query("UPDATE " . Table::classTable . " SET className = '$className' WHERE id = '$classEditId'");
-      if($updateclass)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'Class Updated Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'Class Not Updated Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:3 ".base_url()."master/classMaster");
-    }
+    // if(isset($_POST['update']))
+    // {
+    //   $className = $_POST['className'];
+    //   $classEditId = $_POST['updateclassId'];
+    //   $updateclass = $this->db->query("UPDATE " . Table::classTable . " SET className = '$className' WHERE id = '$classEditId'");
+    //   if($updateclass)
+    //   {
+    //     $msgArr = [
+    //       'class' => 'success',
+    //       'msg' => 'Class Updated Successfully',
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }else
+    //   {
+    //     $msgArr = [
+    //       'class' => 'danger',
+    //       'msg' => 'Class Not Updated Due to this Error. ' . $this->db->last_query(),
+    //     ];
+    //     $this->session->set_userdata($msgArr);
+    //   }
+    //   header("Refresh:3 ".base_url()."master/classMaster");
+    // }
 
 
     // print_r($cityData);
@@ -237,10 +237,10 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <th>Class Id</th>
+                            <!-- <th>Class Id</th> -->
                             <th>Class Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <!-- <th>Status</th>
+                            <th>Action</th> -->
                           </tr>
                         </thead>
                         <tbody>
@@ -249,17 +249,17 @@
                             foreach ($classData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['className'];?></td>
-                                <td>
+                                <!-- <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td>
-                                <td>
+                                </td> -->
+                                <!-- <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td>
+                                </td> -->
                               </tr>
                           <?php  }
                           } ?>
