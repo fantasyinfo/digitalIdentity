@@ -22,9 +22,20 @@ class MasterController extends CI_Controller
 		}
 	}
 
+	public function checkPermission()
+	{
+		if(!$this->CrudModel->checkPermission())
+		{
+			header('Location: '.base_url());
+		}
+	}
+
+
 	public function cityMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'City Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -36,6 +47,8 @@ class MasterController extends CI_Controller
 	public function stateMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'State Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -47,6 +60,8 @@ class MasterController extends CI_Controller
 	public function classMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Class Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -58,6 +73,8 @@ class MasterController extends CI_Controller
 	public function sectionMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Section Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -69,6 +86,8 @@ class MasterController extends CI_Controller
 	public function subjectMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Subject Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -80,6 +99,8 @@ class MasterController extends CI_Controller
 	public function weekMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Week Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -91,6 +112,8 @@ class MasterController extends CI_Controller
 	public function hourMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Hour Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -102,6 +125,8 @@ class MasterController extends CI_Controller
 	public function teacherSubjectsMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Teacher Subjects Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -114,6 +139,8 @@ class MasterController extends CI_Controller
 	public function timeTableSheduleMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Time Table Shedule Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -124,7 +151,9 @@ class MasterController extends CI_Controller
 
 	public function panelUserMaster()
 	{
-		$this->loginCheck();
+		// $this->loginCheck();
+		// check permission
+		// $this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Panel User Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -135,7 +164,9 @@ class MasterController extends CI_Controller
 
 	public function editPermission($id,$userType)
 	{
-		$this->loginCheck();
+		// $this->loginCheck();
+		// check permission
+		// $this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Panel User Master',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -149,6 +180,8 @@ class MasterController extends CI_Controller
 	public function notificationMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Notification Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -160,6 +193,8 @@ class MasterController extends CI_Controller
 	public function feesMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Fees Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -171,6 +206,8 @@ class MasterController extends CI_Controller
 	public function submitFeesMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Fees Submit Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -182,6 +219,8 @@ class MasterController extends CI_Controller
 	public function monthMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Months Master',
 			'adminPanelUrl' => $this->adminPanelURL
@@ -196,6 +235,8 @@ class MasterController extends CI_Controller
 	public function givePermissionMaster()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Permision Provider Master',
 			'adminPanelUrl' => $this->adminPanelURL

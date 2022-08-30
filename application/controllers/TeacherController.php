@@ -25,9 +25,19 @@ class TeacherController extends CI_Controller
 		}
 	}
 
+	public function checkPermission()
+	{
+		if(!$this->CrudModel->checkPermission())
+		{
+			header('Location: '.base_url());
+		}
+	}
+
 	public function list()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Teacher List',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -40,6 +50,8 @@ class TeacherController extends CI_Controller
 	public function addTeacher()
 	{
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
 		$dataArr = [
 			'pageTitle' => 'Add New Teacher',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -57,6 +69,7 @@ class TeacherController extends CI_Controller
 	public function editTeacher($id)
 	{
 		$this->loginCheck();
+
 		$dataArr = [
 			'pageTitle' => 'Edit Teacher',
 			'teacherData' => $this->TeacherModel->singleTeacher($id),
@@ -75,6 +88,7 @@ class TeacherController extends CI_Controller
 	public function viewTeacher($id)
 	{
 		$this->loginCheck();
+
 		$dataArr = [
 			'pageTitle' => 'View Teacher',
 			'teacherData' => $this->TeacherModel->viewSingleTeacherAllData($id),
@@ -93,6 +107,7 @@ class TeacherController extends CI_Controller
 	public function saveTeacher()
 	{
 		$this->loginCheck();
+	
 		if (isset($_POST['submit'])) {
 			if ($this->TeacherModel->saveTeacher($_POST, $_FILES)) {
 				$msgArr = [
@@ -114,6 +129,7 @@ class TeacherController extends CI_Controller
 	public function updateTeacher()
 	{
 		$this->loginCheck();
+
 		if (isset($_POST['submit'])) {
 			if ($this->TeacherModel->updateTeacher($_POST, $_FILES)) {
 				$msgArr = [
@@ -135,6 +151,7 @@ class TeacherController extends CI_Controller
 	public function deleteTeacher($id)
 	{
 		$this->loginCheck();
+
 		if ($this->TeacherModel->deleteTeacher($id)) {
 			$msgArr = [
 				'class' => 'success',

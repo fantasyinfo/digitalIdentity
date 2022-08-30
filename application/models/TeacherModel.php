@@ -36,7 +36,7 @@ class TeacherModel extends CI_Model
 
       
       // check if the teacher is already registerd with us
-      $already = $this->db->query("SELECT * FROM ".Table::teacherTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}''")->result_array();
+      $already = $this->db->query("SELECT * FROM ".Table::teacherTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}'")->result_array();
 
 
       if(!empty($already))

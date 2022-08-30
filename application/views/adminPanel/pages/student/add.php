@@ -36,7 +36,15 @@
               {?>
 
               <div class="alert alert-<?=$this->session->userdata('class')?> alert-dismissible fade show" role="alert">
-                <?=$this->session->userdata('msg')?>
+                <?=$this->session->userdata('msg');
+                if($this->session->userdata('class') == 'success')
+                {
+                  HelperClass::swalSuccess($this->session->userdata('msg'));
+                }else if($this->session->userdata('class') == 'danger')
+                {
+                  HelperClass::swalError($this->session->userdata('msg'));
+                }
+                ?>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -60,153 +68,157 @@
 
                   <div class="row">
                     <div class="card-body">
-                      <div class="row">
-                        <div class="form-group col-md-3">
-                          <label for="name">Name</label>
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="class">Select Class</label>
-                          <select class="form-control select2 select2-danger" name="class" data-dropdown-css-class="select2-danger" style="width: 100%;">
+
+
+                    <div class="col-md-8">
+                    <table class="table">
+                      <tbody>
+                          <tr>
+                              <td><label for="name">Full Name</label></td>
+                              <td><input type="text" name="name" class="form-control" id="name" placeholder="Enter full name"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="class">Select Class</label></td>
+                              <td><select class="form-control select2 select2-danger" name="class" data-dropdown-css-class="select2-danger" style="width: 100%;">
                           <?php 
+                          $selectedClass = '';
+                          
                           if(isset($data['class']) && !empty($data['class']))
                           {
                             
                             foreach($data['class'] as $class)
-                            {?>
-                                <option value="<?= $class['id'] ?>"><?= $class['className'] ?></option>
+                            {
+                              ?>
+                                <option  value="<?= $class['id'] ?>"><?= $class['className'] ?></option>
                            <?php }
                           }
                           ?>
-                        </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="section">Select Section</label>
-                          <select class="form-control select2 select2-danger" name="section" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        </select></td>
+                          </tr>
+                          <tr>
+                              <td><label for="section">Select Section</label></td>
+                              <td> <select class="form-control select2 select2-danger" name="section" data-dropdown-css-class="select2-danger" style="width: 100%;">
                           <?php 
                           if(isset($data['section']) && !empty($data['section']))
                           {
-                            
+                            $selectedSection = '';
                             foreach($data['section'] as $section)
-                            {?>
-                                <option value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option>
+                            {
+                              
+                              ?>
+                                <option  value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option>
                            <?php }
                           }
                           ?>
-                        </select>
-                        </div>
-                          <div class="form-group col-md-3">
-                          <label for="mother">Mother Name</label>
-                          <input type="text" name="mother" class="form-control" id="mother" placeholder="Enter mother name">
-                        </div>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="form-group col-md-3">
-                          <label for="father">Father Name</label>
-                          <input type="text" name="father" class="form-control" id="father" placeholder="Enter father name">
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="email">Email address</label>
-                          <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="mobile">Mobile Number</label>
-                          <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Enter mobile number">
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="dob">Select Date of Birth</label>
-                          <input type="date" name="dob" class="form-control" id="dob">
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                            <label for="address">Address</label>
-                            <input type="text" name="address" class="form-control" id="address" placeholder="Enter address">
-                          </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="state">Select State</label>
-                          <select class="form-control select2 select2-danger" name="state" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        </select></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="mother">Mother Name</label></td>
+                              <td> <input type="text" name="mother" class="form-control" id="mother" placeholder="Enter mother name"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="father">Father Name</label></td>
+                              <td> <input type="text" name="father" class="form-control" id="father" placeholder="Enter father name"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="email">Email address</label></td>
+                              <td>  <input type="email" name="email" class="form-control" id="email" placeholder="Enter email address"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="mobile">Mobile Number</label></td>
+                              <td> <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Enter mobile number"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="dob">Select Date of Birth</label></td>
+                              <td>  <input type="text" name="dob" class="form-control datepicker" id="dob" placeholder="Enter Date of Birth"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="address">Address</label></td>
+                              <td>  <input type="text" name="address" class="form-control" id="address" placeholder="Enter address"></td>
+                          </tr>
+                          <tr>
+                              <td>  <label for="state">Select State</label></td>
+                              <td><select class="form-control select2 select2-danger" name="state" data-dropdown-css-class="select2-danger" style="width: 100%;">
                           <?php 
                           if(isset($data['state']) && !empty($data['state']))
                           {
-                            
+                            $selectedState = '';
                             foreach($data['state'] as $state)
-                            {?>
+                            {
+                              ?>
                                 <option value="<?= $state['id'] ?>"><?= $state['stateName'] ?></option>
                            <?php }
                           }
                           ?>
-                        </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="city">Select City</label>
-                          <select class="form-control select2 select2-danger" name="city" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        </select></td>
+                          </tr>
+                          <tr>
+                              <td><label for="city">Select City</label></td>
+                              <td> <select class="form-control select2 select2-danger" name="city" data-dropdown-css-class="select2-danger" style="width: 100%;">
                           <?php 
                           if(isset($data['city']) && !empty($data['city']))
                           {
-                            
+                            $selectedCity = '';
                             foreach($data['city'] as $city)
-                            {?>
+                            {
+                              ?>
                                 <option value="<?= $city['id'] ?>"><?= $city['cityName'] ?></option>
                            <?php }
                           }
                           ?>
-                        </select>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                            <label for="pincode">Pincode</label>
-                            <input type="text" name="pincode" class="form-control" id="pincode" placeholder="Enter pincode">
-                          </div>
-                        </div>
-                      </div>
-                  
-                      <div class="row">
-                       
-                        <div class="form-group col-md-2">
-                          <label for="city">Image Preview</label><br>
-                          <img src="<?= base_url()?>assets/uploads/avatar.webp" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
-                        </div>
-                        <div class="form-group col-md-3">
-                        <label for="city">Select Image</label>
-                          <div class="input-group">
+                        </select></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="pincode">Pincode</label></td>
+                              <td> <input type="text" name="pincode" class="form-control" id="pincode" placeholder="Enter Pincode"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="city">Select Image</label></td>
+                              <td><img src="<?= base_url()?>assets/uploads/avatar.webp" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
+                              <div class="input-group mt-2">
                             <div class="custom-file">
-                              <input type="file" class="custom-file-input" name="image" id="exampleInputFile" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
-                              <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                              <input type="file" class="custom-file-input" name="image" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
+                              <label class="custom-file-label" for="img">Choose file</label>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="roll_no">Roll Number</label>
-                          <input type="text" name="roll_no" class="form-control" id="roll_no">
-                        </div>
-                        <div class="form-group col-md-3">
-                        <label for="gender">Select Gender</label>
-                          <select class="form-control select2 select2-danger" name="gender" id="gender" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                            </td>
+                          </tr>
+                          <tr>
+                              <td>  <label for="roll_no">Roll Number</label></td>
+                              <td> <input type="text" name="roll_no" class="form-control" id="roll_no" placeholder="Enter roll no"></td>
+                          </tr>
+                          <tr>
+                              <td>  <label for="gender">Select Gender</label></td>
+                              <td><select class="form-control select2 select2-danger" name="gender" id="gender" data-dropdown-css-class="select2-danger" style="width: 100%;">
                           <?php 
 
                           $genderArr = [
                             1 => 'Male',
-                            2 => 'FeMale',
+                            2 => 'Female',
                             3 => 'Other'
                           ];
                          
                             foreach($genderArr as $kk => $gg)
-                            { ?>
+                            {
+                              ?>
                               <option value="<?= $kk ?>"><?= $gg ?></option>
-                              <?php } ?>
-                          </select>
-                        </div>
-                      </div>
+                              <?php }
+                             ?>
+                          </select></td>
+                          </tr>
+                           <tr>
+                              <td>#</td>
+                              <td><button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Submit</button></td>
+                          </tr> 
+                          <!-- <tr>
+                              <td>3</td>
+                              <td>John</td>
+                          </tr> -->
+                      </tbody>
+                  </table>
+                    </div>
                     </div>
                     <!-- /.card-body -->
-                  </div>
-
-                  <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary">Submit</button>
                   </div>
                 </form>
               </div>

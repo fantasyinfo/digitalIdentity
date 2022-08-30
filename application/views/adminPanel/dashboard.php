@@ -34,7 +34,12 @@
         <div class="container-fluid">
     
         <?php 
-        //HelperClass::prePrintR($this->session->userdata());
+
+            $this->CrudModel->checkPermission();
+           // HelperClass::swalError('Student Not Added Successfully.');
+
+         
+       // HelperClass::prePrintR($this->session->userdata());
 
           
 				// $to = "/topics/tournaments";
@@ -47,6 +52,7 @@
          //$this->CrudModel->sendWebPush('Student Updated','Hey New Student Updated Succesfully');
 
         ?>
+        
           <!--/.col (right) -->
         </div>
 

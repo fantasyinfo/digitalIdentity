@@ -22,7 +22,7 @@ $data['adminPanelUrl'] = 'assets/adminPanel/';
 
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url() . $data['adminPanelUrl'] ?>dist/css/adminlte.min.css">
-
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <?php 
@@ -152,7 +152,15 @@ if(isset($_POST['submit']))
               {?>
 
               <div class="alert alert-<?=$this->session->userdata('class')?> alert-dismissible fade show" role="alert">
-                <?=$this->session->userdata('msg')?>
+                <?=$this->session->userdata('msg');
+                 if($this->session->userdata('class') == 'success')
+                 {
+                   HelperClass::swalSuccess($this->session->userdata('msg'));
+                 }else if($this->session->userdata('class') == 'danger')
+                 {
+                   HelperClass::swalError($this->session->userdata('msg'));
+                 }
+                ?>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>

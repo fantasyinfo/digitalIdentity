@@ -16,6 +16,9 @@ class AdminController extends CI_Controller {
 	{
 		// login check
 		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+
 
 		$dataArr = [
 			'pageTitle' => 'Dashboard',
@@ -29,6 +32,14 @@ class AdminController extends CI_Controller {
 	public function loginCheck()
 	{
 		if(!$this->CrudModel->checkIsLogin())
+		{
+			header('Location: '.base_url());
+		}
+	}
+
+	public function checkPermission()
+	{
+		if(!$this->CrudModel->checkPermission())
 		{
 			header('Location: '.base_url());
 		}

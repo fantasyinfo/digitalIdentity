@@ -487,12 +487,47 @@ class CrudModel extends CI_Model
               ];
               $this->session->set_userdata($msgArr);
             return false;
-        }else
-        {
+        }else {
             
             return true;
         }
     }
+
+    public function checkPermission()
+    {
+
+        if($_SESSION['user_type'] == 'SuperCEO')
+        {
+            return true;
+        }
+
+
+
+
+        $userPermissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$_SESSION['id']}' AND user_type = '{$_SESSION['user_type']}' AND status = '1'")->result_array();
+
+        $permissionArr = json_decode($userPermissions[0]['permissions'],TRUE);
+
+        $permissionString = implode(',',$permissionArr);
+
+        $currentPage = $_SERVER['PATH_INFO'];
+
+        $permissionData = $this->db->query("SELECT * FROM " . Table::adminPanelMenuTable . " WHERE id IN ($permissionString) AND status = '1'")->result_array();
+
+        $p = count($permissionData);
+        $permissionDeni = false;
+        for($i=0; $i < $p; $i++)
+        {
+            if( $currentPage == '/'.$permissionData[$i]['link'])
+            {
+                $permissionDeni = true;
+            }
+        }
+           return $permissionDeni;
+        
+    }
+
+
 
     public function sendFirebaseNotification ($to = '', $notif = ''){
 

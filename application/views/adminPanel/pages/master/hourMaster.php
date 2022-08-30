@@ -157,7 +157,16 @@
             <div class="col-sm-6">
               <?php 
               if(!empty($this->session->userdata('msg')))
-              {?>
+              { 
+                if($this->session->userdata('class') == 'success')
+                 {
+                   HelperClass::swalSuccess($this->session->userdata('msg'));
+                 }else if($this->session->userdata('class') == 'danger')
+                 {
+                   HelperClass::swalError($this->session->userdata('msg'));
+                 }
+                
+                ?>
 
               <div class="alert alert-<?=$this->session->userdata('class')?> alert-dismissible fade show" role="alert">
                 <strong>New Message!</strong> <?=$this->session->userdata('msg')?>
@@ -213,10 +222,10 @@
                     ?>
                       <div class="row">
                         <div class="form-group col-md-3">
-                          <input type="time" name="start_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['start_time'];}?>" class="form-control" id="name"  required>
+                          <input type="text" name="start_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['start_time'];}?>" class="form-control timepicker" id="name"  required>
                         </div>
                         <div class="form-group col-md-3">
-                          <input type="time" name="end_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['end_time'];}?>" class="form-control" id="name"  required>
+                          <input type="text" name="end_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['end_time'];}?>" class="form-control timepicker" id="name"  required>
                         </div>
                         <div class="form-group col-md-3">
                           <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
@@ -305,4 +314,7 @@
   <script>
 
     $("#hourDataTable").DataTable();
+
+
+ 
   </script>

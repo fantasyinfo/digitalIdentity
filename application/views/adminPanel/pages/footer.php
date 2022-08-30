@@ -55,6 +55,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <script>
       // Your web app's Firebase configuration
     var firebaseConfig = {
@@ -131,6 +133,22 @@
         event.notification.close();
     });
 
+</script>
+
+<script>
+  $('.datepicker').datepicker();
+
+  $('.timepicker').timepicker({
+    timeFormat: 'h:mm p',
+    interval: 30,
+    minTime: '7:00am',
+    maxTime: '3:00pm',
+    defaultTime: '7:00am',
+    startTime: '7:00am',
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true
+});
 </script>
 
 </body>

@@ -166,4 +166,52 @@ class HelperClass
             return true;
         }
     }
+
+
+
+
+    public static function swalSuccess($msg = 'Changes have been saved')
+    { ?>
+        <script> 
+        Swal.fire(
+            'Good job!',
+            '<?= $msg;?>',
+            'success'
+          )
+        </script>
+   <?php }
+
+
+    public static function swalError($msg = 'Changes not saved')
+    { ?>
+        <script> 
+       Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong! <?= $msg;?>',
+        })
+        </script>
+   <?php }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
