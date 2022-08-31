@@ -15,6 +15,7 @@ class APIController extends CI_Controller
 		$this->load->model('StudentModel');
 		$this->load->model('TeacherModel');
 		$this->load->model('APIModel');
+		$this->load->database();
 	}
 
 	// app login
@@ -22,10 +23,16 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['schoolUniqueCode']) || empty($apiData['userId']) || empty($apiData['password']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+
+		$schoolUniqueCode = $apiData['schoolUniqueCode'];
 		$userId = $apiData['userId'];
 		$passWord = $apiData['password'];
 		$uerType = $apiData['userType'];
-		$userData = $this->APIModel->login($userId, $passWord, $uerType);
+		$userData = $this->APIModel->login($schoolUniqueCode,$userId, $passWord, $uerType);
 		return HelperClass::APIresponse( 200, 'Login Successfully.', $userData);
 	}
 
@@ -35,13 +42,25 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$uerType = $apiData['userType'];
 		$className = $apiData['className'];
 		$sectionName = $apiData['sectionName'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $uerType);
-		$allStudents = $this->APIModel->showAllStudentForAttendence($loginUser[0]['userType'], $className, $sectionName);
-		return HelperClass::APIresponse(200, 'All Students Lists For Attendence.', $allStudents);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$allStudents = $this->APIModel->showAllStudentForAttendence($loginUser[0]['userType'], $className, $sectionName,$schoolUniqueCode);
+		if($allStudents)
+		{
+			return HelperClass::APIresponse(200, 'All Students Lists For Attendence.', $allStudents);
+		}else
+		{
+			return HelperClass::APIresponse(500, 'Students Not Found. Please Use Correct Details.');
+		}
+		
 	}
 
 
@@ -50,6 +69,12 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']) || empty($apiData['loginUserId']) || empty($apiData['attendenceData']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+
+
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = $apiData['loginUserId'];
@@ -57,12 +82,13 @@ class APIController extends CI_Controller
 		$sectionName = $apiData['sectionName'];
 		$attendenceData = $apiData['attendenceData'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$currentDateTime = date('d-m-Y h:i:s');
 		$totalAttenData = count($attendenceData);
 		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
-			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus);
+			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus,$schoolUniqueCode);
 			if (!$insertAttendeceRecord) {
 				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -76,13 +102,18 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$className = $apiData['className'];
 		$sectionName = $apiData['sectionName'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$currentDateTime = date('d-m-Y h:i:s');
-		$data = $this->APIModel->showSubmitAttendenceData($className, $sectionName);
+		$data = $this->APIModel->showSubmitAttendenceData($className, $sectionName,$schoolUniqueCode);
 
 		return HelperClass::APIresponse(200, 'Attendence Data For today date ' . $currentDateTime, $data);
 	}
@@ -92,6 +123,10 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']) || empty($apiData['loginUserId']) || empty($apiData['departureData']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = $apiData['loginUserId'];
@@ -99,6 +134,7 @@ class APIController extends CI_Controller
 		$sectionName = $apiData['sectionName'];
 		$departureData = $apiData['departureData'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$currentDateTime = date('d-m-Y h:i:s');
 
 		$totalDepStu = count($departureData);
@@ -112,7 +148,7 @@ class APIController extends CI_Controller
 			$attendenceId = $departureData[$i]['attendenceId'];
 			 $stu_id = $departureData[$i]['studentId'];
 			$departureStatus = '1';
-			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserId, $loginuserType, $departureStatus);
+			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserId, $loginuserType, $departureStatus,$schoolUniqueCode);
 			if (!$insertDepartureRecord) {
 				return HelperClass::APIresponse(500, 'Departure Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -127,13 +163,19 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+	
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$className = $apiData['className'];
 		$sectionName = $apiData['sectionName'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$currentDateTime = date('d-m-Y h:i:s');
-		$data = $this->APIModel->showSubmitDepartureData($className, $sectionName);
+		$data = $this->APIModel->showSubmitDepartureData($className, $sectionName,$schoolUniqueCode);
 
 		return HelperClass::APIresponse(200, 'Departure Data For today date ' . $currentDateTime, $data);
 	}
@@ -144,6 +186,11 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['loginUserId']) || empty($apiData['subjectId']) || empty($apiData['examDate'])  || empty($apiData['examName'])  || empty($apiData['maxMarks']) || empty($apiData['minMarks']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = $apiData['loginUserId'];
@@ -155,8 +202,9 @@ class APIController extends CI_Controller
 		$maxMarks = $apiData['maxMarks'];
 		$minMarks = $apiData['minMarks'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 
-		$addNewExam = $this->APIModel->addExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks);
+		$addNewExam = $this->APIModel->addExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$schoolUniqueCode);
 
 		if (!$addNewExam) {
 			return HelperClass::APIresponse(500, 'Exam Not Added Successfully beacuse ' . $this->db->last_query());
@@ -173,19 +221,18 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
-		// $loginUserId = $apiData['loginUserId'];
 		$classId = $apiData['classId'];
 		$sectionId = $apiData['sectionId'];
 		$subjectId = (@$apiData['subjectId']) ? @$apiData['subjectId'] : ''; // optional
-		// $examDate = $apiData['examDate'];
-		// $examName = $apiData['examName'];
-		// $maxMarks = $apiData['maxMarks'];
-		// $minMarks = $apiData['minMarks'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-
-		$allExamList = $this->APIModel->showAllExam($classId,$sectionId,$subjectId);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$allExamList = $this->APIModel->showAllExam($classId,$sectionId,$schoolUniqueCode,$subjectId);
 
 		if (!$allExamList) {
 			return HelperClass::APIresponse(500, 'No Exam Found For This Class');
@@ -204,16 +251,19 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['examId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$classId = $apiData['classId'];
 		$sectionId = $apiData['sectionId'];
-		$subjectId = ($apiData['subjectId']) ? $apiData['subjectId'] : ''; // optional
 		$examId = $apiData['examId'];
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-
-		$singleExamData = $this->APIModel->showSingleExam($classId,$sectionId,$examId,$subjectId);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$singleExamData = $this->APIModel->showSingleExam($classId,$sectionId,$examId,$schoolUniqueCode);
 
 		if (!$singleExamData) {
 			return HelperClass::APIresponse(500, 'No Exam Found For This Class');
@@ -230,6 +280,10 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['loginUserId']) || empty($apiData['subjectId']) || empty($apiData['examDate'])  || empty($apiData['examName'])  || empty($apiData['maxMarks']) || empty($apiData['minMarks']) || empty($apiData['examId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = $apiData['loginUserId'];
@@ -242,7 +296,7 @@ class APIController extends CI_Controller
 		$minMarks = $apiData['minMarks'];
 		$examId = $apiData['examId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-
+		// $schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$addNewExam = $this->APIModel->updateExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$examId);
 
 		if (!$addNewExam) {
@@ -259,6 +313,10 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['resultDate']) || empty($apiData['results']) || empty($apiData['loginUserId']) || empty($apiData['examId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = $apiData['loginUserId'];
@@ -268,7 +326,7 @@ class APIController extends CI_Controller
 		$totalResults = count($results);
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		for($i=0;$i<$totalResults;$i++)
 		{
 			$studentId = $results[$i]['studentId'];
@@ -276,7 +334,7 @@ class APIController extends CI_Controller
 			$reMarks = @$results[$i]['reMarks'];
 			$resultStatus = @$results[$i]['resultStatus'];
 
-			$addExamResult = $this->APIModel->addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId);
+			$addExamResult = $this->APIModel->addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId,$schoolUniqueCode);
 		}
 
 		if (!$addExamResult) {
@@ -297,12 +355,13 @@ class APIController extends CI_Controller
 		$apiData = $this->getAPIData();
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
-		$classId = @$apiData['classId'];
-		$sectionId = @$apiData['sectionId'];
-		$qrCode = @$apiData['qrCode'];
-		$studentId = @$apiData['studentId'];
+		$classId = (@$apiData['classId'])?$apiData['classId']:'';
+		$sectionId = (@$apiData['sectionId'])?$apiData['sectionId']:'';
+		$qrCode = (@$apiData['qrCode'])?$apiData['qrCode']:"";
+		$studentId = (@$apiData['studentId'])?$apiData['studentId']:"";
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-		$data = $this->APIModel->showStudentDetails($classId,$sectionId,$qrCode,$studentId);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$data = $this->APIModel->showStudentDetails($classId,$sectionId,$qrCode,$studentId,$schoolUniqueCode);
 		return HelperClass::APIresponse(200, 'Student Details.', $data);
 	}
 

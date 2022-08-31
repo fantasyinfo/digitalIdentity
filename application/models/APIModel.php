@@ -10,7 +10,7 @@ class APIModel extends CI_Model
   }
 
   // login
-  public function login($id, $password, $type)
+  public function login($schoolUniqueCode,$id, $password, $type)
   {
     $dir = base_url() . HelperClass::uploadImgDir;
     if ($type == 'Teacher') {
@@ -22,14 +22,14 @@ class APIModel extends CI_Model
         LEFT JOIN " . Table::stateTable . " st ON st.id =  t.state_id
         LEFT JOIN " . Table::cityTable . " ct ON ct.id =  t.city_id
         LEFT JOIN " . Table::teacherSubjectsTable . " tst ON tst.teacher_id =  t.id
-        WHERE t.user_id = '$id' AND t.password = '$password' AND t.status = '1'
+        WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.user_id = '$id' AND t.password = '$password' AND t.status = '1'
         ";
 
 
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
         $authToken = HelperClass::generateRandomToken();
-        $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id'");
+        $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id' AND schoolUniqueCode = '$schoolUniqueCode'");
         $responseData = [];
         $responseData["teacherId"] = @$userData[0]["teacherId"];
         $responseData["name"] = @$userData[0]["name"];
@@ -50,6 +50,7 @@ class APIModel extends CI_Model
         $responseData["cityName"] = @$userData[0]["cityName"];
         $responseData["authToken"] = @$authToken;
         $responseData["userType"] = @$type;
+        $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
 
         // total count of students
         $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"],$userData[0]["section_id"])) ? $this->countStudentViaClassAndSection($userData[0]["class_id"],$userData[0]["section_id"]) : null;
@@ -87,8 +88,10 @@ class APIModel extends CI_Model
   // validate login
   public function validateLogin($authToken, $type)
   {
+    
     if ($type == 'Teacher') {
-      $sql = "SELECT id as login_user_id FROM " . Table::teacherTable . " WHERE auth_token = '$authToken' AND status = '1'";
+
+      $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::teacherTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
         $userData[0]['userType'] = $type;
@@ -105,19 +108,21 @@ class APIModel extends CI_Model
 
 
   // show students for attendence
-  public function showAllStudentForAttendence($type, $class, $section)
+  public function showAllStudentForAttendence($type, $class, $section,$schoolUniqueCode)
   {
+
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
-      $studentsData = $this->db->query("SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, c.id as classId, c.className,ss.sectionName , ss.id as sectionId
-        FROM " . Table::studentTable . " stu 
-        LEFT JOIN " . Table::classTable . " c ON c.id =  stu.class_id
-        LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  stu.section_id
-        WHERE c.className = '$class' AND ss.sectionName = '$section' AND stu.status = '1'")->result_array();
+      $sql = "SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, c.id as classId, c.className,ss.sectionName , ss.id as sectionId
+      FROM " . Table::studentTable . " stu 
+      LEFT JOIN " . Table::classTable . " c ON c.id =  stu.class_id
+      LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  stu.section_id
+      WHERE c.className = '$class' AND ss.sectionName = '$section' AND stu.status = '1' AND stu.schoolUniqueCode = '$schoolUniqueCode'";
+      $studentsData = $this->db->query($sql)->result_array();
       if (!empty($studentsData)) {
         return $studentsData;
       } else {
-        return HelperClass::APIresponse(500, 'Students Not Found. Please Use Correct Details.');
+        return HelperClass::APIresponse(500, 'Students Not Found. For This Class. '. $class .' - ' .$section);
       }
     } else if ($type == 'Staff') {
       //
@@ -129,27 +134,28 @@ class APIModel extends CI_Model
   public function countStudentViaClassAndSection($class_id,$section_id)
   {
    $totalStudents =  $this->db->query("SELECT count(1) as count FROM ". Table::studentTable ." WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1'")->result_array();
-   if (!empty($totalStudents)) {
-    return $totalStudents[0]['count'];
-  } else {
-    return false;
-  }
+    if (!empty($totalStudents)) {
+      return $totalStudents[0]['count'];
+    } else {
+      return false;
+    }
   }
 
   // save attendence
-  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus)
+  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus,$schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     if ($login_user_type == 'Teacher') {
 
 
-      $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' LIMIT 1")->result_array();
+      $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if (!empty($d)) {
         return HelperClass::APIresponse(500, 'Attendence Already Submited for this Student id today.' . $d[0]['stu_id']);
       }
 
       $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
         "stu_id" => $stu_id,
         "stu_class" => $stu_class,
         "stu_section" => $stu_section,
@@ -159,13 +165,6 @@ class APIModel extends CI_Model
         "dateTime" => date_create()->format('Y-m-d h:i:s'),
         "att_date" => date_create()->format('Y-m-d'),
       ];
-
-
-
-
-
-
-
       $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
       if (!empty($insertId)) {
         return true;
@@ -180,7 +179,7 @@ class APIModel extends CI_Model
   }
 
   // showSubmitAttendenceData
-  public function showSubmitAttendenceData($className, $sectionName)
+  public function showSubmitAttendenceData($className, $sectionName,$schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -188,7 +187,7 @@ class APIModel extends CI_Model
       LEFT JOIN " . Table::studentTable . " stu ON at.stu_id = stu.id
       LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
       LEFT JOIN " . Table::sectionTable . " sec ON stu.section_id = sec.id
-      WHERE at.att_date = '$currentDate' AND at.stu_class = '$className' AND at.stu_section = '$sectionName' ")->result_array();
+      WHERE at.att_date = '$currentDate' AND at.stu_class = '$className' AND at.stu_section = '$sectionName' AND at.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
     if (!empty($d)) {
       return $d;
@@ -198,18 +197,19 @@ class APIModel extends CI_Model
   }
 
   // save departure
-  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus)
+  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus,$schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     if ($login_user_type == 'Teacher') {
 
-      $d = $this->db->query("SELECT stu_id FROM " . Table::departureTable . " WHERE dept_date = '$currentDate' AND stu_id = '$stu_id' LIMIT 1")->result_array();
+      $d = $this->db->query("SELECT stu_id FROM " . Table::departureTable . " WHERE dept_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if (!empty($d)) {
         return HelperClass::APIresponse(500, 'Departure Already Submited for this Student id today.' . $d[0]['stu_id']);
       }
 
       $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
         "attendence_id" => $attendenceId,
         "stu_id" => $stu_id,
         "stu_class" => $stu_class,
@@ -235,7 +235,7 @@ class APIModel extends CI_Model
   }
 
   // showSubmitAttendenceData
-  public function showSubmitDepartureData($className, $sectionName)
+  public function showSubmitDepartureData($className, $sectionName,$schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -243,7 +243,7 @@ class APIModel extends CI_Model
        LEFT JOIN " . Table::studentTable . " stu ON dt.stu_id = stu.id
        LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
        LEFT JOIN " . Table::sectionTable . " sec ON stu.section_id = sec.id
-       WHERE dt.dept_date = '$currentDate' AND dt.stu_class = '$className' AND dt.stu_section = '$sectionName' ")->result_array();
+       WHERE dt.dept_date = '$currentDate' AND dt.stu_class = '$className' AND dt.stu_section = '$sectionName' AND dt.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
     if (!empty($d)) {
       return $d;
@@ -253,11 +253,11 @@ class APIModel extends CI_Model
   }
 
 // showStudentDetils
-  public function showStudentDetails($classId,$sectionId,$qrCode,$studentId)
+  public function showStudentDetails($classId,$sectionId,$qrCode,$studentId,$schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
-    $condition = '';
+    $condition = " AND s.schoolUniqueCode = '$schoolUniqueCode' ";
     if(!empty($classId) && !empty($sectionId) && !empty($studentId))
     {
       $condition.=" AND s.id = '{$studentId}' AND ss.id = '{$sectionId}' AND c.id = '{$classId}' ";
@@ -343,12 +343,13 @@ class APIModel extends CI_Model
 
 
   // add Exam
-  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks)
+  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks,$schoolUniqueCode)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
 
       $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
@@ -405,11 +406,11 @@ class APIModel extends CI_Model
 
 
   // showAllExam
-  public function showAllExam($classId, $sectionId, $subjectId = '')
+  public function showAllExam($classId, $sectionId, $schoolUniqueCode,$subjectId = '')
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
-    $condition = '';
+    $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
     if (!empty($subjectId)) {
       $condition .= " AND e.subject_id = $subjectId ";
     }
@@ -428,14 +429,11 @@ class APIModel extends CI_Model
   }
 
   // showSingleExam
-  public function showSingleExam($classId, $sectionId,  $examId, $subjectId = '')
+  public function showSingleExam($classId, $sectionId,  $examId, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
-    $condition = '';
-    if (!empty($subjectId)) {
-      $condition .= " AND e.subject_id = $subjectId ";
-    }
+    $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
     $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName FROM " . Table::examTable . " e
       INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
@@ -452,18 +450,19 @@ class APIModel extends CI_Model
 
 
    // save attendence
-   public function addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId)
+   public function addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId,$schoolUniqueCode)
    {
      $currentDate = date_create()->format('Y-m-d');
      if ($loginuserType == 'Teacher') {
  
-       $d = $this->db->query("SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' LIMIT 1")->result_array();
+       $d = $this->db->query("SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
  
        if (!empty($d)) {
          return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
        }
  
        $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
          "exam_id" => $examId,
          "marks" => $marks,
          "remarks" => ($reMarks) ? $reMarks : "",

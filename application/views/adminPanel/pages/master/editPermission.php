@@ -18,7 +18,7 @@
 
     $exitingPermission = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$data['id']}' AND user_type = '{$data['userType']}' AND status = '1'")->result_array();
 
-    $exitingPermission = json_decode($exitingPermission[0]['permissions'],TRUE);
+    @$exitingPermission = json_decode(@$exitingPermission[0]['permissions'],TRUE);
 
     // update exiting city
     if(isset($_POST['update']))
