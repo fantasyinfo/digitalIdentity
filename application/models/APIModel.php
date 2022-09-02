@@ -58,9 +58,14 @@ class APIModel extends CI_Model
         // subjects of teachers
         $responseData["teacherSubjects"] = [];
         $subjectsArr = json_decode(@$userData[0]['subject_ids'], TRUE);
-        $totalSub = count(@$subjectsArr);
-        if (isset($totalSub)) {
-          for ($i = 0; $i < $totalSub; $i++) {
+        $totalSub = 0;
+        if(isset($subjectsArr))
+        {
+          $totalSub = count(@$subjectsArr);
+        }
+        
+        if ($totalSub > 0) {
+          for ($i = 0; $i < @$totalSub; $i++) {
             $subArr = [];
             $sub = $this->db->query("SELECT id,subjectName from " . Table::subjectTable . " WHERE id = '{$subjectsArr[$i]}' AND status = '1'")->result_array();
             if (isset($sub)) {
@@ -489,7 +494,8 @@ class APIModel extends CI_Model
       // check if student is pass or fail
 
 
-      $e = $this->db->query("SELECT min_marks,max_marks FROM " . Table::examTable . " WHERE id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+      $e = $this->db->query("SELECT min_marks,max_marks FROM " . Table::examTable . " WHERE 
+      id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if (!empty($e)) {
         if ($marks >= $e[0]['min_marks'] && $marks <= $e[0]['max_marks']) {
