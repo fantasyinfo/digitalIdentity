@@ -11,6 +11,7 @@ class AjaxController extends CI_Controller {
 		parent::__construct();
 		$this->load->model('StudentModel');
 		$this->load->model('TeacherModel');
+		$this->load->model('CrudModel');
 		$this->load->model('QRModel');
 	}
 
@@ -40,6 +41,13 @@ class AjaxController extends CI_Controller {
 	}
 
 
+	public function listDigiCoinAjax()
+	{
+		if(isset($_POST))
+		{
+			return $this->CrudModel->listDigiCoin(Table::getDigiCoinTable,$_POST['user_type'], $_POST);
+		}
+	}
 
 
 

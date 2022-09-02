@@ -360,6 +360,99 @@ class CrudModel extends CI_Model
         
     }
 
+    public function listDigiCoin($tableName,$userType,$data = '')
+    {
+        $this->tableName = $tableName;
+        $joins = '';
+        if(!empty($userType))
+        {
+            if($userType == 'Student')
+            {
+                $joins .= ' LEFT JOIN '.Table::studentTable.' u ON u.id = g.user_id ';
+            }else if($userType == 'Teacher')
+            {
+                $joins .= ' LEFT JOIN '.Table::teacherTable.' u ON u.id = g.user_id ';
+            }
+            
+        }
+
+
+        if(!empty($data))
+        {
+           
+            $condition = " AND g.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+
+            if(!empty($userType))
+            {
+                $condition .= " AND user_type = '$userType' ";
+            }
+            
+            if(isset($data['name']) || isset($data['userId']) || isset($data['fromDate']) || isset($data['toDate']))
+            {
+                if(!empty($data['name']))
+                {
+                    $condition .= " AND u.name LIKE '%{$data['name']}%' ";
+                }
+                if(!empty($data['userId']))
+                {
+                    $condition .= " AND u.user_id LIKE '%{$data['userId']}%' ";
+                }
+                if(!empty($data['fromDate']) && !empty($data['toDate']))
+                {
+                    $condition .= " AND g.created_at BETWEEN '{$data['fromDate']}' AND  '{$data['toDate']}' ";
+                }
+          
+            }
+      
+                $d = $this->db->query("SELECT g.user_type,g.for_what,g.digiCoin,g.status,u.name,u.user_id as uniqueId FROM " .$this->tableName." g $joins WHERE g.status != 4 $condition ORDER BY g.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(1) as count  FROM " .$this->tableName." g $joins WHERE g.status != 4 $condition ORDER BY g.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT g.user_type,g.for_what,g.digiCoin,g.status,u.name,u.user_id as uniqueId FROM " .$this->tableName." g $joins WHERE g.status != 4 ORDER BY g.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(1) as count  FROM " .$this->tableName." g $joins WHERE g.status != 4 ORDER BY g.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = $d[$i]['user_type'];
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['uniqueId'];
+                $subArr[] = HelperClass::actionTypeR[$d[$i]['for_what']];
+                $subArr[] = $d[$i]['digiCoin'];
+                  if($d[$i]['status'] == '1')
+                    {
+                        $subArr[] = '<span class="badge badge-success">Active</span>';
+                    }else{
+                        $subArr[] = '<span class="badge badge-success">DeActive</span>';
+                    };
+                //  $subArr[] = '
+                //  <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
+                //  <a href="editTeacher/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
+                //  <a href="deleteTeacher/'.$d[$i]['id'].'" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
+
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
 
     public function singleStudent($tableName,$id)
     {

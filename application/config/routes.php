@@ -100,10 +100,24 @@ $route[$baseMaster."editPermission/(:any)/(:any)"] = "MasterController/editPermi
 
 
 
+// digiCoins
 
 
+$baseDigiCoin = "digicoin/";
+$digiCoinRoutesArr = [
+    'setDigiCoinMaster',
+    'studentDigiCoin',
+    'teacherDigiCoin'
+];
 
+foreach($digiCoinRoutesArr as $digiRoute)
+{
+    $route[$baseDigiCoin.$digiRoute] = "DigiCoinController"."/".$digiRoute;
+}
 
+// get routes of Teacher
+
+//$route[$baseDigiCoin."editPermission/(:any)"] = "DigiCoinController/editPermission/$1";
 
 
 
@@ -116,7 +130,8 @@ $baseAjax = 'ajax/';
 $ajaxRoutesArr = [
     'listStudentsAjax',
     'listTeachersAjax',
-    'showStudentViaClassAndSectionId'
+    'showStudentViaClassAndSectionId',
+    'listDigiCoinAjax'
     
 ];
 
