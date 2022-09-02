@@ -88,13 +88,16 @@ class HelperClass
         $str = '01234567890123456789012345678901234567890123456789';
         return substr(str_shuffle($str), 0, 1);
     }
-    public static function APIresponse($status = 200, $msg = '', $data = '')
+    public static function APIresponse($status = 200, $msg = '', $data = '',$coins = '')
     {
         $sendArr = [];
         $sendArr['statusCode'] = $status;
         $sendArr['message'] = $msg;
         if (!empty($data)) {
             $sendArr['data'] = $data;
+        }
+        if (!empty($coins)) {
+            $sendArr['coins'] = $coins;
         }
         echo json_encode($sendArr);
         die();

@@ -204,7 +204,7 @@
               <div class="card card-primary">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit Hours</h3>
-                  
+                 
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -222,10 +222,10 @@
                     ?>
                       <div class="row">
                         <div class="form-group col-md-3">
-                          <input type="text" name="start_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['start_time'];}?>" class="form-control timepicker" id="name"  required>
+                          <input type="time" name="start_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['start_time'];}?>" class="form-control " id="name"  required>
                         </div>
                         <div class="form-group col-md-3">
-                          <input type="text" name="end_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['end_time'];}?>" class="form-control timepicker" id="name"  required>
+                          <input type="time" name="end_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['end_time'];}?>" class="form-control " id="name"  required>
                         </div>
                         <div class="form-group col-md-3">
                           <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
@@ -314,7 +314,6 @@
   <script>
 
     $("#hourDataTable").DataTable();
-
 
  
   </script>

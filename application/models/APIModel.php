@@ -601,7 +601,7 @@ class APIModel extends CI_Model
   // check if the digiCoin is set 
   public function checkIsDigiCoinIsSet($for_what, $user_type, $schoolUniqueCode)
   {
-    $d = $this->db->query("SELECT digiCoin FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND for_what = '$for_what' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+    $d = $this->db->query("SELECT digiCoin FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND for_what = '$for_what' AND schoolUniqueCode = '$schoolUniqueCode' AND status ='1' LIMIT 1")->result_array();
     if (!empty($d)) {
       return $d[0]['digiCoin'];
     } else {
@@ -652,5 +652,28 @@ class APIModel extends CI_Model
     } else {
       return $returnDigiCoin;
     }
+  }
+
+  // formula for average percentage of result of a exam / class
+  public function avgResultOfExam($examId,$schoolUniqueCode)
+  {
+    
+    $s = $this->db->query("SELECT SUM(marks) as obtainedMarks, COUNT(1) as count FROM " . Table::resultTable . " WHERE exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
+    if(!empty($s))
+    {
+      $studentMarksObtained = $s[0]['obtainedMarks'];
+      $totalCountOfStudents = $s[0]['count'];
+    }
+
+
+    $e = $this->db->query("SELECT max_marks FROM " . Table::examTable . " WHERE id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+    if (!empty($e)) {
+      $maxMarksOfExam = $e[0]['max_marks'] * $totalCountOfStudents;
+      }
+
+      return array('exam_max_marks' => $maxMarksOfExam,'obtained_max_marks' => $studentMarksObtained);
+
   }
 }

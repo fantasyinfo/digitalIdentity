@@ -103,7 +103,7 @@ class APIController extends CI_Controller
 		  $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Attendence'],$digiCoinF,$schoolUniqueCode);
 		  if($insertDigiCoin)
 		  {
-			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime);
+			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',$digiCoinF);
 		  }else
 		  {
 			return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
@@ -180,7 +180,7 @@ class APIController extends CI_Controller
 		 $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Departure'],$digiCoinF,$schoolUniqueCode);
 		 if($insertDigiCoin)
 		 {
-		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime);
+		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',$digiCoinF);
 		 }else
 		 {
 		   return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
@@ -372,6 +372,28 @@ class APIController extends CI_Controller
 			return HelperClass::APIresponse(500, 'Result Not Added Successfully beacuse ' . $this->db->last_query());
 		}else
 		{
+				// check digiCoin is set for this result time for students avg
+				$perResultDigiCoin =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Result'], HelperClass::userType['Teacher'], $schoolUniqueCode);
+
+				$dataArrOfExam = $this->APIModel->avgResultOfExam($examId,$schoolUniqueCode);
+
+				
+				// calculate digiCoin value as per marks of total student result avg
+
+				if(!empty($dataArrOfExam) && !empty($perResultDigiCoin))
+				{
+					$digiCoinToInsert =   $this->APIModel->calculateStudentResultDigiCoin($perResultDigiCoin, $dataArrOfExam['obtained_max_marks'], $dataArrOfExam['exam_max_marks']);
+				}
+				
+				if (isset($digiCoinToInsert)) {
+					// insert the digicoin
+					$insertDigiCoin = $this->APIModel->insertDigiCoin($studentId, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
+					if ($insertDigiCoin) {
+						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',$perResultDigiCoin);
+					} else {
+						return HelperClass::APIresponse(500, 'Result Updated & DigiCoin Not Inserted For Teacher ' . $this->db->last_query());
+					}
+				}
 			return HelperClass::APIresponse(200, 'Result Updated Successfully');
 		}
 		
