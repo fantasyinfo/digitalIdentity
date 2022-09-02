@@ -29,6 +29,34 @@ class HelperClass
     ];
 
 
+    const actionType = [
+        'Attendence' => '1',
+        'Departure' => '2',
+        'Result' => '3',
+
+    ];
+
+    // reverse order
+    const userTypeR = [
+        '1' => 'Student',
+        '2' => 'Teacher',
+        '3' => 'Staff',
+        '4' => 'Principal',
+        '5' => 'School',
+    ];
+    const userTypeForPanelR = [
+        '1'  => 'Admin',
+        '2'  => 'Staff',
+        '3'  => 'Principal',
+    ];
+
+
+    const actionTypeR = [
+        '1'  => 'Attendence',
+        '2'  => 'Departure',
+        '3'  => 'Result',
+
+    ];
 
     const colorClassType =
     [
@@ -147,7 +175,7 @@ class HelperClass
         $mail->Send();
 
         // if (!$mail->Send()) {
-           // echo $mail->ErrorInfo;
+        // echo $mail->ErrorInfo;
         // } else {
         //    // echo 'Sent';
         // }
@@ -157,12 +185,9 @@ class HelperClass
 
     public static function checkIfItsACEOAccount()
     {
-        if($_SESSION['name'] != 'Super CEO Account' && $_SESSION['email'] != 'superCEO@digitalfied.in' && $_SESSION['user_type'] != 'SuperCEO' && $_SESSION['schoolUniqueCode'] != '963852')
-        {
+        if ($_SESSION['name'] != 'Super CEO Account' && $_SESSION['email'] != 'superCEO@digitalfied.in' && $_SESSION['user_type'] != 'SuperCEO' && $_SESSION['schoolUniqueCode'] != '963852') {
             return false;
-
-        }else
-        {
+        } else {
             return true;
         }
     }
@@ -172,46 +197,24 @@ class HelperClass
 
     public static function swalSuccess($msg = 'Changes have been saved')
     { ?>
-        <script> 
-        Swal.fire(
-            'Good job!',
-            '<?= $msg;?>',
-            'success'
-          )
+        <script>
+            Swal.fire(
+                'Good job!',
+                '<?= $msg; ?>',
+                'success'
+            )
         </script>
-   <?php }
+    <?php }
 
 
     public static function swalError($msg = 'Changes not saved')
     { ?>
-        <script> 
-       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong! <?= $msg;?>',
-        })
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong! <?= $msg; ?>',
+            })
         </script>
-   <?php }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<?php }
 }

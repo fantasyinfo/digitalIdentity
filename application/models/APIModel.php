@@ -10,7 +10,7 @@ class APIModel extends CI_Model
   }
 
   // login
-  public function login($schoolUniqueCode,$id, $password, $type)
+  public function login($schoolUniqueCode, $id, $password, $type)
   {
     $dir = base_url() . HelperClass::uploadImgDir;
     if ($type == 'Teacher') {
@@ -53,27 +53,24 @@ class APIModel extends CI_Model
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
 
         // total count of students
-        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"],$userData[0]["section_id"])) ? $this->countStudentViaClassAndSection($userData[0]["class_id"],$userData[0]["section_id"]) : null;
+        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"])) ? $this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"]) : null;
 
         // subjects of teachers
         $responseData["teacherSubjects"] = [];
-        $subjectsArr = json_decode(@$userData[0]['subject_ids'],TRUE);
+        $subjectsArr = json_decode(@$userData[0]['subject_ids'], TRUE);
         $totalSub = count(@$subjectsArr);
-        if(isset($totalSub))
-        {
-          for($i=0;$i<$totalSub;$i++)
-          {
+        if (isset($totalSub)) {
+          for ($i = 0; $i < $totalSub; $i++) {
             $subArr = [];
-            $sub = $this->db->query("SELECT id,subjectName from ".Table::subjectTable." WHERE id = '{$subjectsArr[$i]}' AND status = '1'")->result_array();
-            if(isset($sub))
-            {
+            $sub = $this->db->query("SELECT id,subjectName from " . Table::subjectTable . " WHERE id = '{$subjectsArr[$i]}' AND status = '1'")->result_array();
+            if (isset($sub)) {
               $subArr['subjectId'] = $sub[0]['id'];
               $subArr['subjectName'] = $sub[0]['subjectName'];
             }
-            array_push($responseData["teacherSubjects"],$subArr);
+            array_push($responseData["teacherSubjects"], $subArr);
           }
         }
-        
+
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
@@ -88,7 +85,7 @@ class APIModel extends CI_Model
   // validate login
   public function validateLogin($authToken, $type)
   {
-    
+
     if ($type == 'Teacher') {
 
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::teacherTable . " WHERE auth_token = '$authToken' AND status = '1'";
@@ -108,7 +105,7 @@ class APIModel extends CI_Model
 
 
   // show students for attendence
-  public function showAllStudentForAttendence($type, $class, $section,$schoolUniqueCode)
+  public function showAllStudentForAttendence($type, $class, $section, $schoolUniqueCode)
   {
 
     if ($type == 'Teacher') {
@@ -122,7 +119,7 @@ class APIModel extends CI_Model
       if (!empty($studentsData)) {
         return $studentsData;
       } else {
-        return HelperClass::APIresponse(500, 'Students Not Found. For This Class. '. $class .' - ' .$section);
+        return HelperClass::APIresponse(500, 'Students Not Found. For This Class. ' . $class . ' - ' . $section);
       }
     } else if ($type == 'Staff') {
       //
@@ -131,9 +128,9 @@ class APIModel extends CI_Model
     }
   }
 
-  public function countStudentViaClassAndSection($class_id,$section_id)
+  public function countStudentViaClassAndSection($class_id, $section_id)
   {
-   $totalStudents =  $this->db->query("SELECT count(1) as count FROM ". Table::studentTable ." WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1'")->result_array();
+    $totalStudents =  $this->db->query("SELECT count(1) as count FROM " . Table::studentTable . " WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1'")->result_array();
     if (!empty($totalStudents)) {
       return $totalStudents[0]['count'];
     } else {
@@ -142,7 +139,7 @@ class APIModel extends CI_Model
   }
 
   // save attendence
-  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus,$schoolUniqueCode)
+  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     if ($login_user_type == 'Teacher') {
@@ -167,6 +164,27 @@ class APIModel extends CI_Model
       ];
       $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
       if (!empty($insertId)) {
+
+
+        // return true if student is absent today do not enter there digicoins
+        if ($attendenceStatus == '0') {
+          return true;
+        }
+
+
+        // check digiCoin is set for this attendence time for students
+        $digiCoinF =  $this->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'], HelperClass::userType['Student'], $schoolUniqueCode);
+
+        if ($digiCoinF) {
+          // insert the digicoin
+          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $schoolUniqueCode);
+          if ($insertDigiCoin) {
+            return true;
+          } else {
+            return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Student ' . $this->db->last_query());
+          }
+        }
+
         return true;
       } else {
         return false;
@@ -179,7 +197,7 @@ class APIModel extends CI_Model
   }
 
   // showSubmitAttendenceData
-  public function showSubmitAttendenceData($className, $sectionName,$schoolUniqueCode)
+  public function showSubmitAttendenceData($className, $sectionName, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -197,7 +215,7 @@ class APIModel extends CI_Model
   }
 
   // save departure
-  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus,$schoolUniqueCode)
+  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     if ($login_user_type == 'Teacher') {
@@ -223,6 +241,22 @@ class APIModel extends CI_Model
 
       $insertId = $this->CrudModel->insert(Table::departureTable, $insertArr);
       if (!empty($insertId)) {
+
+
+        // check digiCoin is set for this departure time for students
+        $digiCoinF =  $this->checkIsDigiCoinIsSet(HelperClass::actionType['Departure'], HelperClass::userType['Student'], $schoolUniqueCode);
+
+        if ($digiCoinF) {
+          // insert the digicoin
+          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Departure'], $digiCoinF, $schoolUniqueCode);
+          if ($insertDigiCoin) {
+            return true;
+          } else {
+            return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Student ' . $this->db->last_query());
+          }
+        }
+
+
         return true;
       } else {
         return false;
@@ -235,7 +269,7 @@ class APIModel extends CI_Model
   }
 
   // showSubmitAttendenceData
-  public function showSubmitDepartureData($className, $sectionName,$schoolUniqueCode)
+  public function showSubmitDepartureData($className, $sectionName, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -252,18 +286,16 @@ class APIModel extends CI_Model
     }
   }
 
-// showStudentDetils
-  public function showStudentDetails($classId,$sectionId,$qrCode,$studentId,$schoolUniqueCode)
+  // showStudentDetils
+  public function showStudentDetails($classId, $sectionId, $qrCode, $studentId, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
     $condition = " AND s.schoolUniqueCode = '$schoolUniqueCode' ";
-    if(!empty($classId) && !empty($sectionId) && !empty($studentId))
-    {
-      $condition.=" AND s.id = '{$studentId}' AND ss.id = '{$sectionId}' AND c.id = '{$classId}' ";
-    }else
-    {
-      $condition.= " AND q.qrcodeUrl = '$qrCode' ";
+    if (!empty($classId) && !empty($sectionId) && !empty($studentId)) {
+      $condition .= " AND s.id = '{$studentId}' AND ss.id = '{$sectionId}' AND c.id = '{$classId}' ";
+    } else {
+      $condition .= " AND q.qrcodeUrl = '$qrCode' ";
     }
 
     $sql = "SELECT s.*, 
@@ -278,15 +310,15 @@ class APIModel extends CI_Model
     CONCAT(rt.marks ,' Out of ', examt.max_marks) as examMarks,
     rt.result_date,rt.remarks,rt.marks,if(rt.status = '1','Pass', 'Fail') as resultStatus,
     subt.subjectName
-    FROM " .Table::studentTable." s
-    LEFT JOIN ".Table::qrcodeTable." q ON q.uniqueValue = s.user_id
-    LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
-    LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
-    LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
-    LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
-    LEFT JOIN ".Table::resultTable." rt ON rt.student_id = s.id
-    LEFT JOIN ".Table::examTable." examt ON rt.exam_id = examt.id
-    LEFT JOIN ".Table::subjectTable." subt ON subt.id = examt.subject_id
+    FROM " . Table::studentTable . " s
+    LEFT JOIN " . Table::qrcodeTable . " q ON q.uniqueValue = s.user_id
+    LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
+    LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
+    LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
+    LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
+    LEFT JOIN " . Table::resultTable . " rt ON rt.student_id = s.id
+    LEFT JOIN " . Table::examTable . " examt ON rt.exam_id = examt.id
+    LEFT JOIN " . Table::subjectTable . " subt ON subt.id = examt.subject_id
     WHERE s.status = '1' $condition 
     ORDER BY s.id DESC";
 
@@ -295,7 +327,7 @@ class APIModel extends CI_Model
     if (!empty($d)) {
       $returnArr = [];
       $returnArr['studentId'] = @$d[0]['id'];
-      $returnArr['u_qr_id'] =@$d[0]['u_qr_id'];
+      $returnArr['u_qr_id'] = @$d[0]['u_qr_id'];
       $returnArr['uniqueValue'] = @$d[0]['uniqueValue'];
       $returnArr['qrcodeUrl'] = @$d[0]['qrcodeUrl'];
       $returnArr['name'] = @$d[0]['name'];
@@ -318,8 +350,7 @@ class APIModel extends CI_Model
 
       $returnArr['resultData'] = [];
       $totalData = count($d);
-      for($i=0;$i < $totalData; $i++)
-      {
+      for ($i = 0; $i < $totalData; $i++) {
         $subArr = [];
         $subArr['exam_name'] = @$d[$i]['exam_name'];
         $subArr['exam_date'] = @$d[$i]['date_of_exam'];
@@ -332,7 +363,7 @@ class APIModel extends CI_Model
         $subArr['examMarks'] = @$d[$i]['examMarks'];
         $subArr['resultStatus'] = @$d[$i]['resultStatus'];
         $subArr['remarks'] = @$d[$i]['remarks'];
-        array_push($returnArr['resultData'],$subArr);
+        array_push($returnArr['resultData'], $subArr);
       }
 
       return $returnArr;
@@ -343,7 +374,7 @@ class APIModel extends CI_Model
 
 
   // add Exam
-  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks,$schoolUniqueCode)
+  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -353,7 +384,7 @@ class APIModel extends CI_Model
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
-        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000,9999),
+        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000, 9999),
         "date_of_exam" => $examDate,
         "max_marks" => $maxMarks,
         "min_marks" => $minMarks,
@@ -383,7 +414,7 @@ class APIModel extends CI_Model
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
-        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000,9999),
+        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000, 9999),
         "date_of_exam" => $examDate,
         "max_marks" => $maxMarks,
         "min_marks" => $minMarks,
@@ -406,7 +437,7 @@ class APIModel extends CI_Model
 
 
   // showAllExam
-  public function showAllExam($classId, $sectionId, $schoolUniqueCode,$subjectId = '')
+  public function showAllExam($classId, $sectionId, $schoolUniqueCode, $subjectId = '')
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -449,43 +480,88 @@ class APIModel extends CI_Model
   }
 
 
-   // save attendence
-   public function addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId,$schoolUniqueCode)
-   {
-     $currentDate = date_create()->format('Y-m-d');
-     if ($loginuserType == 'Teacher') {
- 
-       $d = $this->db->query("SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
- 
-       if (!empty($d)) {
-         return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
-       }
- 
-       $insertArr = [
-        "schoolUniqueCode" => $schoolUniqueCode,
-         "exam_id" => $examId,
-         "marks" => $marks,
-         "remarks" => ($reMarks) ? $reMarks : "",
-         "resultStatus" => $resultStatus,
-         "student_id" => $studentId,
-         "login_user_type" => $loginuserType,
-         "login_user_id" => $loginUserId,
-         "result_date" => $resultDate,
-       ];
+  // save attendence
+  public function addResult($loginUserId, $loginuserType, $resultDate, $studentId, $marks, $reMarks, $examId, $schoolUniqueCode)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    if ($loginuserType == 'Teacher') {
 
- 
-       $insertId = $this->CrudModel->insert(Table::resultTable, $insertArr);
-       if (!empty($insertId)) {
-         return true;
-       } else {
-         return false;
-       }
-     } else if ($loginuserType == 'Staff') {
-       //
-     } else if ($loginuserType == 'Principal') {
-       //
-     }
-   }
+      // check if student is pass or fail
+
+
+      $e = $this->db->query("SELECT min_marks,max_marks FROM " . Table::examTable . " WHERE id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+      if (!empty($e)) {
+        if ($marks >= $e[0]['min_marks'] && $marks <= $e[0]['max_marks']) {
+          $resultStatus = '1'; // pass
+        } else {
+          $resultStatus = '2'; // fail
+        }
+      }
+
+
+
+      $d = $this->db->query("SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+      if (!empty($d)) {
+        return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
+      }
+
+      $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
+        "exam_id" => $examId,
+        "marks" => $marks,
+        "remarks" => ($reMarks) ? $reMarks : "",
+        "resultStatus" => $resultStatus,
+        "student_id" => $studentId,
+        "login_user_type" => $loginuserType,
+        "login_user_id" => $loginUserId,
+        "result_date" => $resultDate,
+      ];
+
+
+      $insertId = $this->CrudModel->insert(Table::resultTable, $insertArr);
+      if (!empty($insertId)) {
+
+
+
+        if ($resultStatus == '1' && !empty($e)) {
+          // check digiCoin is set for this result time for students
+          $perResultDigiCoin =  $this->checkIsDigiCoinIsSet(HelperClass::actionType['Result'], HelperClass::userType['Student'], $schoolUniqueCode);
+
+          // calculate digiCoin value as per marks of student
+
+          $digiCoinToInsert =   $this->calculateStudentResultDigiCoin($perResultDigiCoin, $marks, $e[0]['max_marks']);
+
+
+
+          if ($digiCoinToInsert) {
+            // insert the digicoin
+            $insertDigiCoin = $this->insertDigiCoin($studentId, HelperClass::userTypeR['1'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
+            if ($insertDigiCoin) {
+              return true;
+            } else {
+              return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Student ' . $this->db->last_query());
+            }
+          }
+        }
+
+
+
+
+
+
+
+        return true;
+      } else {
+        return false;
+      }
+    } else if ($loginuserType == 'Staff') {
+      //
+    } else if ($loginuserType == 'Principal') {
+      //
+    }
+  }
 
 
   // fetching all classes
@@ -503,5 +579,72 @@ class APIModel extends CI_Model
   public function allSubjects()
   {
     return  $this->CrudModel->allSubjects(Table::subjectTable);
+  }
+
+  // calculate digicoin
+  public function getAlreadyDigiCoinCount($user_id, $user_type, $schoolUniqueCode)
+  {
+    $d = $this->db->query("SELECT SUM(digiCoin) as digiCoin FROM " . Table::getDigiCoinTable . " WHERE user_type = '$user_type' AND user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+    if (!empty($d)) {
+      return $d[0]['digiCoin'];
+    } else {
+      return 0;
+    }
+  }
+
+  // check if the digiCoin is set 
+  public function checkIsDigiCoinIsSet($for_what, $user_type, $schoolUniqueCode)
+  {
+    $d = $this->db->query("SELECT digiCoin FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND for_what = '$for_what' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+    if (!empty($d)) {
+      return $d[0]['digiCoin'];
+    } else {
+      return false;
+    }
+  }
+
+  // insert digiCoin
+  public function insertDigiCoin($user_id, $user_type, $for_what, $digiCoin, $schoolUniqueCode)
+  {
+    $d = $this->db->query("INSERT INTO " . Table::getDigiCoinTable . " (schoolUniqueCode,user_type,user_id,for_what,digiCoin) VALUES ('$schoolUniqueCode','$user_type','$user_id',$for_what,'$digiCoin')");
+    if (!empty($d)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  // formula for student digiCoin
+  public function calculateStudentResultDigiCoin($perResultDigiCoin, $marksObtained, $maxMarks)
+  {
+
+    $percentageCal = $marksObtained / $maxMarks * 100; // 35 / 50 * 100 = 70%
+
+    $returnDigiCoin = 0;
+    if ($percentageCal >= 90 && $percentageCal <= 100) {
+      // 90 - 100 %tage = return 100% digiCoin
+      return $returnDigiCoin = $perResultDigiCoin;
+    } else if ($percentageCal >= 80 && $percentageCal <= 90) {
+      // 80 - 90 %tage = return 90% digiCoin
+      return $returnDigiCoin = ($perResultDigiCoin / 100) * 90;
+    } else if ($percentageCal >= 70 && $percentageCal <= 80) {
+      // 70 - 80 %tage = return 80% digiCoin
+      return $returnDigiCoin = ($perResultDigiCoin / 100) * 80;
+    } else if ($percentageCal >= 60 && $percentageCal <= 70) {
+      // 60 - 70 %tage = return 70% digiCoin
+      return $returnDigiCoin = ($perResultDigiCoin / 100) * 70;
+    } else if ($percentageCal >= 50 && $percentageCal <= 60) {
+      // 50 - 60 %tage = return 60% digiCoin
+      return $returnDigiCoin = ($perResultDigiCoin / 100) * 60;
+    } else if ($percentageCal >= 40 && $percentageCal <= 50) {
+      // 40 - 50 %tage = return 50% digiCoin
+      return $returnDigiCoin = ($perResultDigiCoin / 100) * 50;
+    } else if ($percentageCal >= 33 && $percentageCal <= 40) {
+      // 33 - 40 %tage = return 40% digiCoin
+      return $returnDigiCoin = ($perResultDigiCoin / 100) * 40;
+    } else {
+      return $returnDigiCoin;
+    }
   }
 }

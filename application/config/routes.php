@@ -82,6 +82,7 @@ $masterRoutesArr = [
     'feesMaster',
     'submitFeesMaster',
     'monthMaster',
+    'setDigiCoinMaster',
     'givePermissionMaster' // only for super Admin
     
 ];

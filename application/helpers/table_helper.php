@@ -27,4 +27,7 @@ class Table{
     const feesTable = 'fees';
     const feesForStudentTable = 'feesforstudent';
     const monthTable = 'month';
+    const setDigiCoinTable = 'set_digi_coin';
+    const getDigiCoinTable = 'get_digi_coin';
+    
 }

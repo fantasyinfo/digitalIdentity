@@ -94,6 +94,23 @@ class APIController extends CI_Controller
 			}
 		}
 
+		 // check digiCoin is set for this attendence time for teachers
+		 $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'],HelperClass::userType['Teacher'],$schoolUniqueCode);
+
+		 if($digiCoinF)
+		 {
+		  // insert the digicoin
+		  $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Attendence'],$digiCoinF,$schoolUniqueCode);
+		  if($insertDigiCoin)
+		  {
+			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime);
+		  }else
+		  {
+			return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
+		  }
+		 }
+
+		 
 		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime);
 	}
 
@@ -154,6 +171,21 @@ class APIController extends CI_Controller
 			}
 		}
 
+		// check digiCoin is set for this departure time for teachers
+		$digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Departure'],HelperClass::userType['Teacher'],$schoolUniqueCode);
+
+		if($digiCoinF)
+		{
+		 // insert the digicoin
+		 $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Departure'],$digiCoinF,$schoolUniqueCode);
+		 if($insertDigiCoin)
+		 {
+		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime);
+		 }else
+		 {
+		   return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
+		 }
+		}
 		return HelperClass::APIresponse(200, 'Departure Updated Successfully at ' . $currentDateTime);
 	}
 
@@ -332,9 +364,8 @@ class APIController extends CI_Controller
 			$studentId = $results[$i]['studentId'];
 			$marks = $results[$i]['marks'];
 			$reMarks = @$results[$i]['reMarks'];
-			$resultStatus = @$results[$i]['resultStatus'];
-
-			$addExamResult = $this->APIModel->addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$resultStatus,$examId,$schoolUniqueCode);
+		
+			$addExamResult = $this->APIModel->addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$examId,$schoolUniqueCode);
 		}
 
 		if (!$addExamResult) {
