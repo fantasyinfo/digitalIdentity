@@ -11,66 +11,66 @@
     $this->load->library('session');
 
   // fetching section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " ")->result_array();
+    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status != '4'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 
     // edit and delete action
-    // if(isset($_GET['action']))
-    // {
+    if(isset($_GET['action']))
+    {
    
-    //   if($_GET['action'] == 'edit')
-    //   {
-    //     $editId = $_GET['edit_id'];
-    //     $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId' ")->result_array();
-    //   }
+      if($_GET['action'] == 'edit')
+      {
+        $editId = $_GET['edit_id'];
+        $editsectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE id='$editId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+      }
 
 
-    //   if($_GET['action'] == 'delete')
-    //   {
-    //     $deleteId = $_GET['delete_id'];
-    //     $deletesectionData = $this->db->query("DELETE FROM " . Table::sectionTable . " WHERE id='$deleteId'");
-    //     if($deletesectionData)
-    //     {
-    //       $msgArr = [
-    //         'class' => 'success',
-    //         'msg' => 'section Deleted Successfully',
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }else
-    //     {
-    //       $msgArr = [
-    //         'class' => 'danger',
-    //         'msg' => 'section Not Deleted Due to this Error. ' . $this->db->last_query(),
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }
-    //     header("Refresh:3 ".base_url()."master/sectionMaster");
-    //   }
+      if($_GET['action'] == 'delete')
+      {
+        $deleteId = $_GET['delete_id'];
+        $deletesectionData = $this->db->query("UPDATE " . Table::sectionTable . " SET status = '4' WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+        if($deletesectionData)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'section Deleted Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'section Not Deleted Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 ".base_url()."master/sectionMaster");
+      }
 
-    //   if($_GET['action'] == 'status')
-    //   {
-    //     $status = $_GET['status'];
-    //     $updateId = $_GET['edit_id'];
-    //     $updateStatus = $this->db->query("UPDATE " . Table::sectionTable . " SET status = '$status' WHERE id = '$updateId'");
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::sectionTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
-    //     if($updateStatus)
-    //     {
-    //       $msgArr = [
-    //         'class' => 'success',
-    //         'msg' => 'Section Status Updated Successfully',
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }else
-    //     {
-    //       $msgArr = [
-    //         'class' => 'danger',
-    //         'msg' => 'Section Status Not Updated Due to this Error. ' . $this->db->last_query(),
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }
-    //     header("Refresh:3 ".base_url()."master/sectionMaster");
-    //   }
-    // }
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Section Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Section Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 ".base_url()."master/sectionMaster");
+      }
+    }
 
 
     // insert new section
@@ -78,7 +78,7 @@
     {
       $sectionName = $_POST['sectionName'];
 
-      $alreadySection = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE sectionName = '$sectionName'")->result_array();
+      $alreadySection = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE sectionName = '$sectionName'   AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
       if(!empty($alreadySection))
       {
@@ -92,7 +92,7 @@
       }
 
 
-      $insertNewsection = $this->db->query("INSERT INTO " . Table::sectionTable . " (sectionName) VALUES ('$sectionName')");
+      $insertNewsection = $this->db->query("INSERT INTO " . Table::sectionTable . " (schoolUniqueCode,sectionName) VALUES ('{$_SESSION['schoolUniqueCode']}','$sectionName')");
       if($insertNewsection)
       {
         $msgArr = [
@@ -108,32 +108,32 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/sectionMaster");
+      header("Refresh:1 ".base_url()."master/sectionMaster");
     }
 
     // update exiting section
-    // if(isset($_POST['update']))
-    // {
-    //   $sectionName = $_POST['sectionName'];
-    //   $sectionEditId = $_POST['updatesectionId'];
-    //   $updatesection = $this->db->query("UPDATE " . Table::sectionTable . " SET sectionName = '$sectionName' WHERE id = '$sectionEditId'");
-    //   if($updatesection)
-    //   {
-    //     $msgArr = [
-    //       'class' => 'success',
-    //       'msg' => 'section Updated Successfully',
-    //     ];
-    //     $this->session->set_userdata($msgArr);
-    //   }else
-    //   {
-    //     $msgArr = [
-    //       'class' => 'danger',
-    //       'msg' => 'section Not Updated Due to this Error. ' . $this->db->last_query(),
-    //     ];
-    //     $this->session->set_userdata($msgArr);
-    //   }
-    //   header("Refresh:3 ".base_url()."master/sectionMaster");
-    // }
+    if(isset($_POST['update']))
+    {
+      $sectionName = $_POST['sectionName'];
+      $sectionEditId = $_POST['updatesectionId'];
+      $updatesection = $this->db->query("UPDATE " . Table::sectionTable . " SET sectionName = '$sectionName' WHERE id = '$sectionEditId'   AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+      if($updatesection)
+      {
+        $msgArr = [
+          'class' => 'success',
+          'msg' => 'section Updated Successfully',
+        ];
+        $this->session->set_userdata($msgArr);
+      }else
+      {
+        $msgArr = [
+          'class' => 'danger',
+          'msg' => 'section Not Updated Due to this Error. ' . $this->db->last_query(),
+        ];
+        $this->session->set_userdata($msgArr);
+      }
+      header("Refresh:1 ".base_url()."master/sectionMaster");
+    }
 
 
     // print_r($sectionData);
@@ -242,10 +242,10 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <!-- <th>Section Id</th> -->
+                            <th>Section Id</th>
                             <th>Section Name</th>
-                            <!-- <th>Status</th>
-                            <th>Action</th> -->
+                            <th>Status</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -254,17 +254,17 @@
                             foreach ($sectionData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <!-- <td><?= $cn['id'];?></td> -->
+                                <td><?= $cn['id'];?></td>
                                 <td><?= $cn['sectionName'];?></td>
-                                <!-- <td>
+                                <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td> -->
-                                <!-- <td>
+                                </td>
+                                <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td> -->
+                                </td>
                               </tr>
                           <?php  }
                           } ?>

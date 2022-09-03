@@ -11,13 +11,13 @@
     $this->load->library('session');
 
     // fetching city data
-    $subjectData = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
+    $subjectData = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
     // class data
-    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = 1")->result_array();
+    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
     // section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = 1")->result_array();
+    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
     // hours data
     $hoursTableData = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
@@ -26,7 +26,7 @@
     $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
     // week data
-    $weekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE status = 1")->result_array();
+    // $weekData = $this->db->query("SELECT * FROM " . Table::weekTable . " WHERE status = 1")->result_array();
 
     // shedule data
      $sheduleData = $this->db->query("
@@ -65,7 +65,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
+        header("Refresh:1 " . base_url() . "master/timeTableSheduleMaster");
       }
 
       if($_GET['action'] == 'status')
@@ -89,7 +89,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
+        header("Refresh:1 " . base_url() . "master/timeTableSheduleMaster");
       }
     }
 
@@ -154,7 +154,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
+      header("Refresh:1 " . base_url() . "master/timeTableSheduleMaster");
     }
 
     // update exiting city
@@ -203,7 +203,7 @@
         
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 " . base_url() . "master/timeTableSheduleMaster");
+      header("Refresh:1 " . base_url() . "master/timeTableSheduleMaster");
     }
 
 
@@ -507,7 +507,7 @@
                                       foreach ($sheduleJsonArr as $subArr) {
                                         $timeArr = $this->db->query("SELECT * FROM " . Table::timeTableHoursTable . " WHERE status = 1 AND id='{$subArr['time']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
-                                        $subectArr = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE status = 1 AND id='{$subArr['subject']}'")->result_array();
+                                        $subectArr = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE status = 1 AND id='{$subArr['subject']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
                                         $teacherArr = $this->db->query("SELECT * FROM " . Table::teacherTable . " WHERE status = 1 AND id='{$subArr['teacher']}'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 

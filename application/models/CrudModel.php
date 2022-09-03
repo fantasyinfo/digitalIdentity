@@ -135,7 +135,7 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
+            $condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
 
             if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
             {
@@ -250,7 +250,7 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
+            $condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
 
             if(isset($data['teacherName']) || isset($data['teacherClass']) || isset($data['teacherMobile']) || isset($data['teacherUserId']) || isset($data['teacherFromDate']) || isset($data['teacherToDate']))
             {

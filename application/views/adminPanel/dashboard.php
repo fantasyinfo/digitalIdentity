@@ -1,5 +1,3 @@
-
-
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
@@ -32,27 +30,56 @@
       <!-- Main content -->
       <div class="content">
         <div class="container-fluid">
-    
-        <?php 
 
-            $this->CrudModel->checkPermission();
-           // HelperClass::swalError('Student Not Added Successfully.');
+          <?php
 
-         
-       // HelperClass::prePrintR($this->session->userdata());
+          $this->CrudModel->checkPermission();
 
-          
-				// $to = "/topics/tournaments";
-    
-				// $notification = array(
-				// 	'title' => "New tournament!!",
-				// 	'body' => "A new tournament is ready, Join now or miss out"
-				// );
-        
-         //$this->CrudModel->sendWebPush('Student Updated','Hey New Student Updated Succesfully');
+          ?>
 
-        ?>
-        
+<div id="accordion">
+
+  <div class="card card-primary card-outline">
+    <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
+        <div class="card-header">
+        <h4 class="card-title w-100">
+        Students Section
+        </h4>
+        </div>
+    </a>
+      <div id="collapseOne" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+        Hello Woirld;
+            <?php include("dashinclude/student_section.php"); ?>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <!--/.col (right) -->
         </div>
 
@@ -70,5 +97,5 @@
   </div>
   <!-- ./wrapper -->
   <script>
-   
+
   </script>

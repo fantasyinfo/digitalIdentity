@@ -44,7 +44,7 @@
     //       ];
     //       $this->session->set_userdata($msgArr);
     //     }
-    //     header("Refresh:3 ".base_url()."master/weekMaster");
+    //     header("Refresh:1 ".base_url()."master/weekMaster");
     //   }
 
     //   if($_GET['action'] == 'status')
@@ -68,7 +68,7 @@
     //       ];
     //       $this->session->set_userdata($msgArr);
     //     }
-    //     header("Refresh:3 ".base_url()."master/weekMaster");
+    //     header("Refresh:1 ".base_url()."master/weekMaster");
     //   }
 
     // }
@@ -110,7 +110,7 @@
     //     ];
     //     $this->session->set_userdata($msgArr);
     //   }
-    //   header("Refresh:3 ".base_url()."master/weekMaster");
+    //   header("Refresh:1 ".base_url()."master/weekMaster");
     // }
 
     
@@ -134,7 +134,7 @@
     //     ];
     //     $this->session->set_userdata($msgArr);
     //   }
-    //   header("Refresh:3 ".base_url()."master/weekMaster");
+    //   header("Refresh:1 ".base_url()."master/weekMaster");
     // }
 
 

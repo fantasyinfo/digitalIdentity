@@ -48,7 +48,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 " . base_url() . "master/panelUserMaster");
+        header("Refresh:1 " . base_url() . "master/panelUserMaster");
       }
 
 
@@ -70,7 +70,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 " . base_url() . "master/panelUserMaster");
+        header("Refresh:1 " . base_url() . "master/panelUserMaster");
       }
     }
 
@@ -133,7 +133,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 " . base_url() . "master/panelUserMaster");
+      header("Refresh:1 " . base_url() . "master/panelUserMaster");
     }
 
     // update exiting city
@@ -166,7 +166,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 " . base_url() . "master/panelUserMaster");
+      header("Refresh:1 " . base_url() . "master/panelUserMaster");
     }
 
 

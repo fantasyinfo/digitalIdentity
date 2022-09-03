@@ -44,7 +44,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/hourMaster");
+        header("Refresh:1 ".base_url()."master/hourMaster");
       }
 
       if($_GET['action'] == 'status')
@@ -68,7 +68,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/hourMaster");
+        header("Refresh:1 ".base_url()."master/hourMaster");
       }
 
 
@@ -114,7 +114,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/hourMaster");
+      header("Refresh:1 ".base_url()."master/hourMaster");
     }
 
     // update exiting city
@@ -139,7 +139,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/hourMaster");
+      header("Refresh:1 ".base_url()."master/hourMaster");
     }
 
 

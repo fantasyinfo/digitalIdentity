@@ -12,7 +12,7 @@
     $this->load->model('CrudModel');
 
   // fetching city data
-    $notificatonData = $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " ORDER BY id DESC")->result_array();
+    $notificatonData = $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
     // insert new city
     if(isset($_POST['submit']))
@@ -24,7 +24,7 @@
       $this->CrudModel->sendWebPush($title,$body);
 
 
-      $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (title,body,device_type) VALUES ('$title','$body','Web')");
+      $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web')");
       if($insertNotification)
       {
       
@@ -41,7 +41,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/notificationMaster");
+      header("Refresh:1 ".base_url()."master/notificationMaster");
     }
 
 

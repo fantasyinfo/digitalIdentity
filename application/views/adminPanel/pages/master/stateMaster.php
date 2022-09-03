@@ -44,7 +44,7 @@
     //       ];
     //       $this->session->set_userdata($msgArr);
     //     }
-    //     header("Refresh:3 ".base_url()."master/stateMaster");
+    //     header("Refresh:1 ".base_url()."master/stateMaster");
     //   }
 
     //   if($_GET['action'] == 'status')
@@ -68,7 +68,7 @@
     //       ];
     //       $this->session->set_userdata($msgArr);
     //     }
-    //     header("Refresh:3 ".base_url()."master/stateMaster");
+    //     header("Refresh:1 ".base_url()."master/stateMaster");
     //   }
 
     // }
@@ -109,7 +109,7 @@
     //     ];
     //     $this->session->set_userdata($msgArr);
     //   }
-    //   header("Refresh:3 ".base_url()."master/stateMaster");
+    //   header("Refresh:1 ".base_url()."master/stateMaster");
     // }
 
     // update exiting city
@@ -133,7 +133,7 @@
     //     ];
     //     $this->session->set_userdata($msgArr);
     //   }
-    //   header("Refresh:3 ".base_url()."master/stateMaster");
+    //   header("Refresh:1 ".base_url()."master/stateMaster");
     // }
 
 

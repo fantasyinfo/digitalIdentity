@@ -34,9 +34,6 @@ $(document).ready(function(){
             state: {
               required: true
             },
-            city: {
-              required: true
-            },
             pincode: {
               required: true
             },
@@ -63,7 +60,6 @@ $(document).ready(function(){
             dob: "Please select your date of birth",
             address: "Please add your address",
             state: "Please select your state",
-            city: "Please select your city",
             pincode: "Please enter pincode",
             image: "Please add student image",
             roll_no: "Please add roll no",
@@ -121,9 +117,6 @@ $(document).ready(function(){
             state: {
               required: true
             },
-            city: {
-              required: true
-            },
             pincode: {
               required: true
             },
@@ -151,7 +144,6 @@ $(document).ready(function(){
             doj: "Please select your date of joining in the school",
             address: "Please add your address",
             state: "Please select your state",
-            city: "Please select your city",
             pincode: "Please enter pincode",
             image: "Please add student image",
             roll_no: "Please add roll no",

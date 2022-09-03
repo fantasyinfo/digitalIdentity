@@ -43,7 +43,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3");
+      header("Refresh:1");
     }
 
 

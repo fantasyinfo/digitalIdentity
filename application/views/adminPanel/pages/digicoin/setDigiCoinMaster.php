@@ -45,7 +45,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/setDigiCoinMaster");
+        header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
       }
 
       if($_GET['action'] == 'status')
@@ -69,7 +69,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/setDigiCoinMaster");
+        header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
       }
 
     }
@@ -114,7 +114,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/setDigiCoinMaster");
+      header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
     }
 
     // update exiting city
@@ -142,7 +142,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/setDigiCoinMaster");
+      header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
     }
 
 

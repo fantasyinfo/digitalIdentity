@@ -19,7 +19,7 @@
     $teachersData = $this->db->query("SELECT id,CONCAT(name, ' - ',user_id) as userName FROM " . Table::teacherTable . " WHERE status = 1 AND schoolUniqueCode = ".$_SESSION['schoolUniqueCode']." ORDER BY id DESC")->result_array();
 
 
-    $subjectsData = $this->db->query("SELECT id, subjectName FROM " . Table::subjectTable . " WHERE status = 1 ORDER BY id DESC")->result_array();
+    $subjectsData = $this->db->query("SELECT id, subjectName FROM " . Table::subjectTable . " WHERE status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
     // edit and delete action
     if(isset($_GET['action']))
@@ -56,7 +56,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
+        header("Refresh:1 ".base_url()."master/teacherSubjectsMaster");
       }
 
       if($_GET['action'] == 'status')
@@ -80,7 +80,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
+        header("Refresh:1 ".base_url()."master/teacherSubjectsMaster");
       }
 
     }
@@ -125,7 +125,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
+      header("Refresh:1 ".base_url()."master/teacherSubjectsMaster");
     }
 
     // update exiting city
@@ -150,7 +150,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/teacherSubjectsMaster");
+      header("Refresh:1 ".base_url()."master/teacherSubjectsMaster");
     }
 
 

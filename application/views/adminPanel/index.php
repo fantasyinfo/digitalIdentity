@@ -80,7 +80,7 @@ if(isset($_POST['submit']))
       ];
       $this->session->set_userdata($msgArr);
 
-      header("Refresh:3 url=adminPanel");
+      header("Refresh:1 url=adminPanel");
     }else
     {
       $msgArr = [

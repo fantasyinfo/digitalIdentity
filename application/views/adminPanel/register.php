@@ -70,7 +70,7 @@ if(isset($_POST['submit']))
       'msg' => 'This Email id OR Mobile Number is Already Register With Us Try Login.',
     ];
     $this->session->set_userdata($msgArr);
-    header("Refresh:3 ".base_url()."register");
+    header("Refresh:1 ".base_url()."register");
     exit(0);
   }
 

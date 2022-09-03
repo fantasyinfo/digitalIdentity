@@ -11,67 +11,67 @@
     $this->load->library('session');
 
   // fetching city data
-    $subjectData = $this->db->query("SELECT * FROM " . Table::subjectTable . "  ORDER BY id DESC")->result_array();
+    $subjectData = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE status != '4'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
 
     // edit and delete action
-    // if(isset($_GET['action']))
-    // {
+    if(isset($_GET['action']))
+    {
  
-    //   if($_GET['action'] == 'edit')
-    //   {
-    //     $editId = $_GET['edit_id'];
-    //     $editsubjectData = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE id='$editId'")->result_array();
-    //   }
+      if($_GET['action'] == 'edit')
+      {
+        $editId = $_GET['edit_id'];
+        $editsubjectData = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE id='$editId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+      }
 
      
-    //   if($_GET['action'] == 'delete')
-    //   {
-    //     $deleteId = $_GET['delete_id'];
-    //     $deletesubjectData = $this->db->query("DELETE FROM " . Table::subjectTable . " WHERE id='$deleteId'");
-    //     if($deletesubjectData)
-    //     {
-    //       $msgArr = [
-    //         'class' => 'success',
-    //         'msg' => 'subject Deleted Successfully',
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }else
-    //     {
-    //       $msgArr = [
-    //         'class' => 'danger',
-    //         'msg' => 'subject Not Deleted Due to this Error. ' . $this->db->last_query(),
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }
-    //     header("Refresh:3 ".base_url()."master/subjectMaster");
-    //   }
+      if($_GET['action'] == 'delete')
+      {
+        $deleteId = $_GET['delete_id'];
+        $deletesubjectData = $this->db->query("UPDATE " . Table::subjectTable . " SET status = '4' WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+        if($deletesubjectData)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'subject Deleted Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'subject Not Deleted Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 ".base_url()."master/subjectMaster");
+      }
 
-    //   if($_GET['action'] == 'status')
-    //   {
-    //     $status = $_GET['status'];
-    //     $updateId = $_GET['edit_id'];
-    //     $updateStatus = $this->db->query("UPDATE " . Table::subjectTable . " SET status = '$status' WHERE id = '$updateId'");
+      if($_GET['action'] == 'status')
+      {
+        $status = $_GET['status'];
+        $updateId = $_GET['edit_id'];
+        $updateStatus = $this->db->query("UPDATE " . Table::subjectTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
-    //     if($updateStatus)
-    //     {
-    //       $msgArr = [
-    //         'class' => 'success',
-    //         'msg' => 'Subject Status Updated Successfully',
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }else
-    //     {
-    //       $msgArr = [
-    //         'class' => 'danger',
-    //         'msg' => 'Subject Status Not Updated Due to this Error. ' . $this->db->last_query(),
-    //       ];
-    //       $this->session->set_userdata($msgArr);
-    //     }
-    //     header("Refresh:3 ".base_url()."master/subjectMaster");
-    //   }
+        if($updateStatus)
+        {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Subject Status Updated Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Subject Status Not Updated Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 ".base_url()."master/subjectMaster");
+      }
 
-    // }
+    }
 
 
     // insert new city
@@ -79,7 +79,7 @@
     {
       $subjectName = $_POST['subjectName'];
 
-      $alreadySubject = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE subjectName = '$subjectName'")->result_array();
+      $alreadySubject = $this->db->query("SELECT * FROM " . Table::subjectTable . " WHERE subjectName = '$subjectName'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
       if(!empty($alreadySubject))
       {
@@ -93,7 +93,7 @@
       }
 
 
-      $insertNewCity = $this->db->query("INSERT INTO " . Table::subjectTable . " (subjectName) VALUES ('$subjectName')");
+      $insertNewCity = $this->db->query("INSERT INTO " . Table::subjectTable . " (schoolUniqueCode,subjectName) VALUES ('{$_SESSION['schoolUniqueCode']}','$subjectName')");
       if($insertNewCity)
       {
         $msgArr = [
@@ -109,32 +109,32 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:3 ".base_url()."master/subjectMaster");
+      header("Refresh:1 ".base_url()."master/subjectMaster");
     }
 
     // update exiting city
-    // if(isset($_POST['update']))
-    // {
-    //   $subjectName = $_POST['subjectName'];
-    //   $subjectEditId = $_POST['updatesubjectId'];
-    //   $updatesubject = $this->db->query("UPDATE " . Table::subjectTable . " SET subjectName = '$subjectName' WHERE id = '$subjectEditId'");
-    //   if($updatesubject)
-    //   {
-    //     $msgArr = [
-    //       'class' => 'success',
-    //       'msg' => 'subject Updated Successfully',
-    //     ];
-    //     $this->session->set_userdata($msgArr);
-    //   }else
-    //   {
-    //     $msgArr = [
-    //       'class' => 'danger',
-    //       'msg' => 'subject Not Updated Due to this Error. ' . $this->db->last_query(),
-    //     ];
-    //     $this->session->set_userdata($msgArr);
-    //   }
-    //   header("Refresh:3 ".base_url()."master/subjectMaster");
-    // }
+    if(isset($_POST['update']))
+    {
+      $subjectName = $_POST['subjectName'];
+      $subjectEditId = $_POST['updatesubjectId'];
+      $updatesubject = $this->db->query("UPDATE " . Table::subjectTable . " SET subjectName = '$subjectName' WHERE id = '$subjectEditId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+      if($updatesubject)
+      {
+        $msgArr = [
+          'class' => 'success',
+          'msg' => 'subject Updated Successfully',
+        ];
+        $this->session->set_userdata($msgArr);
+      }else
+      {
+        $msgArr = [
+          'class' => 'danger',
+          'msg' => 'subject Not Updated Due to this Error. ' . $this->db->last_query(),
+        ];
+        $this->session->set_userdata($msgArr);
+      }
+      header("Refresh:1 ".base_url()."master/subjectMaster");
+    }
 
 
     // print_r($cityData);
@@ -244,10 +244,10 @@
                         <thead>
                           <tr>
                             <th>Id</th>
-                            <!-- <th>Subject Id</th> -->
+                            <th>Subject Id</th>
                             <th>Subject Name</th>
-                            <!-- <th>Status</th>
-                            <th>Action</th> -->
+                            <th>Status</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -256,17 +256,17 @@
                             foreach ($subjectData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <!-- <td><?= $cn['id'];?></td> -->
+                                <td><?= $cn['id'];?></td>
                                 <td><?= $cn['subjectName'];?></td>
-                                <!-- <td>
+                                <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td> -->
-                                <!-- <td>
+                                </td>
+                                <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td> -->
+                                </td>
                               </tr>
                           <?php  }
                           } ?>
