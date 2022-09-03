@@ -167,17 +167,17 @@ class TeacherModel extends CI_Model
       return $this->CrudModel->deleteStudent(Table::teacherTable,$id);
     }
 
-    public function allClass(){
-      return $this->CrudModel->allClass(Table::classTable);
+    public function allClass($schoolUniqueCode){
+      return $this->CrudModel->allClass(Table::classTable,$schoolUniqueCode);
     }
-    public function allSection(){
-      return $this->CrudModel->allSection(Table::sectionTable);
+    public function allSection($schoolUniqueCode){
+      return $this->CrudModel->allSection(Table::sectionTable,$schoolUniqueCode);
     }
-    public function allCity(){
-      return $this->CrudModel->allCity(Table::cityTable);
+    public function allCity($schoolUniqueCode){
+      return $this->CrudModel->allCity(Table::cityTable,$schoolUniqueCode);
     }
-    public function allState(){
-      return $this->CrudModel->allState(Table::stateTable);
+    public function allState($schoolUniqueCode){
+      return $this->CrudModel->allState(Table::stateTable,$schoolUniqueCode);
     }
 
 

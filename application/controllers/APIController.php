@@ -429,7 +429,8 @@ class APIController extends CI_Controller
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-		$data = $this->APIModel->allClasses();
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$data = $this->APIModel->allClasses($schoolUniqueCode);
 		return HelperClass::APIresponse(200, 'All Classes Data.', $data);
 	}
 
@@ -441,7 +442,8 @@ class APIController extends CI_Controller
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-		$data = $this->APIModel->allSections();
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$data = $this->APIModel->allSections($schoolUniqueCode);
 		return HelperClass::APIresponse(200, 'All Sections Data', $data);
 	}
 
@@ -454,7 +456,8 @@ class APIController extends CI_Controller
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-		$data = $this->APIModel->allSubjects();
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$data = $this->APIModel->allSubjects($schoolUniqueCode);
 		return HelperClass::APIresponse(200, 'All Subjects Data', $data);
 	}
 

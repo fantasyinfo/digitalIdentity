@@ -515,30 +515,30 @@ class CrudModel extends CI_Model
         LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
         WHERE s.status != 0 AND s.id = {$id} ORDER BY s.id DESC LIMIT 1")->result_array();
     }
-    public function allClass($tableName)
+    public function allClass($tableName,$schoolUniqueCode)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,className FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       return $d = $this->db->query("SELECT id,className FROM " . $this->tableName ." WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
-    public function allSection($tableName)
+    public function allSection($tableName,$schoolUniqueCode)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,sectionName FROM " . $this->tableName  ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       return $d = $this->db->query("SELECT id,sectionName FROM " . $this->tableName  ." WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
-    public function allCity($tableName)
+    public function allCity($tableName,$schoolUniqueCode)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,cityName FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       return $d = $this->db->query("SELECT id,cityName FROM " . $this->tableName ." WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
-    public function allState($tableName)
+    public function allState($tableName,$schoolUniqueCode)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,stateName FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       return $d = $this->db->query("SELECT id,stateName FROM " . $this->tableName ." WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
-    public function allSubjects($tableName)
+    public function allSubjects($tableName,$schoolUniqueCode)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,subjectName FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       return $d = $this->db->query("SELECT id,subjectName FROM " . $this->tableName ." WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
 
     public function deleteStudent($tableName = "", $student_id = "")

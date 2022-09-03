@@ -53,7 +53,7 @@ class APIModel extends CI_Model
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
 
         // total count of students
-        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"])) ? $this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"]) : null;
+        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"],$schoolUniqueCode)) ? $this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"],$schoolUniqueCode) : null;
 
         // subjects of teachers
         $responseData["teacherSubjects"] = [];
@@ -133,9 +133,9 @@ class APIModel extends CI_Model
     }
   }
 
-  public function countStudentViaClassAndSection($class_id, $section_id)
+  public function countStudentViaClassAndSection($class_id, $section_id,$schoolUniqueCode)
   {
-    $totalStudents =  $this->db->query("SELECT count(1) as count FROM " . Table::studentTable . " WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1'")->result_array();
+    $totalStudents =  $this->db->query("SELECT count(1) as count FROM " . Table::studentTable . " WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     if (!empty($totalStudents)) {
       return $totalStudents[0]['count'];
     } else {
@@ -571,20 +571,20 @@ class APIModel extends CI_Model
 
 
   // fetching all classes
-  public function allClasses()
+  public function allClasses($schoolUniqueCode)
   {
-    return $this->CrudModel->allClass(Table::classTable);
+    return $this->CrudModel->allClass(Table::classTable,$schoolUniqueCode);
   }
 
   // fetching all sections
-  public function allSections()
+  public function allSections($schoolUniqueCode)
   {
-    return  $this->CrudModel->allSection(Table::sectionTable);
+    return  $this->CrudModel->allSection(Table::sectionTable,$schoolUniqueCode);
   }
   // fetching all subjects
-  public function allSubjects()
+  public function allSubjects($schoolUniqueCode)
   {
-    return  $this->CrudModel->allSubjects(Table::subjectTable);
+    return  $this->CrudModel->allSubjects(Table::subjectTable,$schoolUniqueCode);
   }
 
   // calculate digicoin

@@ -7,6 +7,7 @@ class StudentController extends CI_Controller
 	public $viewDir = 'adminPanel/';
 	public $adminPanelURL = "assets/adminPanel/";
 	public $studentDir = "pages/student/";
+	public $schoolUniqueCode = '';
 
 	public function __construct()
 	{
@@ -14,6 +15,7 @@ class StudentController extends CI_Controller
 		$this->load->model('StudentModel');
 		$this->load->model('CrudModel');
 		$this->load->library('session');
+		$this->schoolUniqueCode = $_SESSION['schoolUniqueCode'];
 	}
 
 	public function loginCheck()
@@ -54,10 +56,10 @@ class StudentController extends CI_Controller
 			'pageTitle' => 'Add New Student',
 			'adminPanelUrl' => $this->adminPanelURL,
 			'submitFormUrl' => base_url('student/saveStudent'),
-			'class' => $this->StudentModel->allClass(),
-			'section' => $this->StudentModel->allSection(),
-			'city' => $this->StudentModel->allCity(),
-			'state' => $this->StudentModel->allState(),
+			'class' => $this->StudentModel->allClass($this->schoolUniqueCode),
+			'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
+			'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
+			'state' => $this->StudentModel->allState($this->schoolUniqueCode),
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'add');
@@ -73,10 +75,10 @@ class StudentController extends CI_Controller
 			'studentData' => $this->StudentModel->singleStudent($id),
 			'adminPanelUrl' => $this->adminPanelURL,
 			'submitFormUrl' => base_url('student/updateStudent'),
-			'class' => $this->StudentModel->allClass(),
-			'section' => $this->StudentModel->allSection(),
-			'city' => $this->StudentModel->allCity(),
-			'state' => $this->StudentModel->allState(),
+			'class' => $this->StudentModel->allClass($this->schoolUniqueCode),
+			'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
+			'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
+			'state' => $this->StudentModel->allState($this->schoolUniqueCode),
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'edit');
