@@ -135,7 +135,13 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            $condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
+            $condition = " 
+             AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND st.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND ct.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            ";
 
             if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
             {
@@ -250,7 +256,13 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            $condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
+            $condition = "
+            AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND st.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND ct.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             ";
 
             if(isset($data['teacherName']) || isset($data['teacherClass']) || isset($data['teacherMobile']) || isset($data['teacherUserId']) || isset($data['teacherFromDate']) || isset($data['teacherToDate']))
             {
@@ -380,7 +392,7 @@ class CrudModel extends CI_Model
         if(!empty($data))
         {
            
-            $condition = " AND g.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+            $condition = " AND g.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND u.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
 
             if(!empty($userType))
             {
@@ -506,27 +518,27 @@ class CrudModel extends CI_Model
     public function allClass($tableName)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,className FROM " . $this->tableName)->result_array();
+       return $d = $this->db->query("SELECT id,className FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     }
     public function allSection($tableName)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,sectionName FROM " . $this->tableName)->result_array();
+       return $d = $this->db->query("SELECT id,sectionName FROM " . $this->tableName  ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     }
     public function allCity($tableName)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,cityName FROM " . $this->tableName)->result_array();
+       return $d = $this->db->query("SELECT id,cityName FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     }
     public function allState($tableName)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,stateName FROM " . $this->tableName)->result_array();
+       return $d = $this->db->query("SELECT id,stateName FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     }
     public function allSubjects($tableName)
     {
         $this->tableName = $tableName;
-       return $d = $this->db->query("SELECT id,subjectName FROM " . $this->tableName)->result_array();
+       return $d = $this->db->query("SELECT id,subjectName FROM " . $this->tableName ." AND status !='4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     }
 
     public function deleteStudent($tableName = "", $student_id = "")
