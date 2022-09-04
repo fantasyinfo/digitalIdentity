@@ -60,6 +60,8 @@
                     <!-- <th>Id</th> -->
                     <th>QR Code URL</th>
                     <th>Value</th>
+                    <th>Class</th>
+                    <th>Roll No</th>
                     <!-- <th>User Id</th>
                     <th>Mobile</th>
                     <th>Class - Section</th>

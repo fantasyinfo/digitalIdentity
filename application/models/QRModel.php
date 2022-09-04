@@ -30,8 +30,7 @@ class QRModel extends CI_Model
                     }
                 }
           
-                    $d = $this->db->query("SELECT qr.qrcodeUrl,
-                    CONCAT(qr.uniqueValue, '|',cl.className, '-',se.sectionName, '|', st.roll_no ) as qrName
+                    $d = $this->db->query("SELECT qr.qrcodeUrl,qr.uniqueValue as qrName, CONCAT(cl.className, ' - ', se.sectionName) as classNames, st.roll_no
                     FROM ".Table::qrcodeTable." qr 
                     JOIN ".Table::studentTable." st ON st.user_id = qr.uniqueValue
                     JOIN ".Table::classTable." cl ON cl.id = st.class_id
@@ -46,8 +45,7 @@ class QRModel extends CI_Model
                     WHERE qr.status != 0 $condition ORDER BY qr.id DESC";
                 }else
                 {
-                    $d = $this->db->query("SELECT qr.qrcodeUrl,
-                    CONCAT(qr.uniqueValue, '|',cl.className, '-',se.sectionName, '|', st.roll_no ) as qrName
+                    $d = $this->db->query("SELECT qr.qrcodeUrl,qr.uniqueValue as qrName, CONCAT(cl.className, ' - ', se.sectionName) as classNames, st.roll_no
                     FROM ".Table::qrcodeTable." qr 
                     JOIN ".Table::studentTable." st ON st.user_id = qr.uniqueValue
                     JOIN ".Table::classTable." cl ON cl.id = st.class_id
@@ -72,6 +70,8 @@ class QRModel extends CI_Model
                     // $subArr[] = ($j = $i + 1);
                     $subArr[] = $d[$i]['qrcodeUrl'];
                     $subArr[] = $d[$i]['qrName'];
+                    $subArr[] = $d[$i]['classNames'];
+                    $subArr[] = $d[$i]['roll_no'];
                     // $subArr[] = $d[$i]['mobile'];
                     // $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
                     // $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
