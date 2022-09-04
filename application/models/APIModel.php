@@ -713,6 +713,65 @@ class APIModel extends CI_Model
     }
   }
 
+
+  // checkAllGifts
+  public function checkAllGifts($user_type, $schoolUniqueCode)
+  {
+    if($user_type == 'Teacher')
+    {
+      $dir = base_url() . HelperClass::uploadImgDir;
+      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '2' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return 0;
+      }
+    }
+ 
+  }
+
+
+
+
+  // wallet History
+  public function walletHistory($loginUserId,$loginuserType,$schoolUniqueCode)
+  {
+    if ($loginuserType == 'Teacher') {
+    }
+    $d = $this->db->query("SELECT 
+    CASE
+    WHEN for_what = '1' THEN 'Attendence' 
+    WHEN for_what = '2' THEN 'Departure' 
+    WHEN for_what = '3' THEN 'Result' 
+    END as for_what,
+    digiCoin, 'Earning' as tStatus FROM " . Table::getDigiCoinTable . " WHERE user_type = '$loginuserType' AND user_id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+    if (!empty($d)) {
+
+      $sendArr = [];
+      $totalCount = count($d);
+      $sendArr['totalDigiCoins'] = 0;
+      $sendArr['transactions'] = [];
+      $totalCoins = 0;
+      for($i=0; $i<$totalCount;$i++)
+      {
+        $subArr = [];
+        $subArr['digiCoin'] = $d[$i]['digiCoin'];
+        $subArr['for_what'] = $d[$i]['for_what'];
+        $subArr['tStatus'] = $d[$i]['tStatus'];
+        $totalCoins += $d[$i]['digiCoin'];
+        array_push($sendArr['transactions'],$subArr);
+      }
+      $sendArr['totalDigiCoins'] = $totalCoins;
+
+      return $sendArr;
+    } else {
+      return 0;
+    }
+  }
+
+
+
+
   // check if the digiCoin is set 
   public function checkIsDigiCoinIsSet($for_what, $user_type, $schoolUniqueCode)
   {

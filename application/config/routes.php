@@ -170,6 +170,9 @@ $apiRoutesArr = [
     'showAllHomeWorks',
     'showSingleHomeWork',
     'updateHomeWork',
+    'walletHistory',
+    'getAlreadyDigiCoinCount',
+    'checkAllGifts',
 ];
 
 foreach($apiRoutesArr as $apiRoute)

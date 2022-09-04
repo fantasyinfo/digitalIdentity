@@ -572,6 +572,79 @@ public function updateHomeWork()
 
 
 
+	// wallet history
+	public function walletHistory()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$walletHistoryData = $this->APIModel->walletHistory($loginUserId,$loginuserType,$schoolUniqueCode);
+
+		if (!$walletHistoryData) {
+			return HelperClass::APIresponse(500, 'No Wallet Found For This User');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Wallet Data.',$walletHistoryData);
+		}
+	}
+
+
+	// count digicoin
+	public function getAlreadyDigiCoinCount()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$digiCoinCountData = $this->APIModel->getAlreadyDigiCoinCount($loginUserId,$loginuserType,$schoolUniqueCode);
+
+		if (!$digiCoinCountData) {
+			return HelperClass::APIresponse(500, 'No DigiCoin Found For This User');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'DigiCoin Count Data.',$digiCoinCountData);
+		}
+	}
+
+	// check all gifts
+	public function checkAllGifts()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$digiCoinCountData = $this->APIModel->checkAllGifts($loginuserType,$schoolUniqueCode);
+
+		if (!$digiCoinCountData) {
+			return HelperClass::APIresponse(500, 'No Gifts Found For This User Type' . $loginuserType);
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Gifts Data.',$digiCoinCountData);
+		}
+	}
+
 
 	// fetching all classes
 	public function allClasses()

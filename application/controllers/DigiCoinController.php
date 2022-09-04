@@ -63,7 +63,7 @@ class DigiCoinController extends CI_Controller
 		// check permission
 		$this->checkPermission();
 		$dataArr = [
-			'pageTitle' => 'Student DigiCoin',
+			'pageTitle' => 'Students DigiCoin',
 			'adminPanelUrl' => $this->adminPanelURL
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
@@ -76,7 +76,7 @@ class DigiCoinController extends CI_Controller
 		// check permission
 		$this->checkPermission();
 		$dataArr = [
-			'pageTitle' => 'Student DigiCoin',
+			'pageTitle' => 'Teachers DigiCoin',
 			'adminPanelUrl' => $this->adminPanelURL
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
