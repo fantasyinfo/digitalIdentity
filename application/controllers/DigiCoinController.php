@@ -44,6 +44,19 @@ class DigiCoinController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'setDigiCoinMaster');
 	}
 
+	public function giftMaster()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Gift Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'giftMaster');
+	}
+
 	public function studentDigiCoin()
 	{
 		$this->loginCheck();

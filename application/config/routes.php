@@ -107,7 +107,8 @@ $baseDigiCoin = "digicoin/";
 $digiCoinRoutesArr = [
     'setDigiCoinMaster',
     'studentDigiCoin',
-    'teacherDigiCoin'
+    'teacherDigiCoin',
+    'giftMaster'
 ];
 
 foreach($digiCoinRoutesArr as $digiRoute)

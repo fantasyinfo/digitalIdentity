@@ -546,8 +546,16 @@ class CrudModel extends CI_Model
         if (!empty($tableName)) {
             $this->tableName    = $tableName;
             $this->student_id   = $this->sanitizeInput($student_id);
-            $sql    = "UPDATE " . $this->tableName . " SET status = '4' WHERE id = " . $this->student_id . " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
-            if($this->db->query($sql))
+    
+            $delImg = $this->db->query("SELECT image FROM " . $this->tableName . " WHERE id = " . $this->student_id . "  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+
+            if(!empty(@$delImg))
+            {
+                $imgN = @$delImg[0]['image'];
+                @unlink(HelperClass::uploadImgDir . $imgN);
+            }
+
+            if($this->db->query("DELETE FROM " . $this->tableName . " WHERE id = " . $this->student_id . " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'"))
             {
                 return true;
             }else 

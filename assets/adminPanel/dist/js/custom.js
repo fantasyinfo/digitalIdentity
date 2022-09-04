@@ -31,11 +31,13 @@ $(document).ready(function(){
             address: {
               required: true
             },
-            state: {
-              required: true
-            },
+            // state: {
+            //   required: true
+            // },
             pincode: {
-              required: true
+              required: true,
+              minlength: 6,
+              maxlength: 6
             },
             roll_no: {
               required: true
@@ -59,8 +61,12 @@ $(document).ready(function(){
             father: "Please add your father name",
             dob: "Please select your date of birth",
             address: "Please add your address",
-            state: "Please select your state",
-            pincode: "Please enter pincode",
+            // state: "Please select your state",
+            pincode: {
+              required: "Please enter pincode",
+              minlength: "Your password must be at least 6 digit",
+              maxlength: "Your password must be at least 6 digit"
+            },
             image: "Please add student image",
             roll_no: "Please add roll no",
           },
@@ -70,10 +76,10 @@ $(document).ready(function(){
             element.closest('.form-group').append(error);
           },
           highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
+            $(element).addClass('is-invalid').removeClass( "is-valid" );
           },
           unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
+            $(element).removeClass('is-invalid').addClass( "is-valid" );
           }
         });
       }); 
@@ -114,11 +120,13 @@ $(document).ready(function(){
             address: {
               required: true
             },
-            state: {
-              required: true
-            },
+            // state: {
+            //   required: true
+            // },
             pincode: {
-              required: true
+              required: true,
+              minlength: 6,
+              maxlength: 6
             },
             roll_no: {
               required: true
@@ -143,8 +151,12 @@ $(document).ready(function(){
             dob: "Please select your date of birth",
             doj: "Please select your date of joining in the school",
             address: "Please add your address",
-            state: "Please select your state",
-            pincode: "Please enter pincode",
+            // state: "Please select your state",
+            pincode: {
+              required: "Please enter pincode",
+              minlength: "Your password must be at least 6 digit",
+              maxlength: "Your password must be at least 6 digit"
+            },
             image: "Please add student image",
             roll_no: "Please add roll no",
           },
@@ -154,10 +166,10 @@ $(document).ready(function(){
             element.closest('.form-group').append(error);
           },
           highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
+            $(element).addClass('is-invalid').removeClass( "is-valid" );
           },
           unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
+            $(element).removeClass('is-invalid').addClass( "is-valid" );
           }
         });
       }); 
