@@ -300,7 +300,7 @@ class APIModel extends CI_Model
     if (!empty($classId) && !empty($sectionId) && !empty($studentId)) {
       $condition .= " AND s.id = '{$studentId}' AND ss.id = '{$sectionId}' AND c.id = '{$classId}' ";
     } else {
-      $condition .= " AND q.qrcodeUrl = '$qrCode' ";
+      $condition .= " AND (q.qrcodeUrl = '$qrCode' OR q.uniqueValue = '$qrCode') ";
     }
 
     $sql = "SELECT s.*, 
@@ -325,7 +325,7 @@ class APIModel extends CI_Model
     LEFT JOIN " . Table::examTable . " examt ON rt.exam_id = examt.id
     LEFT JOIN " . Table::subjectTable . " subt ON subt.id = examt.subject_id
     WHERE s.status = '1' $condition 
-    ORDER BY s.id DESC";
+    ORDER BY s.id DESC LIMIT 1";
 
     $d = $this->db->query($sql)->result_array();
 
@@ -463,6 +463,121 @@ class APIModel extends CI_Model
       return HelperClass::APIresponse(500, 'No Exams found for this class');
     }
   }
+
+
+  // add homeWork
+  public function addHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode)
+  {
+    //$currentDate = date_create()->format('Y-m-d');
+    if ($loginuserType == 'Teacher') {
+
+      $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
+        "login_user_id" => $loginUserId,
+        "login_user_type" => $loginuserType,
+        "class_id" => $classId,
+        "section_id" => $sectionId,
+        "subject_id" => $subjectId,
+        "home_work_note" => $homeWorkNote ,
+        "home_work_date" => $homeWorkDate,
+        "home_work_finish_date" => $homeWorkDueDate,
+      ];
+
+      $insertId = $this->CrudModel->insert(Table::homeWorkTable, $insertArr);
+      if (!empty($insertId)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if ($loginuserType == 'Staff') {
+      //
+    } else if ($loginuserType == 'Principal') {
+      //
+    }
+  }
+
+    // updateHomeWork
+    public function updateHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$homeWorkId)
+    {
+      //$currentDate = date_create()->format('Y-m-d');
+      if ($loginuserType == 'Teacher') {
+  
+        $updateArr = [
+          "login_user_id" => $loginUserId,
+          "login_user_type" => $loginuserType,
+          "class_id" => $classId,
+          "section_id" => $sectionId,
+          "subject_id" => $subjectId,
+          "home_work_note" => $homeWorkNote ,
+          "home_work_date" => $homeWorkDate,
+          "home_work_finish_date" => $homeWorkDueDate,
+        ];
+  
+        $update = $this->CrudModel->update(Table::homeWorkTable, $updateArr, $homeWorkId);
+        if (!empty($update)) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if ($loginuserType == 'Staff') {
+        //
+      } else if ($loginuserType == 'Principal') {
+        //
+      }
+    }
+  
+
+
+    // showAllExam
+    public function showAllHomeWorks($classId, $sectionId, $schoolUniqueCode, $subjectId = '')
+    {
+      $currentDate = date_create()->format('Y-m-d');
+      $dir = base_url() . HelperClass::uploadImgDir;
+      $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
+      if (!empty($subjectId)) {
+        $condition .= " AND e.subject_id = $subjectId ";
+      }
+  
+      $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
+        INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
+        INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
+        INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
+        WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.status = '1'")->result_array();
+  
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return HelperClass::APIresponse(500, 'No Home Work found for this class');
+      }
+    }
+
+
+
+  // showSingleHomeWork
+  public function showSingleHomeWork($classId, $sectionId,  $homeWorkId, $schoolUniqueCode)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
+
+    $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
+      INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
+      INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
+      INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
+      WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.id = '$homeWorkId' AND e.status = '1'")->result_array();
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'No Home Work found for this class');
+    }
+  }
+
+
+
+
+
+
 
   // showSingleExam
   public function showSingleExam($classId, $sectionId,  $examId, $schoolUniqueCode)

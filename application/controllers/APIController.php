@@ -400,6 +400,158 @@ class APIController extends CI_Controller
 	}
 
 
+	// addHomeWork
+	public function addHomeWork()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['loginUserId']) || empty($apiData['subjectId'])|| empty($apiData['homeWorkNote'])|| empty($apiData['homeWorkDate'])|| empty($apiData['homeWorkDueDate']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = $apiData['subjectId'];
+		$homeWorkNote = $apiData['homeWorkNote'];
+		$homeWorkDate = $apiData['homeWorkDate'];
+		$homeWorkDueDate = $apiData['homeWorkDueDate'];
+
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$addHomeWork = $this->APIModel->addHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode);
+		
+
+		if (!$addHomeWork) {
+			return HelperClass::APIresponse(500, 'Home Work Not Added Successfully beacuse ' . $this->db->last_query());
+		}else
+		{
+				// check digiCoin is set for this result time for students avg
+				// $perResultDigiCoin =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Result'], HelperClass::userType['Teacher'], $schoolUniqueCode);
+
+				// $dataArrOfExam = $this->APIModel->avgResultOfExam($examId,$schoolUniqueCode);
+
+				
+				// calculate digiCoin value as per marks of total student result avg
+
+				// if(!empty($dataArrOfExam) && !empty($perResultDigiCoin))
+				// {
+				// 	$digiCoinToInsert =   $this->APIModel->calculateStudentResultDigiCoin($perResultDigiCoin, $dataArrOfExam['obtained_max_marks'], $dataArrOfExam['exam_max_marks']);
+				// }
+				
+				// if (isset($digiCoinToInsert)) {
+				// 	// insert the digicoin
+				// 	$insertDigiCoin = $this->APIModel->insertDigiCoin($studentId, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
+				// 	if ($insertDigiCoin) {
+				// 		return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',$perResultDigiCoin);
+				// 	} else {
+				// 		return HelperClass::APIresponse(500, 'Result Updated & DigiCoin Not Inserted For Teacher ' . $this->db->last_query());
+				// 	}
+				// }
+			return HelperClass::APIresponse(200, 'Home Work Updated Successfully');
+		}
+		
+	}
+
+	// showAllHomeWorks
+	public function showAllHomeWorks()
+	{
+		
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = (@$apiData['subjectId']) ? @$apiData['subjectId'] : ''; // optional
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$allHomeWorkList = $this->APIModel->showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$subjectId);
+
+		if (!$allHomeWorkList) {
+			return HelperClass::APIresponse(500, 'No Home Work Found For This Class');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Home Work List.',$allHomeWorkList);
+		}
+	}
+
+
+
+// showSingleHomeWork
+
+
+public function showSingleHomeWork()
+{
+	$this->checkAPIRequest();
+	$apiData = $this->getAPIData();
+	if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['homeWorkId']))
+	{
+		return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+	}
+	$authToken = $apiData['authToken'];
+	$loginuserType = $apiData['userType'];
+	$classId = $apiData['classId'];
+	$sectionId = $apiData['sectionId'];
+	$homeWorkId = $apiData['homeWorkId'];
+
+	$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+	$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+	$singleExamData = $this->APIModel->showSingleHomeWork($classId,$sectionId,$homeWorkId,$schoolUniqueCode);
+
+	if (!$singleExamData) {
+		return HelperClass::APIresponse(500, 'No Exam Found For This Class');
+	}else
+	{
+		return HelperClass::APIresponse(200, 'Exam Data.',$singleExamData);
+	}
+	
+}
+
+
+//updateHomeWork
+
+public function updateHomeWork()
+{
+	$this->checkAPIRequest();
+	$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['loginUserId']) || empty($apiData['subjectId'])|| empty($apiData['homeWorkNote'])|| empty($apiData['homeWorkDate'])|| empty($apiData['homeWorkDueDate'])|| empty($apiData['homeWorkId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = $apiData['subjectId'];
+		$homeWorkNote = $apiData['homeWorkNote'];
+		$homeWorkDate = $apiData['homeWorkDate'];
+		$homeWorkDueDate = $apiData['homeWorkDueDate'];
+		$homeWorkId = $apiData['homeWorkId'];
+	$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+	// $schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+	$addNewHomeWork = $this->APIModel->updateHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$homeWorkId);
+
+	if (!$addNewHomeWork) {
+		return HelperClass::APIresponse(500, 'Home Work Not Updated Successfully beacuse ' . $this->db->last_query());
+	}else
+	{
+		return HelperClass::APIresponse(200, 'Home Work Updated Successfully');
+	}
+	
+}
+
+
+
 
 	// showStudentDetails
 	public function showStudentDetails()
