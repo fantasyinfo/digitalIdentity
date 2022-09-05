@@ -173,6 +173,8 @@ $apiRoutesArr = [
     'walletHistory',
     'getAlreadyDigiCoinCount',
     'checkAllGifts',
+    'showGiftsForRedeem',
+    'redeemGifts',
 ];
 
 foreach($apiRoutesArr as $apiRoute)

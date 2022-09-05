@@ -30,6 +30,7 @@ class Table{
     const setDigiCoinTable = 'set_digi_coin';
     const getDigiCoinTable = 'get_digi_coin';
     const giftTable = 'gift';
+    const giftRedeemTable = 'redeem_gifts';
     const homeWorkTable = 'home_work';
     
 }

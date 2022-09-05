@@ -53,17 +53,16 @@ class APIModel extends CI_Model
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
 
         // total count of students
-        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"],$schoolUniqueCode)) ? $this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"],$schoolUniqueCode) : null;
+        $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"], $schoolUniqueCode)) ? $this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"], $schoolUniqueCode) : null;
 
         // subjects of teachers
         $responseData["teacherSubjects"] = [];
         $subjectsArr = json_decode(@$userData[0]['subject_ids'], TRUE);
         $totalSub = 0;
-        if(isset($subjectsArr))
-        {
+        if (isset($subjectsArr)) {
           $totalSub = count(@$subjectsArr);
         }
-        
+
         if ($totalSub > 0) {
           for ($i = 0; $i < @$totalSub; $i++) {
             $subArr = [];
@@ -133,7 +132,7 @@ class APIModel extends CI_Model
     }
   }
 
-  public function countStudentViaClassAndSection($class_id, $section_id,$schoolUniqueCode)
+  public function countStudentViaClassAndSection($class_id, $section_id, $schoolUniqueCode)
   {
     $totalStudents =  $this->db->query("SELECT count(1) as count FROM " . Table::studentTable . " WHERE class_id = '$class_id' AND section_id = '$section_id' AND status = '1' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     if (!empty($totalStudents)) {
@@ -466,7 +465,7 @@ class APIModel extends CI_Model
 
 
   // add homeWork
-  public function addHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode)
+  public function addHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $schoolUniqueCode)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -478,7 +477,7 @@ class APIModel extends CI_Model
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
-        "home_work_note" => $homeWorkNote ,
+        "home_work_note" => $homeWorkNote,
         "home_work_date" => $homeWorkDate,
         "home_work_finish_date" => $homeWorkDueDate,
       ];
@@ -496,60 +495,60 @@ class APIModel extends CI_Model
     }
   }
 
-    // updateHomeWork
-    public function updateHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$homeWorkId)
-    {
-      //$currentDate = date_create()->format('Y-m-d');
-      if ($loginuserType == 'Teacher') {
-  
-        $updateArr = [
-          "login_user_id" => $loginUserId,
-          "login_user_type" => $loginuserType,
-          "class_id" => $classId,
-          "section_id" => $sectionId,
-          "subject_id" => $subjectId,
-          "home_work_note" => $homeWorkNote ,
-          "home_work_date" => $homeWorkDate,
-          "home_work_finish_date" => $homeWorkDueDate,
-        ];
-  
-        $update = $this->CrudModel->update(Table::homeWorkTable, $updateArr, $homeWorkId);
-        if (!empty($update)) {
-          return true;
-        } else {
-          return false;
-        }
-      } else if ($loginuserType == 'Staff') {
-        //
-      } else if ($loginuserType == 'Principal') {
-        //
+  // updateHomeWork
+  public function updateHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $homeWorkId)
+  {
+    //$currentDate = date_create()->format('Y-m-d');
+    if ($loginuserType == 'Teacher') {
+
+      $updateArr = [
+        "login_user_id" => $loginUserId,
+        "login_user_type" => $loginuserType,
+        "class_id" => $classId,
+        "section_id" => $sectionId,
+        "subject_id" => $subjectId,
+        "home_work_note" => $homeWorkNote,
+        "home_work_date" => $homeWorkDate,
+        "home_work_finish_date" => $homeWorkDueDate,
+      ];
+
+      $update = $this->CrudModel->update(Table::homeWorkTable, $updateArr, $homeWorkId);
+      if (!empty($update)) {
+        return true;
+      } else {
+        return false;
       }
+    } else if ($loginuserType == 'Staff') {
+      //
+    } else if ($loginuserType == 'Principal') {
+      //
     }
-  
+  }
 
 
-    // showAllExam
-    public function showAllHomeWorks($classId, $sectionId, $schoolUniqueCode, $subjectId = '')
-    {
-      $currentDate = date_create()->format('Y-m-d');
-      $dir = base_url() . HelperClass::uploadImgDir;
-      $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
-      if (!empty($subjectId)) {
-        $condition .= " AND e.subject_id = $subjectId ";
-      }
-  
-      $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
+
+  // showAllExam
+  public function showAllHomeWorks($classId, $sectionId, $schoolUniqueCode, $subjectId = '')
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
+    if (!empty($subjectId)) {
+      $condition .= " AND e.subject_id = $subjectId ";
+    }
+
+    $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
         INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
         INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
         INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
         WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.status = '1'")->result_array();
-  
-      if (!empty($d)) {
-        return $d;
-      } else {
-        return HelperClass::APIresponse(500, 'No Home Work found for this class');
-      }
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'No Home Work found for this class');
     }
+  }
 
 
 
@@ -688,26 +687,48 @@ class APIModel extends CI_Model
   // fetching all classes
   public function allClasses($schoolUniqueCode)
   {
-    return $this->CrudModel->allClass(Table::classTable,$schoolUniqueCode);
+    return $this->CrudModel->allClass(Table::classTable, $schoolUniqueCode);
   }
 
   // fetching all sections
   public function allSections($schoolUniqueCode)
   {
-    return  $this->CrudModel->allSection(Table::sectionTable,$schoolUniqueCode);
+    return  $this->CrudModel->allSection(Table::sectionTable, $schoolUniqueCode);
   }
   // fetching all subjects
   public function allSubjects($schoolUniqueCode)
   {
-    return  $this->CrudModel->allSubjects(Table::subjectTable,$schoolUniqueCode);
+    return  $this->CrudModel->allSubjects(Table::subjectTable, $schoolUniqueCode);
   }
 
   // calculate digicoin
-  public function getAlreadyDigiCoinCount($user_id, $user_type, $schoolUniqueCode)
+  public function getAlreadyDigiCoinCount($user_id, $user_type_id, $user_type_key,$schoolUniqueCode)
   {
-    $d = $this->db->query("SELECT SUM(digiCoin) as digiCoin FROM " . Table::getDigiCoinTable . " WHERE user_type = '$user_type' AND user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+    
+    // check total digicoin earn
+    $d = $this->db->query("SELECT SUM(digiCoin) as digiCoin FROM " . Table::getDigiCoinTable . " WHERE user_type = '$user_type_key' AND user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
     if (!empty($d)) {
-      return $d[0]['digiCoin'];
+      $totalDigiCoinEarn = $d[0]['digiCoin'];
+    }
+
+    // check total digicoin redeem
+   
+    $c = $this->db->query("SELECT SUM(digiCoin_used) as digiCoinUsed FROM " . Table::giftRedeemTable . " WHERE login_user_type = '$user_type_id' AND login_user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
+
+    // get diffrence both
+    if (!empty($c)) {
+      $redeemCoins = @$c[0]['digiCoinUsed'];
+    }
+
+    $r = [];
+    $r['earnDigiCoin'] = @$totalDigiCoinEarn;
+    $r['redeemDigiCoin'] = (@$redeemCoins) ? @$redeemCoins : '0';
+    $r['balanceDigiCoin'] = strval(@$totalDigiCoinEarn - @$redeemCoins);
+
+    if (!empty($r)) {
+      return $r;
     } else {
       return 0;
     }
@@ -717,55 +738,112 @@ class APIModel extends CI_Model
   // checkAllGifts
   public function checkAllGifts($user_type, $schoolUniqueCode)
   {
-    if($user_type == 'Teacher')
-    {
+    if ($user_type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
-      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '2' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+      $userTypeId = HelperClass::userType[$user_type];
+      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
       if (!empty($d)) {
         return $d;
       } else {
         return 0;
       }
     }
- 
+  }
+  // checkAllGifts
+  public function showGiftsForRedeem($loginUserId, $loginuserType, $schoolUniqueCode)
+  {
+    if ($loginuserType == 'Teacher') {
+      // check sum of there digicoins first
+      $userType = HelperClass::userType[$loginuserType];
+      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
+      if (!empty($totalDigiCoinInWallet)) {
+        
+        $dir = base_url() . HelperClass::uploadImgDir;
+        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+      }
+
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return 0;
+      }
+    } else if ($loginuserType == 'Student') {
+      //
+    }
+  }
+
+
+  // redeemGifts
+  public function redeemGifts($giftId, $loginUserId, $loginuserType, $schoolUniqueCode)
+  {
+    if ($loginuserType == 'Teacher') {
+      $giftValueDigiCoin = 0;
+      // check sum of there digicoins first
+      $userType = HelperClass::userType[$loginuserType];
+
+      $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND schoolUniqueCode = '$schoolUniqueCode' and id = '$giftId'")->result_array();
+
+      if (!empty($giftValue)) {
+        $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];
+      }
+
+
+      // total digiCoins in wallet
+      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType,$loginuserType, $schoolUniqueCode);
+
+      if ($totalDigiCoinInWallet['balanceDigiCoin'] >= $giftValueDigiCoin) {
+        $insertRedeem = $this->db->query("INSERT INTO " . Table::giftRedeemTable . " (schoolUniqueCode,login_user_id,login_user_type,gift_id,digiCoin_used) VALUES ('$schoolUniqueCode','$loginUserId','$userType','$giftId','$giftValueDigiCoin')");
+      }else
+      {
+        return HelperClass::APIresponse(500, 'This Gifts Not Redeem, Because Your DigiCoins are too low. Gift Id is ' . $giftId . ' if you have redeem 1 or more gifts then check all other is redeem successfully.');
+      }
+
+      if (!empty($insertRedeem)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if ($loginuserType == 'Student') {
+      //
+    }
   }
 
 
 
 
   // wallet History
-  public function walletHistory($loginUserId,$loginuserType,$schoolUniqueCode)
+  public function walletHistory($loginUserId, $loginuserType, $schoolUniqueCode)
   {
     if ($loginuserType == 'Teacher') {
-    }
-    $d = $this->db->query("SELECT 
-    CASE
-    WHEN for_what = '1' THEN 'Attendence' 
-    WHEN for_what = '2' THEN 'Departure' 
-    WHEN for_what = '3' THEN 'Result' 
-    END as for_what,
-    digiCoin, 'Earning' as tStatus FROM " . Table::getDigiCoinTable . " WHERE user_type = '$loginuserType' AND user_id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
-    if (!empty($d)) {
+      $userType = HelperClass::userType[$loginuserType];
+      $d = $this->db->query("
+    SELECT id as tId, CASE WHEN for_what = '1' THEN 'Attendence'  WHEN for_what = '2' THEN 'Departure' WHEN for_what = '3' THEN 'Result' END as for_what,
+    digiCoin, 'Earning' as tStatus FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' 
+    UNION ALL
+    SELECT grt.id as tId, gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus FROM " . Table::giftRedeemTable . " grt 
+    LEFT JOIN " . Table::giftTable . " ON gift.id = grt.gift_id
+    WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+      if (!empty($d)) {
 
-      $sendArr = [];
-      $totalCount = count($d);
-      $sendArr['totalDigiCoins'] = 0;
-      $sendArr['transactions'] = [];
-      $totalCoins = 0;
-      for($i=0; $i<$totalCount;$i++)
-      {
-        $subArr = [];
-        $subArr['digiCoin'] = $d[$i]['digiCoin'];
-        $subArr['for_what'] = $d[$i]['for_what'];
-        $subArr['tStatus'] = $d[$i]['tStatus'];
-        $totalCoins += $d[$i]['digiCoin'];
-        array_push($sendArr['transactions'],$subArr);
+        $sendArr = [];
+        $totalCount = count($d);
+        $sendArr['totalDigiCoins'] = 0;
+        $sendArr['transactions'] = [];
+        $totalCoins = 0;
+        for ($i = 0; $i < $totalCount; $i++) {
+          $subArr = [];
+          $subArr['tId'] = $d[$i]['tId'];
+          $subArr['digiCoin'] = $d[$i]['digiCoin'];
+          $subArr['for_what'] = $d[$i]['for_what'];
+          $subArr['tStatus'] = $d[$i]['tStatus'];
+          array_push($sendArr['transactions'], $subArr);
+        }
+        $sendArr['totalDigiCoins'] = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
+
+        return $sendArr;
+      } else {
+        return 0;
       }
-      $sendArr['totalDigiCoins'] = $totalCoins;
-
-      return $sendArr;
-    } else {
-      return 0;
     }
   }
 
@@ -829,13 +907,12 @@ class APIModel extends CI_Model
   }
 
   // formula for average percentage of result of a exam / class
-  public function avgResultOfExam($examId,$schoolUniqueCode)
+  public function avgResultOfExam($examId, $schoolUniqueCode)
   {
-    
+
     $s = $this->db->query("SELECT SUM(marks) as obtainedMarks, COUNT(1) as count FROM " . Table::resultTable . " WHERE exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
-    if(!empty($s))
-    {
+    if (!empty($s)) {
       $studentMarksObtained = $s[0]['obtainedMarks'];
       $totalCountOfStudents = $s[0]['count'];
     }
@@ -845,9 +922,8 @@ class APIModel extends CI_Model
 
     if (!empty($e)) {
       $maxMarksOfExam = $e[0]['max_marks'] * $totalCountOfStudents;
-      }
+    }
 
-      return array('exam_max_marks' => $maxMarksOfExam,'obtained_max_marks' => $studentMarksObtained);
-
+    return array('exam_max_marks' => $maxMarksOfExam, 'obtained_max_marks' => $studentMarksObtained);
   }
 }

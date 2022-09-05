@@ -611,7 +611,8 @@ public function updateHomeWork()
 		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$digiCoinCountData = $this->APIModel->getAlreadyDigiCoinCount($loginUserId,$loginuserType,$schoolUniqueCode);
+		$userTypeId = HelperClass::userType[$loginuserType];
+		$digiCoinCountData = $this->APIModel->getAlreadyDigiCoinCount($loginUserId,$userTypeId,$loginuserType,$schoolUniqueCode);
 
 		if (!$digiCoinCountData) {
 			return HelperClass::APIresponse(500, 'No DigiCoin Found For This User');
@@ -642,6 +643,62 @@ public function updateHomeWork()
 		}else
 		{
 			return HelperClass::APIresponse(200, 'All Gifts Data.',$digiCoinCountData);
+		}
+	}
+
+	// check all gifts
+	public function showGiftsForRedeem()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$digiCoinCountData = $this->APIModel->showGiftsForRedeem($loginUserId,$loginuserType,$schoolUniqueCode);
+
+		if (!$digiCoinCountData) {
+			return HelperClass::APIresponse(500, 'Your DigiCoins are too low, there is no gifts for your total digicoins. increase them & try again.' . $loginuserType);
+		}else
+		{
+			return HelperClass::APIresponse(200, 'You are eligible to redeem those Gifts Data.',$digiCoinCountData);
+		}
+	}
+
+
+	// redeem gifts
+	public function redeemGifts()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']) || empty($apiData['giftsIds']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$giftsIds = $apiData['giftsIds'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$totalCountOfGifts = count($giftsIds);
+
+		for($i=0; $i < $totalCountOfGifts; $i++){
+			$giftId = $giftsIds[$i]['gift_id'];
+			$redeemGifts = $this->APIModel->redeemGifts($giftId,$loginUserId,$loginuserType,$schoolUniqueCode);
+		}
+
+		if (!$redeemGifts) {
+			return HelperClass::APIresponse(500, 'Gifts Not Redeem, there is some issue contact support.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'You have successfully redeem your gift, digiCoin balance is updated & you can check your gift status anytime.');
 		}
 	}
 
