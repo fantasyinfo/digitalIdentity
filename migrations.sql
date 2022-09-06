@@ -20,3 +20,6 @@
 -- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Gift Redeem Master', 'digicoin/giftRedeemMaster', NULL, '33', '0', '1', '1', CURRENT_TIMESTAMP);
 
 -- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'LeaderBoard', 'digicoin/leaderBoard', NULL, '33', '0', '1', '1', CURRENT_TIMESTAMP);
+
+
+ALTER TABLE `teachers` ADD `education` VARCHAR(100) NULL AFTER `image`, ADD `experience` VARCHAR(100) NULL AFTER `education`;

@@ -298,7 +298,7 @@ class CrudModel extends CI_Model
                 }
             }
       
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -313,7 +313,7 @@ class CrudModel extends CI_Model
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -342,6 +342,8 @@ class CrudModel extends CI_Model
                 $subArr[] = $d[$i]['user_id'];
                 $subArr[] = $d[$i]['mobile'];
                 $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = $d[$i]['education'];
+                $subArr[] = @HelperClass::experience[$d[$i]['experience']];
                 $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
 
                   if($d[$i]['status'] == 'Active')
@@ -351,7 +353,6 @@ class CrudModel extends CI_Model
                         $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
                     };
 
-                $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
                 $subArr[] = '
                 <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
                 <a href="editTeacher/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  

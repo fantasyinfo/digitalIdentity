@@ -107,10 +107,11 @@
                     <th>Name</th>
                     <th>User Id</th>
                     <th>Mobile</th>
-                    <th>Class - Section</th>
+                    <th>Class Teacher</th>
+                    <th>Education</th>
+                    <th>Experience</th>
                     <th>State - City - Pincode</th>
                     <th>Status</th>
-                    <th>Date of Birth</th>
                     <th>Action</th>
                   </tr>
                   </thead>

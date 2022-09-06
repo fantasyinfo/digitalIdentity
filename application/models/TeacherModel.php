@@ -32,6 +32,8 @@ class TeacherModel extends CI_Model
       $insertArr['city_id'] = $post['city'];
       $insertArr['pincode'] = $post['pincode'];
       $insertArr['state_id'] = $post['state'];
+      $insertArr['education'] = $post['education'];
+      $insertArr['experience'] = $post['experience'];
       $insertArr['image'] = '';
 
       
@@ -114,6 +116,8 @@ class TeacherModel extends CI_Model
       $insertArr['city_id'] = $post['city'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['pincode'] = $post['pincode'];
+      $insertArr['education'] = $post['education'];
+      $insertArr['experience'] = $post['experience'];
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 

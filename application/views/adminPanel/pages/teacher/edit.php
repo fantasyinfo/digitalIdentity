@@ -137,6 +137,37 @@
                               <td> <input type="number" name="mobile" class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
                           </tr>
                           <tr>
+                              <td> <label for="education">Education</label></td>
+                              <td> <input type="text" name="education" class="form-control" value="<?=$sd['education'];?>"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="experience">Experience</label></td>
+                              <td> <select class="form-control select2 select2-danger" name="experience" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <?php 
+                             
+
+                                $selectedExperience = '';
+                                foreach(HelperClass::experience as $exp => $val)
+                                {
+                                  if(isset($sd['experience']) && !empty($sd['experience']))
+                                  {
+                                    if($sd['experience'] == $exp)
+                                    {
+                                      $selectedExperience= 'selected';
+                                    }else
+                                    {
+                                      $selectedExperience= '';
+                                    }
+                                  }
+                                  ?>
+                                    <option <?= $selectedExperience; ?>  value="<?= $exp;?>"><?= $val;?></option>
+                              <?php 
+                                
+                            }
+                              ?>
+                              </select></td>
+                          </tr>
+                          <tr>
                               <td> <label for="dob">Select Date of Birth</label></td>
                               <td>  <input type="text" name="dob" class="form-control datepicker" id="dob" value="<?=$sd['dob'];?>"></td>
                           </tr>

@@ -90,6 +90,8 @@ class HelperClass
         '4' => 'Deliverd'
     ];
 
+    const experience = ['Fresher', '1 to 3 Years', '3 to 5 Years', '5 to 10 Years', '10 to 15 Years', '15 Years +'
+    ];
     public static function uniqueI()
     {
         $str = '01234567890123456789012345678901234567890123456789';

@@ -128,6 +128,24 @@
                               <td> <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Enter mobile number"></td>
                           </tr>
                           <tr>
+                              <td> <label for="education">Education</label></td>
+                              <td> <input type="text" name="education" class="form-control" placeholder="Enter Education eg. Bsc Maths"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="experience">Experience</label></td>
+                              <td> <select class="form-control select2 select2-danger" name="experience" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <?php 
+                              
+                                foreach(HelperClass::experience as $exp => $val)
+                                {?>
+                                    <option  value="<?= $exp;?>"><?= $val;?></option>
+                              <?php 
+                              }
+                              
+                              ?>
+                              </select></td>
+                          </tr>
+                          <tr>
                               <td> <label for="dob">Select Date of Birth</label></td>
                               <td>  <input type="text" name="dob" class="form-control datepicker" id="dob" placeholder="Enter date of birth"></td>
                           </tr>
