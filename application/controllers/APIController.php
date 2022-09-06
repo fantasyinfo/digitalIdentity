@@ -596,6 +596,30 @@ public function updateHomeWork()
 		}
 	}
 
+	// leaderBoard
+	public function leaderBoard()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode);
+
+		if (!$leaderBoardData) {
+			return HelperClass::APIresponse(500, 'No LeaderBoard Found For This User ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'LeaderBoard Data.',$leaderBoardData);
+		}
+	}
+
 
 	// count digicoin
 	public function getAlreadyDigiCoinCount()

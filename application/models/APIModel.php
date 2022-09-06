@@ -848,6 +848,71 @@ class APIModel extends CI_Model
   }
 
 
+  // leaderBoard
+  public function leaderBoard($loginuserType, $schoolUniqueCode)
+  {
+    $dir = base_url().HelperClass::uploadImgDir;
+    if ($loginuserType == 'Teacher') {
+      $tableName = Table::teacherTable;
+      $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      
+      if (!empty($d)) {
+
+        $sendArr = [];
+        $totalCount = count($d);
+        $a = 1;
+        for ($i = 0; $i < $totalCount; $i++) {
+         $userDetails =  $this->db->query("SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
+
+          $subArr = [];
+          $subArr['position'] = $a++;
+          $subArr['userType'] = $d[$i]['user_type'];
+          $subArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+          $subArr['name'] = @$userDetails[0]['name'];
+          $subArr['uniqueId'] = @$userDetails[0]['user_id'];
+          $subArr['className'] = @$userDetails[0]['className'];
+          $subArr['sectionName'] = @$userDetails[0]['sectionName'];
+          $subArr['image'] = $dir.@$userDetails[0]['image'];
+          array_push($sendArr, $subArr);
+        }
+        
+        return $sendArr;
+      } else {
+        return 0;
+      }
+    }else if($loginuserType == 'Student')
+    {
+      $tableName = Table::studentTable;
+      $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      
+      if (!empty($d)) {
+
+        $sendArr = [];
+        $totalCount = count($d);
+        $a = 1;
+        for ($i = 0; $i < $totalCount; $i++) {
+         $userDetails =  $this->db->query("SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
+
+          $subArr = [];
+          $subArr['position'] = $a++;
+          $subArr['userType'] = $d[$i]['user_type'];
+          $subArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+          $subArr['name'] = $userDetails[0]['name'];
+          $subArr['uniqueId'] = $userDetails[0]['user_id'];
+          $subArr['className'] = $userDetails[0]['className'];
+          $subArr['sectionName'] = $userDetails[0]['sectionName'];
+          $subArr['image'] = $dir.$userDetails[0]['image'];
+          array_push($sendArr, $subArr);
+        }
+        
+        return $sendArr;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+
 
 
   // check if the digiCoin is set 

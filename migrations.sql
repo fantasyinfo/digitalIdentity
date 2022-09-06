@@ -14,3 +14,9 @@
 
 
 -- CREATE TABLE `redeem_gifts` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `login_user_id` INT NOT NULL , `login_user_type` INT NOT NULL , `gift_id` INT NOT NULL , `digiCoin_used` INT NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' COMMENT '1=>pending,2=>send,3=>intransit,4=>deliverd' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Gift Redeem Master', 'digicoin/giftRedeemMaster', NULL, '33', '0', '1', '1', CURRENT_TIMESTAMP);
+
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'LeaderBoard', 'digicoin/leaderBoard', NULL, '33', '0', '1', '1', CURRENT_TIMESTAMP);

@@ -108,7 +108,10 @@ $digiCoinRoutesArr = [
     'setDigiCoinMaster',
     'studentDigiCoin',
     'teacherDigiCoin',
-    'giftMaster'
+    'giftMaster',
+    'giftRedeemMaster',
+    'changeGiftStatus',
+    'leaderBoard'
 ];
 
 foreach($digiCoinRoutesArr as $digiRoute)
@@ -175,6 +178,7 @@ $apiRoutesArr = [
     'checkAllGifts',
     'showGiftsForRedeem',
     'redeemGifts',
+    'leaderBoard'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

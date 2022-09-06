@@ -83,6 +83,13 @@ class HelperClass
     ];
 
 
+    const giftStatus = [
+        '1' => 'Pending',
+        '2' => 'Sent',
+        '3' => 'On the Way',
+        '4' => 'Deliverd'
+    ];
+
     public static function uniqueI()
     {
         $str = '01234567890123456789012345678901234567890123456789';

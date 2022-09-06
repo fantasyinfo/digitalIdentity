@@ -57,6 +57,19 @@ class DigiCoinController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'giftMaster');
 	}
 
+	public function giftRedeemMaster()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Gift Redeem Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'giftRedeemMaster');
+	}
+
 	public function studentDigiCoin()
 	{
 		$this->loginCheck();
@@ -81,6 +94,47 @@ class DigiCoinController extends CI_Controller
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->digiDir . 'teacherDigiCoinList');
+	}
+
+	public function leaderBoard()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Leader Board',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'leaderBoard');
+	}
+
+
+	public function changeGiftStatus()
+	{
+		if(isset($_POST['status']) && isset($_POST['editId']))
+		{
+			$status = $_POST['status'];
+			$updateId = $_POST['editId'];
+			$updateStatus = $this->db->query("UPDATE " . Table::giftRedeemTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
+
+			if($updateStatus)
+			{
+				$msgArr = [
+					'class' => 'success',
+					'msg' => 'Gift Redeem Status Updated Successfully',
+				];
+				$this->session->set_userdata($msgArr);
+			}else
+			{
+				$msgArr = [
+					'class' => 'danger',
+					'msg' => 'Gift Redeem Status Not Updated Due to this Error. ' . $this->db->last_query(),
+				];
+				$this->session->set_userdata($msgArr);
+			}
+			echo json_encode(array('status' => true));
+		}
 	}
 
 }
