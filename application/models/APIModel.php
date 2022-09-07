@@ -83,6 +83,40 @@ class APIModel extends CI_Model
       //
     } else if ($type == 'Principal') {
       //
+    }else if($type == 'Parent')
+    {
+      $mobile = $id;
+      $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
+      LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
+      LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
+      WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.password = '$password' AND t.status = '1'";
+      $userData = $this->db->query($sql)->result_array();
+      if(!empty($userData))
+      {
+        $authToken = HelperClass::generateRandomToken();
+        $this->db->query("UPDATE " . Table::studentTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+
+        $totalStudentsCount = count($userData);
+        $responseData = [];
+        $responseData['studentsData'] = [];
+        for($i = 0 ; $i < $totalStudentsCount; $i++)
+        {
+          $subArr = [];
+          $subArr["userId"] = @$userData[0]["user_id"];
+          $subArr["name"] = @$userData[0]["name"];
+          $subArr["image"] = @$userData[0]["image"];
+          $subArr["user_id"] = @$userData[0]["user_id"];
+          $subArr["className"] = @$userData[0]["className"];
+          $subArr["sectionName"] = @$userData[0]["sectionName"];
+          $subArr["authToken"] = @$authToken;
+          $subArr["userType"] = @$type;
+          $subArr["schoolUniqueCode"] = @$schoolUniqueCode;
+          array_push($responseData["studentsData"], $subArr);
+        }
+        return $responseData;
+      } else {
+        return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+      }
     }
   }
 
@@ -911,6 +945,30 @@ class APIModel extends CI_Model
       }
     }
   }
+
+
+  // leaderBoard
+  public function visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode)
+  {
+      if(!empty($file))
+      {
+        $fileName = $this->CrudModel->uploadImg($file,'VISITOR-');
+      }else
+      {
+        $fileName = '';
+      }
+
+      $d = $this->db->query("INSERT INTO ".Table::visitorTable." (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$fileName')");
+      // echo $this->db->last_query();
+      
+      if (($d)) {
+        return true;
+      } else {
+        return false;
+      }
+    
+  }
+  
 
 
 

@@ -625,22 +625,36 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']) || empty($apiData['visit_date'])|| empty($apiData['visit_time'])|| empty($apiData['visitor_name']) || empty($apiData['person_to_meet'])|| empty($apiData['purpose_to_meet'])|| empty($apiData['visitor_mobile_no']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = $apiData['loginUserId'];
-		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode);
+		$visit_date = $apiData['visit_date'];
+		$visit_time = $apiData['visit_time'];
+		$visitor_name = $apiData['visitor_name'];
+		$person_to_meet = $apiData['person_to_meet'];
+		$purpose_to_meet = $apiData['purpose_to_meet'];
+		$visitor_mobile_no = $apiData['visitor_mobile_no'];
 
-		if (!$leaderBoardData) {
-			return HelperClass::APIresponse(500, 'No LeaderBoard Found For This User ' . $this->db->last_query());
+		if(isset($_FILES['visitor_image']))
+		{
+			$file = $_FILES['visitor_image'];
 		}else
 		{
-			return HelperClass::APIresponse(200, 'LeaderBoard Data.',$leaderBoardData);
+			$file = '';
+		}
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode);
+
+		if (!$visitorEntry) {
+			return HelperClass::APIresponse(500, 'There is some technical issue, visitor entry not inserted ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'New Visitor Entry Added Successfully.');
 		}
 	}
 

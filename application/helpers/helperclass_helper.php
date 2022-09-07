@@ -20,7 +20,8 @@ class HelperClass
         'Teacher' => '2',
         'Staff' => '3',
         'Principal' => '4',
-        'School' => '5'
+        'School' => '5',
+        'Parent' => '6'
     ];
     const userTypeForPanel = [
         'Admin' => '1',
@@ -43,6 +44,7 @@ class HelperClass
         '3' => 'Staff',
         '4' => 'Principal',
         '5' => 'School',
+        '6' => 'Parent'
     ];
     const userTypeForPanelR = [
         '1'  => 'Admin',
