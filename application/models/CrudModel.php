@@ -109,7 +109,7 @@ class CrudModel extends CI_Model
         $end = end($explode);
         $file_ext=strtolower($end);
         
-        $extensions= array("jpeg","jpg","png","webp","svg");
+        $extensions= array("jpeg","jpg","png","gif");
         
         if(in_array($file_ext,$extensions)=== false){
            $errors[]="extension not allowed, please choose a JPEG or PNG file.";
@@ -120,14 +120,34 @@ class CrudModel extends CI_Model
         }
         
         if(empty($errors)==true){
-           move_uploaded_file($file_tmp,HelperClass::uploadImgDir.$file_name);
-           return $file_name;
+           
+           //move_uploaded_file($file_tmp,HelperClass::uploadImgDir.$file_name);
+        //    return $file_name;
+           
+           $destUrl =  $this->compressImg($file_tmp,HelperClass::uploadImgDir.$file_name,80);
+           $exp = explode(HelperClass::uploadImgDir,$destUrl);
+           return $exp[1]; // return upload url
         }else{
           return false;
         }
       
     }
 
+    public function compressImg($source_url, $destination_url, $quality)
+    {
+        $info = getimagesize($source_url);
+     
+        if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
+        elseif ($info['mime'] == 'image/gif') $image = imagecreatefromgif($source_url);
+        elseif ($info['mime'] == 'image/png') $image = imagecreatefrompng($source_url);
+        elseif ($info['mime'] == 'image/jpg') $image = imagecreatefromjpeg($source_url);
+        
+        //save it
+        imagejpeg($image, $destination_url, $quality);
+            
+        //return destination file url
+        return $destination_url;    
+    }
 
     public function showAllStudents($tableName,$data = '')
     {
