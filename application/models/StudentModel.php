@@ -36,8 +36,25 @@ class StudentModel extends CI_Model
       $insertArr['image'] = '';
 
 
+
+      // check if this mobile number is also using any of the other child of this parent then use the same password
+      $alreadyMobile = $this->db->query("SELECT password FROM ".Table::studentTable." WHERE mobile = '{$insertArr['mobile']}'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+
+      if(!empty($alreadyMobile[0]))
+      {
+        $insertArr['password'] = $alreadyMobile[0]['password'];
+      }else
+      {
+        $insertArr['password'] = HelperClass::makeRandomPassword();
+      }
+
+
+
+    
+
+
       // check if the student is already registerd with us
-      $already = $this->db->query("SELECT * FROM ".Table::studentTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}'")->result_array();
+      $already = $this->db->query("SELECT * FROM ".Table::studentTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 
       if(!empty($already[0]))

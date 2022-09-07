@@ -1,0 +1,1 @@
+-- ALTER TABLE `students` ADD `password` VARCHAR(100) NULL AFTER `image`;

@@ -23,7 +23,7 @@ class TeacherModel extends CI_Model
       $insertArr['mother_name'] = $post['mother'];
       $insertArr['father_name'] = $post['father'];
       $insertArr['mobile'] = $post['mobile'];
-      $insertArr['password'] = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".rand(000000000,999999999)),0,6) ;
+      $insertArr['password'] = HelperClass::makeRandomPassword();
       $insertArr['email'] = $post['email'];
       $insertArr['dob'] = $post['dob'];
       $insertArr['doj'] = $post['doj'];
@@ -38,7 +38,7 @@ class TeacherModel extends CI_Model
 
       
       // check if the teacher is already registerd with us
-      $already = $this->db->query("SELECT * FROM ".Table::teacherTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}'")->result_array();
+      $already = $this->db->query("SELECT * FROM ".Table::teacherTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND mother_name = '{$insertArr['mother_name']}' AND father_name = '{$insertArr['father_name']}' AND dob = '{$insertArr['dob']}'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 
       if(!empty($already))
