@@ -32,5 +32,6 @@ class Table{
     const giftTable = 'gift';
     const giftRedeemTable = 'redeem_gifts';
     const homeWorkTable = 'home_work';
+    const visitorTable = 'visitor_entry';
     
 }

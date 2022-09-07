@@ -190,6 +190,19 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->masterDir . 'notificationMaster');
 	}
 
+	public function visitorMaster()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Visitor Master',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'visitorMaster');
+	}
+
 	public function feesMaster()
 	{
 		$this->loginCheck();

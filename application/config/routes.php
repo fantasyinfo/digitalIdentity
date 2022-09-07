@@ -79,6 +79,7 @@ $masterRoutesArr = [
     'timeTableSheduleMaster',
     'panelUserMaster',
     'notificationMaster',
+    'visitorMaster',
     'feesMaster',
     'submitFeesMaster',
     'monthMaster',
@@ -178,7 +179,8 @@ $apiRoutesArr = [
     'checkAllGifts',
     'showGiftsForRedeem',
     'redeemGifts',
-    'leaderBoard'
+    'leaderBoard',
+    'visitorEntry'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
