@@ -752,7 +752,7 @@ public function updateHomeWork()
 		$totalCountOfGifts = count($giftsIds);
 
 		for($i=0; $i < $totalCountOfGifts; $i++){
-			$giftId = $giftsIds[$i]['gift_id'];
+			$giftId = $giftsIds[$i];
 			$redeemGifts = $this->APIModel->redeemGifts($giftId,$loginUserId,$loginuserType,$schoolUniqueCode);
 		}
 
