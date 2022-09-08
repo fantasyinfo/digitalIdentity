@@ -1,8 +1,16 @@
 <div class="container">
   <div class="content-wrapper">
     <?php
+
+
+
+
     $sd = $data['studentData'][0];
     //print_r($sd);
+    $dir = base_url().HelperClass::uploadImgDir;
+    $schoolD = $this->db->query("SELECT smt.* FROM ".Table::schoolMasterTable." smt 
+    LEFT JOIN ".Table::studentTable."  s ON s.schoolUniqueCode = smt.unique_id 
+    WHERE s.user_id = '{$sd['user_id']}' ORDER BY smt.id DESC LIMIT 1 ")->result_array();
 
     if(!$sd || empty( $sd) )
     {
@@ -76,7 +84,7 @@
                 <div class="card-body rounded ml-3">
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">School Name</p>
-                    <h6 class="mt-2" style="font-weight:600;">  <img src="<?=HelperClass::schoolLogoImg?>" class="rounded-circle" width="40" height="40"> <?= HelperClass::schoolName; ?></h6>
+                    <h6 class="mt-2" style="font-weight:600;">  <img src="<?=$dir.$schoolD[0]['image']?>" class="rounded-circle" width="40" height="40"> <?= $schoolD[0]['school_name'] ?></h6>
                   </div>
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Class</p>
@@ -98,10 +106,10 @@
                       }
                       ?></h6>
                   </div>
-                <div class="row mb-2">
+                <!-- <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Attendence</p>
                     <h6 class="mt-2" style="font-weight:600;">  <i class="fa-solid fa-calendar-check"></i> 78%</h6>
-                  </div>
+                  </div> -->
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Class Teacher</p>
                     <h6 class="mt-2" style="font-weight:600;">  <i class="fa-solid fa-user"></i> <?= $sd['className'] . " - " . $sd['sectionName']; ?></h6>

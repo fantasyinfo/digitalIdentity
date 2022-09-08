@@ -63,6 +63,18 @@ $route[$baseTeacher."deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$
 
 
 
+// school routs
+ $baseSchool = "school/";
+ $schoolRoutesArr = [
+    'schoolProfile'
+];
+
+foreach($schoolRoutesArr as $schoolRoute)
+{
+    $route[$baseSchool.$schoolRoute] = "SchoolController"."/".$schoolRoute;
+}
+
+
 
 // master routes
 

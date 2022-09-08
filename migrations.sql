@@ -7,3 +7,9 @@
 
 -- ALTER TABLE `visitor_entry` CHANGE `visitor_mobile_no` `visitor_mobile_no` VARCHAR(100) NOT NULL;
 -- ALTER TABLE `students` ADD `auth_token` VARCHAR(255) NULL AFTER `status`;
+
+
+-- UPDATE `admin_panel_menu` SET `link` = 'school/schoolProfile' WHERE `admin_panel_menu`.`id` = 3;
+-- ALTER TABLE `schoolmaster` ADD `pincode` INT(6) NULL AFTER `classes_up_to`;
+-- ALTER TABLE `schoolmaster` ADD `doa` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `pincode`;
+-- ALTER TABLE `schoolmaster` CHANGE `logo` `image` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;

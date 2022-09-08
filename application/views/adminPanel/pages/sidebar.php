@@ -1,12 +1,19 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+<?php
+$dir = base_url().HelperClass::uploadImgDir;
+$schoolD = $this->db->query("SELECT * FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1 ")->result_array();?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
-    <img src="<?= $data['adminPanelUrl'] ?>dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">Admin</span>
+    <img src="<?= $dir.$schoolD[0]['image'] ?>" alt="School Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light"><?= $schoolD[0]['school_name'] ?></span>
   </a>
 
   <?php
+
 
 
 $checkPermission = (HelperClass::checkIfItsACEOAccount()) ? true : false;
