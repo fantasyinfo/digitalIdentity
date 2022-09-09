@@ -42,7 +42,7 @@
                 </div>
                 <div class="card-body rounded">
                   <div class="d-flex flex-row align-items-center text-left">
-                    <img src="<?= $sd['image']; ?>" alt="Admin" class="rounded-circle" width="100" height="100">
+                    <img src="<?= @$sd['image']; ?>" alt="Admin" class="rounded-circle" width="100" height="100">
                     <div class="mt-3">
                       <h3 style="font-weight:600;margin-left:20px;"><?= $sd['name']; ?></h3>
                       <h5 style="font-weight:300;margin-left:20px;" class="text-secondary mb-1 ml-3">@<?= $sd['user_id']; ?></h5>
@@ -84,7 +84,7 @@
                 <div class="card-body rounded ml-3">
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">School Name</p>
-                    <h6 class="mt-2" style="font-weight:600;">  <img src="<?=$dir.$schoolD[0]['image']?>" class="rounded-circle" width="40" height="40"> <?= $schoolD[0]['school_name'] ?></h6>
+                    <h6 class="mt-2" style="font-weight:600;">  <img src="<?=@$dir.@$schoolD[0]['image']?>" class="rounded-circle" width="40" height="40"> <?= @$schoolD[0]['school_name'] ?></h6>
                   </div>
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Class</p>
@@ -92,7 +92,7 @@
                   </div>
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Roll No</p>
-                    <h6 class="mt-2" style="font-weight:600;">  <i class="fa-solid fa-tag"></i> <?= $sd['roll_no']; ?></h6>
+                    <h6 class="mt-2" style="font-weight:600;">  <i class="fa-solid fa-tag"></i> <?= @$sd['roll_no']; ?></h6>
                   </div>
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Gender</p>

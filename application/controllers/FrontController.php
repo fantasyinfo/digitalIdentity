@@ -12,6 +12,7 @@ class FrontController extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('StudentModel');
+		$this->load->model('TeacherModel');
 		$this->load->library('session');
 	}
 	
@@ -40,7 +41,32 @@ class FrontController extends CI_Controller {
 			
 			}
 			
-		}else
+		
+		}else if($_GET['tecid'])
+		{
+			$dataArr = [
+				'pageTitle' => 'HomePage',
+				'studentData' => $this->TeacherModel->showTeacherProfile(),
+				'adminPanelUrl' => $this->adminPanelURL,
+			];
+			
+			if(isset($dataArr['studentData']) && !empty($dataArr['studentData']))
+			{
+				$this->load->view($this->frontViewDir .'pages/header',['data' => $dataArr]);
+				$this->load->view($this->frontViewDir .'index');
+				$this->load->view($this->frontViewDir .'pages/footer');
+			}else
+			{
+				$dataArr = [
+					'pageTitle' => 'Login',
+					'adminPanelUrl' => $this->adminPanelURL,
+				];
+				$this->load->view('adminPanel/index',['data' => $dataArr]);
+			
+			}
+		}
+		
+		else
 		{
 			$dataArr = [
 				'pageTitle' => 'Login',

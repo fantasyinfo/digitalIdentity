@@ -155,10 +155,10 @@ class TeacherModel extends CI_Model
     }
     public function showTeacherProfile()
     {
-        if(isset($_GET['stuid']))
+        if(isset($_GET['tecid']))
         {
-          $userId = explode(HelperClass::schoolPrefix,$_GET['stuid']);
-          return $this->CrudModel->showStudentProfile(Table::teacherTable,$userId[1]);
+          $userId = explode(HelperClass::schoolPrefix,$_GET['tecid']);
+          return $this->CrudModel->showTeacherProfile(Table::teacherTable,$userId[1]);
         }
     }
     public function viewSingleTeacherAllData($id)
