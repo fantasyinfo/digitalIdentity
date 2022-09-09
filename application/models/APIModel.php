@@ -815,10 +815,14 @@ class APIModel extends CI_Model
       // check sum of there digicoins first
       $userType = HelperClass::userType[$loginuserType];
 
+    
       $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND schoolUniqueCode = '$schoolUniqueCode' and id = '$giftId'")->result_array();
 
       if (!empty($giftValue)) {
         $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];
+      }else
+      {
+        return HelperClass::APIresponse(500, 'This Gift Id\'s Not found, Please Check Another Gift ' . $this->db->last_query());
       }
 
 
@@ -843,7 +847,45 @@ class APIModel extends CI_Model
   }
 
 
+// gift redeem status
+  public function giftRedeemStatus($loginUserId, $loginuserType, $schoolUniqueCode)
+  {
+    $dir = base_url() . HelperClass::uploadImgDir;
+      if ($loginuserType == 'Teacher') {
+        $userType = HelperClass::userType[$loginuserType];
 
+        $sql = "SELECT grt.*, gt.id as giftId, gt.gift_name, CONCAT('$dir',gt.gift_image) as image FROM " . Table::giftRedeemTable . " grt
+        LEFT JOIN ".Table::giftTable." gt ON grt.gift_id = gt.id AND gt.user_type = '$userType'
+         WHERE grt.login_user_id = '$loginUserId' AND grt.login_user_type = '$userType' AND grt.schoolUniqueCode = '$schoolUniqueCode'";
+
+        $allGiftsRedeemData = $this->db->query($sql)->result_array();
+        if($allGiftsRedeemData){
+
+          $totalC = count($allGiftsRedeemData);
+          $sendArr = [];
+          $sendArr['giftStatus'] = [];
+          for($i=0; $i< $totalC; $i++)
+          {
+            $subArr = [];
+            $subArr['giftRedeemId'] = $allGiftsRedeemData[$i]['id'];
+            $subArr['giftId'] = $allGiftsRedeemData[$i]['giftId'];
+            $subArr['giftName'] = $allGiftsRedeemData[$i]['gift_name'];
+            $subArr['giftImage'] = $allGiftsRedeemData[$i]['image'];
+            $subArr['digiCoinUsed'] = $allGiftsRedeemData[$i]['digiCoin_used'];
+            $subArr['redeemStatus'] = HelperClass::giftStatus[$allGiftsRedeemData[$i]['status']];
+            $subArr['redeemDate'] = date('d-m-Y h:i:A', strtotime($allGiftsRedeemData[$i]['created_at']));
+            array_push($sendArr['giftStatus'],$subArr);
+          }
+          return $sendArr;
+        }else
+        {
+          return HelperClass::APIresponse(500, 'There is no gift redeem found for this user.');
+        }
+
+      } else if ($loginuserType == 'Student') {
+        //
+      }
+  }
 
   // wallet History
   public function walletHistory($loginUserId, $loginuserType, $schoolUniqueCode)
@@ -852,9 +894,9 @@ class APIModel extends CI_Model
       $userType = HelperClass::userType[$loginuserType];
       $d = $this->db->query("
     SELECT id as tId, CASE WHEN for_what = '1' THEN 'Attendence'  WHEN for_what = '2' THEN 'Departure' WHEN for_what = '3' THEN 'Result' END as for_what,
-    digiCoin, 'Earning' as tStatus FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' 
+    digiCoin, 'Earning' as tStatus, created_at as whatDate FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' 
     UNION ALL
-    SELECT grt.id as tId, gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus FROM " . Table::giftRedeemTable . " grt 
+    SELECT grt.id as tId, gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus, grt.created_at as whatDate FROM " . Table::giftRedeemTable . " grt 
     LEFT JOIN " . Table::giftTable . " ON gift.id = grt.gift_id
     WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
       if (!empty($d)) {
@@ -870,6 +912,7 @@ class APIModel extends CI_Model
           $subArr['digiCoin'] = $d[$i]['digiCoin'];
           $subArr['for_what'] = $d[$i]['for_what'];
           $subArr['tStatus'] = $d[$i]['tStatus'];
+          $subArr['whatDate'] = $d[$i]['whatDate'];
           array_push($sendArr['transactions'], $subArr);
         }
         $sendArr['totalDigiCoins'] = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);

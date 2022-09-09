@@ -191,6 +191,7 @@ $apiRoutesArr = [
     'checkAllGifts',
     'showGiftsForRedeem',
     'redeemGifts',
+    'giftRedeemStatus',
     'leaderBoard',
     'visitorEntry'
 ];

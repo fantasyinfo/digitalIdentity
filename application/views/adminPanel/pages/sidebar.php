@@ -4,12 +4,12 @@
 
 <?php
 $dir = base_url().HelperClass::uploadImgDir;
-$schoolD = $this->db->query("SELECT * FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1 ")->result_array();?>
+@$schoolD = $this->db->query("SELECT * FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1 ")->result_array();?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
-    <img src="<?= $dir.$schoolD[0]['image'] ?>" alt="School Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light"><?= $schoolD[0]['school_name'] ?></span>
+    <img src="<?= @$dir.@$schoolD[0]['image'] ?>" alt="School Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light"><?= @$schoolD[0]['school_name'] ?></span>
   </a>
 
   <?php

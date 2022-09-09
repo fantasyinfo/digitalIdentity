@@ -16,7 +16,7 @@
   // fetching city data
     $giftRedeemData = $this->db->query("SELECT grt.*, gt.id as gift_id, gt.gift_image, gt.gift_name, gt.redeem_digiCoins FROM " . Table::giftRedeemTable . " grt 
     LEFT JOIN ".Table::giftTable." gt ON gt.id = grt.gift_id
-    WHERE grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+    WHERE grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY grt.id DESC")->result_array();
     
 
 
@@ -141,6 +141,7 @@
                             <th>Gift DigiCoin Cost</th>
                             <th>DigiCoin Used</th>
                             <th>Change Status</th>
+                            <th>Gift Redeem Date</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -176,6 +177,7 @@
                                    
                                   </select>
                                 </td>
+                                <td><?= date('d-m-Y h:i:A', strtotime($cn['created_at']));?></td>
                               </tr>
                           <?php  }
                           } ?>

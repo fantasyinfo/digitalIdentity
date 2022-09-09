@@ -83,12 +83,17 @@ class APIController extends CI_Controller
 		$attendenceData = $apiData['attendenceData'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$currentDateTime = date('d-m-Y h:i:s');
 		$totalAttenData = count($attendenceData);
 		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
-			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserId, $loginuserType, $attendenceStatus,$schoolUniqueCode);
+			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus,$schoolUniqueCode);
 			if (!$insertAttendeceRecord) {
 				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -152,6 +157,11 @@ class APIController extends CI_Controller
 		$departureData = $apiData['departureData'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$currentDateTime = date('d-m-Y h:i:s');
 
 		$totalDepStu = count($departureData);
@@ -165,7 +175,7 @@ class APIController extends CI_Controller
 			$attendenceId = $departureData[$i]['attendenceId'];
 			 $stu_id = $departureData[$i]['studentId'];
 			$departureStatus = '1';
-			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserId, $loginuserType, $departureStatus,$schoolUniqueCode);
+			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserIdFromDB, $loginuserType, $departureStatus,$schoolUniqueCode);
 			if (!$insertDepartureRecord) {
 				return HelperClass::APIresponse(500, 'Departure Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -235,8 +245,12 @@ class APIController extends CI_Controller
 		$minMarks = $apiData['minMarks'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-
-		$addNewExam = $this->APIModel->addExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$schoolUniqueCode);
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
+		$addNewExam = $this->APIModel->addExam($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$schoolUniqueCode);
 
 		if (!$addNewExam) {
 			return HelperClass::APIresponse(500, 'Exam Not Added Successfully beacuse ' . $this->db->last_query());
@@ -329,7 +343,12 @@ class APIController extends CI_Controller
 		$examId = $apiData['examId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		// $schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$addNewExam = $this->APIModel->updateExam($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$examId);
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
+		$addNewExam = $this->APIModel->updateExam($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$examId);
 
 		if (!$addNewExam) {
 			return HelperClass::APIresponse(500, 'Exam Not Updated Successfully beacuse ' . $this->db->last_query());
@@ -359,13 +378,18 @@ class APIController extends CI_Controller
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		for($i=0;$i<$totalResults;$i++)
 		{
 			$studentId = $results[$i]['studentId'];
 			$marks = $results[$i]['marks'];
 			$reMarks = @$results[$i]['reMarks'];
 		
-			$addExamResult = $this->APIModel->addResult($loginUserId,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$examId,$schoolUniqueCode);
+			$addExamResult = $this->APIModel->addResult($loginUserIdFromDB,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$examId,$schoolUniqueCode);
 		}
 
 		if (!$addExamResult) {
@@ -422,8 +446,13 @@ class APIController extends CI_Controller
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 
-		$addHomeWork = $this->APIModel->addHomeWork($loginUserId,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode);
+		$addHomeWork = $this->APIModel->addHomeWork($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode);
 		
 
 		if (!$addHomeWork) {
@@ -586,7 +615,12 @@ public function updateHomeWork()
 		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$walletHistoryData = $this->APIModel->walletHistory($loginUserId,$loginuserType,$schoolUniqueCode);
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
+		$walletHistoryData = $this->APIModel->walletHistory($loginUserIdFromD,$loginuserType,$schoolUniqueCode);
 
 		if (!$walletHistoryData) {
 			return HelperClass::APIresponse(500, 'No Wallet Found For This User');
@@ -610,6 +644,11 @@ public function updateHomeWork()
 		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode);
 
 		if (!$leaderBoardData) {
@@ -648,6 +687,11 @@ public function updateHomeWork()
 		}
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode);
 
 		if (!$visitorEntry) {
@@ -673,8 +717,13 @@ public function updateHomeWork()
 		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$userTypeId = HelperClass::userType[$loginuserType];
-		$digiCoinCountData = $this->APIModel->getAlreadyDigiCoinCount($loginUserId,$userTypeId,$loginuserType,$schoolUniqueCode);
+		$digiCoinCountData = $this->APIModel->getAlreadyDigiCoinCount($loginUserIdFromDB,$userTypeId,$loginuserType,$schoolUniqueCode);
 
 		if (!$digiCoinCountData) {
 			return HelperClass::APIresponse(500, 'No DigiCoin Found For This User');
@@ -698,6 +747,11 @@ public function updateHomeWork()
 		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$digiCoinCountData = $this->APIModel->checkAllGifts($loginuserType,$schoolUniqueCode);
 
 		if (!$digiCoinCountData) {
@@ -722,7 +776,12 @@ public function updateHomeWork()
 		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$digiCoinCountData = $this->APIModel->showGiftsForRedeem($loginUserId,$loginuserType,$schoolUniqueCode);
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
+		$digiCoinCountData = $this->APIModel->showGiftsForRedeem($loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
 
 		if (!$digiCoinCountData) {
 			return HelperClass::APIresponse(500, 'Your DigiCoins are too low, there is no gifts for your total digicoins. increase them & try again.' . $loginuserType);
@@ -748,12 +807,23 @@ public function updateHomeWork()
 		$giftsIds = $apiData['giftsIds'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
 		$totalCountOfGifts = count($giftsIds);
+
+
+
+		// echo json_encode($giftsIds);die();
+
+
+
 
 		for($i=0; $i < $totalCountOfGifts; $i++){
 			$giftId = $giftsIds[$i];
-			$redeemGifts = $this->APIModel->redeemGifts($giftId,$loginUserId,$loginuserType,$schoolUniqueCode);
+			$redeemGifts = $this->APIModel->redeemGifts($giftId,$loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
 		}
 
 		if (!$redeemGifts) {
@@ -764,6 +834,33 @@ public function updateHomeWork()
 		}
 	}
 
+	// gift redeem status
+	public function giftRedeemStatus()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		if($loginUserIdFromDB != $loginUserId)
+		{
+			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		}
+		$giftStatus = $this->APIModel->giftRedeemStatus($loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
+		if (!$giftStatus) {
+			return HelperClass::APIresponse(500, 'Gifts Redeem Status Not Found.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Your Gifts Redeem Status. ',$giftStatus);
+		}
+	}
 
 	// fetching all classes
 	public function allClasses()
