@@ -993,15 +993,8 @@ class APIModel extends CI_Model
   // leaderBoard
   public function visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode)
   {
-      if(!empty($file))
-      {
-        $fileName = $this->CrudModel->uploadImg($file,'VISITOR-');
-      }else
-      {
-        $fileName = '';
-      }
-
-      $d = $this->db->query("INSERT INTO ".Table::visitorTable." (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$fileName')");
+    
+      $d = $this->db->query("INSERT INTO ".Table::visitorTable." (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$file')");
       // echo $this->db->last_query();
       
       if (($d)) {

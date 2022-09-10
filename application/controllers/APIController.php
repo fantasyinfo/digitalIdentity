@@ -620,7 +620,7 @@ public function updateHomeWork()
 		{
 			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
 		}
-		$walletHistoryData = $this->APIModel->walletHistory($loginUserIdFromD,$loginuserType,$schoolUniqueCode);
+		$walletHistoryData = $this->APIModel->walletHistory($loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
 
 		if (!$walletHistoryData) {
 			return HelperClass::APIresponse(500, 'No Wallet Found For This User');
@@ -677,14 +677,14 @@ public function updateHomeWork()
 		$person_to_meet = $apiData['person_to_meet'];
 		$purpose_to_meet = $apiData['purpose_to_meet'];
 		$visitor_mobile_no = $apiData['visitor_mobile_no'];
+		$document_image_name = '';
+		
+		$documentType=$apiData['image'];
+	    $document = base64_decode($apiData['image']);
+        $document_image_name='visitor_img_'.time().'.png';
+    	$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/".$document_image_name;
+        $success = file_put_contents($document_file, $document);
 
-		if(isset($_FILES['visitor_image']))
-		{
-			$file = $_FILES['visitor_image'];
-		}else
-		{
-			$file = '';
-		}
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
@@ -692,7 +692,7 @@ public function updateHomeWork()
 		{
 			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
 		}
-		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode);
+		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$document_image_name,$schoolUniqueCode);
 
 		if (!$visitorEntry) {
 			return HelperClass::APIresponse(500, 'There is some technical issue, visitor entry not inserted ' . $this->db->last_query());
