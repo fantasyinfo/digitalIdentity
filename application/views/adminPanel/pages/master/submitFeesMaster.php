@@ -15,11 +15,19 @@
     $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
+   function getInvoiceNumber($db)
+    {
+
+        $dd = $db->query("SELECT invoice_id FROM " .Table::feesForStudentTable ." WHERE invoice_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
+        $id = explode(HelperClass::invoicePrefix,$dd[0]['invoice_id']);
+        return HelperClass::invoicePrefix . ($id[1] + 1);
+    }
+
     if(isset($_POST['submit']))
     {
 
       $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
-      $invoice_id = 0;
+      $invoice_id = getInvoiceNumber($this->db);
       $login_user_id = $_SESSION['id'];
       $login_user_type = $_SESSION['user_type'];
       $student_id = $_POST['studentId'];
@@ -53,7 +61,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:1 ".base_url()."master/submitFeesMaster");
+        header("Refresh:1 ".base_url()."master/feesListingMaster");
        
     }
 
@@ -209,25 +217,25 @@
                     <input type="number" class="form-control mb-3"  name="offer_amt" value="0">
 
                     <label>Deposit Amount</label>
-                    <input type="number" class="form-control mb-3"  name="deposit_amt">
+                    <input type="number" class="form-control mb-3"  name="deposit_amt" required>
 
                     <label>Date of Deposit</label>
-                    <input type="date" class="form-control mb-3"  name="fee_deposit_date">
+                    <input type="date" class="form-control mb-3"  name="fee_deposit_date" required>
 
                     <label>Payment Mode</label>
-                    <select name="payment_mode"  class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                    <select name="payment_mode"  class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" required>
                         <option value="1">Online</option>
                         <option value="2">Offline</option>
                       </select>
 
                     <label>Depositer Name</label>
-                    <input type="text" class="form-control mb-3"  name="depositer_name">
+                    <input type="text" class="form-control mb-3"  name="depositer_name" required>
 
                     <label>Depositer Mobile</label>
-                    <input type="number" class="form-control mb-3"  name="depositer_mobile">
+                    <input type="number" class="form-control mb-3"  name="depositer_mobile" required>
 
                     <label>Depositer Address</label>
-                    <input type="text" class="form-control mb-3"  name="depositer_address">
+                    <input type="text" class="form-control mb-3"  name="depositer_address" required>
 
                     <label>Old Due Balance ( last year )</label>
                     <input type="number" class="form-control mb-3"  name="total_due_balance" value="0">

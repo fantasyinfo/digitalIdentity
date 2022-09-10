@@ -15,8 +15,13 @@
 -- ALTER TABLE `schoolmaster` CHANGE `logo` `image` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
 
-ALTER TABLE `fees` ADD `schoolUniqueCode` VARCHAR(100) NOT NULL AFTER `id`;
-ALTER TABLE `feesforstudent` ADD `schoolUniqueCode` VARCHAR(100) NOT NULL AFTER `id`;
-ALTER TABLE `schoolmaster` ADD `session_started_from` INT NULL AFTER `doa`, ADD `session_ended_to` INT NULL AFTER `session_started_from`;
-ALTER TABLE `feesforstudent` ADD `fee_deposit_date` DATE NULL AFTER `deposit_amt`;
-ALTER TABLE `schoolmaster` ADD `session_started_from_year` INT NULL AFTER `session_ended_to`, ADD `session_ended_to_year` INT NULL AFTER `session_started_from_year`;
+-- ALTER TABLE `fees` ADD `schoolUniqueCode` VARCHAR(100) NOT NULL AFTER `id`;
+-- ALTER TABLE `feesforstudent` ADD `schoolUniqueCode` VARCHAR(100) NOT NULL AFTER `id`;
+-- ALTER TABLE `schoolmaster` ADD `session_started_from` INT NULL AFTER `doa`, ADD `session_ended_to` INT NULL AFTER `session_started_from`;
+-- ALTER TABLE `feesforstudent` ADD `fee_deposit_date` DATE NULL AFTER `deposit_amt`;
+-- ALTER TABLE `schoolmaster` ADD `session_started_from_year` INT NULL AFTER `session_ended_to`, ADD `session_ended_to_year` INT NULL AFTER `session_started_from_year`;
+
+
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Fees', '#', 'fa-solid fa-money-bill-wave', '0', '1', '0', '1', CURRENT_TIMESTAMP);
+
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Fees Listing Master', 'master/feesListingMaster', NULL, '40', '0', '1', '1', CURRENT_TIMESTAMP);

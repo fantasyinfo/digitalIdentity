@@ -101,7 +101,7 @@ class HelperClass
 
 
 
-
+const invoicePrefix = 'INVOICE-00';
 
 
 

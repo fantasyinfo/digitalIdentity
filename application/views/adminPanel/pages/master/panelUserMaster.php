@@ -227,7 +227,7 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-10 mx-auto">
+            <div class="col-md-12 mx-auto">
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
