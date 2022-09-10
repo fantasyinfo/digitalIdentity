@@ -15,6 +15,14 @@
       $sd = $data['schoolData'][0];
 
 
+      $monthD = $this->db->query("SELECT * FROM ".Table::monthTable." WHERE Status = '1'")->result_array();
+
+
+
+
+
+
+
       if(isset($_POST['submit']))
       {
         $school_name = $_POST['school_name'];
@@ -22,6 +30,10 @@
         $address = $_POST['address'];
         $pincode = $_POST['pincode'];
         $schoolId = $_POST['schoolId'];
+        $session_started_from = $_POST['session_started_from'];
+        $session_ended_to = $_POST['session_ended_to'];
+        $session_started_from_year = $_POST['session_started_from_year'];
+        $session_ended_to_year = $_POST['session_ended_to_year'];
 
 
         $fileName = "";
@@ -33,7 +45,17 @@
 
 
 
-        $updateSchool = $this->db->query("UPDATE " . Table::schoolMasterTable . " SET school_name = '$school_name',mobile = '$mobile',address = '$address', pincode = '$pincode', image = '$fileName' WHERE id = '$schoolId' AND unique_id = '{$_SESSION['schoolUniqueCode']}'");
+        $updateSchool = $this->db->query("UPDATE " . Table::schoolMasterTable . " SET 
+        school_name = '$school_name',
+        mobile = '$mobile',
+        address = '$address', 
+        pincode = '$pincode', 
+        image = '$fileName', 
+        session_started_from = '$session_started_from', 
+        session_ended_to = '$session_ended_to',
+        session_started_from_year = '$session_started_from_year', 
+        session_ended_to_year = '$session_ended_to_year'
+        WHERE id = '$schoolId' AND unique_id = '{$_SESSION['schoolUniqueCode']}'");
         if($updateSchool)
         {
           $msgArr = [
@@ -90,7 +112,7 @@
         <div class="container-fluid">
           <div class="row">
             <!-- left column -->
-            <div class="col-md-10 mx-auto">
+            <div class="col-md-12 mx-auto">
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -113,11 +135,11 @@
                 
                   <div class="row">
                     <div class="card-body">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                     <table class="table">
                       <tbody>
                           <tr>
-                              <td><label for="name">School Code</label></td>
+                              <td width="40%"><label for="name">School Code</label></td>
                               <td><input type="text"  class="form-control" value="<?=$sd['unique_id'];?>" readonly></td>
                           </tr>
                           <tr>
@@ -146,6 +168,96 @@
                           <tr>
                               <td> <label for="dob">Select Date of Approval</label></td>
                               <td>  <input type="text" class="form-control"  value="<?= date('d-M-Y h:i:A', strtotime($sd['doa']));?>" readonly></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="dob">School Session Started From ( April )</label></td>
+                              <td>  
+                                <div class="row">
+
+                              
+                                <div class="col-md-6">
+                                    <select name="session_started_from" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                  <option value="" selected>Select Month</option>
+                                  <?php  foreach ($monthD as $mon) { 
+                                      if($sd['session_started_from'] == $mon['id'])
+                                      {
+                                        $monthSelected= 'selected';
+                                      }else
+                                      {
+                                        $monthSelected = '';
+                                      }
+                                  
+                                  ?>
+                              <option <?=$monthSelected?> value="<?= $mon['id'] ?>"><?= $mon['monthName'] ?></option>
+                              <?php } ?>
+                                  </select>
+                                </div>
+                                <div class="col-md-6">
+ 
+                                <select name="session_started_from_year" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <option value="" selected>Select Year</option>
+                              <?php  foreach (HelperClass::sessionYears as $sec => $val) { 
+                                  if($sd['session_started_from_year'] == $val)
+                                  {
+                                    $secSelected= 'selected';
+                                  }else
+                                  {
+                                    $secSelected = '';
+                                  }
+                              
+                              ?>
+                          <option <?=$secSelected?> value="<?= $val ?>"><?= $val ?></option>
+                          <?php } ?>
+                              </select>
+                                </div>
+                                </div>
+                            </td>
+                          </tr>
+                          <tr>
+                              <td> <label for="dob">School Session Ended To ( March )</label></td>
+                              <td> 
+                              <div class="row">
+                                <div class="col-md-6">
+                                <select name="session_ended_to" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <option value="" selected>Select Month</option>
+                              <?php  foreach ($monthD as $monA) { 
+                            
+                                  if($sd['session_ended_to'] == $monA['id'])
+                                  {
+                                    $monthSelectedY= 'selected';
+                                  }else
+                                  {
+                                    $monthSelectedY = '';
+                                  }
+                                
+                                
+                              
+                              ?>
+                          <option <?=$monthSelectedY?> value="<?= $monA['id'] ?>"><?= $monA['monthName'] ?></option>
+                          <?php } ?>
+                              </select>
+                                </div> 
+                                <div class="col-md-6">
+                                <select name="session_ended_to_year" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <option value="" selected>Select Year</option>
+                              <?php  foreach (HelperClass::sessionYears as $secA => $valA) { 
+                            
+                                  if($sd['session_ended_to_year'] == $valA)
+                                  {
+                                    $secSelectedY= 'selected';
+                                  }else
+                                  {
+                                    $secSelectedY = '';
+                                  }
+                                
+                              ?>
+                          <option <?=$secSelectedY?> value="<?= $valA ?>"><?= $valA ?></option>
+                          <?php } ?>
+                              </select>
+                                </div>
+                            
+                                </div>
+                              </td>
                           </tr>
                           <tr>
                               <td> <label for="address">Address</label></td>

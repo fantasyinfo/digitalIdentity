@@ -13,3 +13,10 @@
 -- ALTER TABLE `schoolmaster` ADD `pincode` INT(6) NULL AFTER `classes_up_to`;
 -- ALTER TABLE `schoolmaster` ADD `doa` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `pincode`;
 -- ALTER TABLE `schoolmaster` CHANGE `logo` `image` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+
+ALTER TABLE `fees` ADD `schoolUniqueCode` VARCHAR(100) NOT NULL AFTER `id`;
+ALTER TABLE `feesforstudent` ADD `schoolUniqueCode` VARCHAR(100) NOT NULL AFTER `id`;
+ALTER TABLE `schoolmaster` ADD `session_started_from` INT NULL AFTER `doa`, ADD `session_ended_to` INT NULL AFTER `session_started_from`;
+ALTER TABLE `feesforstudent` ADD `fee_deposit_date` DATE NULL AFTER `deposit_amt`;
+ALTER TABLE `schoolmaster` ADD `session_started_from_year` INT NULL AFTER `session_ended_to`, ADD `session_ended_to_year` INT NULL AFTER `session_started_from_year`;

@@ -40,6 +40,15 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+	public function totalFeesDue()
+	{
+		if(isset($_POST))
+		{
+			//HelperClass::prePrintR($_POST);
+			echo $this->StudentModel->totalFeesDue($_POST);
+		}
+	}
+
 
 	public function listDigiCoinAjax()
 	{

@@ -200,8 +200,9 @@ class StudentModel extends CI_Model
     {
       if(!empty($p))
       {
-        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status = '1'")->result_array();
+        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
         $html = '';
+
         if(!empty($d))
         {
           foreach($d as $dd)
@@ -211,6 +212,121 @@ class StudentModel extends CI_Model
           return json_encode($html);
         }
         return json_encode($sql);
+      }
+    }
+    public function totalFeesDue(array $p)
+    {
+      if(!empty($p))
+      {
+        // sessionStrtingFrom
+       $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+
+
+       if(!empty($school))
+       {
+        $sessionStartingFrom = $school[0]['session_started_from']; // month
+        $sessionStartingYear = $school[0]['session_started_from_year'];
+        $sessionStartDate = 1;
+
+        $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
+      
+        $sessionEndingFrom =  $school[0]['session_ended_to']; // month
+        $sessionEndingYear =  $school[0]['session_ended_to_year'];
+        $sessionEndDate = 31;
+
+        $sessionEnd = date("$sessionEndingYear-$sessionEndingFrom-$sessionEndDate");
+    
+       }else
+       {
+        return json_encode(array( 'msg' => 'Please Select The School Session Started From & Ending To on Profile Section.', 'status' => 404));
+       }
+
+
+      
+       $currentMonth = date('m'); // current month
+       $currentYear = date('Y'); // current Year
+
+
+
+
+        // select fees for this class, and total all months till date
+
+        // where month is greater than session start and current year & month is less then session end next year
+        $d = $this->db->query($sql = "SELECT * FROM ".Table::feesTable." WHERE class_id = '{$p['classId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+        if(!empty($d))
+        {
+
+        
+      
+          // current month - session start month
+
+          $totalMonthsForFees = intval($currentMonth) - intval($sessionStartingFrom);
+
+          $totalDueFeesTillThisMonth =  (intval($d[0]['fees_amt']) * intval($totalMonthsForFees));
+
+          // check total fees submited by this student
+
+//           MONTH(fee_deposit_date) > MONTH(CURRENT_DATE())
+// AND YEAR(fee_deposit_date) = YEAR(CURRENT_DATE())
+
+          $check = $this->db->query($sql = "SELECT * FROM ".Table::feesForStudentTable." WHERE 
+          class_id = '{$p['classId']}' AND 
+          section_id = '{$p['sectionId']}' AND
+          student_id = '{$p['studentId']}' AND
+          status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+           AND created_at BETWEEN '$sessionStart' AND '$sessionEnd'
+           ")->result_array();
+
+          if(!empty($check))
+          {
+            // offer amt
+            // deposit amt
+            // total_due_balance
+            $totalCountCheck = count($check);
+
+            $totalDepsitAmt = 0;
+            $totalOfferAmt = 0;
+            $totalDueAmt = 0;
+            for($i=0; $i<$totalCountCheck;$i++)
+            {
+              $totalDepsitAmt = intval($totalDepsitAmt) + intval($check[$i]['deposit_amt']);
+              $totalOfferAmt = intval($totalOfferAmt) +  intval($check[$i]['offer_amt']);
+              $totalDueAmt = intval($totalDueAmt) + intval($check[$i]['total_due_balance']);
+            }
+
+          }
+
+          $totalDepositAmtAfterOfferAddedAndDueSubtracted = (intval(@$totalDepsitAmt) + intval(@$totalOfferAmt)) - intval(@$totalDueAmt);
+          // check totalDepositFees
+
+         $totalBalance =  (intval($totalDueFeesTillThisMonth) - intval($totalDepositAmtAfterOfferAddedAndDueSubtracted));
+
+         // calcualte total months fees deposit
+        $totalMonthFeesDue =  (intval($totalBalance) / intval($d[0]['fees_amt']));
+        $totalMonthFeesDeposit =  (intval($totalBalance) % intval($d[0]['fees_amt']));
+
+        $sendArr = [
+          'perMonthFeesForThisClass' => $d[0]['fees_amt'],
+          'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
+          'sessionStartedFrom' => $sessionStartingFrom,
+          'currentMonth' => $currentMonth,
+          'totalDepositAmount' => @$totalDepsitAmt,
+          'totalOfferAmt' => @$totalOfferAmt,
+          'totalDueAmt' => @$totalDueAmt,
+          'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
+          'totalBalanceForDeposit' => $totalBalance,
+          'totalMonthFeesDue' => floor($totalMonthFeesDue),
+          'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
+
+        ];
+
+        return json_encode(array( 'data' => $sendArr, 'status' => 200));
+        }else
+        {
+          return json_encode(array( 'msg' => 'There is no fees showing for this class. please insert it first.', 'status' => 404));
+
+        }
+        //return json_encode($sql);
       }
     }
 

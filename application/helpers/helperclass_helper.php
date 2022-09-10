@@ -92,6 +92,19 @@ class HelperClass
         '4' => 'Deliverd'
     ];
 
+    const sessionYears = [
+        '2022',
+        '2023',
+        '2024',
+        '2025'
+    ];
+
+
+
+
+
+
+
     const experience = ['Fresher', '1 to 3 Years', '3 to 5 Years', '5 to 10 Years', '10 to 15 Years', '15 Years +'
     ];
     public static function uniqueI()

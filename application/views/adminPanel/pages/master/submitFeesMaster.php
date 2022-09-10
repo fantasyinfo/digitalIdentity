@@ -12,8 +12,57 @@
     <?php
 
 
-    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1'")->result_array();
-    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1'")->result_array();
+    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+    $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+
+    if(isset($_POST['submit']))
+    {
+
+      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+      $invoice_id = 0;
+      $login_user_id = $_SESSION['id'];
+      $login_user_type = $_SESSION['user_type'];
+      $student_id = $_POST['studentId'];
+      $class_id = $_POST['classId'];
+      $section_id = $_POST['sectionId'];
+      $offer_amt = $_POST['offer_amt'];
+      $deposit_amt = $_POST['deposit_amt'];
+      $fee_deposit_date = $_POST['fee_deposit_date'];
+      $payment_mode = $_POST['payment_mode'];
+      $depositer_name = $_POST['depositer_name'];
+      $depositer_mobile = $_POST['depositer_mobile'];
+      $depositer_address = $_POST['depositer_address'];
+      $total_due_balance = $_POST['total_due_balance'];
+
+      $insert =  $this->db->query("INSERT INTO ".Table::feesForStudentTable." 
+       (schoolUniqueCode,invoice_id,login_user_id,login_user_type,student_id,class_id,section_id,offer_amt,deposit_amt,fee_deposit_date,payment_mode,depositer_name,depositer_mobile,depositer_address,total_due_balance) 
+       VALUES ('$schoolUniqueCode','$invoice_id','$login_user_id','$login_user_type','$student_id','$class_id','$section_id','$offer_amt','$deposit_amt','$fee_deposit_date','$payment_mode','$depositer_name','$depositer_mobile','$depositer_address','$total_due_balance')");
+
+       if($insert)
+       {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Fees Submited Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Fees Not Submitted Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 ".base_url()."master/submitFeesMaster");
+       
+    }
+
+
+
+
+
+
+
 
 
     ?>
@@ -47,11 +96,35 @@
       <!-- Main content -->
       <div class="content">
         <div class="container-fluid">
+        <?php 
+              if(!empty($this->session->userdata('msg')))
+              {  
+                if($this->session->userdata('class') == 'success')
+                 {
+                   HelperClass::swalSuccess($this->session->userdata('msg'));
+                 }else if($this->session->userdata('class') == 'danger')
+                 {
+                   HelperClass::swalError($this->session->userdata('msg'));
+                 }
+                
+                
+                ?>
 
+              <div class="alert alert-<?=$this->session->userdata('class')?> alert-dismissible fade show" role="alert">
+                <strong>New Message!</strong> <?=$this->session->userdata('msg')?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <?php
+              $this->session->unset_userdata('class') ;
+              $this->session->unset_userdata('msg') ;
+              }
+              ?>
           <form method="post" action="">
             <div class="row">
 
-              <div class="col-md-8 mx-auto">
+              <div class="col-md-12 mx-auto">
                 <div class="card">
                   <div class="card-header">Please Select Correct Details</div>
                   <div class="card-body">
@@ -90,10 +163,76 @@
 
                     <div class="form-group col-md-12">
                       <label>Select Students </label>
-                      <select name="studentId" id="studentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="studentId" id="studentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="totalFeesDue(this)">
                         <option disabled >Students</option>
                       </select>
                     </div>
+                    <div class="form-group col-md-12">
+                      <div class="row">
+                      <div class="col-md-3">
+                          <label>Fees Per Month</label>
+                          <input type="text" class="form-control bg-warning"  id="fees_per_month" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Fees Till This Month</label>
+                          <input type="text" class="form-control"  id="total_fees_till_this_month" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Old Due Amount</label>
+                          <input type="text" class="form-control"  id="total_old_due" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Deposit Fees This Year</label>
+                          <input type="text" class="form-control bg-success"  id="total_deposit_till_this_session" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Offer Get On Fees</label>
+                          <input type="text" class="form-control"  id="total_offer_get" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Old Deposit / Dues / Offer</label>
+                          <input type="text" class="form-control"  id="total_old_deposit_dues_offers" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Months Fees Due</label>
+                          <input type="text" class="form-control"  id="total_month_fees_due" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label>Total Due Today</label>
+                          <input type="text" class="form-control bg-danger"  id="total_due_today" readonly>
+                        </div>
+                      </div>
+                      
+                    </div>
+
+                    <label>Offer Amount</label>
+                    <input type="number" class="form-control mb-3"  name="offer_amt" value="0">
+
+                    <label>Deposit Amount</label>
+                    <input type="number" class="form-control mb-3"  name="deposit_amt">
+
+                    <label>Date of Deposit</label>
+                    <input type="date" class="form-control mb-3"  name="fee_deposit_date">
+
+                    <label>Payment Mode</label>
+                    <select name="payment_mode"  class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        <option value="1">Online</option>
+                        <option value="2">Offline</option>
+                      </select>
+
+                    <label>Depositer Name</label>
+                    <input type="text" class="form-control mb-3"  name="depositer_name">
+
+                    <label>Depositer Mobile</label>
+                    <input type="number" class="form-control mb-3"  name="depositer_mobile">
+
+                    <label>Depositer Address</label>
+                    <input type="text" class="form-control mb-3"  name="depositer_address">
+
+                    <label>Old Due Balance ( last year )</label>
+                    <input type="number" class="form-control mb-3"  name="total_due_balance" value="0">
+
+                    <input type="submit" name="submit" class="btn btn-block btn-lg btn-primary my-5"></input>
                   </div>
                 </div>
               </div>
@@ -148,5 +287,53 @@
 
         });
       }
+    }
+
+    function totalFeesDue(x)
+    {
+      let classId = $("#classId").val();
+      var sectionId = $("#sectionId").val();
+      let studentId = x.value;
+      $.ajax({
+          url: '<?= base_url() . 'ajax/totalFeesDue';?>',
+          method: 'post',
+          processData: 'false',
+          data : {
+            classId : classId,
+            sectionId: sectionId,
+            studentId : studentId
+          },
+          success: function (response)
+          {
+            //console.log(response);
+            response =  $.parseJSON(response);
+            console.log(response);
+            console.log(response['data']['totalmonthFeesDeposit']);
+
+            let fees_per_month = $("#fees_per_month").val(response['data']['perMonthFeesForThisClass']);
+            let total_fees_till_this_month = $("#total_fees_till_this_month").val(response['data']['totalFeesTillThisMonth']);
+            let total_old_due = $("#total_old_due").val(response['data']['totalDueAmt']);
+            let total_deposit_till_this_session = $("#total_deposit_till_this_session").val(response['data']['totalDepositAmount']);
+            let total_offer_get = $("#total_offer_get").val(response['data']['totalOfferAmt']);
+            let total_old_deposit_dues_offers = $("#total_old_deposit_dues_offers").val(response['data']['totalDueAmountAfterOfferApplyAndDueSubstract']);
+            let total_month_fees_due = $("#total_month_fees_due").val(response['data']['totalMonthFeesDue']);
+            let total_due_today = $("#total_due_today").val(response['data']['totalBalanceForDeposit']);
+          },
+          error: function (error)
+          {
+            console.log(error);
+          }
+
+        });
+
+
+
+
+
+
+
+
+
+
     }
   </script>

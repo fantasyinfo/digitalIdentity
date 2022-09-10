@@ -11,10 +11,10 @@
     $this->load->library('session');
 
   // fetching city data
-    $feesData = $this->db->query("SELECT * FROM " . Table::feesTable . " ORDER BY id DESC")->result_array();
+    $feesData = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status != '4' ORDER BY id DESC")->result_array();
 
     // classes
-    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' ORDER BY id DESC")->result_array();
+    $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
     // edit and delete action
     if(isset($_GET['action']))
@@ -23,14 +23,14 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editCityData = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE id='$editId'")->result_array();
+        $editCityData = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE id='$editId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
       }
 
       // delete the city
       if($_GET['action'] == 'delete')
       {
         $deleteId = $_GET['delete_id'];
-        $deleteCityData = $this->db->query("DELETE FROM " . Table::feesTable . " WHERE id='$deleteId'");
+        $deleteCityData = $this->db->query("DELETE FROM " . Table::feesTable . " WHERE id='$deleteId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
         if($deleteCityData)
         {
           $msgArr = [
@@ -53,7 +53,7 @@
       {
         $status = $_GET['status'];
         $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::feesTable . " SET status = '$status' WHERE id = '$updateId'");
+        $updateStatus = $this->db->query("UPDATE " . Table::feesTable . " SET status = '$status' WHERE id = '$updateId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
         if($updateStatus)
         {
@@ -82,7 +82,7 @@
       $classId = $_POST['classId'];
       $feesAmt = $_POST['fees_amt'];
 
-      $alreadyFees = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '$classId'")->result_array();
+      $alreadyFees = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '$classId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
       if(!empty($alreadyFees))
       {
@@ -95,7 +95,7 @@
           exit(0);
       }
 
-      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (class_id,fees_amt) VALUES ('$classId','$feesAmt')");
+      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (schoolUniqueCode,class_id,fees_amt) VALUES ('{$_SESSION['schoolUniqueCode']}','$classId','$feesAmt')");
       if($insertNewFees)
       {
       
@@ -121,7 +121,7 @@
       $classId = $_POST['classId'];
       $feesAmt = $_POST['fees_amt'];
       $cityEditId = $_POST['updateCityId'];
-      $updateFees = $this->db->query("UPDATE " . Table::feesTable . " SET class_id = '$classId',fees_amt = '$feesAmt' WHERE id = '$cityEditId'");
+      $updateFees = $this->db->query("UPDATE " . Table::feesTable . " SET class_id = '$classId',fees_amt = '$feesAmt' WHERE id = '$cityEditId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if($updateFees)
       {
         $msgArr = [

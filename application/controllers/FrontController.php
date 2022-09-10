@@ -42,7 +42,7 @@ class FrontController extends CI_Controller {
 			}
 			
 		
-		}else if($_GET['tecid'])
+		}else if(isset($_GET['tecid']))
 		{
 			$dataArr = [
 				'pageTitle' => 'HomePage',

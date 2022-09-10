@@ -148,6 +148,7 @@ $ajaxRoutesArr = [
     'listStudentsAjax',
     'listTeachersAjax',
     'showStudentViaClassAndSectionId',
+    'totalFeesDue',
     'listDigiCoinAjax'
     
 ];
