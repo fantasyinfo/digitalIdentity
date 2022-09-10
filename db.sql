@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 06, 2022 at 03:57 PM
+-- Generation Time: Sep 10, 2022 at 02:36 PM
 -- Server version: 5.7.39
 -- PHP Version: 7.4.30
 
@@ -47,7 +47,7 @@ CREATE TABLE `admin_panel_menu` (
 INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES
 (1, 'Dashboard', 'dashboard', 'fa-solid fa-gauge', 0, 1, 0, '1', '2022-08-29 03:55:52'),
 (2, 'Dashboard View', 'adminPanel', NULL, 1, 0, 1, '1', '2022-08-29 03:55:52'),
-(3, 'School Profile', 'school-profile', NULL, 1, 0, 1, '1', '2022-08-29 03:55:52'),
+(3, 'School Profile', 'school/schoolProfile', NULL, 1, 0, 1, '1', '2022-08-29 03:55:52'),
 (4, 'Students', 'students', 'fa-solid fa-graduation-cap', 0, 1, 0, '1', '2022-08-29 03:55:52'),
 (5, 'List Students', 'student/list', NULL, 4, 0, 1, '1', '2022-08-29 03:55:52'),
 (6, 'Add Student', 'student/addStudent', NULL, 4, 0, 1, '1', '2022-08-29 03:55:52'),
@@ -67,16 +67,19 @@ INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_p
 (25, 'Panel User Master', 'master/panelUserMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
 (27, 'Staff', 'master', 'fa-solid fa-people-group', 0, 1, 0, '1', '2022-08-29 03:55:52'),
 (28, 'Notification', 'master/notificationMaster', NULL, 27, 0, 1, '1', '2022-08-29 03:55:52'),
-(29, 'Fees Master', 'master/feesMaster', NULL, 27, 0, 1, '2', '2022-08-29 03:55:52'),
+(29, 'Fees Master', 'master/feesMaster', NULL, 40, 0, 1, '1', '2022-08-29 03:55:52'),
 (30, 'Month Master', 'master/monthMaster', NULL, 15, 0, 1, '2', '2022-08-29 03:55:52'),
-(31, 'Fees Submit Master', 'master/submitFeesMaster', NULL, 15, 0, 1, '2', '2022-08-29 03:55:52'),
+(31, 'Fees Submit Master', 'master/submitFeesMaster', NULL, 40, 0, 1, '1', '2022-08-29 03:55:52'),
 (32, 'Set DigiCoin Master', 'digicoin/setDigiCoinMaster', NULL, 33, 0, 1, '1', '2022-09-02 03:12:09'),
 (33, 'DigiCoins', '#', 'fa-solid fa-coins', 0, 1, 0, '1', '2022-09-02 12:53:50'),
 (34, 'Students DigiCoins', 'digicoin/studentDigiCoin', NULL, 33, 0, 1, '1', '2022-09-02 12:54:53'),
 (35, 'Teachers DigiCoins', 'digicoin/teacherDigiCoin', NULL, 33, 0, 1, '1', '2022-09-02 12:54:53'),
 (36, 'Gift Master', 'digicoin/giftMaster', NULL, 33, 0, 1, '1', '2022-09-04 02:40:27'),
 (37, 'Gift Redeem Master', 'digicoin/giftRedeemMaster', NULL, 33, 0, 1, '1', '2022-09-06 02:33:05'),
-(38, 'LeaderBoard', 'digicoin/leaderBoard', NULL, 33, 0, 1, '1', '2022-09-06 02:33:05');
+(38, 'LeaderBoard', 'digicoin/leaderBoard', NULL, 33, 0, 1, '1', '2022-09-06 02:33:05'),
+(39, 'Visitor Master', 'master/visitorMaster', NULL, 27, 0, 1, '1', '2022-09-07 03:18:48'),
+(40, 'Fees', '#', 'fa-solid fa-money-bill-wave', 0, 1, 0, '1', '2022-09-10 06:18:08'),
+(41, 'Fees Listing Master', 'master/feesListingMaster', NULL, 40, 0, 1, '1', '2022-09-10 06:18:08');
 
 -- --------------------------------------------------------
 
@@ -127,7 +130,22 @@ INSERT INTO `attendence` (`id`, `schoolUniqueCode`, `stu_id`, `stu_class`, `stu_
 (32, '683611', 5, '11th', 'Arts', 6, 'Teacher', '1', '2022-09-05 03:44:31', '2022-09-05', '1', '2022-09-05 03:44:31'),
 (33, '683611', 8, '11th', 'Arts', 6, 'Teacher', '1', '2022-09-05 03:44:31', '2022-09-05', '1', '2022-09-05 03:44:31'),
 (34, '683611', 18, '11th', 'Arts', 6, 'Teacher', '0', '2022-09-05 03:44:31', '2022-09-05', '1', '2022-09-05 03:44:31'),
-(35, '683611', 19, '11th', 'Arts', 6, 'Teacher', '1', '2022-09-05 03:44:31', '2022-09-05', '1', '2022-09-05 03:44:31');
+(35, '683611', 19, '11th', 'Arts', 6, 'Teacher', '1', '2022-09-05 03:44:31', '2022-09-05', '1', '2022-09-05 03:44:31'),
+(36, '683611', 5, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-06 01:58:26', '2022-09-06', '1', '2022-09-06 13:58:26'),
+(37, '683611', 8, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-06 01:58:26', '2022-09-06', '1', '2022-09-06 13:58:26'),
+(38, '683611', 16, '11th', 'Arts', 2, 'Teacher', '0', '2022-09-06 01:58:26', '2022-09-06', '1', '2022-09-06 13:58:26'),
+(39, '683611', 5, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-07 01:16:52', '2022-09-07', '1', '2022-09-07 13:16:52'),
+(40, '683611', 8, '11th', 'Arts', 2, 'Teacher', '0', '2022-09-07 01:16:52', '2022-09-07', '1', '2022-09-07 13:16:52'),
+(41, '683611', 16, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-07 01:16:52', '2022-09-07', '1', '2022-09-07 13:16:52'),
+(42, '683611', 5, '11th', 'Arts', 2, 'Teacher', '0', '2022-09-08 02:53:55', '2022-09-08', '1', '2022-09-08 14:53:55'),
+(43, '683611', 8, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-08 02:53:55', '2022-09-08', '1', '2022-09-08 14:53:55'),
+(44, '683611', 16, '11th', 'Arts', 2, 'Teacher', '0', '2022-09-08 02:53:55', '2022-09-08', '1', '2022-09-08 14:53:55'),
+(45, '683611', 5, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-08 20:53:48', '2022-09-09', '1', '2022-09-09 08:53:48'),
+(46, '683611', 8, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-08 20:53:48', '2022-09-09', '1', '2022-09-09 08:53:48'),
+(47, '683611', 16, '11th', 'Arts', 2, 'Teacher', '0', '2022-09-08 20:53:48', '2022-09-09', '1', '2022-09-09 08:53:48'),
+(48, '683611', 5, '11th', 'Arts', 9, 'Teacher', '1', '2022-09-09 19:54:56', '2022-09-10', '1', '2022-09-10 07:54:56'),
+(49, '683611', 8, '11th', 'Arts', 9, 'Teacher', '1', '2022-09-09 19:54:56', '2022-09-10', '1', '2022-09-10 07:54:56'),
+(50, '683611', 16, '11th', 'Arts', 9, 'Teacher', '0', '2022-09-09 19:54:56', '2022-09-10', '1', '2022-09-10 07:54:56');
 
 -- --------------------------------------------------------
 
@@ -269,7 +287,10 @@ INSERT INTO `departure` (`id`, `schoolUniqueCode`, `attendence_id`, `stu_id`, `s
 (10, '683611', '16', 16, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-02 21:54:02', '2022-09-03', '1', '2022-09-03 09:54:02'),
 (11, '683611', '24', 5, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-04 04:39:28', '2022-09-04', '1', '2022-09-04 04:39:28'),
 (12, '683611', '25', 8, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-04 04:39:28', '2022-09-04', '1', '2022-09-04 04:39:28'),
-(13, '683611', '27', 4, 'Nursery', 'A', 2, 'Teacher', '1', '2022-09-04 04:48:05', '2022-09-04', '1', '2022-09-04 16:48:05');
+(13, '683611', '27', 4, 'Nursery', 'A', 2, 'Teacher', '1', '2022-09-04 04:48:05', '2022-09-04', '1', '2022-09-04 16:48:05'),
+(14, '683611', '39', 5, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-07 01:18:54', '2022-09-07', '1', '2022-09-07 13:18:54'),
+(15, '683611', '41', 16, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-07 01:18:54', '2022-09-07', '1', '2022-09-07 13:18:54'),
+(16, '683611', '43', 8, '11th', 'Arts', 2, 'Teacher', '1', '2022-09-08 03:07:35', '2022-09-08', '1', '2022-09-08 15:07:35');
 
 -- --------------------------------------------------------
 
@@ -310,7 +331,8 @@ INSERT INTO `exam` (`id`, `schoolUniqueCode`, `class_id`, `section_id`, `subject
 (10, '683611', 1, 1, 1, 'new exam Date: 1 Exam Id: 5459', '0000-00-00', 15, 5, 2, 'Teacher', '1', '2022-09-03 13:24:55'),
 (11, '683611', 14, 2, 3, 'Weekly Exam English Subject Date: 14 Exam Id: 4871 Date: 14 Exam Id: 2917', '0000-00-00', 100, 35, 2, 'Teacher', '1', '2022-09-04 04:39:12'),
 (12, '683611', 14, 13, 3, 'Per Day Math Exam Date: 14 Exam Id: 7438', '0000-00-00', 100, 50, 2, 'Teacher', '1', '2022-09-04 04:43:52'),
-(13, '683611', 4, 1, 1, 'new exam Date: 4 Exam Id: 3007', '0000-00-00', 40, 15, 2, 'Teacher', '1', '2022-09-04 11:02:58');
+(13, '683611', 4, 1, 1, 'new exam Date: 4 Exam Id: 3007', '0000-00-00', 40, 15, 2, 'Teacher', '1', '2022-09-04 11:02:58'),
+(14, '683611', 14, 13, 10, 'Accounts ing Date: 14 Exam Id: 6987', '0000-00-00', 100, 30, 2, 'Teacher', '1', '2022-09-07 13:37:56');
 
 -- --------------------------------------------------------
 
@@ -320,6 +342,7 @@ INSERT INTO `exam` (`id`, `schoolUniqueCode`, `class_id`, `section_id`, `subject
 
 CREATE TABLE `fees` (
   `id` int(11) NOT NULL,
+  `schoolUniqueCode` varchar(100) NOT NULL,
   `class_id` int(11) NOT NULL,
   `fees_amt` float NOT NULL,
   `status` enum('1','2') NOT NULL,
@@ -330,10 +353,12 @@ CREATE TABLE `fees` (
 -- Dumping data for table `fees`
 --
 
-INSERT INTO `fees` (`id`, `class_id`, `fees_amt`, `status`, `created_at`) VALUES
-(1, 15, 1200, '1', '2022-08-27 07:54:11'),
-(2, 14, 1100, '1', '2022-08-27 08:23:00'),
-(4, 1, 100, '1', '2022-08-27 08:25:18');
+INSERT INTO `fees` (`id`, `schoolUniqueCode`, `class_id`, `fees_amt`, `status`, `created_at`) VALUES
+(1, '', 15, 1200, '1', '2022-08-27 07:54:11'),
+(2, '', 14, 1100, '1', '2022-08-27 08:23:00'),
+(4, '', 1, 100, '1', '2022-08-27 08:25:18'),
+(5, '683611', 14, 1100, '1', '2022-09-10 03:36:34'),
+(6, '683611', 1, 100, '1', '2022-09-10 06:35:49');
 
 -- --------------------------------------------------------
 
@@ -343,24 +368,32 @@ INSERT INTO `fees` (`id`, `class_id`, `fees_amt`, `status`, `created_at`) VALUES
 
 CREATE TABLE `feesforstudent` (
   `id` int(11) NOT NULL,
+  `schoolUniqueCode` varchar(100) NOT NULL,
   `invoice_id` varchar(100) NOT NULL,
   `login_user_id` int(11) NOT NULL,
   `login_user_type` varchar(100) NOT NULL,
   `student_id` int(11) NOT NULL,
   `class_id` int(11) NOT NULL,
   `section_id` int(11) NOT NULL,
-  `months` int(11) NOT NULL,
   `offer_amt` float DEFAULT NULL,
   `deposit_amt` float NOT NULL,
+  `fee_deposit_date` date DEFAULT NULL,
   `payment_mode` enum('1','2') NOT NULL COMMENT '1 => online, 2 => offline',
   `depositer_name` varchar(100) NOT NULL,
   `depositer_mobile` varchar(100) DEFAULT NULL,
   `depositer_address` varchar(100) NOT NULL,
-  `custom_amt` float DEFAULT NULL,
   `total_due_balance` float DEFAULT NULL,
   `status` enum('1','2') NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `feesforstudent`
+--
+
+INSERT INTO `feesforstudent` (`id`, `schoolUniqueCode`, `invoice_id`, `login_user_id`, `login_user_type`, `student_id`, `class_id`, `section_id`, `offer_amt`, `deposit_amt`, `fee_deposit_date`, `payment_mode`, `depositer_name`, `depositer_mobile`, `depositer_address`, `total_due_balance`, `status`, `created_at`) VALUES
+(1, '683611', 'INVOICE-001', 14, 'Principal', 8, 14, 13, 0, 1450, '2022-09-10', '2', 'Jhonny Bhai', '5649874521', 'Delhi', 0, '1', '2022-09-10 03:40:14'),
+(2, '683611', 'INVOICE-002', 14, 'Principal', 27, 1, 1, 0, 140, '2022-09-10', '2', 'Sonu Dudh Wala', '7418526532', 'Mumbai', 0, '1', '2022-09-10 06:36:21');
 
 -- --------------------------------------------------------
 
@@ -438,7 +471,29 @@ INSERT INTO `get_digi_coin` (`id`, `schoolUniqueCode`, `user_type`, `user_id`, `
 (52, '683611', 'Student', 5, 1, 10, '1', '2022-09-05 03:44:31'),
 (53, '683611', 'Student', 8, 1, 10, '1', '2022-09-05 03:44:31'),
 (54, '683611', 'Student', 19, 1, 10, '1', '2022-09-05 03:44:31'),
-(55, '683611', 'Teacher', 6, 1, 30, '1', '2022-09-05 03:44:31');
+(55, '683611', 'Teacher', 6, 1, 30000, '1', '2022-09-05 03:44:31'),
+(56, '683611', 'Student', 5, 1, 10, '1', '2022-09-06 13:58:26'),
+(57, '683611', 'Student', 8, 1, 10, '1', '2022-09-06 13:58:26'),
+(58, '683611', 'Teacher', 2, 1, 30, '1', '2022-09-06 13:58:26'),
+(59, '683611', 'Student', 5, 1, 10, '1', '2022-09-07 13:16:52'),
+(60, '683611', 'Student', 16, 1, 10, '1', '2022-09-07 13:16:52'),
+(61, '683611', 'Teacher', 2, 1, 30, '1', '2022-09-07 13:16:52'),
+(62, '683611', 'Student', 5, 2, 10, '1', '2022-09-07 13:18:54'),
+(63, '683611', 'Student', 16, 2, 10, '1', '2022-09-07 13:18:54'),
+(64, '683611', 'Teacher', 2, 2, 15, '1', '2022-09-07 13:18:54'),
+(65, '683611', 'Student', 5, 3, 6, '1', '2022-09-07 13:39:03'),
+(66, '683611', 'Student', 16, 3, 5, '1', '2022-09-07 13:39:03'),
+(67, '683611', 'Teacher', 16, 3, 12, '1', '2022-09-07 13:39:03'),
+(68, '683611', 'Student', 8, 1, 10, '1', '2022-09-08 14:53:55'),
+(69, '683611', 'Teacher', 2, 1, 30, '1', '2022-09-08 14:53:55'),
+(70, '683611', 'Student', 8, 2, 10, '1', '2022-09-08 15:07:35'),
+(71, '683611', 'Teacher', 2, 2, 15, '1', '2022-09-08 15:07:35'),
+(72, '683611', 'Student', 5, 1, 10, '1', '2022-09-09 08:53:48'),
+(73, '683611', 'Student', 8, 1, 10, '1', '2022-09-09 08:53:48'),
+(74, '683611', 'Teacher', 2, 1, 30, '1', '2022-09-09 08:53:48'),
+(75, '683611', 'Student', 5, 1, 10, '1', '2022-09-10 07:54:56'),
+(76, '683611', 'Student', 8, 1, 10, '1', '2022-09-10 07:54:56'),
+(77, '683611', 'Teacher', 9, 1, 30, '1', '2022-09-10 07:54:56');
 
 -- --------------------------------------------------------
 
@@ -464,7 +519,15 @@ CREATE TABLE `gift` (
 INSERT INTO `gift` (`id`, `schoolUniqueCode`, `gift_name`, `gift_image`, `redeem_digiCoins`, `user_type`, `status`, `created_at`) VALUES
 (1, '683611', 'NoteBook', 'img-GIFT-41e3YGKg-3L.jpg', 200, '1', '1', '2022-09-04 02:45:24'),
 (2, '683611', 'NoteBook', 'img-GIFT-41e3YGKg-3L.jpg', 300, '2', '1', '2022-09-04 02:45:41'),
-(3, '683611', 'Pencil Box', 'img-GIFT-61QVt3iITJL._SL1332_.jpg', 25, '2', '1', '2022-09-05 03:46:49');
+(3, '683611', 'Pencil Box', 'img-GIFT-61QVt3iITJL._SL1332_.jpg', 25, '2', '1', '2022-09-05 03:46:49'),
+(4, '683611', 'Wallet', 'img-GIFT-71E1p7tcACL._SY450_.jpg', 1000, '2', '1', '2022-09-08 01:12:15'),
+(5, '683611', 'Ladies Purse', 'img-GIFT-ladies-stylish-purse-500x500.jpg', 1500, '2', '1', '2022-09-08 01:12:31'),
+(6, '683611', 'Belt', 'img-GIFT-71yHZH1535L._UX569_.jpg', 800, '2', '1', '2022-09-08 01:12:45'),
+(7, '683611', 'Milk Mug', 'img-GIFT-1563118457552_0..jpg', 500, '2', '1', '2022-09-08 01:13:03'),
+(8, '683611', 'Water Bottle', 'img-GIFT-gh-030222-best-water-bottles-1646239937.png', 700, '2', '1', '2022-09-08 01:13:20'),
+(9, '683611', 'Amazing Pen', 'img-GIFT-0x0.jpg', 1000, '2', '1', '2022-09-08 01:13:38'),
+(10, '683611', 'Award', 'img-GIFT-trophy-gold.png', 2500, '2', '1', '2022-09-08 01:13:53'),
+(11, '683611', 'T-Shirt', 'img-GIFT-61yBCMmuI4L._UL1440_.jpg', 800, '2', '1', '2022-09-08 01:14:09');
 
 -- --------------------------------------------------------
 
@@ -493,7 +556,8 @@ CREATE TABLE `home_work` (
 
 INSERT INTO `home_work` (`id`, `schoolUniqueCode`, `login_user_id`, `login_user_type`, `class_id`, `section_id`, `subject_id`, `home_work_note`, `home_work_date`, `home_work_finish_date`, `status`, `created_at`) VALUES
 (1, '683611', 3, 'Teacher', 9, 2, 9, 'Learn the chapter 6 wala in english nhi hindi wala', '2022-09-03', '2022-09-05', '1', '2022-09-04 09:29:24'),
-(2, '683611', 2, 'Teacher', 15, 2, 1, 'Have to learn chapter 4 & do all questions answers as well.', '2022-09-04', '2022-09-06', '1', '2022-09-04 16:47:50');
+(2, '683611', 2, 'Teacher', 15, 2, 1, 'Have to learn chapter 4 & do all questions answers as well.', '2022-09-04', '2022-09-06', '1', '2022-09-04 16:47:50'),
+(3, '683611', 2, 'Teacher', 14, 13, 5, 'Chapter 4 learn kar liyo', '2022-09-06', '2022-09-07', '1', '2022-09-06 13:52:38');
 
 -- --------------------------------------------------------
 
@@ -555,7 +619,7 @@ INSERT INTO `panel_menu_permission` (`id`, `schoolUniqueCode`, `user_id`, `user_
 (5, '', 8, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', NULL, '1', '2022-08-24 13:09:33'),
 (6, '', 9, 'Admin', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', NULL, '1', '2022-08-25 02:33:46'),
 (7, '', 10, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', NULL, '1', '2022-08-25 02:33:58'),
-(8, '', 14, 'Principal', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"28\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\"]', NULL, '1', '2022-08-25 02:51:10'),
+(8, '', 14, 'Principal', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"28\", \"39\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\"]', NULL, '1', '2022-08-25 02:51:10'),
 (9, '973713', 0, 'Admin', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', '1', '1', '2022-08-28 08:40:33'),
 (10, '973713', 0, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', '1', '1', '2022-08-28 08:40:33'),
 (11, '973713', 0, 'Principal', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', '1', '1', '2022-08-28 08:40:33'),
@@ -680,7 +744,8 @@ INSERT INTO `qrcode_students` (`id`, `schoolUniqueCode`, `qrcodeUrl`, `uniqueVal
 (18, '965316', 'https://qverify.in?stuid=dvm-stu00009', 'stu00009', NULL, '1', '23', '1', '2022-08-28 14:27:05'),
 (19, '963852', 'https://qverify.in?stuid=dvm-stu000010', 'stu000010', NULL, '1', '24', '1', '2022-08-29 12:41:18'),
 (20, '724212', 'https://qverify.in?stuid=dvm-stu000011', 'stu000011', NULL, '1', '25', '1', '2022-09-03 14:13:45'),
-(21, '724212', 'https://qverify.in?stuid=dvm-stu000012', 'stu000012', NULL, '1', '26', '1', '2022-09-03 14:16:53');
+(21, '724212', 'https://qverify.in?stuid=dvm-stu000012', 'stu000012', NULL, '1', '26', '1', '2022-09-03 14:16:53'),
+(22, '683611', 'https://qverify.in?stuid=dvm-stu000013', 'stu000013', NULL, '1', '27', '1', '2022-09-07 02:35:54');
 
 -- --------------------------------------------------------
 
@@ -709,7 +774,8 @@ INSERT INTO `qrcode_teachers` (`id`, `schoolUniqueCode`, `qrcodeUrl`, `uniqueVal
 (16, '683611', 'https://qverify.in?tecid=dvm-tec00005', 'tec00005', NULL, '2', '5', '1', '2022-08-28 04:08:01'),
 (17, '', 'https://qverify.in?tecid=dvm-tec00006', 'tec00006', NULL, '2', '6', '1', '2022-08-30 14:42:38'),
 (18, '965316', 'https://qverify.in?tecid=dvm-tec00007', 'tec00007', NULL, '2', '7', '1', '2022-08-30 14:47:57'),
-(19, '724212', 'https://qverify.in?tecid=dvm-tec00008', 'tec00008', NULL, '2', '8', '1', '2022-09-03 14:10:31');
+(19, '724212', 'https://qverify.in?tecid=dvm-tec00008', 'tec00008', NULL, '2', '8', '1', '2022-09-03 14:10:31'),
+(20, '683611', 'https://qverify.in?tecid=dvm-tec00009', 'tec00009', NULL, '2', '9', '1', '2022-09-06 15:23:38');
 
 -- --------------------------------------------------------
 
@@ -734,7 +800,17 @@ CREATE TABLE `redeem_gifts` (
 
 INSERT INTO `redeem_gifts` (`id`, `schoolUniqueCode`, `login_user_id`, `login_user_type`, `gift_id`, `digiCoin_used`, `status`, `created_at`) VALUES
 (1, '683611', 3, 2, 3, 25, '2', '2022-09-05 03:47:37'),
-(3, '683611', 6, 2, 3, 25, '1', '2022-09-05 03:48:12');
+(3, '683611', 6, 2, 3, 25, '1', '2022-09-05 03:48:12'),
+(4, '683611', 2, 2, 0, 0, '1', '2022-09-08 13:32:49'),
+(5, '683611', 2, 2, 0, 0, '1', '2022-09-08 13:40:57'),
+(6, '683611', 2, 2, 0, 0, '1', '2022-09-08 13:45:55'),
+(7, '683611', 6, 2, 3, 25, '1', '2022-09-09 01:27:00'),
+(8, '683611', 6, 2, 14, 0, '1', '2022-09-09 01:27:00'),
+(9, '683611', 6, 2, 3, 25, '1', '2022-09-09 01:32:46'),
+(10, '683611', 6, 2, 3, 25, '1', '2022-09-09 01:33:59'),
+(11, '683611', 6, 2, 3, 25, '1', '2022-09-09 01:34:40'),
+(12, '683611', 6, 2, 4, 1000, '1', '2022-09-09 01:34:40'),
+(13, '683611', 9, 2, 3, 25, '1', '2022-09-10 08:44:34');
 
 -- --------------------------------------------------------
 
@@ -781,7 +857,10 @@ INSERT INTO `result` (`id`, `schoolUniqueCode`, `exam_id`, `marks`, `remarks`, `
 (17, '683611', 10, 12, 'amazing ', '1', 4, 'Teacher', 2, '2022-09-16', '1', '2022-09-03 13:25:38'),
 (18, '683611', 12, 12, '', '2', 5, 'Teacher', 2, '2022-09-06', '1', '2022-09-04 04:48:39'),
 (19, '683611', 12, 50, 'Good ', '1', 8, 'Teacher', 2, '2022-09-06', '1', '2022-09-04 04:48:39'),
-(20, '683611', 12, 0, '', '2', 16, 'Teacher', 2, '2022-09-06', '1', '2022-09-04 04:48:39');
+(20, '683611', 12, 0, '', '2', 16, 'Teacher', 2, '2022-09-06', '1', '2022-09-04 04:48:39'),
+(21, '683611', 14, 56, '', '1', 5, 'Teacher', 2, '2022-09-08', '1', '2022-09-07 13:39:03'),
+(22, '683611', 14, 0, '', '2', 8, 'Teacher', 2, '2022-09-08', '1', '2022-09-07 13:39:03'),
+(23, '683611', 14, 45, '', '1', 16, 'Teacher', 2, '2022-09-08', '1', '2022-09-07 13:39:03');
 
 -- --------------------------------------------------------
 
@@ -798,8 +877,14 @@ CREATE TABLE `schoolmaster` (
   `mobile` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `logo` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `classes_up_to` varchar(100) DEFAULT NULL,
+  `pincode` int(6) DEFAULT NULL,
+  `doa` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `session_started_from` int(11) DEFAULT NULL,
+  `session_ended_to` int(11) DEFAULT NULL,
+  `session_started_from_year` int(11) DEFAULT NULL,
+  `session_ended_to_year` int(11) DEFAULT NULL,
   `status` enum('1','2') NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -808,16 +893,16 @@ CREATE TABLE `schoolmaster` (
 -- Dumping data for table `schoolmaster`
 --
 
-INSERT INTO `schoolmaster` (`id`, `unique_id`, `u_qr_id`, `user_id`, `school_name`, `mobile`, `email`, `address`, `logo`, `classes_up_to`, `status`, `created_at`) VALUES
-(1, '683611', '15', 'sch00001', 'Growell Girls School', '9638521470', 'growell@gmail.com', 'abc building baraut', NULL, '8', '2', '2022-08-28 03:06:55'),
-(2, '427695', '16', 'sch00002', 'Baraut Public School', '9876545689', 'brt@gmail.com', 'patti chaudhran baraut', NULL, '12', '2', '2022-08-28 03:09:29'),
-(3, '973713', '17', 'sch00003', 'Joker Public Inter College', '9876548565', 'joker@public.com', 'joker wali gali baraut', NULL, '12', '2', '2022-08-28 08:40:33'),
-(4, '467886', '18', 'sch00004', 'Test School', '7418526253', 'gs27349gs@gmail.com', 'tst address', NULL, '8', '1', '2022-08-28 10:34:12'),
-(5, '219981', '19', 'sch00005', 'Digital', '9876548515', 'ramji27349@gmail.com', 'Ram ke bharoshe', NULL, '5', '1', '2022-08-28 13:44:18'),
-(6, '951166', '20', 'sch00006', 'SBPS School', '1234567', 'mihiryadavofficial@gmail.com', '1234', NULL, '7', '1', '2022-08-28 13:50:47'),
-(7, '965316', '21', 'sch00007', 'svt public school', '8700671965', 'ni30.dev@gmail.com', 'E165 , 3rd floor', NULL, '0', '1', '2022-08-28 14:18:59'),
-(8, '491608', '22', 'sch00008', 'Vidya Sagar School', '9876541232', 'gs27349@gmail.com', '12-190 gali maliyan patti chaudran', NULL, '12', '1', '2022-08-30 03:32:05'),
-(9, '724212', '23', 'sch00009', 'Shrione Public School', '9045308073', 'shrione77@gmail.com', 'Bada Jain Mandir', NULL, '12', '1', '2022-09-03 13:46:25');
+INSERT INTO `schoolmaster` (`id`, `unique_id`, `u_qr_id`, `user_id`, `school_name`, `mobile`, `email`, `address`, `image`, `classes_up_to`, `pincode`, `doa`, `session_started_from`, `session_ended_to`, `session_started_from_year`, `session_ended_to_year`, `status`, `created_at`) VALUES
+(1, '683611', '15', 'sch00001', 'Baraut Public School', '9638521470', 'growell@gmail.com', 'abc building baraut', 'img-SCHOOL-istockphoto-1171617683-612x612.jpg', '8', 250611, '2022-09-08 03:13:48', 4, 3, 2022, 2023, '2', '2022-08-28 03:06:55'),
+(2, '427695', '16', 'sch00002', 'Baraut Public School', '9876545689', 'brt@gmail.com', 'patti chaudhran baraut', NULL, '12', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '2', '2022-08-28 03:09:29'),
+(3, '973713', '17', 'sch00003', 'Joker Public Inter College', '9876548565', 'joker@public.com', 'joker wali gali baraut', NULL, '12', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '2', '2022-08-28 08:40:33'),
+(4, '467886', '18', 'sch00004', 'Test School', '7418526253', 'gs27349gs@gmail.com', 'tst address', NULL, '8', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '1', '2022-08-28 10:34:12'),
+(5, '219981', '19', 'sch00005', 'Digital', '9876548515', 'ramji27349@gmail.com', 'Ram ke bharoshe', NULL, '5', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '1', '2022-08-28 13:44:18'),
+(6, '951166', '20', 'sch00006', 'SBPS School', '1234567', 'mihiryadavofficial@gmail.com', '1234', NULL, '7', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '1', '2022-08-28 13:50:47'),
+(7, '965316', '21', 'sch00007', 'svt public school', '8700671965', 'ni30.dev@gmail.com', 'E165 , 3rd floor', NULL, '0', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '1', '2022-08-28 14:18:59'),
+(8, '491608', '22', 'sch00008', 'Vidya Sagar School', '9876541232', 'gs27349@gmail.com', '12-190 gali maliyan patti chaudran', NULL, '12', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '1', '2022-08-30 03:32:05'),
+(9, '724212', '23', 'sch00009', 'Shrione Public School', '9045308073', 'shrione77@gmail.com', 'Bada Jain Mandir', NULL, '12', NULL, '2022-09-08 03:13:48', NULL, NULL, NULL, NULL, '1', '2022-09-03 13:46:25');
 
 -- --------------------------------------------------------
 
@@ -966,7 +1051,9 @@ CREATE TABLE `students` (
   `city_id` varchar(100) NOT NULL,
   `pincode` int(11) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
   `status` enum('1','2','3','4') NOT NULL DEFAULT '1',
+  `auth_token` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -974,26 +1061,27 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `status`, `created_at`) VALUES
-(4, '683611', '', 'Saurya Jain', 'STU-00004', '1', '1', '4', '1', 'Nisha Jain', 'Sanjay Jain', '9045308073', 'sau@gmail.com', '2012-01-12', 'Bada Jain Mandir', '1', '1', NULL, 'IMG-STU-00004-630-01873773en_Masterfile.jpg', '1', '2022-08-11 07:50:06'),
-(5, '683611', '', 'Shelly Sharma', 'STU00005', '14', '13', '16', '2', 'Madhu Sharma', 'Manbir Sharma', '7472583698', 'manB@shelly.com', '1999-01-05', 'Patti Chaudhran', '1', '1', 147255, 'IMG-STU-00005-155269816-happy-indian-school-girl-wearing-uniform-holding-laptop-on-lilac-background-.webp', '1', '2022-08-11 14:09:26'),
-(8, '683611', '', 'Satyender Chauhan', 'STU00008', '14', '13', '16', '1', 'Bimla Devi', 'Rajiv Chauhan', '9879879854', 'sat@gmail.com', '2005-01-11', 'Nehru Road', '1', '1', 250611, 'IMG-STU00008-cute-little-indian-asian-school-boy-note-book-isolated-over-white-background-150100971.jpg', '1', '2022-08-12 03:09:09'),
-(9, '683611', '', 'Preety Mishra', 'STU00009', '10', '2', '11', '2', 'Kajol Mishra', 'Ajay Mishra', '8956236932', 'prretyMih@gmail.com', '2014-03-06', 'Gurana Road Badi Masjid', '1', '2', NULL, 'IMG-STU00009-1-indian-girl-school-student-standing-EFDF0R.jpg', '1', '2022-08-12 03:15:58'),
-(10, '683611', '', 'Rakhi Yadav', 'STU000010', '9', '1', '21', '2', 'Sonali Yadav', 'Anurag Yadav', '9632586523', 'arkna@gmail.com', '2015-04-28', 'Baraut Baghpat Road', '1', '3', NULL, 'IMG-STU000010-360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', '1', '2022-08-12 03:24:36'),
-(11, '683611', '4', 'Javad Ahmed', 'STU000011', '13', '2', '17', '1', 'Khusida Ahmed', 'Munna Ahmed', '1472583695', 'mun@gmail.com', '2006-01-05', 'House no 02/41 Patti Mirapur', '1', '1', 250677, 'IMG-STU000011-istockphoto-1342191955-612x612.jpg', '1', '2022-08-12 03:28:38'),
-(12, '683611', '5', 'Jadu', 'STU000012', '13', '2', '2', '1', 'Tom', 'Kruz', '9632581475', 'abc@gmail.com', '2019-06-05', 'fake gali', '1', '1', 234567, 'IMG-STU000012-cetegory-img-17.png', '1', '2022-08-12 03:55:28'),
-(13, '683611', '6', 'Ram Sharma', 'stu00001', '8', '2', '19', '1', 'Urmila Devi', 'Balkishan Sharma', '6325148547', 'rambal582@gmail.com', '2013-06-05', 'ABC Building ', '1', '2', 250609, 'img-stu00001-360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', '1', '2022-08-12 12:10:13'),
-(14, '683611', '7', 'Kirti Kaif', 'stu00002', '9', '2', '12', '2', 'Jhenny Kaif', 'Jhonny kaif', '8956232536', 'kriti251@gmail.com', '2012-03-06', 'Bijrol Road', '1', '1', 250611, 'img-stu00002-283-2839124_school-indian-student-png-transparent-png.png', '1', '2022-08-13 02:18:41'),
-(16, '683611', '11', 'Priya', 'stu00003', '14', '13', '25', '2', 'Sunita', 'Mannu', '9633696952', 'priyam@yahoo.com', '2001-03-15', 'Delhi Haryana Road', '5', '6', 250623, 'img-stu00003-photo-1630178836733-3d61d8974258.jpg', '1', '2022-08-15 04:04:05'),
-(17, '683611', '12', 'Arun', 'stu00004', '9', '3', '25', '1', 'Parul', 'Govind', '8956233625', 'abcarun@email.com', '2010-12-29', 'Gante Wali Gali', '1', '3', 369254, 'img-stu00004-360_F_270188580_YDUEwBmDIxBMvCQxkcunmEkm93VqOgqm.jpg', '1', '2022-08-15 04:14:45'),
-(18, '683611', '13', 'Sameer Ahmed', 'stu00005', '3', '2', '18', '1', 'Salma Ahmed', 'Juber Ahmed', '9638521452', 'samAh@email.com', '2014-02-26', 'Near Railway Station', '1', '3', 250622, 'img-stu00005-360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', '1', '2022-08-26 10:39:49'),
-(20, '683611', '15', 'New School Student', 'stu00006', '3', '3', '10', '1', 'maa ka name', 'bap ka name', '7418523695', 'mabap@email.com', '2022-08-20', 'maaaaaadress', '1', '1', 123456, 'img-stu00006-630-01491566en_Masterfile.jpg', '1', '2022-08-28 04:04:42'),
-(21, '951166', '16', 'Rahul Tiwari', 'stu00007', '8', '3', '34', '1', '', 'Ramesh', '1234567891', 'zuzu@mumu.com', '2022-08-19', 'reredfvergve', '2', '2', 400065, '', '1', '2022-08-28 13:58:18'),
-(22, '965316', '17', 'nitish', 'stu00008', '2', '1', '10', '1', 'maharani', 'janardan', '8700671965', 'ni30.dev@gmail.com', '2007-07-28', 'E165 , 3rd floor', '2', '4', 110059, 'img-stu00008-Screenshot from 2022-08-26 20-06-52.png', '1', '2022-08-28 14:25:22'),
-(23, '965316', '18', 'nisha', 'stu00009', '5', '4', '11', '2', 'maharani', 'ram', '7836928080', 'nguptani30@gmail.com', '2016-07-12', 'D65 , 3rd floor', '5', '5', 110059, 'img-stu00009-Screenshot from 2022-08-18 14-10-53.png', '1', '2022-08-28 14:27:05'),
-(24, '963852', '19', 'Jaddu', 'stu000010', '3', '2', '11', '1', 'mohter name aayaga', 'baap hai', '8794562514', 'maa@baap.com', '2022-08-03', 'abc building', '1', '1', 250611, 'img-stu000010-630-07071784en_Masterfile.jpg', '1', '2022-08-29 12:41:18'),
-(25, '724212', '20', 'Ridhi Jain', 'stu000011', '17', '18', '12', '2', 'Gunjan Jain', 'Pankaj Jain', '9876543215', 'ridhi@email.com', '06/01/2004', 'Bada Jain Mandir', '34', '19', 250611, 'img-stu000011-WhatsApp Image 2022-09-03 at 19.21.47.jpeg', '1', '2022-09-03 14:13:45'),
-(26, '724212', '21', 'Atisya Jain', 'stu000012', '18', '18', '10', '1', 'Rubi Jain', 'Rajiv Jain', '7899878548', 'atisya@email.com', '05/14/2007', 'Bada Jain Mandir', '34', '19', 250611, 'img-stu000012-WhatsApp Image 2022-09-03 at 19.21.46.jpeg', '1', '2022-09-03 14:16:53');
+INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `created_at`) VALUES
+(4, '683611', '', 'Saurya Jain', 'STU-00004', '1', '1', '4', '1', 'Nisha Jain', 'Sanjay Jain', '9045308073', 'sau@gmail.com', '2012-01-12', 'Bada Jain Mandir', '1', '1', NULL, 'IMG-STU-00004-630-01873773en_Masterfile.jpg', NULL, '1', NULL, '2022-08-11 07:50:06'),
+(5, '683611', '', 'Shelly Sharma', 'STU00005', '14', '13', '16', '2', 'Madhu Sharma', 'Manbir Sharma', '7472583698', 'manB@shelly.com', '1999-01-05', 'Patti Chaudhran', '1', '1', 147255, 'IMG-STU-00005-155269816-happy-indian-school-girl-wearing-uniform-holding-laptop-on-lilac-background-.webp', NULL, '1', NULL, '2022-08-11 14:09:26'),
+(8, '683611', '', 'Satyender Chauhan', 'STU00008', '14', '13', '16', '1', 'Bimla Devi', 'Rajiv Chauhan', '9879879854', 'sat@gmail.com', '2005-01-11', 'Nehru Road', '1', '1', 250611, 'IMG-STU00008-cute-little-indian-asian-school-boy-note-book-isolated-over-white-background-150100971.jpg', NULL, '1', NULL, '2022-08-12 03:09:09'),
+(9, '683611', '', 'Preety Mishra', 'STU00009', '10', '2', '11', '2', 'Kajol Mishra', 'Ajay Mishra', '8956236932', 'prretyMih@gmail.com', '2014-03-06', 'Gurana Road Badi Masjid', '1', '2', NULL, 'IMG-STU00009-1-indian-girl-school-student-standing-EFDF0R.jpg', NULL, '1', NULL, '2022-08-12 03:15:58'),
+(10, '683611', '', 'Rakhi Yadav', 'STU000010', '9', '1', '21', '2', 'Sonali Yadav', 'Anurag Yadav', '9632586523', 'arkna@gmail.com', '2015-04-28', 'Baraut Baghpat Road', '1', '3', NULL, 'IMG-STU000010-360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', NULL, '1', NULL, '2022-08-12 03:24:36'),
+(11, '683611', '4', 'Javad Ahmed', 'STU000011', '13', '2', '17', '1', 'Khusida Ahmed', 'Munna Ahmed', '1472583695', 'mun@gmail.com', '2006-01-05', 'House no 02/41 Patti Mirapur', '1', '1', 250677, 'IMG-STU000011-istockphoto-1342191955-612x612.jpg', NULL, '1', NULL, '2022-08-12 03:28:38'),
+(12, '683611', '5', 'Jadu', 'STU000012', '13', '2', '2', '1', 'Tom', 'Kruz', '9632581475', 'abc@gmail.com', '2019-06-05', 'fake gali', '1', '1', 234567, 'IMG-STU000012-cetegory-img-17.png', NULL, '1', NULL, '2022-08-12 03:55:28'),
+(13, '683611', '6', 'Ram Sharma', 'stu00001', '8', '2', '19', '1', 'Urmila Devi', 'Balkishan Sharma', '6325148547', 'rambal582@gmail.com', '2013-06-05', 'ABC Building ', '1', '2', 250609, 'img-stu00001-360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', NULL, '1', NULL, '2022-08-12 12:10:13'),
+(14, '683611', '7', 'Kirti Kaif', 'stu00002', '9', '2', '12', '2', 'Jhenny Kaif', 'Jhonny kaif', '8956232536', 'kriti251@gmail.com', '2012-03-06', 'Bijrol Road', '1', '1', 250611, 'img-stu00002-283-2839124_school-indian-student-png-transparent-png.png', NULL, '1', NULL, '2022-08-13 02:18:41'),
+(16, '683611', '11', 'Priya', 'stu00003', '14', '13', '25', '2', 'Sunita', 'Mannu', '9633696952', 'priyam@yahoo.com', '2001-03-15', 'Delhi Haryana Road', '5', '6', 250623, 'img-stu00003-photo-1630178836733-3d61d8974258.jpg', NULL, '1', NULL, '2022-08-15 04:04:05'),
+(17, '683611', '12', 'Arun', 'stu00004', '9', '3', '25', '1', 'Parul', 'Govind', '8956233625', 'abcarun@email.com', '2010-12-29', 'Gante Wali Gali', '1', '3', 369254, 'img-stu00004-360_F_270188580_YDUEwBmDIxBMvCQxkcunmEkm93VqOgqm.jpg', NULL, '1', NULL, '2022-08-15 04:14:45'),
+(18, '683611', '13', 'Sameer Ahmed', 'stu00005', '3', '2', '18', '1', 'Salma Ahmed', 'Juber Ahmed', '9638521452', 'samAh@email.com', '2014-02-26', 'Near Railway Station', '1', '3', 250622, 'img-stu00005-360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', NULL, '1', NULL, '2022-08-26 10:39:49'),
+(20, '683611', '15', 'New School Student', 'stu00006', '3', '3', '10', '1', 'maa ka name', 'bap ka name', '7418523695', 'mabap@email.com', '2022-08-20', 'maaaaaadress', '1', '1', 123456, 'img-stu00006-630-01491566en_Masterfile.jpg', NULL, '1', NULL, '2022-08-28 04:04:42'),
+(21, '951166', '16', 'Rahul Tiwari', 'stu00007', '8', '3', '34', '1', '', 'Ramesh', '1234567891', 'zuzu@mumu.com', '2022-08-19', 'reredfvergve', '2', '2', 400065, '', NULL, '1', NULL, '2022-08-28 13:58:18'),
+(22, '965316', '17', 'nitish', 'stu00008', '2', '1', '10', '1', 'maharani', 'janardan', '8700671965', 'ni30.dev@gmail.com', '2007-07-28', 'E165 , 3rd floor', '2', '4', 110059, 'img-stu00008-Screenshot from 2022-08-26 20-06-52.png', NULL, '1', NULL, '2022-08-28 14:25:22'),
+(23, '965316', '18', 'nisha', 'stu00009', '5', '4', '11', '2', 'maharani', 'ram', '7836928080', 'nguptani30@gmail.com', '2016-07-12', 'D65 , 3rd floor', '5', '5', 110059, 'img-stu00009-Screenshot from 2022-08-18 14-10-53.png', NULL, '1', NULL, '2022-08-28 14:27:05'),
+(24, '963852', '19', 'Jaddu', 'stu000010', '3', '2', '11', '1', 'mohter name aayaga', 'baap hai', '8794562514', 'maa@baap.com', '2022-08-03', 'abc building', '1', '1', 250611, 'img-stu000010-630-07071784en_Masterfile.jpg', NULL, '1', NULL, '2022-08-29 12:41:18'),
+(25, '724212', '20', 'Ridhi Jain', 'stu000011', '17', '18', '12', '2', 'Gunjan Jain', 'Pankaj Jain', '9876543215', 'ridhi@email.com', '06/01/2004', 'Bada Jain Mandir', '34', '19', 250611, 'img-stu000011-WhatsApp Image 2022-09-03 at 19.21.47.jpeg', NULL, '1', NULL, '2022-09-03 14:13:45'),
+(26, '724212', '21', 'Atisya Jain', 'stu000012', '18', '18', '10', '1', 'Rubi Jain', 'Rajiv Jain', '7899878548', 'atisya@email.com', '05/14/2007', 'Bada Jain Mandir', '34', '19', 250611, 'img-stu000012-WhatsApp Image 2022-09-03 at 19.21.46.jpeg', NULL, '1', NULL, '2022-09-03 14:16:53'),
+(27, '683611', '22', 'Ujjwal ', 'stu000013', '1', '1', '1', '1', 'Madu Devi', 'Manbir', '7060643952', 'ujjwal@goon.com', '06/04/2003', 'Goon', '1', '1', 250611, 'img-stu000013-630-01491566en_Masterfile.jpg', 'uaFq2f', '1', NULL, '2022-09-07 02:35:54');
 
 -- --------------------------------------------------------
 
@@ -1069,13 +1157,14 @@ CREATE TABLE `teachers` (
 
 INSERT INTO `teachers` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `gender`, `mother_name`, `father_name`, `mobile`, `password`, `auth_token`, `email`, `dob`, `doj`, `address`, `state_id`, `city_id`, `pincode`, `image`, `education`, `experience`, `status`, `created_at`) VALUES
 (1, '683611', '9', 'Shivani Sharma', 'tec00001', '8', '1', '2', 'Sunita Devi', 'Birju Sharma', '3216549875', '', NULL, 'shivani147@gmail.com', '1995-07-06', '2020-03-20', 'Nehru Road', '1', '1', '250611', 'img-tec00001-630-01873594en_Masterfile.jpg', NULL, NULL, '1', '2022-08-13 04:18:44'),
-(2, '683611', '10', 'Arjun Kapoor', 'tec00002', '14', '13', '1', 'Bano Kapoor', 'Amrith Kapoor', '9633695214', 'B2gD9t', 'VvQ6WNop5jTXl91uLMBC8y9t1G01d2b64FUc1xa7', 'arjunK01@gmail.com', '1993-06-02', '2022-02-01', 'Near Nagar Palika', '1', '2', '250609', 'img-tec00002-Indian-school-t11791.jpg', NULL, NULL, '1', '2022-08-13 04:24:44'),
+(2, '683611', '10', 'Arjun Kapoor', 'tec00002', '14', '13', '1', 'Bano Kapoor', 'Amrith Kapoor', '9633695214', 'B2gD9t', 'B3121t8UPFRew69OImMA4nv7XH5kbyhcrSxlTKYi', 'arjunK01@gmail.com', '1993-06-02', '2022-02-01', 'Near Nagar Palika', '1', '2', '250609', 'img-tec00002-Indian-school-t11791.jpg', NULL, NULL, '1', '2022-08-13 04:24:44'),
 (3, '683611', '', 'Jhonny', 'tec00003', '14', '13', '1', 'Kamla ', 'Vimal', '3692582154', 'D7wySb', 'DzdFMv0OrmQqI15oke8l8b37BAytjwfsgG63PiXW', 'jhonnyjid@email.com', '2003-02-15', '2022-08-15', 'Patti Birapur', '2', '4', '110006', 'img-tec00003-portrait-young-male-teacher-background-school-blackboard-teacher-s-day-knowledge-day-back-to-school-study-159722312.jpg', NULL, NULL, '1', '2022-08-15 04:01:33'),
 (4, '683611', '15', 'Kavita Sharma', 'tec00004', '1', '1', '2', 'Banno Devi', 'Mamchand Sharma', '7894561230', 'S2YDAO', NULL, 'kav@gmail.com', '1992-05-06', '2021-01-28', 'Gali MiraPur Baru Patti', '1', '1', '250611', 'img-tec00004-istockphoto-517042363-612x612.jpg', NULL, NULL, '1', '2022-08-28 03:17:57'),
 (5, '683611', '16', 'new scholl teacher', 'tec00005', '13', '2', '2', 'asdf', 'asdf', '9151446619', '6Q0xT6', 'V1NfxukabrOP7y9tz7FQcisZ9DHE5TGeJnjUh62K', 'asdfasdf@sfg', '2022-08-06', '2022-08-05', 'asdfasdfsdaf', '1', '1', 'asdfasdf', 'img-tec00005-istockphoto-1139495117-612x612.jpg', NULL, NULL, '1', '2022-08-28 04:08:01'),
-(6, '683611', '17', 'babita sharama', 'tec00006', '13', '2', '2', 'usha', 'prem', '9898989898', 'r63meF', 'w8P0DnL1yzakQIl4smog6N277pAe095Ub2cGxYT6', 'babita@gmail.com', '06/08/1999', '08/10/2022', 'A165 , 3rd floor', '2', '4', '110076', 'img-tec00006-Screenshot from 2022-08-18 18-35-25.png', '10th', '1', '1', '2022-08-30 14:42:38'),
+(6, '683611', '17', 'babita sharama', 'tec00006', '13', '2', '2', 'usha', 'prem', '9898989898', 'r63meF', '58OjunPhoY4x6EDe0ZL3i6A7GbVqNs42QKyrHBMX', 'babita@gmail.com', '06/08/1999', '08/10/2022', 'A165 , 3rd floor', '2', '4', '110076', 'img-tec00006-Screenshot from 2022-08-18 18-35-25.png', '10th', '1', '1', '2022-08-30 14:42:38'),
 (7, '965316', '18', 'babita sharama', 'tec00007', '1', '1', '2', 'usha', 'prem', '08700671965', 'Jfkyig', 'bQVR07GX3wfYPO9yjueA778mzSv8NcLnJ2o9BH0U', 'nguptani30@gmail.com', '06/17/2020', '08/06/2022', 'E165 , 3rd floor', '2', '4', '110059', 'img-tec00007-Screenshot from 2022-08-18 14-17-24.png', NULL, NULL, '1', '2022-08-30 14:47:57'),
-(8, '724212', '19', 'Gaurav Jain', 'tec00008', '17', '18', '1', 'Krishna Jain', 'Sushil Kumar Jain', '9045308073', 'E60VYG', '7APlIKeyNV48gfBFO1ntCXdrpGQx1SJUmRE5v5ca', 'gaurav77@gmail.com', '07/28/1993', '11/01/2021', 'Bada Jain Mandir', '34', '19', '250611', 'img-tec00008-WhatsApp Image 2022-08-27 at 11.56.35.jpeg', NULL, NULL, '1', '2022-09-03 14:10:31');
+(8, '724212', '19', 'Gaurav Jain', 'tec00008', '17', '18', '1', 'Krishna Jain', 'Sushil Kumar Jain', '9045308073', 'E60VYG', '7APlIKeyNV48gfBFO1ntCXdrpGQx1SJUmRE5v5ca', 'gaurav77@gmail.com', '07/28/1993', '11/01/2021', 'Bada Jain Mandir', '34', '19', '250611', 'img-tec00008-WhatsApp Image 2022-08-27 at 11.56.35.jpeg', NULL, NULL, '1', '2022-09-03 14:10:31'),
+(9, '683611', '20', 'Satyender Sir Ji', 'tec00009', '14', '13', '1', 'Falana', 'Dikana', '9638527418', '13860C', 'DhMozPBt2I2EL68axW4qKdQcm1wufV5J95kTr8YN', 'sat@gmaul.co', '09/01/2022', '09/01/2022', 'Gali ka pata hi nhi h', '1', '1', '098765', 'img-tec00009-images (20).jpeg', '1', '0', '1', '2022-09-06 15:23:38');
 
 -- --------------------------------------------------------
 
@@ -1201,6 +1290,36 @@ INSERT INTO `users` (`id`, `schoolUniqueCode`, `name`, `email`, `password`, `use
 (55, '724212', 'Staff', 'Staff@email.com', 'R1lCNm42bW5KWmtuVm1RU1pFNjJ3UT09', 'Staff', 'aWRKFP3nxO08Y4JB6254i5MIcVgQyqrpN46Hv61X', NULL, '1', '2022-09-03 13:48:43'),
 (56, '724212', 'Principal', 'Principal@email.com', 'N2hMZUFQN29Kd0xBQ3ZtdzFnQVl1dz09', 'Principal', 'Fe5x0XmAb8PZdipRYfK9J73rChOG8wUlB0MS6Lt4', NULL, '1', '2022-09-03 13:48:43'),
 (57, '724212', 'Shrione Public School Admin', 'shrione77@gmail.com', 'elZnd3BTR0ljWGhlKzRPOFhtdEJzQT09', 'Admin', 'VXMrUvb0ehBqTY62D45RHGNP2Fk94u4go7J3ifE3', NULL, '1', '2022-09-03 13:48:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `visitor_entry`
+--
+
+CREATE TABLE `visitor_entry` (
+  `id` int(11) NOT NULL,
+  `schoolUniqueCode` varchar(100) NOT NULL,
+  `visit_date` date NOT NULL,
+  `visit_time` time NOT NULL,
+  `visitor_name` varchar(100) NOT NULL,
+  `person_to_meet` varchar(100) NOT NULL,
+  `purpose_to_meet` text NOT NULL,
+  `visitor_mobile_no` varchar(100) NOT NULL,
+  `visitor_image` varchar(255) NOT NULL,
+  `status` enum('1','2','3','4') NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `visitor_entry`
+--
+
+INSERT INTO `visitor_entry` (`id`, `schoolUniqueCode`, `visit_date`, `visit_time`, `visitor_name`, `person_to_meet`, `purpose_to_meet`, `visitor_mobile_no`, `visitor_image`, `status`, `created_at`) VALUES
+(1, '683611', '2022-09-07', '07:00:00', 'Jhonny', 'Maths Sir Arjun', 'Need to discuss about a question', '6397520221', '', '1', '2022-09-07 11:56:05'),
+(2, '683611', '2022-09-10', '12:05:00', 'Satyendra', 'Tmkoc', 'Discuss about math ', '74767767677', '', '1', '2022-09-10 06:36:25'),
+(3, '683611', '2022-09-10', '14:02:00', 'Hdfj', 'Udjjjf', 'Hdu', '6766765788', '', '1', '2022-09-10 08:33:19'),
+(4, '683611', '2022-09-10', '14:08:00', 'B nc', 'Cjff', 'Mckcm', '9888888888', 'visitor_img_1662799296.png', '1', '2022-09-10 08:41:36');
 
 -- --------------------------------------------------------
 
@@ -1420,6 +1539,12 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `visitor_entry`
+--
+ALTER TABLE `visitor_entry`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `week`
 --
 ALTER TABLE `week`
@@ -1433,13 +1558,13 @@ ALTER TABLE `week`
 -- AUTO_INCREMENT for table `admin_panel_menu`
 --
 ALTER TABLE `admin_panel_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `attendence`
 --
 ALTER TABLE `attendence`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `city`
@@ -1463,43 +1588,43 @@ ALTER TABLE `classshedule`
 -- AUTO_INCREMENT for table `departure`
 --
 ALTER TABLE `departure`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `exam`
 --
 ALTER TABLE `exam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `fees`
 --
 ALTER TABLE `fees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `feesforstudent`
 --
 ALTER TABLE `feesforstudent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `get_digi_coin`
 --
 ALTER TABLE `get_digi_coin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `gift`
 --
 ALTER TABLE `gift`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `home_work`
 --
 ALTER TABLE `home_work`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `month`
@@ -1529,25 +1654,25 @@ ALTER TABLE `qrcode_schools`
 -- AUTO_INCREMENT for table `qrcode_students`
 --
 ALTER TABLE `qrcode_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `qrcode_teachers`
 --
 ALTER TABLE `qrcode_teachers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `redeem_gifts`
 --
 ALTER TABLE `redeem_gifts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `schoolmaster`
@@ -1577,7 +1702,7 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `subject`
@@ -1589,7 +1714,7 @@ ALTER TABLE `subject`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `teachersubjects`
@@ -1608,6 +1733,12 @@ ALTER TABLE `tthours`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT for table `visitor_entry`
+--
+ALTER TABLE `visitor_entry`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `week`
