@@ -95,6 +95,7 @@ $masterRoutesArr = [
     'feesMaster',
     'submitFeesMaster',
     'feesListingMaster',
+    'feesInvoice',
     'monthMaster',
     'setDigiCoinMaster',
     'givePermissionMaster' // only for super Admin

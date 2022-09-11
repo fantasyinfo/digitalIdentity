@@ -158,6 +158,7 @@
                             <th>Depositor Address</th>
                             <th>Total Old Due</th>
                             <th>Fees Submited Date</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -176,6 +177,7 @@
                                 <td><?= $cn['depositer_address'];?></td>
                                 <td>₹ <?= number_format($cn['total_due_balance'],2);?>/-</td>
                                 <td><?= $cn['fee_deposit_date'];?></td>
+                                <td><a href="<?= base_url('master/feesInvoice')?>?id=<?= $cn['id'];?>" class="btn btn-primary" >Invoice</a></td>
                               </tr>
                           <?php  }
                           } ?>

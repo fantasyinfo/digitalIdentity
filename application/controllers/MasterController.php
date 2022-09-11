@@ -242,6 +242,18 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->masterDir . 'feesListingMaster');
 	}
 
+	public function feesInvoice()
+	{
+		$this->loginCheck();
+		// check permission
+		//$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Fees Invoice',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . $this->masterDir . 'feesInvoice');
+	}
+
 	public function monthMaster()
 	{
 		$this->loginCheck();

@@ -57,29 +57,46 @@
 
 </div>
 
+<?php
+
+$sheduleData = $this->db->query("
+     SELECT cST.shedule_json, cST.id, ct.className,st.sectionName,cST.status FROM " . Table::classSheduleTable . " cST 
+     JOIN ".Table::classTable." ct ON ct.id = cST.class_id
+     JOIN ".Table::sectionTable." st ON st.id = cST.section_id 
+     WHERE cST.status != '4' AND cST.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+     ORDER BY cST.id DESC
+     ")->result_array();
+
+     $totalCount = count($sheduleData);
+    //  HelperClass::prePrintR($sheduleData);
+     $sheduleD = [];
+     $teacherArr = [];
+     for($i=0; $i < $totalCount; $i++)
+     {
+      array_push($sheduleD,json_decode($sheduleData[$i]['shedule_json'],TRUE));
+     }
+    
+
+     $totalY = count($sheduleD);
+     for($j=0; $j < $totalY; $j++)
+     {
+        for($k=0; $k < count($sheduleD[$j]); $k++)
+        {
+          array_push($teacherArr,$sheduleD[$j][$k]);
+        }
+     }
 
 
-
-       
-
-
-
-
-
-
-
+     $totalT = count($teacherArr);
+     $teachersArr = [];
+     for($l=0; $l < $totalT; $l++)
+     {
+        // if()
+     }
+// HelperClass::prePrintR($teacherArr);
 
 
-
-
-
-
-
-
-
-
-
-
+?>
           <!--/.col (right) -->
         </div>
 
