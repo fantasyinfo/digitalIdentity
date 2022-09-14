@@ -7,6 +7,7 @@ class APIModel extends CI_Model
   {
     $this->load->database();
     $this->load->model('CrudModel');
+    $this->load->model('StudentModel');
   }
 
   // login
@@ -339,26 +340,20 @@ class APIModel extends CI_Model
     $sql = "SELECT s.*, 
     CONCAT('$dir',s.image) as image,
     if(s.status = '1', 'Active','InActive')as status,
-    c.className,
-    ss.sectionName,
+    c.className, c.id as classId,
+    ss.sectionName, ss.id as sectionId,
     st.stateName,
     ct.cityName,
-    q.uniqueValue, q.qrcodeUrl,
-    examt.exam_name, examt.date_of_exam, examt.min_marks,examt.max_marks,
-    CONCAT(rt.marks ,' Out of ', examt.max_marks) as examMarks,
-    rt.result_date,rt.remarks,rt.marks,if(rt.status = '1','Pass', 'Fail') as resultStatus,
-    subt.subjectName
+    q.uniqueValue, q.qrcodeUrl
     FROM " . Table::studentTable . " s
     LEFT JOIN " . Table::qrcodeTable . " q ON q.uniqueValue = s.user_id
     LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
     LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
     LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
     LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
-    LEFT JOIN " . Table::resultTable . " rt ON rt.student_id = s.id
-    LEFT JOIN " . Table::examTable . " examt ON rt.exam_id = examt.id
-    LEFT JOIN " . Table::subjectTable . " subt ON subt.id = examt.subject_id
-    WHERE s.status = '1' $condition 
-    ORDER BY s.id DESC LIMIT 1";
+    WHERE s.status = '1' 
+    $condition 
+    ORDER BY s.id DESC";
 
     $d = $this->db->query($sql)->result_array();
 
@@ -386,23 +381,15 @@ class APIModel extends CI_Model
       $returnArr['status'] = @$d[0]['status'];
       $returnArr['image'] = @$d[0]['image'];
 
-      $returnArr['resultData'] = [];
-      $totalData = count($d);
-      for ($i = 0; $i < $totalData; $i++) {
-        $subArr = [];
-        $subArr['exam_name'] = @$d[$i]['exam_name'];
-        $subArr['exam_date'] = @$d[$i]['date_of_exam'];
-        $subArr['subjectName'] = @$d[$i]['subjectName'];
-        $subArr['max_marks'] = @$d[$i]['max_marks'];
-        $subArr['min_marks'] = @$d[$i]['min_marks'];
-        $subArr['exam_name'] = @$d[$i]['exam_name'];
-        $subArr['result_date'] = @$d[$i]['result_date'];
-        $subArr['marksRecived'] = @$d[$i]['marks'];
-        $subArr['examMarks'] = @$d[$i]['examMarks'];
-        $subArr['resultStatus'] = @$d[$i]['resultStatus'];
-        $subArr['remarks'] = @$d[$i]['remarks'];
-        array_push($returnArr['resultData'], $subArr);
-      }
+      // results with exam
+      $returnArr['resultData'] = $this->StudentModel->showResultDataWithExam($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
+    
+      // attendence
+      $returnArr['attendenceData'] = $this->StudentModel->showAttendenceData($schoolUniqueCode,$d[0]['className'],$d[0]['sectionName'],$d[0]['id']);
+ 
+      // fees data
+      $returnArr['feesData'] = $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
+      $returnArr['feesDetails'] = $this->StudentModel->totalFeesDueToday($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
 
       return $returnArr;
     } else {
@@ -892,17 +879,25 @@ class APIModel extends CI_Model
   {
     if ($loginuserType == 'Teacher') {
       $userType = HelperClass::userType[$loginuserType];
-      $d = $this->db->query("
-    SELECT id as tId, CASE WHEN for_what = '1' THEN 'Attendence'  WHEN for_what = '2' THEN 'Departure' WHEN for_what = '3' THEN 'Result' END as for_what,
-    digiCoin, 'Earning' as tStatus, created_at as whatDate FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' 
-    UNION ALL
-    SELECT grt.id as tId, gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus, grt.created_at as whatDate FROM " . Table::giftRedeemTable . " grt 
-    LEFT JOIN " . Table::giftTable . " ON gift.id = grt.gift_id
-    WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+
+      $sql = "SELECT * FROM ( SELECT gdc.id as tId,  CASE WHEN gdc.for_what = '1' THEN 'Attendence'  WHEN gdc.for_what = '2' THEN 'Departure' WHEN gdc.for_what = '3' THEN 'Result'  END as for_what, gdc.digiCoin,  'Earning' as tStatus,  gdc.created_at as whatDate  FROM " . Table::getDigiCoinTable . " gdc  WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' ) as a  
+      UNION ALL
+     SELECT * FROM (SELECT grt.id as tId,gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus,grt.created_at as whatDate  FROM " . Table::giftRedeemTable . " grt  LEFT JOIN " . Table::giftTable . "  ON gift.id = grt.gift_id WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ) as b";
+
+    //   $d = $this->db->query("
+    // SELECT id as tId, CASE WHEN for_what = '1' THEN 'Attendence'  WHEN for_what = '2' THEN 'Departure' WHEN for_what = '3' THEN 'Result' END as for_what,
+    // digiCoin, 'Earning' as tStatus, created_at as whatDate FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' 
+    // UNION ALL
+    // SELECT grt.id as tId, gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus, grt.created_at as whatDate FROM " . Table::giftRedeemTable . " grt 
+    // LEFT JOIN " . Table::giftTable . " ON gift.id = grt.gift_id
+    // WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+      $d = $this->db->query($sql)->result_array();
+      
       if (!empty($d)) {
 
         $sendArr = [];
         $totalCount = count($d);
+   
         $sendArr['totalDigiCoins'] = 0;
         $sendArr['transactions'] = [];
         $totalCoins = 0;

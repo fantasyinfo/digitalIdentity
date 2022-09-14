@@ -35,6 +35,7 @@
 
           $this->CrudModel->checkPermission();
 
+          $currentDate = date('Y-m-d');
           ?>
 
 <div id="accordion">
@@ -47,10 +48,9 @@
         </h4>
         </div>
     </a>
-      <div id="collapseOne" class="collapse" data-parent="#accordion">
+      <div id="collapseOne" class="collapse show" data-parent="#accordion">
       <div class="card-body">
-        Hello Woirld;
-            <?php include("dashinclude/student_section.php"); ?>
+       <?php include("dashinclude/student_section.php"); ?>
       </div>
     </div>
   </div>

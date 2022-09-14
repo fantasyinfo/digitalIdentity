@@ -266,8 +266,8 @@ class StudentModel extends CI_Model
 
           // check total fees submited by this student
 
-//           MONTH(fee_deposit_date) > MONTH(CURRENT_DATE())
-// AND YEAR(fee_deposit_date) = YEAR(CURRENT_DATE())
+            //           MONTH(fee_deposit_date) > MONTH(CURRENT_DATE())
+              // AND YEAR(fee_deposit_date) = YEAR(CURRENT_DATE())
 
           $check = $this->db->query($sql = "SELECT * FROM ".Table::feesForStudentTable." WHERE 
           class_id = '{$p['classId']}' AND 
@@ -330,4 +330,239 @@ class StudentModel extends CI_Model
       }
     }
 
+    public function totalFeesDueToday($schoolUniqueCode,$classId,$sectionId,$studentId)
+    {
+      $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+      if(!empty($school))
+       {
+        $sessionStartingFrom = $school[0]['session_started_from']; // month
+        $sessionStartingYear = $school[0]['session_started_from_year'];
+        $sessionStartDate = 1;
+
+        $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
+      
+        $sessionEndingFrom =  $school[0]['session_ended_to']; // month
+        $sessionEndingYear =  $school[0]['session_ended_to_year'];
+        $sessionEndDate = 31;
+
+        $sessionEnd = date("$sessionEndingYear-$sessionEndingFrom-$sessionEndDate");
+    
+       }
+
+       $currentMonth = date('m'); // current month
+       $currentYear = date('Y'); // current Year
+
+
+       $d = $this->db->query("SELECT * FROM ".Table::feesTable." WHERE class_id = '$classId' AND status = '1' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
+            // echo $this->db->last_query(); die();
+       if(!empty($d))
+       {
+        $totalMonthsForFees = intval($currentMonth) - intval($sessionStartingFrom);
+
+        $totalDueFeesTillThisMonth =  (intval($d[0]['fees_amt']) * intval($totalMonthsForFees));
+
+        $check = $this->db->query($sql = "SELECT * FROM ".Table::feesForStudentTable." WHERE 
+          class_id = '$classId' AND 
+          section_id = '$sectionId' AND
+          student_id = '$studentId' AND
+          status = '1' AND schoolUniqueCode = '$schoolUniqueCode'
+           AND created_at BETWEEN '$sessionStart' AND '$sessionEnd'
+           ")->result_array();
+       }
+       //echo $this->db->last_query(); die();
+       if(!empty($check))
+          {
+            // offer amt
+            // deposit amt
+            // total_due_balance
+            $totalCountCheck = count($check);
+
+            $totalDepsitAmt = 0;
+            $totalOfferAmt = 0;
+            $totalDueAmt = 0;
+            for($i=0; $i<$totalCountCheck;$i++)
+            {
+              $totalDepsitAmt = intval($totalDepsitAmt) + intval($check[$i]['deposit_amt']);
+              $totalOfferAmt = intval($totalOfferAmt) +  intval($check[$i]['offer_amt']);
+              $totalDueAmt = intval($totalDueAmt) + intval($check[$i]['total_due_balance']);
+            }
+
+          }
+   
+          $totalDepositAmtAfterOfferAddedAndDueSubtracted = (intval(@$totalDepsitAmt) + intval(@$totalOfferAmt)) - intval(@$totalDueAmt);
+          // check totalDepositFees
+
+         $totalBalance =  (intval(@$totalDueFeesTillThisMonth) - intval(@$totalDepositAmtAfterOfferAddedAndDueSubtracted));
+
+         // calcualte total months fees deposit
+        $totalMonthFeesDue =  (intval($totalBalance) / intval(@$d[0]['fees_amt']));
+        // $totalMonthFeesDeposit =  (intval($totalBalance) % intval(@$d[0]['fees_amt']));
+
+
+       return $sendArr = [
+          'perMonthFeesForThisClass' => $d[0]['fees_amt'],
+          'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
+          'sessionStartedFrom' => $sessionStartingFrom,
+          'currentMonth' => $currentMonth,
+          'totalDepositAmount' => @$totalDepsitAmt,
+          'totalOfferAmt' => @$totalOfferAmt,
+          'totalDueAmt' => @$totalDueAmt,
+          'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
+          'totalBalanceForDeposit' => $totalBalance,
+          'totalMonthFeesDue' => floor($totalMonthFeesDue),
+          // 'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
+        ];
+    }
+
+
+    public function checkFeesSubmitDetails($schoolUniqueCode,$classId,$sectionId,$studentId)
+    {
+      $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+      if(!empty($school))
+       {
+        $sessionStartingFrom = $school[0]['session_started_from']; // month
+        $sessionStartingYear = $school[0]['session_started_from_year'];
+        $sessionStartDate = 1;
+
+        $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
+      
+        $sessionEndingFrom =  $school[0]['session_ended_to']; // month
+        $sessionEndingYear =  $school[0]['session_ended_to_year'];
+        $sessionEndDate = 31;
+
+        $sessionEnd = date("$sessionEndingYear-$sessionEndingFrom-$sessionEndDate");
+    
+       }
+
+       $currentMonth = date('m'); // current month
+       $currentYear = date('Y'); // current Year
+
+      $d = $this->db->query("SELECT * FROM ".Table::feesForStudentTable." WHERE 
+          class_id = '$classId' AND 
+          section_id = '$sectionId' AND
+          student_id = '$studentId' AND
+          status = '1' AND schoolUniqueCode = '$schoolUniqueCode'
+           AND created_at BETWEEN '$sessionStart' AND '$sessionEnd'
+           ")->result_array();
+
+        // echo $this->db->last_query(); die();
+        $returnArr = [];
+           if(!empty($d))
+           {
+            $totalD = count($d);
+              for($i=0; $i<$totalD; $i++)
+              {
+                $subArr = [];
+                $subArr = [
+                  'invoice_id' => $d[$i]['invoice_id'],
+                  'offer_amt' => $d[$i]['offer_amt'],
+                  'deposit_amt' => $d[$i]['deposit_amt'],
+                  'fee_deposit_date' => $d[$i]['fee_deposit_date'],
+                  'depositer_name' => $d[$i]['depositer_name'],
+                  'total_old_due_balance' => $d[$i]['total_due_balance'],
+                  // 'fee_due_today' => $d[$i]['total_due_balance'],
+                  'payment_mode' => ($d[$i]['payment_mode'] =='1') ? 'Online' : 'Offline',
+                ];
+              
+                array_push($returnArr, $subArr);
+              }
+            
+           }
+
+           return $returnArr;
+    }
+
+    public function showAttendenceData($schoolUniqueCode,$className,$sectionName,$studentId)
+    {
+      $d = $this->db->query("SELECT * FROM ".Table::attendenceTable." WHERE 
+      stu_class = '$className' AND 
+      stu_section = '$sectionName' AND
+      stu_id = '$studentId' AND
+      status = '1' AND 
+      schoolUniqueCode = '$schoolUniqueCode' 
+      AND MONTH(att_date) = MONTH(CURRENT_DATE())
+      AND YEAR(att_date) = YEAR(CURRENT_DATE())
+      ")->result_array();
+
+        // echo $this->db->last_query(); die();
+        $returnArr = [];
+           if(!empty($d))
+           {
+            $totalD = count($d);
+              for($i=0; $i<$totalD; $i++)
+              {
+                $subArr = [];
+                if($d[$i]['attendenceStatus'] == '0')
+                  {
+                    // absent
+                    $subArr = [
+                      'status' => '0',
+                      'dateTime' => $d[$i]['dateTime']
+                    ];
+                  }else if($d[$i]['attendenceStatus'] == '1')
+                  {
+                    //present
+                    $subArr = [
+                      'status' => '1',
+                      'dateTime' => $d[$i]['dateTime']
+                    ];
+                  }
+                  array_push($returnArr, $subArr);
+              }
+            
+           }
+
+           return $returnArr;
+    }
+
+    public function showResultDataWithExam($schoolUniqueCode,$classId,$sectionId,$studentId)
+    {
+      $d = $this->db->query("SELECT 
+      examt.exam_name, examt.date_of_exam, examt.min_marks,examt.max_marks,
+      CONCAT(rt.marks ,' Out of ', examt.max_marks) as examMarks,
+      rt.result_date,rt.remarks,rt.marks,if(rt.status = '1','Pass', 'Fail') as resultStatus,
+      subt.subjectName
+       FROM ".Table::examTable." examt
+      INNER JOIN ".Table::resultTable." rt ON rt.exam_id = examt.id AND examt.schoolUniqueCode = rt.schoolUniqueCode
+      LEFT JOIN " . Table::subjectTable . " subt ON subt.id = examt.subject_id
+      WHERE rt.student_id = '$studentId' AND examt.class_id = '$classId' AND examt.section_id = '$sectionId'
+      AND rt.schoolUniqueCode = '$schoolUniqueCode' AND examt.schoolUniqueCode = '$schoolUniqueCode'
+     ")->result_array();
+
+         //echo $this->db->last_query(); die();
+        $returnArr = [];
+           if(!empty($d))
+           {
+            $totalD = count($d);
+              for($i=0; $i<$totalD; $i++)
+              {
+                $subArr = [];
+                // if(empty($d[$i]['exam_name']) || $d[$i]['examMarks'] || $d[$i]['result_date'])
+                // {
+                //   continue;
+                // }
+                $subArr['exam_name'] = @$d[$i]['exam_name'];
+                $subArr['exam_date'] = @$d[$i]['date_of_exam'];
+                $subArr['subjectName'] = @$d[$i]['subjectName'];
+                $subArr['max_marks'] = @$d[$i]['max_marks'];
+                $subArr['min_marks'] = @$d[$i]['min_marks'];
+                $subArr['exam_name'] = @$d[$i]['exam_name'];
+                $subArr['result_date'] = @$d[$i]['result_date'];
+                $subArr['marksRecived'] = @$d[$i]['marks'];
+                $subArr['examMarks'] = @$d[$i]['examMarks'];
+                $subArr['resultStatus'] = @$d[$i]['resultStatus'];
+                $subArr['remarks'] = @$d[$i]['remarks'];
+                array_push($returnArr, $subArr);
+              }
+            
+           }
+
+           return $returnArr;
+    }
+
+
+  
 }
