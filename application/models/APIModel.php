@@ -877,20 +877,29 @@ class APIModel extends CI_Model
   // wallet History
   public function walletHistory($loginUserId, $loginuserType, $schoolUniqueCode)
   {
+    $dir = base_url() . HelperClass::uploadImgDir;
     if ($loginuserType == 'Teacher') {
       $userType = HelperClass::userType[$loginuserType];
 
-      $sql = "SELECT * FROM ( SELECT gdc.id as tId,  CASE WHEN gdc.for_what = '1' THEN 'Attendence'  WHEN gdc.for_what = '2' THEN 'Departure' WHEN gdc.for_what = '3' THEN 'Result'  END as for_what, gdc.digiCoin,  'Earning' as tStatus,  gdc.created_at as whatDate  FROM " . Table::getDigiCoinTable . " gdc  WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' ) as a  
-      UNION ALL
-     SELECT * FROM (SELECT grt.id as tId,gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus,grt.created_at as whatDate  FROM " . Table::giftRedeemTable . " grt  LEFT JOIN " . Table::giftTable . "  ON gift.id = grt.gift_id WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ) as b";
+      $sql = "SELECT * FROM ( SELECT gdc.id as tId,  
+      CASE 
+      WHEN gdc.for_what = '1' THEN 'Attendence'  
+      WHEN gdc.for_what = '2' THEN 'Departure'
+      WHEN gdc.for_what = '3' THEN 'Result'  
+      END as for_what, gdc.digiCoin,  'Earning' as tStatus, 
+      gdc.created_at as whatDate,
+       CASE 
+       WHEN gdc.for_what = '1' THEN CONCAT('$dir','attendance.png')
+       WHEN gdc.for_what = '2' THEN CONCAT('$dir','clock.png')
+       WHEN gdc.for_what = '3' THEN CONCAT('$dir','exam.png')
+       END as image
 
-    //   $d = $this->db->query("
-    // SELECT id as tId, CASE WHEN for_what = '1' THEN 'Attendence'  WHEN for_what = '2' THEN 'Departure' WHEN for_what = '3' THEN 'Result' END as for_what,
-    // digiCoin, 'Earning' as tStatus, created_at as whatDate FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' 
-    // UNION ALL
-    // SELECT grt.id as tId, gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus, grt.created_at as whatDate FROM " . Table::giftRedeemTable . " grt 
-    // LEFT JOIN " . Table::giftTable . " ON gift.id = grt.gift_id
-    // WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+        FROM " . Table::getDigiCoinTable . " gdc  WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' ) as a  
+      UNION ALL
+     SELECT * FROM (SELECT grt.id as tId,gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus,grt.created_at as whatDate, CONCAT('$dir',gift.gift_image)  as image   FROM " . Table::giftRedeemTable . " grt  LEFT JOIN " . Table::giftTable . "  ON gift.id = grt.gift_id WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ) as b
+     ORDER BY whatDate DESC
+     ";
+
       $d = $this->db->query($sql)->result_array();
       
       if (!empty($d)) {
@@ -908,6 +917,7 @@ class APIModel extends CI_Model
           $subArr['for_what'] = $d[$i]['for_what'];
           $subArr['tStatus'] = $d[$i]['tStatus'];
           $subArr['whatDate'] = $d[$i]['whatDate'];
+          $subArr['image'] = $d[$i]['image'];
           array_push($sendArr['transactions'], $subArr);
         }
         $sendArr['totalDigiCoins'] = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
