@@ -58,6 +58,14 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+	public function showCityViaStateId()
+	{
+		if(isset($_POST['stateId']))
+		{
+			echo $this->CrudModel->showCityViaStateId($_POST['stateId']);
+		}
+	}
+
 
 
 	public function listQR()

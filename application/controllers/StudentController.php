@@ -58,12 +58,12 @@ class StudentController extends CI_Controller
 			'submitFormUrl' => base_url('student/saveStudent'),
 			'class' => $this->StudentModel->allClass($this->schoolUniqueCode),
 			'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
-			'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
+			// 'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
 			'state' => $this->StudentModel->allState($this->schoolUniqueCode),
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'add');
-		$this->load->view($this->viewDir . 'pages/footer');
+		// $this->load->view($this->viewDir . 'pages/footer');
 	}
 
 	public function editStudent($id)
@@ -77,12 +77,12 @@ class StudentController extends CI_Controller
 			'submitFormUrl' => base_url('student/updateStudent'),
 			'class' => $this->StudentModel->allClass($this->schoolUniqueCode),
 			'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
-			'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
+			// 'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
 			'state' => $this->StudentModel->allState($this->schoolUniqueCode),
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'edit');
-		$this->load->view($this->viewDir . 'pages/footer');
+		// $this->load->view($this->viewDir . 'pages/footer');
 	}
 
 	public function viewStudent($id)

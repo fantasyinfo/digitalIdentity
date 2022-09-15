@@ -574,6 +574,33 @@ class CrudModel extends CI_Model
        return $d = $this->db->query("SELECT id,subjectName FROM " . $this->tableName ." WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
 
+
+
+    public function showCityViaStateId($stateId)
+    {
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+       $d = $this->db->query("SELECT id,cityName FROM " . Table::cityTable ." WHERE stateId = '$stateId' AND status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
+       $html = '';
+
+        if(!empty($d))
+        {
+          foreach($d as $dd)
+          {
+           $html .= "<option value='".$dd['id']."'>".$dd['cityName']."</option>";
+          }
+          return json_encode($html);
+        }
+    }
+
+
+
+
+
+
+
+
+
     public function deleteStudent($tableName = "", $student_id = "")
     {
         if (!empty($tableName)) {

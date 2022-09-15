@@ -159,7 +159,7 @@
                           </tr>
                           <tr>
                               <td>  <label for="state">Select State</label></td>
-                              <td><select class="form-control select2 select2-danger" name="state" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <td><select class="form-control select2 select2-danger" name="state" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showCity()" id="stateIdd">
                           <?php 
                           if(isset($data['state']) && !empty($data['state']))
                           {
@@ -174,19 +174,7 @@
                           </tr>
                           <tr>
                               <td><label for="city">Select City</label></td>
-                              <td> <select class="form-control select2 select2-danger" name="city" data-dropdown-css-class="select2-danger" style="width: 100%;">
-                          <?php 
-                          if(isset($data['city']) && !empty($data['city']))
-                          {
-                            $selectedCity = '';
-                            foreach($data['city'] as $city)
-                            {
-                              
-                              ?>
-                                <option value="<?= $city['id'] ?>"><?= $city['cityName'] ?></option>
-                           <?php }
-                          }
-                          ?>
+                              <td> <select class="form-control select2 select2-danger" name="city" id="cityData" data-dropdown-css-class="select2-danger" style="width: 100%;">
                         </select></td>
                           </tr>
                           <tr>
@@ -258,7 +246,37 @@
 
     <?php $this->load->view("adminPanel/pages/footer-copyright.php"); ?>
   </div>
+  <?php $this->load->view("adminPanel/pages/footer.php"); ?>
   <!-- ./wrapper -->
   <script>
-    var ajaxUrl = '<?= base_url() . 'ajax/listStudentsAjax' ?>';
+       var ajaxUrl = '<?= base_url() . 'ajax/showCityViaStateId' ?>';
+
+// load default city
+  showCity();
+
+  function showCity()
+    {
+
+      $('#cityData option').remove();
+      let stateId = $("#stateIdd").val();
+      $.ajax({
+          url: ajaxUrl,
+          method: 'post',
+          processData: 'false',
+          data : {
+            stateId : stateId,
+          },
+          success: function (response)
+          {
+            response =  $.parseJSON(response);
+            $('#cityData').append(response);
+          },
+          error: function (error)
+          {
+            console.log(error);
+          }
+
+        });
+    }
+
   </script>

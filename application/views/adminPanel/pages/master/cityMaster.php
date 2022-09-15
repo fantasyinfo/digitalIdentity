@@ -12,9 +12,11 @@
     $this->load->model('CrudModel');
 
   // fetching city data
-    $cityData = $this->db->query("SELECT * FROM " . Table::cityTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
+    $cityData = $this->db->query("SELECT c.*, s.stateName FROM " . Table::cityTable . " c 
+    LEFT JOIN ".Table::stateTable." s ON s.id = c.stateId AND c.schoolUniqueCode = s.schoolUniqueCode
+    WHERE c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY c.id DESC")->result_array();
 
-
+    $stateData = $this->db->query("SELECT * FROM " . Table::stateTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' ORDER BY id DESC")->result_array();
     // edit and delete action
     if(isset($_GET['action']))
     {
@@ -79,6 +81,7 @@
     if(isset($_POST['submit']))
     {
       $cityName = $_POST['cityName'];
+      $stateId = $_POST['stateId'];
 
 
       $alreadyCity = $this->db->query("SELECT * FROM " . Table::cityTable . " WHERE cityName = '$cityName'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
@@ -94,7 +97,7 @@
           exit(0);
       }
 
-      $insertNewCity = $this->db->query("INSERT INTO " . Table::cityTable . " (schoolUniqueCode,cityName) VALUES ('{$_SESSION['schoolUniqueCode']}','$cityName')");
+      $insertNewCity = $this->db->query("INSERT INTO " . Table::cityTable . " (schoolUniqueCode,cityName,stateId) VALUES ('{$_SESSION['schoolUniqueCode']}','$cityName','$stateId')");
       if($insertNewCity)
       {
       
@@ -119,7 +122,10 @@
     {
       $cityName = $_POST['cityName'];
       $cityEditId = $_POST['updateCityId'];
-      $updateCity = $this->db->query("UPDATE " . Table::cityTable . " SET cityName = '$cityName' WHERE id = '$cityEditId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+      $stateId = $_POST['stateId'];
+      $updateCity = $this->db->query("UPDATE " . Table::cityTable . " SET cityName = '$cityName' , stateId = '$stateId' WHERE id = '$cityEditId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+
+      // echo $this->db->last_query(); die();
       if($updateCity)
       {
         $msgArr = [
@@ -200,40 +206,64 @@
             <?php //print_r($data['class']);
             ?>
             <div class="col-md-12 mx-auto">
-              <!-- jquery validation -->
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Add / Edit City</h3>
-                </div>
-                <!-- /.card-header -->
-                <!-- form start -->
-
-
-                <div class="row">
-                  <div class="card-body">
-                    <form method="post" action="">
-                    <?php 
-                    if(isset($_GET['action']) && $_GET['action'] == 'edit')
-                    {?>
-                     <input type="hidden" name="updateCityId" value="<?=$editId?>">
-                    <?php }
-                    
-                    ?>
-                      <div class="row">
-                        <div class="form-group col-md-3">
-                          <input type="text" name="cityName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['cityName'];}?>" class="form-control" id="name" placeholder="Enter city name" required>
+        
+                      <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">Add / Edit City</h3>
                         </div>
-                        <div class="form-group col-md-3">
-                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
+                        <div class="card-body">
+                          <div class="col-md-8 mx-auto">
+                          <form method="post" action="">
+                          <?php 
+                          if(isset($_GET['action']) && $_GET['action'] == 'edit')
+                          {?>
+                          <input type="hidden" name="updateCityId" value="<?=$editId?>">
+                          <?php }
+                          
+                          ?>
+                          <div class="form-group ">
+                            <label>Select State </label>
+                            <select name="stateId" id="stateId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <option disabled >States</option>
+                              <?php
+                               $selected = '';
+                              if (isset($stateData)) {
+                                foreach ($stateData as $state) {
+                                  if(isset($_GET['action']) && $_GET['action'] == 'edit')
+                                  { 
+                                    if($editCityData[0]['stateId'] == $state['id'])
+                                    {
+                                      $selected = 'selected';
+                                    }else
+                                    {
+                                      $selected = '';
+                                    }
+                                  }
+
+
+                              ?>
+                                  <option <?= $selected; ?> value="<?= $state['id'] ?>"><?= $state['stateName'] ?></option>
+                              <?php }
+                              }
+
+                              ?>
+                            </select>
+                          </div>
+                              <div class="form-group">
+                                <input type="text" name="cityName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['cityName'];}?>" class="form-control" id="name" placeholder="Enter city name" required>
+                              </div>
+                              <div class="form-group">
+                                <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-success btn-lg btn-block">Submit</button>
+                              </div>
+                           
+                          </form>
+                          </div>
+                         
                         </div>
                       </div>
-                    </form>
-                  </div>
-                  <!-- /.card -->
-                </div>
-                <!--/.col (left) -->
-                <!-- right column -->
-              </div>
+          
+               
+           
 
               <div class="row">
 
@@ -250,6 +280,7 @@
                             <th>Id</th>
                             <th>City Id</th>
                             <th>City Name</th>
+                            <th>State Name</th>
                             <th>Status</th> 
                             <th>Action</th>
                           </tr>
@@ -262,6 +293,7 @@
                                 <td><?= ++$i;?></td>
                                 <td><?= $cn['id'];?></td>
                                 <td><?= $cn['cityName'];?></td>
+                                <td><?= $cn['stateName'];?></td>
                                <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">

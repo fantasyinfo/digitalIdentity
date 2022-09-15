@@ -138,39 +138,29 @@
                           </tr>
                           <tr>
                               <td>  <label for="state">Select State</label></td>
-                              <td><select class="form-control select2 select2-danger" name="state" data-dropdown-css-class="select2-danger" style="width: 100%;">
-                          <?php 
-                          if(isset($data['state']) && !empty($data['state']))
-                          {
-                            $selectedState = '';
-                            foreach($data['state'] as $state)
-                            {
-                              ?>
-                                <option value="<?= $state['id'] ?>"><?= $state['stateName'] ?></option>
-                           <?php }
-                          }
-                          ?>
+                              <td><select class="form-control select2 select2-danger" name="state" id="stateIdd" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showCity()">
+                                <?php 
+                                if(isset($data['state']) && !empty($data['state']))
+                                {
+                                  $selectedState = '';
+                                  foreach($data['state'] as $state)
+                                  {
+                                    ?>
+                                      <option value="<?= $state['id'] ?>"><?= $state['stateName'] ?></option>
+                                <?php }
+                                }
+                                ?>
                         </select></td>
                           </tr>
                           <tr>
                               <td><label for="city">Select City</label></td>
-                              <td> <select class="form-control select2 select2-danger" name="city" data-dropdown-css-class="select2-danger" style="width: 100%;">
-                          <?php 
-                          if(isset($data['city']) && !empty($data['city']))
-                          {
-                            $selectedCity = '';
-                            foreach($data['city'] as $city)
-                            {
-                              ?>
-                                <option value="<?= $city['id'] ?>"><?= $city['cityName'] ?></option>
-                           <?php }
-                          }
-                          ?>
-                        </select></td>
+                              <td> <select class="form-control select2 select2-danger" id="cityData" name="city" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                         
+                            </select></td>
                           </tr>
                           <tr>
                               <td> <label for="pincode">Pincode</label></td>
-                              <td> <input type="text" name="pincode" class="form-control" id="pincode" placeholder="Enter Pincode"></td>
+                              <td> <input type="number" name="pincode" class="form-control" id="pincode" placeholder="Enter Pincode"></td>
                           </tr>
                           <tr>
                               <td> <label for="city">Select Image</label></td>
@@ -242,7 +232,38 @@
 
     <?php $this->load->view("adminPanel/pages/footer-copyright.php"); ?>
   </div>
+  <?php $this->load->view("adminPanel/pages/footer.php"); ?>
   <!-- ./wrapper -->
   <script>
-    var ajaxUrl = '<?= base_url() . 'ajax/listStudentsAjax' ?>';
+    var ajaxUrl = '<?= base_url() . 'ajax/showCityViaStateId' ?>';
+
+    // load default city
+      showCity();
+   
+      function showCity()
+        {
+
+          $('#cityData option').remove();
+          let stateId = $("#stateIdd").val();
+          $.ajax({
+              url: ajaxUrl,
+              method: 'post',
+              processData: 'false',
+              data : {
+                stateId : stateId,
+              },
+              success: function (response)
+              {
+                response =  $.parseJSON(response);
+                $('#cityData').append(response);
+              },
+              error: function (error)
+              {
+                console.log(error);
+              }
+
+            });
+        }
+
+
   </script>

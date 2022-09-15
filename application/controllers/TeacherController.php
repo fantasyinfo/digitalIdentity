@@ -61,7 +61,7 @@ class TeacherController extends CI_Controller
 			'submitFormUrl' => base_url('teacher/saveTeacher'),
 			'class' => $this->TeacherModel->allClass($this->schoolUniqueCode),
 			'section' => $this->TeacherModel->allSection($this->schoolUniqueCode),
-			'city' => $this->TeacherModel->allCity($this->schoolUniqueCode),
+			// 'city' => $this->TeacherModel->allCity($this->schoolUniqueCode),
 			'state' => $this->TeacherModel->allState($this->schoolUniqueCode),
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
@@ -80,7 +80,7 @@ class TeacherController extends CI_Controller
 			'submitFormUrl' => base_url('teacher/updateTeacher'),
 			'class' => $this->TeacherModel->allClass($this->schoolUniqueCode),
 			'section' => $this->TeacherModel->allSection($this->schoolUniqueCode),
-			'city' => $this->TeacherModel->allCity($this->schoolUniqueCode),
+			// 'city' => $this->TeacherModel->allCity($this->schoolUniqueCode),
 			'state' => $this->TeacherModel->allState($this->schoolUniqueCode),
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
