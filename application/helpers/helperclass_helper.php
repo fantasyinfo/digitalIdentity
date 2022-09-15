@@ -112,7 +112,7 @@ const invoicePrefix = 'INVOICE-00';
         $str = '01234567890123456789012345678901234567890123456789';
         return substr(str_shuffle($str), 0, 1);
     }
-    public static function APIresponse($status = 200, $msg = '', $data = '',$coins = '')
+    public static function APIresponse($status = 200, $msg = '', $data = '',$extraKey = [])
     {
         $sendArr = [];
         $sendArr['statusCode'] = $status;
@@ -120,8 +120,11 @@ const invoicePrefix = 'INVOICE-00';
         if (!empty($data)) {
             $sendArr['data'] = $data;
         }
-        if (!empty($coins)) {
-            $sendArr['coins'] = $coins;
+        if (!empty($extraKey)) {
+            foreach($extraKey as $key => $value)
+            {
+                $sendArr[$key] = $value;
+            }  
         }
         echo json_encode($sendArr);
         die();

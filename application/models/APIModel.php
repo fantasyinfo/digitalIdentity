@@ -149,7 +149,7 @@ class APIModel extends CI_Model
 
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
-      $sql = "SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, c.id as classId, c.className,ss.sectionName , ss.id as sectionId
+      $sql = "SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, stu.roll_no, c.id as classId, c.className,ss.sectionName , ss.id as sectionId
       FROM " . Table::studentTable . " stu 
       LEFT JOIN " . Table::classTable . " c ON c.id =  stu.class_id
       LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  stu.section_id
@@ -380,6 +380,7 @@ class APIModel extends CI_Model
       $returnArr['pincode'] = @$d[0]['pincode'];
       $returnArr['status'] = @$d[0]['status'];
       $returnArr['image'] = @$d[0]['image'];
+      $returnArr['roll_no'] = @$d[0]['roll_no'];
 
       // results with exam
       $returnArr['resultData'] = $this->StudentModel->showResultDataWithExam($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);

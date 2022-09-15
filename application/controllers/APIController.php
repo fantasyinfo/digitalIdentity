@@ -55,7 +55,7 @@ class APIController extends CI_Controller
 		$allStudents = $this->APIModel->showAllStudentForAttendence($loginUser[0]['userType'], $className, $sectionName,$schoolUniqueCode);
 		if($allStudents)
 		{
-			return HelperClass::APIresponse(200, 'All Students Lists For Attendence.', $allStudents);
+			return HelperClass::APIresponse(200, 'All Students Lists For Attendence.', $allStudents , ['totalCounts' => count($allStudents)]);
 		}else
 		{
 			return HelperClass::APIresponse(500, 'Students Not Found. Please Use Correct Details.');
@@ -108,7 +108,7 @@ class APIController extends CI_Controller
 		  $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Attendence'],$digiCoinF,$schoolUniqueCode);
 		  if($insertDigiCoin)
 		  {
-			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',$digiCoinF);
+			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',['coins' =>$digiCoinF]);
 		  }else
 		  {
 			return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
@@ -190,7 +190,7 @@ class APIController extends CI_Controller
 		 $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Departure'],$digiCoinF,$schoolUniqueCode);
 		 if($insertDigiCoin)
 		 {
-		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',$digiCoinF);
+		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',['coins' =>$digiCoinF]);
 		 }else
 		 {
 		   return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
@@ -413,7 +413,7 @@ class APIController extends CI_Controller
 					// insert the digicoin
 					$insertDigiCoin = $this->APIModel->insertDigiCoin($studentId, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
 					if ($insertDigiCoin) {
-						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',$perResultDigiCoin);
+						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',['coins' =>$perResultDigiCoin]);
 					} else {
 						return HelperClass::APIresponse(500, 'Result Updated & DigiCoin Not Inserted For Teacher ' . $this->db->last_query());
 					}
