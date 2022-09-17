@@ -1,8 +1,12 @@
-<div class="container">
-  <div class="content-wrapper">
+<!-- <div class="container">
+  <div class="content-wrapper"> -->
     <?php
 
-
+$isTeacher = false;
+if(isset($_GET['tecid']))
+{
+  $isTeacher = true;
+}
 
 
     $sd = $data['studentData'][0];
@@ -18,7 +22,7 @@
     }
 
     ?>
-<style>
+<!-- <style>
   .fa-solid, .fas {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -28,10 +32,10 @@
     padding: 8px;
  
 }
-</style>
+</style> -->
 
     <!-- Main content -->
-    <div class="content">
+    <!-- <div class="content">
       <div class="container-fluid">
         <div class="main-body">
           <div class="row gutters-sm">
@@ -56,13 +60,13 @@
                     <h4 class="card-title text-white">Student QR</h4>
                   </div>
                   <div class="card-body rounded">
-                    <!-- <div class="d-flex align-items-center text-align-center"> -->
+                  
                     <?php
                     $string = HelperClass::fullPathQR.$sd['user_id'];
                     $google_chart_api_url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=".$string."";
                       echo "<img src='".$google_chart_api_url."' alt='".$string."' id='qrCode' class='img-fluid rounded mx-auto d-block' >";
                     ?>
-                    <!-- </div> -->
+                  
                     <div class="row text-center">
                       <div class="col-md-6">
                         <button onclick="PrintImage('<?=$google_chart_api_url?>'); return false;" class="btn btn-lg btn-block btn-danger btn-rounded mb-1"><i class="fa-solid fa-print"></i> Print QR</button>
@@ -106,10 +110,7 @@
                       }
                       ?></h6>
                   </div>
-                <!-- <div class="row mb-2">
-                      <p class="mb-0" class="text-secondary" style="font-weight:500;">Attendence</p>
-                    <h6 class="mt-2" style="font-weight:600;">  <i class="fa-solid fa-calendar-check"></i> 78%</h6>
-                  </div> -->
+         
                 <div class="row mb-2">
                       <p class="mb-0" class="text-secondary" style="font-weight:500;">Class Teacher</p>
                     <h6 class="mt-2" style="font-weight:600;">  <i class="fa-solid fa-user"></i> <?= $sd['className'] . " - " . $sd['sectionName']; ?></h6>
@@ -145,11 +146,257 @@
         </div>
 
 
-        <!-- /.container-fluid -->
       </div>
-      <!-- /.content -->
-    </div>
-  </div>
+
+    </div> -->
+  <!-- </div>
+</div> -->
+
+
+
+
+<div class="resumebox">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6" >
+                    <div class="whitebox  namebox d-flex align-items-center">
+                        <div class="imgboy">
+                            <img src="<?= @$sd['image']; ?>" alt="" class="img-res" />
+                        </div>
+                        <div class="name_box">
+                            <h1><?= $sd['name']; ?></h1>
+                            <span>@<?= $sd['user_id']; ?></span>
+                        </div>
+                    </div>
+
+                    <div class="whitebox qrbox " id="qr1">
+                        <h2>QR Code</h2>
+                        <span>
+                        <?php
+                          $string = HelperClass::fullPathQR.$sd['user_id'];
+                          $google_chart_api_url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=".$string."";
+                            echo "<img src='".$google_chart_api_url."' alt='".$string."' id='qrCode' class='img-res' >";
+                          ?>
+                            <h6><?= $sd['user_id']; ?></h6>
+                        </span>
+                        <div class="btnbox d-flex align-items-center justify-content-center">
+                            <a href="#" class="btn_p" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Print QR<span><img src="<?= $dir . 'profile/'?>Print.svg" alt=""
+                                        class="img-res" /></span></a>
+                            <a href="#" class="btn_s">Share<span><img src="<?= $dir . 'profile/'?>share.svg" alt=""
+                                        class="img-res" /></span></a>
+                            <a href="#" class="btn_d" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Download<span><img src="<?= $dir . 'profile/'?>download.svg" alt=""
+                                        class="img-res"  /></span></a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6" >
+                    <div class="whitebox school_dts">
+                        <div class="detailbox">
+                            <ul>
+                                <li>
+                                    <label>School Name</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span>
+                                          <img src="<?=@$dir.@$schoolD[0]['image']?>" alt="" class="img-res" />
+                                        </span>
+                                        <h4><?= @$schoolD[0]['school_name'] ?></h4>
+                                    </div>
+                                </li>
+                                <?php if(!$isTeacher )
+                                { ?>
+                                <li>
+                                    <label>Class</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['className'] . " - " . $sd['sectionName']; ?></h4>
+                                    </div>
+                                </li>
+                                <?php }else
+                                { ?>
+                                  <li>
+                                  <label>Education</label>
+                                  <div class="box_dts d-flex align-items-center">
+                                      <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
+                                      <h4><?= $sd['education'] ; ?></h4>
+                                  </div>
+                                  </li>
+                                  <li>
+                                  <label>Experience</label>
+                                  <div class="box_dts d-flex align-items-center">
+                                      <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
+                                      <h4><?= HelperClass::experience[$sd['experience']]; ?></h4>
+                                  </div>
+                                  </li>
+                               <?php } ?>
+
+
+
+
+
+                                <?php if(!$isTeacher )
+                                { ?>
+                                  <li>
+                                    <label>Roll No</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon2.svg" alt="" class="img-res" /></span>
+                                        <h4><?= @$sd['roll_no']; ?></h4>
+                                    </div>
+                                </li>
+                                <?php } ?>
+                                <?php if(!$isTeacher )
+                                { ?>
+
+                                <li>
+                                    <label>Attendance</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon3.svg" alt="" class="img-res" /></span>
+                                        <h4>78%</h4>
+                                    </div>
+                                </li>
+                                <?php } ?>
+                               
+
+                                <?php if(!$isTeacher )
+                                { ?>
+                                <li>
+                                    <label>Class Teacher</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon4.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['className'] . " - " . $sd['sectionName']; ?></h4>
+                                    </div>
+                                </li>
+
+                                <?php } ?>
+                                
+
+                                <li>
+                                    <label>Phone Number</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon5.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['mobile']; ?></h4>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <label>Email Id</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon8.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['email']; ?></h4>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <label>Mother Name</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon6.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['mother_name']; ?></h4>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <label>Father Name</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon4.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['father_name']; ?></h4>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <label>Address</label>
+                                    <div class="box_dts d-flex align-items-center">
+                                        <span><img src="<?= $dir . 'profile/'?>dicon7.svg" alt="" class="img-res" /></span>
+                                        <h4><?= $sd['address'] . " - " . $sd['cityName'] . " - " . $sd['stateName'] . " - India"; ?>
+                                        </h4>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if($isTeacher)
+                { ?>
+
+  <div class="col-sm-12">
+                    <div class="whitebox reviewbox">
+                        <div class="rv_head d-flex align-items-center justify-content-lg-between">
+                            <h3>Reviews</h3>
+                            <div class="ftrbox">
+                                <span>Filter reviews by&nbsp;:&nbsp;</span>
+                                <select>
+                                    <option>View All</option>
+                                </select>
+                            </div>
+                        </div>
+                      <div class="pdvb">
+                        <div class="rvdetails">
+                            <span>Showing 1-5 out of 50+ reviews</span>
+
+                            <div class="sttxt d-flex justify-content-between align-items-center">
+                            <div class="star d-flex align-items-center">
+                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <h5>5.0</h5>
+                            </div>
+
+                            <h5>&#36;&nbsp;50.00 SGD</h5>
+                        </div>
+                        </div>
+
+                        <div class="details_rv ">
+                            <h4>Stripe checkout</h4>
+                            <p>Amazing coder worked tirelessly for me for a day, and made all the changes i requested without any issue. Constantly communicationg and showing me tests to ensure the payment cart work...<button type="button" class="btnmr">more</button></p>
+                       <ul class="lidsr d-flex">
+                        <li><a href="#">PHP</a></li>
+                        <li><a href="#">Website Design</a></li>
+                        <li><a href="#">WordPress</a></li>
+                        <li><a href="#">PayPal</a></li>
+                        <li><a href="#">HTML</a></li>
+                       </ul>
+
+                       <div class="boxname_d d-flex align-items-center mt-4">
+                        <h5>D</h5>
+                        <h6><b>Steve W.</b>&nbsp;<span>@designnerd007</span></h6>
+                        <span>&#729;&nbsp;6 month ago</span>
+                       </div>
+                        </div>
+                    </div></div>
+                </div> 
+
+             <?php   } ?>
+           
+
+
+                <div class="col-sm-12">
+                <div class="whitebox qrbox " id="qr2">
+                        <h2>QR Code</h2>
+                        <span>
+                        <?php
+                          $string = HelperClass::fullPathQR.$sd['user_id'];
+                          $google_chart_api_url = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=".$string."";
+                            echo "<img src='".$google_chart_api_url."' alt='".$string."' id='qrCode' class='img-res' >";
+                          ?>
+                            <h6><?= $sd['user_id']; ?></h6>
+                        </span>
+                        <div class="btnbox d-flex align-items-center justify-content-center">
+                            <a href="#" class="btn_p" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Print QR<span><img src="<?= $dir . 'profile/'?>Print.svg" alt=""
+                                        class="img-res" /></span></a>
+                            <a href="#" class="btn_s">Share<span><img src="<?= $dir . 'profile/'?>share.svg" alt=""
+                                        class="img-res" /></span></a>
+                            <a href="#" class="btn_d" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Download<span><img src="<?= $dir . 'profile/'?>download.svg" alt=""
+                                        class="img-res"  /></span></a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">

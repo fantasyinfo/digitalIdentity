@@ -2,3 +2,6 @@
 
 
 -- ALTER TABLE `city` ADD `stateId` INT NULL AFTER `cityName`;
+
+
+CREATE TABLE `rating_and_reviews` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `login_user_id` INT NOT NULL , `login_user_type` INT NOT NULL , `user_id` INT NOT NULL , `user_type` INT NOT NULL , `stars` ENUM('1','2','3','4','5') NOT NULL , `review` TEXT NOT NULL , `for_what` VARCHAR(100) NOT NULL , `status` ENUM("1","2","3","4") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
