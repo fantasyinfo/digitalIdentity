@@ -1,11 +1,17 @@
 <!-- <div class="container">
   <div class="content-wrapper"> -->
+
+
+  
+
     <?php
 
 $isTeacher = false;
+$stTable = Table::studentTable;
 if(isset($_GET['tecid']))
 {
   $isTeacher = true;
+  $stTable = Table::teacherTable;
 }
 
 
@@ -13,7 +19,7 @@ if(isset($_GET['tecid']))
     //print_r($sd);
     $dir = base_url().HelperClass::uploadImgDir;
     $schoolD = $this->db->query("SELECT smt.* FROM ".Table::schoolMasterTable." smt 
-    LEFT JOIN ".Table::studentTable."  s ON s.schoolUniqueCode = smt.unique_id 
+    LEFT JOIN ".$stTable."  s ON s.schoolUniqueCode = smt.unique_id 
     WHERE s.user_id = '{$sd['user_id']}' ORDER BY smt.id DESC LIMIT 1 ")->result_array();
 
     if(!$sd || empty( $sd) )
@@ -226,7 +232,7 @@ if(isset($_GET['tecid']))
                                   <label>Experience</label>
                                   <div class="box_dts d-flex align-items-center">
                                       <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
-                                      <h4><?= HelperClass::experience[$sd['experience']]; ?></h4>
+                                      <h4><?= @HelperClass::experience[$sd['experience']]; ?></h4>
                                   </div>
                                   </li>
                                <?php } ?>
@@ -317,60 +323,91 @@ if(isset($_GET['tecid']))
                 </div>
 
                 <?php if($isTeacher)
-                { ?>
+                {
+                  
+                  $reviews = $this->db->query("SELECT * FROM ".Table::ratingAndReviewTable." WHERE user_id = '{$sd['id']}' AND user_type = '".HelperClass::userType['Teacher']."' AND schoolUniqueCode = '{$sd['schoolUniqueCode']}' AND status = '1'")->result_array();
+                  
+                  $totalStars = $this->db->query("SELECT SUM(stars) as totalStars FROM ".Table::ratingAndReviewTable." 
+                  WHERE user_id = '{$sd['id']}' AND user_type = '".HelperClass::userType['Teacher']."' AND schoolUniqueCode = '{$sd['schoolUniqueCode']}' AND status = '1'  GROUP BY user_id ")->result_array();
 
-  <div class="col-sm-12">
-                    <div class="whitebox reviewbox">
-                        <div class="rv_head d-flex align-items-center justify-content-lg-between">
-                            <h3>Reviews</h3>
-                            <div class="ftrbox">
-                                <span>Filter reviews by&nbsp;:&nbsp;</span>
-                                <select>
-                                    <option>View All</option>
-                                </select>
+
+                  $totalCountReview = count($reviews);
+                  // HelperClass::prePrintR($reviews);
+                  if(!empty($reviews))
+                  {
+                  ?>
+                  <div class="col-sm-12 py-2">
+                    <div class="whitebox reviewbox py-3 px-2">
+                      
+                        <!-- <span style="margin:20px;">Showing 1-5 out of <?= $totalCountReview; ?> reviews</span> -->
+                        <table id="newtable1" class="table">
+                          <thead>
+                            <tr>
+                              <th>
+                              <!-- <div class="d-flex align-items-center justify-content-lg-between"> -->
+                                <span>Total Reviews : <b><?= $totalCountReview; ?></b></span>
+                                <!-- OverAll Rating <?=  ($totalStars[0]['totalStars'] / $totalCountReview) * 5 ?> -->
+                               <!-- </div> -->
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                <?php  
+                    foreach($reviews as $r)
+                    { ?>
+                      <tr>
+                        <td>
+                         <div class="pdvb">
+                          <div class="rvdetails">
+                          <div class="sttxt d-flex justify-content-between align-items-center">
+                                <div class="star d-flex align-items-center">
+                                  <?php 
+                                  
+                                  for($j=0; $j <$r['stars'];$j++ )
+                                  { ?>
+                                    <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <?php }
+                                  
+                                  ?>
+                                    <h5><?=$r['stars'];?>.0</h5>
+                                </div>
+
+                                <h5>&nbsp;<?= HelperClass::reviewType[$r['for_what']]; ?></h5>
                             </div>
-                        </div>
-                      <div class="pdvb">
-                        <div class="rvdetails">
-                            <span>Showing 1-5 out of 50+ reviews</span>
-
-                            <div class="sttxt d-flex justify-content-between align-items-center">
-                            <div class="star d-flex align-items-center">
-                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
-                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
-                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
-                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
-                                <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
-                                <h5>5.0</h5>
-                            </div>
-
-                            <h5>&#36;&nbsp;50.00 SGD</h5>
-                        </div>
-                        </div>
-
-                        <div class="details_rv ">
-                            <h4>Stripe checkout</h4>
-                            <p>Amazing coder worked tirelessly for me for a day, and made all the changes i requested without any issue. Constantly communicationg and showing me tests to ensure the payment cart work...<button type="button" class="btnmr">more</button></p>
-                       <ul class="lidsr d-flex">
-                        <li><a href="#">PHP</a></li>
-                        <li><a href="#">Website Design</a></li>
-                        <li><a href="#">WordPress</a></li>
-                        <li><a href="#">PayPal</a></li>
-                        <li><a href="#">HTML</a></li>
-                       </ul>
-
-                       <div class="boxname_d d-flex align-items-center mt-4">
-                        <h5>D</h5>
-                        <h6><b>Steve W.</b>&nbsp;<span>@designnerd007</span></h6>
-                        <span>&#729;&nbsp;6 month ago</span>
-                       </div>
-                        </div>
-                    </div></div>
-                </div> 
-
-             <?php   } ?>
-           
-
+                          </div>
+                          <div class="details_rv">
+                                  <h4><?=$r['review_title'];?></h4>
+                                  <p><?=$r['review'];?></p>
+                                  <div class="boxname_d d-flex align-items-center mt-4">
+                                          <?php 
+                                          
+                                          if($r['login_user_type'] == HelperClass::userType['Parent'])
+                                          {
+                                            $tTable = Table::studentTable;
+                                          }
+                                          
+                                        $ratingProviderUser =  $this->db->query("SELECT father_name, mother_name, user_id FROM ".$tTable." WHERE id = '{$r['login_user_id']}' AND schoolUniqueCode = '{$sd['schoolUniqueCode']}' AND status = '1' ")->result_array();
+                                          
+                                        if(!empty($ratingProviderUser))
+                                        { ?>
+                                          <h5><?=$ratingProviderUser[0]['father_name'][0]; ?></h5>
+                                          <h6><b><?= $ratingProviderUser[0]['father_name'] . " & " . $ratingProviderUser[0]['mother_name'] ?> </b>&nbsp;
+                                          <span style="color:dimgrey">@<?=$ratingProviderUser[0]['user_id']?></span></h6>
+                                          <span style="color:dimgrey">&#729;&nbsp;<?= date('d-m-Y h:i:A', strtotime($r['created_at']));?></span>
+                                        <?php }
+                                          ?>
+                                  </div>
+                          </div>
+                         </div>
+                        </td>
+                      </tr>
+                   <?php }   ?>
+          
+             </tbody>
+                      </table>
+             </div>
+ </div> 
+ <?php } } ?>
 
                 <div class="col-sm-12">
                 <div class="whitebox qrbox " id="qr2">
@@ -398,7 +435,14 @@ if(isset($_GET['tecid']))
             </div>
         </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
 <script type="text/javascript">
 
 function ImagetoPrint(source) {
@@ -431,4 +475,38 @@ btnDownload.addEventListener('click', () => {
 function getFileName(str) {
     return str.substring(str.lastIndexOf('/') + 1)
 }
+
+// function showModal()
+// {
+//   // $('#myModal').modal(options)
+//   $("#reasonModal").modal('show');
+// }
+
+
+// function hideMe()
+// {
+//   $("#reasonModal").modal('hide');
+// }
+
+
+</script>
+
+<script>
+console.log('aaya');
+$(document).ready(function () {
+    $('#newtable1').DataTable({
+      // searching: false
+      pageLength : 5,
+      lengthMenu: [5, 10, 20],
+      ordering: false,
+      language: {
+            "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "No Data Found",
+            "info": "Showing _START_ Out Of _END_ Reviews From Total _TOTAL_ Reviews",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+        }
+    });
+    console.log('aaya');
+});
 </script>

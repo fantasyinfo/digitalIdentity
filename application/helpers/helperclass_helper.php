@@ -60,6 +60,10 @@ class HelperClass
 
     ];
 
+    const reviewType =[
+        '1' => 'Result Published'
+    ];
+
     const colorClassType =
     [
         'primary',
