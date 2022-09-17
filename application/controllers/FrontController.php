@@ -21,7 +21,7 @@ class FrontController extends CI_Controller {
 		if(isset($_GET['stuid']))
 		{
 			$dataArr = [
-				'pageTitle' => 'HomePage',
+				'pageTitle' => 'Student Profile',
 				'studentData' => $this->StudentModel->showStudentProfile(),
 				'adminPanelUrl' => $this->adminPanelURL,
 			];
@@ -45,7 +45,7 @@ class FrontController extends CI_Controller {
 		}else if(isset($_GET['tecid']))
 		{
 			$dataArr = [
-				'pageTitle' => 'HomePage',
+				'pageTitle' => 'Teacher Profile',
 				'studentData' => $this->TeacherModel->showTeacherProfile(),
 				'adminPanelUrl' => $this->adminPanelURL,
 			];
@@ -53,7 +53,7 @@ class FrontController extends CI_Controller {
 			if(isset($dataArr['studentData']) && !empty($dataArr['studentData']))
 			{
 				$this->load->view($this->frontViewDir .'pages/header',['data' => $dataArr]);
-				$this->load->view($this->frontViewDir .'index');
+				$this->load->view($this->frontViewDir .'teacherProfile');
 				$this->load->view($this->frontViewDir .'pages/footer');
 			}else
 			{

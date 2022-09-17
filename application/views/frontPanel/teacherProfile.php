@@ -1,20 +1,26 @@
- <?php
+<?php
 
-$isTeacher = false;
+
 $stTable = Table::studentTable;
+$sd = $data['studentData'][0];
+
+if(!$sd || empty( $sd) )
+{
+  header('Location: '.HelperClass::brandUrl);
+}
 
 
-    $sd = $data['studentData'][0];
-    //print_r($sd);
-    $dir = base_url().HelperClass::uploadImgDir;
-    $schoolD = $this->db->query("SELECT smt.* FROM ".Table::schoolMasterTable." smt 
-    LEFT JOIN ".$stTable."  s ON s.schoolUniqueCode = smt.unique_id 
-    WHERE s.user_id = '{$sd['user_id']}' ORDER BY smt.id DESC LIMIT 1 ")->result_array();
+if(isset($_GET['tecid']))
+{
+  $isTeacher = true;
+  $stTable = Table::teacherTable;
 
-    if(!$sd || empty( $sd) )
-    {
-      header('Location: '.HelperClass::brandUrl);
-    }
+  $dir = base_url().HelperClass::uploadImgDir;
+  $schoolD = $this->db->query("SELECT smt.* FROM ".Table::schoolMasterTable." smt 
+  LEFT JOIN ".$stTable."  s ON s.schoolUniqueCode = smt.unique_id 
+  WHERE s.user_id = '{$sd['user_id']}' ORDER BY smt.id DESC LIMIT 1 ")->result_array();
+}
+
 
     ?>
 
@@ -67,39 +73,22 @@ $stTable = Table::studentTable;
                                         <h4><?= @$schoolD[0]['school_name'] ?></h4>
                                     </div>
                                 </li>
-                              
-                                <li>
-                                    <label>Class</label>
-                                    <div class="box_dts d-flex align-items-center">
-                                        <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
-                                        <h4><?= $sd['className'] . " - " . $sd['sectionName']; ?></h4>
-                                    </div>
-                                </li>
-                             
+                           
                                   <li>
-                                    <label>Roll No</label>
-                                    <div class="box_dts d-flex align-items-center">
-                                        <span><img src="<?= $dir . 'profile/'?>dicon2.svg" alt="" class="img-res" /></span>
-                                        <h4><?= @$sd['roll_no']; ?></h4>
-                                    </div>
-                                </li>
-                               
-
-                                <li>
-                                    <label>Attendance</label>
-                                    <div class="box_dts d-flex align-items-center">
-                                        <span><img src="<?= $dir . 'profile/'?>dicon3.svg" alt="" class="img-res" /></span>
-                                        <h4>78%</h4>
-                                    </div>
-                                </li>
-                               
-                                <li>
-                                    <label>Class Teacher</label>
-                                    <div class="box_dts d-flex align-items-center">
-                                        <span><img src="<?= $dir . 'profile/'?>dicon4.svg" alt="" class="img-res" /></span>
-                                        <h4><?= $sd['className'] . " - " . $sd['sectionName']; ?></h4>
-                                    </div>
-                                </li>
+                                  <label>Education</label>
+                                  <div class="box_dts d-flex align-items-center">
+                                      <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
+                                      <h4><?= $sd['education'] ; ?></h4>
+                                  </div>
+                                  </li>
+                                  <li>
+                                  <label>Experience</label>
+                                  <div class="box_dts d-flex align-items-center">
+                                      <span><img src="<?= $dir . 'profile/'?>dicon1.svg" alt="" class="img-res" /></span>
+                                      <h4><?= @HelperClass::experience[$sd['experience']]; ?></h4>
+                                  </div>
+                                  </li>
+                             
 
                                 <li>
                                     <label>Phone Number</label>
@@ -145,6 +134,109 @@ $stTable = Table::studentTable;
                         </div>
                     </div>
                 </div>
+
+                <?php 
+                
+                  
+                  $reviews = $this->db->query("SELECT * FROM ".Table::ratingAndReviewTable." WHERE user_id = '{$sd['id']}' AND user_type = '".HelperClass::userType['Teacher']."' AND schoolUniqueCode = '{$sd['schoolUniqueCode']}' AND status = '1'")->result_array();
+                  
+                  $totalStars = $this->db->query("SELECT SUM(stars) as totalStars FROM ".Table::ratingAndReviewTable." 
+                  WHERE user_id = '{$sd['id']}' AND user_type = '".HelperClass::userType['Teacher']."' AND schoolUniqueCode = '{$sd['schoolUniqueCode']}' AND status = '1'  GROUP BY user_id ")->result_array();
+
+
+                  $totalCountReview = count($reviews);
+                  // HelperClass::prePrintR($reviews);
+                  if(!empty($reviews))
+                  {
+                  ?>
+                  <div class="col-sm-12 py-2">
+                    <div class="whitebox reviewbox py-3 px-2">
+                      
+                        <!-- <span style="margin:20px;">Showing 1-5 out of <?= $totalCountReview; ?> reviews</span> -->
+                        <table id="newtable1" class="table">
+                          <thead>
+                            <tr>
+                              <th>
+                              <!-- <div class="d-flex align-items-center justify-content-lg-between"> -->
+                                <span>Total Reviews : <b><?= $totalCountReview; ?></b></span>
+                                <!-- OverAll Rating <?=  ($totalStars[0]['totalStars'] / $totalCountReview) * 5 ?> -->
+                               <!-- </div> -->
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                <?php  
+                    foreach($reviews as $r)
+                    { ?>
+                      <tr>
+                        <td>
+                         <div class="pdvb">
+                          <div class="rvdetails">
+                          <div class="sttxt d-flex justify-content-between align-items-center">
+                                <div class="star d-flex align-items-center">
+                                  <?php 
+                                  
+                                  for($j=0; $j <$r['stars'];$j++ )
+                                  { ?>
+                                    <span><img src="<?= $dir . 'profile/'?>star.svg" alt="" class="img-res"/></span>
+                                <?php }
+                                  
+                                  ?>
+                                    <h5><?=$r['stars'];?>.0</h5>
+                                </div>
+
+                                <h5>&nbsp;<?= HelperClass::reviewType[$r['for_what']]; ?></h5>
+                            </div>
+                          </div>
+                          <div class="details_rv">
+                                  <h4><?=$r['review_title'];?></h4>
+                                  <p><?=$r['review'];?></p>
+                                  <div class="boxname_d d-flex align-items-center mt-4">
+                                          <?php 
+                                          
+                                          if($r['login_user_type'] == HelperClass::userType['Parent'])
+                                          {
+                                            $tTable = Table::studentTable;
+                                            
+                                          }else
+                                          {
+ $tTable = Table::studentTable;
+                                          }
+                                         
+                                          $qrTable = Table::qrcodeTable;
+                                        $ratingProviderUser =  $this->db->query("SELECT u.father_name, u.mother_name, u.user_id, qr.qrcodeUrl
+                                         FROM ".$tTable." u
+                                        LEFT JOIN ".$qrTable." qr ON u.user_id = qr.uniqueValue
+                                        WHERE u.id = '{$r['login_user_id']}' 
+                                        AND u.schoolUniqueCode = '{$sd['schoolUniqueCode']}' 
+                                        AND qr.schoolUniqueCode = '{$sd['schoolUniqueCode']}'
+                                        AND u.status = '1' ")->result_array();
+                                          
+                                        if(!empty($ratingProviderUser))
+                                        { ?>
+                                         <h5><?=@$ratingProviderUser[0]['father_name'][0]; ?></h5>
+                                         <a href="<?= @$ratingProviderUser[0]['qrcodeUrl'] ?>" target="_blank">
+                                          <h6>
+                                            <b><?= @$ratingProviderUser[0]['father_name'] . " & " . @$ratingProviderUser[0]['mother_name'] ?>
+                                           </b>&nbsp;
+                                          </a>
+                                          <span style="color:dimgrey">@<?=$ratingProviderUser[0]['user_id']?></span></h6>
+                                      
+                                          <span style="color:dimgrey">&#729;&nbsp;<?= date('d-m-Y h:i:A', strtotime($r['created_at']));?></span>
+                                        <?php }
+                                          ?>
+                                  </div>
+                          </div>
+                         </div>
+                        </td>
+                      </tr>
+                   <?php }   ?>
+          
+             </tbody>
+                      </table>
+             </div>
+ </div> 
+ <?php }  ?>
 
                 <div class="col-sm-12">
                 <div class="whitebox qrbox " id="qr2">
@@ -212,18 +304,6 @@ btnDownload.addEventListener('click', () => {
 function getFileName(str) {
     return str.substring(str.lastIndexOf('/') + 1)
 }
-
-// function showModal()
-// {
-//   // $('#myModal').modal(options)
-//   $("#reasonModal").modal('show');
-// }
-
-
-// function hideMe()
-// {
-//   $("#reasonModal").modal('hide');
-// }
 
 
 </script>
