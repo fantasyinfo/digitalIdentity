@@ -84,7 +84,7 @@ class APIModel extends CI_Model
       //
     } else if ($type == 'Principal') {
       //
-    }else if($type == 'Parent')
+    }else if($type == 'Parent' || $type == 'Student')
     {
       $mobile = $id;
       $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
@@ -103,12 +103,13 @@ class APIModel extends CI_Model
         for($i = 0 ; $i < $totalStudentsCount; $i++)
         {
           $subArr = [];
-          $subArr["userId"] = @$userData[0]["user_id"];
-          $subArr["name"] = @$userData[0]["name"];
-          $subArr["image"] = @$userData[0]["image"];
-          $subArr["user_id"] = @$userData[0]["user_id"];
-          $subArr["className"] = @$userData[0]["className"];
-          $subArr["sectionName"] = @$userData[0]["sectionName"];
+          $subArr["studentId"] = @$userData[$i]["id"];
+          $subArr["userId"] = @$userData[$i]["user_id"];
+          $subArr["name"] = @$userData[$i]["name"];
+          $subArr["image"] = @$userData[$i]["image"];
+          $subArr["user_id"] = @$userData[$i]["user_id"];
+          $subArr["className"] = @$userData[$i]["className"];
+          $subArr["sectionName"] = @$userData[$i]["sectionName"];
           $subArr["authToken"] = @$authToken;
           $subArr["userType"] = @$type;
           $subArr["schoolUniqueCode"] = @$schoolUniqueCode;
@@ -155,6 +156,10 @@ class APIModel extends CI_Model
   // show students for attendence
   public function showAllStudentForAttendence($type, $class, $section, $schoolUniqueCode)
   {
+
+    if( date('D') == 'Sun') { 
+      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
+    }
 
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
@@ -247,6 +252,9 @@ class APIModel extends CI_Model
   // showSubmitAttendenceData
   public function showSubmitAttendenceData($className, $sectionName, $schoolUniqueCode)
   {
+    if( date('D') == 'Sun') { 
+      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
+    }
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
     $d = $this->db->query("SELECT at.id as attendenceId, at.attendenceStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::attendenceTable . " at 
@@ -951,6 +959,8 @@ class APIModel extends CI_Model
       if (!empty($d)) {
 
         $sendArr = [];
+        $sendArr['topOne'] = [];
+        $sendArr['topTwo'] = [];
         $sendArr['topThree'] = [];
         $sendArr['restAll'] = [];
 
@@ -961,16 +971,46 @@ class APIModel extends CI_Model
 
          if($i == 0 || $i == 1 || $i == 2)
          {
-          $topSubArr = [];
-          $topSubArr['position'] = $a++;
-          $topSubArr['userType'] = $d[$i]['user_type'];
-          $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
-          $topSubArr['name'] = @$userDetails[0]['name'];
-          $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-          $topSubArr['className'] = @$userDetails[0]['className'];
-          $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-          $topSubArr['image'] = $dir.@$userDetails[0]['image'];
-          array_push($sendArr['topThree'], $topSubArr);
+          if($i == 0 )
+          {
+            $topSubArr = [];
+            $topSubArr['position'] = $a++;
+            $topSubArr['userType'] = $d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['name'] = @$userDetails[0]['name'];
+            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+            $topSubArr['className'] = @$userDetails[0]['className'];
+            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $sendArr['topOne']= $topSubArr;
+          }
+          if($i == 1)
+          {
+            $topSubArr = [];
+            $topSubArr['position'] = $a++;
+            $topSubArr['userType'] = $d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['name'] = @$userDetails[0]['name'];
+            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+            $topSubArr['className'] = @$userDetails[0]['className'];
+            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $sendArr['topTwo'] = $topSubArr;
+          }
+          if($i == 2)
+          {
+            $topSubArr = [];
+            $topSubArr['position'] = $a++;
+            $topSubArr['userType'] = $d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['name'] = @$userDetails[0]['name'];
+            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+            $topSubArr['className'] = @$userDetails[0]['className'];
+            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $sendArr['topThree'] =$topSubArr;
+          }
+         
            continue;
          }
 
@@ -1000,6 +1040,8 @@ class APIModel extends CI_Model
       if (!empty($d)) {
 
         $sendArr = [];
+        $sendArr['topOne'] = [];
+        $sendArr['topTwo'] = [];
         $sendArr['topThree'] = [];
         $sendArr['restAll'] = [];
 
@@ -1010,16 +1052,45 @@ class APIModel extends CI_Model
 
          if($i == 0 || $i == 1 || $i == 2)
          {
-          $topSubArr = [];
-          $topSubArr['position'] = $a++;
-          $topSubArr['userType'] = $d[$i]['user_type'];
-          $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
-          $topSubArr['name'] = @$userDetails[0]['name'];
-          $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-          $topSubArr['className'] = @$userDetails[0]['className'];
-          $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-          $topSubArr['image'] = $dir.@$userDetails[0]['image'];
-          array_push($sendArr['topThree'], $topSubArr);
+          if($i == 0 )
+          {
+            $topSubArr = [];
+            $topSubArr['position'] = $a++;
+            $topSubArr['userType'] = $d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['name'] = @$userDetails[0]['name'];
+            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+            $topSubArr['className'] = @$userDetails[0]['className'];
+            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $sendArr['topOne'] =  $topSubArr;
+          }
+          if($i == 1)
+          {
+            $topSubArr = [];
+            $topSubArr['position'] = $a++;
+            $topSubArr['userType'] = $d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['name'] = @$userDetails[0]['name'];
+            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+            $topSubArr['className'] = @$userDetails[0]['className'];
+            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $sendArr['topTwo'] = $topSubArr;
+          }
+          if($i == 2)
+          {
+            $topSubArr = [];
+            $topSubArr['position'] = $a++;
+            $topSubArr['userType'] = $d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['name'] = @$userDetails[0]['name'];
+            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+            $topSubArr['className'] = @$userDetails[0]['className'];
+            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $sendArr['topThree'] =  $topSubArr;
+          }
            continue;
          }
 
@@ -1046,6 +1117,11 @@ class APIModel extends CI_Model
   public function bannerForApp($schoolUniqueCode)
   {
     return $this->db->query("SELECT * FROM " . Table::bannerTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+  }
+
+  public function notificationsForParent($schoolUniqueCode)
+  {
+    return $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC ")->result_array();
   }
 
   // leaderBoard

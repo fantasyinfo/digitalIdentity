@@ -723,6 +723,31 @@ public function updateHomeWork()
 		}
 	}
 
+	// notificationsForParent
+	public function notificationsForParent()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$notificationsData = $this->APIModel->notificationsForParent($schoolUniqueCode);
+
+		if (!$notificationsData) {
+			return HelperClass::APIresponse(500, 'No New Notification Found. ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Notifications Data.', $notificationsData);
+		}
+	}
+
 
 	// count digicoin
 	public function getAlreadyDigiCoinCount()

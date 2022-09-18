@@ -200,6 +200,7 @@ $apiRoutesArr = [
     'leaderBoard',
     'visitorEntry',
     'bannerForApp',
+    'notificationsForParent'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
