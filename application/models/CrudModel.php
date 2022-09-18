@@ -155,6 +155,7 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
+            // print_r($data);
             $condition = " 
              AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
              AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
@@ -163,7 +164,7 @@ class CrudModel extends CI_Model
              AND ct.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
             ";
 
-            if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
+            if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']) || isset($data['studentSection']))
             {
                 if(!empty($data['studentName']))
                 {
@@ -171,7 +172,11 @@ class CrudModel extends CI_Model
                 }
                 if(!empty($data['studentClass']))
                 {
-                    $condition .= " AND c.className LIKE '%{$data['studentClass']}%' ";
+                    $condition .= " AND c.id = '{$data['studentClass']}' ";
+                }
+                if(!empty($data['studentSection']))
+                {
+                    $condition .= " AND ss.id = '{$data['studentSection']}' ";
                 }
                 if(!empty($data['studentMobile']))
                 {
@@ -190,14 +195,14 @@ class CrudModel extends CI_Model
                 {
                     $condition .= " 
                     OR s.name LIKE '%{$data['search']['value']}%' 
-                    OR c.className LIKE '%{$data['search']['value']}%' 
+                    OR c.id LIKE '%{$data['search']['value']}%' 
                     OR s.mobile LIKE '%{$data['search']['value']}%' 
                     OR s.user_id LIKE '%{$data['search']['value']}%' 
                     ";
                 }
             }
       
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -212,7 +217,7 @@ class CrudModel extends CI_Model
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -243,12 +248,30 @@ class CrudModel extends CI_Model
                 $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
                 $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
 
-                  if($d[$i]['status'] == 'Active')
-                    {
-                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
-                    }else{
-                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
-                    };
+                if($d[$i]['status'] == '1') 
+                {
+                    $ns =  '2';
+                }
+                else{
+                    $ns = '1';
+                }
+
+           
+                if($d[$i]['status'] == '1') 
+                {
+                    $cclas = 'success';
+                    $ssus = 'Active';
+                }
+                else{
+                    $cclas = 'danger';
+                    $ssus = 'Inactive';
+                }
+
+                
+
+                $subArr[] = "<a href='?action=status&edit_id=".$d[$i]['id']."&status=".$ns." ' class='badge badge-".$cclas ."'> ".$ssus."</a>";
+
+
 
                 $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
                 $subArr[] = '
@@ -318,7 +341,7 @@ class CrudModel extends CI_Model
                 }
             }
       
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -333,7 +356,7 @@ class CrudModel extends CI_Model
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -366,12 +389,28 @@ class CrudModel extends CI_Model
                 $subArr[] = @HelperClass::experience[$d[$i]['experience']];
                 $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
 
-                  if($d[$i]['status'] == 'Active')
-                    {
-                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
-                    }else{
-                        $subArr[] = '<span class="badge badge-success">'.$d[$i]['status'].'</span>';
-                    };
+                if($d[$i]['status'] == '1') 
+                {
+                    $ns =  '2';
+                }
+                else{
+                    $ns = '1';
+                }
+
+           
+                if($d[$i]['status'] == '1') 
+                {
+                    $cclas = 'success';
+                    $ssus = 'Active';
+                }
+                else{
+                    $cclas = 'danger';
+                    $ssus = 'Inactive';
+                }
+
+                
+
+                $subArr[] = "<a href='?action=status&edit_id=".$d[$i]['id']."&status=".$ns." ' class='badge badge-".$cclas ."'> ".$ssus."</a>";
 
                 $subArr[] = '
                 <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  

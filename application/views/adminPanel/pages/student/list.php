@@ -32,6 +32,44 @@
     <div class="content">
       <div class="container-fluid">
       <?php 
+
+
+
+$this->load->model('CrudModel');
+$classData = $this->CrudModel->allClass(Table::classTable, $_SESSION['schoolUniqueCode']);
+$sectionData = $this->CrudModel->allSection(Table::sectionTable, $_SESSION['schoolUniqueCode']);
+
+if(isset($_GET['action']) )
+{
+  if($_GET['action'] == 'status')
+  {
+    $status = $_GET['status'];
+    $updateId = $_GET['edit_id'];
+    $updateStatus = $this->db->query("UPDATE " . Table::studentTable . " SET status = '$status' WHERE id = '$updateId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+
+    if($updateStatus)
+    {
+      $msgArr = [
+        'class' => 'success',
+        'msg' => 'Student Status Updated Successfully',
+      ];
+      $this->session->set_userdata($msgArr);
+    }else
+    {
+      $msgArr = [
+        'class' => 'danger',
+        'msg' => 'Student Status Not Updated Due to this Error. ' . $this->db->last_query(),
+      ];
+      $this->session->set_userdata($msgArr);
+    }
+    header("Refresh:1 ".base_url()."student/list");
+  }
+}
+
+
+
+
+
               if(!empty($this->session->userdata('msg')))
               {?>
 
@@ -62,8 +100,28 @@
             <input type="text" class="form-control" id="studentName" placeholder="Search by name">
           </div>
           <div class="form-group col-md-2">
-          <label >Class</label>
-            <input type="text" class="form-control" id="studentClass" placeholder="Search by class">
+          <label>Select Class </label>
+          <select  id="studentClass" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+              <?php 
+              if(isset($classData))
+              {
+               foreach($classData as $cd)
+                {  ?>
+              <option value="<?=$cd['id']?>"><?=$cd['className']?></option>
+            <?php } } ?>   
+           </select>
+          </div>
+          <div class="form-group col-md-2">
+          <label>Select Section </label>
+          <select  id="studentSection" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+              <?php 
+              if(isset($sectionData))
+              {
+               foreach($sectionData as $sd)
+                {  ?>
+              <option value="<?=$sd['id']?>"><?=$sd['sectionName']?></option>
+            <?php } } ?>   
+           </select>
           </div>
           <div class="form-group col-md-2">
           <label >Mobile No</label>
@@ -81,7 +139,7 @@
           <label >To Date</label>
             <input type="date" class="form-control" id="toDate">
           </div>
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-2 pt-4">
             <button id="search" class="btn btn-primary">Submit</button>
             <button onclick="window.location.reload();" class="btn btn-warning">Clear</button>
           </div>
@@ -141,7 +199,7 @@
    // datatable student list intilizing
  loadStudentDataTable();
 
-function loadStudentDataTable(sn = '',sc = '',sm = '',si = '',fd = '',td = '')
+function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',si = '',fd = '',td = '')
 {
    $("#listDatatable").DataTable({
      "responsive": true, "lengthChange": true, "autoWidth": true,
@@ -165,6 +223,7 @@ function loadStudentDataTable(sn = '',sc = '',sm = '',si = '',fd = '',td = '')
          data : {
            studentName: sn,
            studentClass: sc,
+           studentSection: ss,
            studentMobile: sm,
            studentUserId: si,
            studentFromDate: fd,
@@ -184,6 +243,7 @@ function loadStudentDataTable(sn = '',sc = '',sm = '',si = '',fd = '',td = '')
    loadStudentDataTable(
      $("#studentName").val(),
      $("#studentClass").val(),
+     $("#studentSection").val(),
      $("#studentMobile").val(),
      $("#studentUserId").val(),
      $("#fromDate").val(),

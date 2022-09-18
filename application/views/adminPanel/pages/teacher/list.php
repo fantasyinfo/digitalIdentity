@@ -32,6 +32,45 @@
     <div class="content">
       <div class="container-fluid">
       <?php 
+
+
+if(isset($_GET['action']) )
+{
+  if($_GET['action'] == 'status')
+  {
+    $status = $_GET['status'];
+    $updateId = $_GET['edit_id'];
+    $updateStatus = $this->db->query("UPDATE " . Table::teacherTable . " SET status = '$status' WHERE id = '$updateId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+
+    if($updateStatus)
+    {
+      $msgArr = [
+        'class' => 'success',
+        'msg' => 'Teacher Status Updated Successfully',
+      ];
+      $this->session->set_userdata($msgArr);
+    }else
+    {
+      $msgArr = [
+        'class' => 'danger',
+        'msg' => 'Teacher Status Not Updated Due to this Error. ' . $this->db->last_query(),
+      ];
+      $this->session->set_userdata($msgArr);
+    }
+    header("Refresh:1 ".base_url()."teacher/list");
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
        $this->CrudModel->checkPermission();
               if(!empty($this->session->userdata('msg')))
               {?>
@@ -63,10 +102,10 @@
           <label >Name</label>
             <input type="text" class="form-control" id="teacherName" placeholder="Search by name">
           </div>
-          <div class="form-group col-md-2">
+          <!-- <div class="form-group col-md-2">
           <label >Class</label>
             <input type="text" class="form-control" id="teacherClass" placeholder="Search by class">
-          </div>
+          </div> -->
           <div class="form-group col-md-2">
           <label >Mobile No</label>
             <input type="number" class="form-control" id="teacherMobile" placeholder="Search by mobile">
@@ -83,7 +122,7 @@
           <label >To Date</label>
             <input type="date" class="form-control" id="toDate">
           </div>
-          <div class="form-group col-md-2">
+          <div class="form-group col-md-2 pt-4">
             <button id="searchTeacher" class="btn btn-primary">Submit</button>
             <button onclick="window.location.reload();" class="btn btn-warning">Clear</button>
           </div>
@@ -167,7 +206,7 @@
            url: ajaxUrlForTeacherList,
            data : {
              teacherName: sn,
-             teacherClass: sc,
+            //  teacherClass: sc,
              teacherMobile: sm,
              teacherUserId: si,
              teacherFromDate: fd,
@@ -186,7 +225,8 @@
      $("#listDatatableTeacher").DataTable().destroy();
      loadTeacherDataTable(
        $("#teacherName").val(),
-       $("#teacherClass").val(),
+      //  $("#teacherClass").val(),
+      '',
        $("#teacherMobile").val(),
        $("#teacherUserId").val(),
        $("#fromDate").val(),
