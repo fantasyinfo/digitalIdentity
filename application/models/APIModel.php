@@ -139,6 +139,15 @@ class APIModel extends CI_Model
       //
     } else if ($type == 'Principal') {
       //
+    } else if ($type == 'Parent') {
+      $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
+      $userData = $this->db->query($sql)->result_array();
+      if (!empty($userData)) {
+        $userData[0]['userType'] = $type;
+        return $userData;
+      } else {
+        return HelperClass::APIresponse(500, 'Auth Token Not Match. Please Use Correct Details.');
+      }
     }
   }
 
@@ -995,6 +1004,10 @@ class APIModel extends CI_Model
     }
   }
 
+  public function bannerForApp($schoolUniqueCode)
+  {
+    return $this->db->query("SELECT * FROM " . Table::bannerTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+  }
 
   // leaderBoard
   public function visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode)

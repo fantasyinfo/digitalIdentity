@@ -101,7 +101,7 @@ class CrudModel extends CI_Model
     {
        
         $errors= array();
-        $file_name = HelperClass::imgPrefix . $id ."-".$file['image']['name'];
+        $file_name = HelperClass::imgPrefix . $id ."-". time() .$file['image']['name'];
         $file_size =$file['image']['size'];
         $file_tmp =$file['image']['tmp_name'];
         $file_type=$file['image']['type'];

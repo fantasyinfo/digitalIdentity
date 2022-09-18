@@ -702,6 +702,31 @@ public function updateHomeWork()
 		}
 	}
 
+	// bannerForApp
+	public function bannerForApp()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$bannerImgs = $this->APIModel->bannerForApp($schoolUniqueCode);
+
+		if (!$bannerImgs) {
+			return HelperClass::APIresponse(500, 'No Banner\'s Added From Panel ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Banners Images.', $bannerImgs);
+		}
+	}
+
 
 	// count digicoin
 	public function getAlreadyDigiCoinCount()

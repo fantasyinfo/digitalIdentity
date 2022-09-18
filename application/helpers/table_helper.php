@@ -34,5 +34,6 @@ class Table{
     const homeWorkTable = 'home_work';
     const visitorTable = 'visitor_entry';
     const ratingAndReviewTable = 'rating_and_reviews';
+    const bannerTable = 'banner_for_app';
     
 }

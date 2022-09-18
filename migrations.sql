@@ -10,3 +10,6 @@
 -- ALTER TABLE `rating_and_reviews` CHANGE `for_what` `for_what` INT NOT NULL;
 -- ALTER TABLE `rating_and_reviews` ADD `review_title` VARCHAR(100) NOT NULL AFTER `review`;
 -- ALTER TABLE `rating_and_reviews` ADD `reason_id` INT NOT NULL AFTER `for_what`;
+
+
+CREATE TABLE `banner_for_app` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `image` VARCHAR(255) NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;

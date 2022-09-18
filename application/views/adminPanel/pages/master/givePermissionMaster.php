@@ -78,9 +78,9 @@
         // insert default userPermissions
 
         $userDefaultPermissionArr = [
-          'Admin' => ["2", "4", "5", "7", "8", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "21"],
+          'Admin' => ["2","3","5","6","13","14","16","17","18","19","20","22","23","24","25","28","39","32","34","35","36","37","38","29","31","41"],
           'Staff' => ["2", "4", "7", "10", "11", "12", "13", "14", "16"],
-          'Principal' => ["2", "4", "5", "7", "8", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"]
+          'Principal' => ["2","3","5","6","13","14","16","17","18","19","20","22","23","24","25","28","39","32","34","35","36","37","38","29","31","41"]
         ];
 
         foreach ($userDefaultPermissionArr as $key => $value) {
@@ -173,7 +173,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:1 " . base_url() . "master/givePermissionMaster");
+        header("Refresh:30 " . base_url() . "master/givePermissionMaster");
       }
     }
 

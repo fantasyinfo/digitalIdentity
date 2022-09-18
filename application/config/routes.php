@@ -98,6 +98,7 @@ $masterRoutesArr = [
     'feesInvoice',
     'monthMaster',
     'setDigiCoinMaster',
+    'bannerMaster',
     'givePermissionMaster' // only for super Admin
     
 ];
@@ -197,7 +198,8 @@ $apiRoutesArr = [
     'redeemGifts',
     'giftRedeemStatus',
     'leaderBoard',
-    'visitorEntry'
+    'visitorEntry',
+    'bannerForApp',
 ];
 
 foreach($apiRoutesArr as $apiRoute)
