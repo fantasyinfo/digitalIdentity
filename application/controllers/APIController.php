@@ -635,20 +635,16 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']))
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
-		$loginUserId = $apiData['loginUserId'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+
+	
 		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode);
 
 		if (!$leaderBoardData) {
