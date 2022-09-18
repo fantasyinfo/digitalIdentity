@@ -152,6 +152,33 @@ class APIModel extends CI_Model
     }
   }
 
+  // student dashboard
+  public function studentDashboard($schoolUniqueCode,$studentId)
+  {
+    $dir = base_url() . HelperClass::uploadImgDir;
+
+    $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
+    LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
+    LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
+    WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.id = '$studentId' AND t.status = '1' LIMIT 1";
+    $userData = $this->db->query($sql)->result_array();
+
+    if(!empty($userData))
+    {
+        $responseData = [];
+        $responseData["studentId"] = @$userData[0]["id"];
+        $responseData["userId"] = @$userData[0]["user_id"];
+        $responseData["name"] = @$userData[0]["name"];
+        $responseData["image"] = @$userData[0]["image"];
+        $responseData["user_id"] = @$userData[0]["user_id"];
+        $responseData["className"] = @$userData[0]["className"];
+        $responseData["sectionName"] = @$userData[0]["sectionName"];
+        $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+      return $responseData;
+    } else {
+      return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+    }
+  }
 
   // show students for attendence
   public function showAllStudentForAttendence($type, $class, $section, $schoolUniqueCode)

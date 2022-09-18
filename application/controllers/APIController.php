@@ -748,6 +748,34 @@ public function updateHomeWork()
 		}
 	}
 
+	// studentDashboard
+	public function studentDashboard()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['studentId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$studentId = $apiData['studentId'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$notificationsData = $this->APIModel->studentDashboard($schoolUniqueCode,$studentId);
+
+		if (!$notificationsData) {
+			return HelperClass::APIresponse(500, 'No Student Found. ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Student Dashboard Data.', $notificationsData);
+		}
+	}
+
+
+
 
 	// count digicoin
 	public function getAlreadyDigiCoinCount()
