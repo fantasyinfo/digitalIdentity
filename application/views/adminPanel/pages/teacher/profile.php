@@ -11,9 +11,10 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <?php 
+    
     $sd = $data['teacherData'][0];
     //print_r($sd);
-    
+    $string = HelperClass::qrcodeUrl . "?tecid=" . HelperClass::schoolPrefix.$sd['user_id'];
     ?>
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -51,12 +52,13 @@
                       <p class="text-secondary mb-1"><?=$sd['className'] . " - " . $sd['sectionName'];?></p>
                       <span class="badge badge-success"><?=$sd['user_id'];?></span>
                     </div>
+                    <a href="<?=$string?>" class="btn btn-info text-white my-2" target="_blank">User Profile View</a>
                   </div>
                 </div>
               </div>
               <div class="card mt-3">
                 <?php
-                $string = HelperClass::fullPathQR.$sd['user_id'];
+               
               $google_chart_api_url = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=".$string."&choe=UTF-8";
                 // let's display the generated QR code
                   echo "<img src='".$google_chart_api_url."' alt='".$string."'>";
@@ -144,7 +146,7 @@
               </div>
 
               <div class="row gutters-sm">
-                <div class="col-sm-6 mb-3">
+                <div class="col-sm-12 mb-3">
                   <div class="card h-100">
                     <div class="card-header bg-primary">
                     <h6 class="d-flex align-items-center mb-3">Login Details</h6>
