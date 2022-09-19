@@ -184,9 +184,7 @@ class APIModel extends CI_Model
   public function showAllStudentForAttendence($type, $class, $section, $schoolUniqueCode)
   {
 
-    if( date('D') == 'Sun') { 
-      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
-    }
+  
 
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
@@ -221,6 +219,9 @@ class APIModel extends CI_Model
   // save attendence
   public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode)
   {
+    if( date('D') == 'Sun') { 
+      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
+    }
     $currentDate = date_create()->format('Y-m-d');
     if ($login_user_type == 'Teacher') {
 
@@ -279,9 +280,7 @@ class APIModel extends CI_Model
   // showSubmitAttendenceData
   public function showSubmitAttendenceData($className, $sectionName, $schoolUniqueCode)
   {
-    if( date('D') == 'Sun') { 
-      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
-    }
+
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
     $d = $this->db->query("SELECT at.id as attendenceId, at.attendenceStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::attendenceTable . " at 
@@ -300,6 +299,9 @@ class APIModel extends CI_Model
   // save departure
   public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode)
   {
+    if( date('D') == 'Sun') { 
+      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
+    }
     $currentDate = date_create()->format('Y-m-d');
     if ($login_user_type == 'Teacher') {
 
@@ -771,6 +773,10 @@ class APIModel extends CI_Model
   public function getAlreadyDigiCoinCount($user_id, $user_type_id, $user_type_key,$schoolUniqueCode)
   {
     
+    if($user_type_key == 'Parent' || $user_type_key == 'Student')
+    {
+      $user_type_key = 'Student';
+    }
     // check total digicoin earn
     $d = $this->db->query("SELECT SUM(digiCoin) as digiCoin FROM " . Table::getDigiCoinTable . " WHERE user_type = '$user_type_key' AND user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
@@ -807,7 +813,7 @@ class APIModel extends CI_Model
     if ($user_type == 'Teacher') {
       $dir = base_url() . HelperClass::uploadImgDir;
       $userTypeId = HelperClass::userType[$user_type];
-      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId'")->result_array();
       if (!empty($d)) {
         return $d;
       } else {
@@ -825,7 +831,7 @@ class APIModel extends CI_Model
       if (!empty($totalDigiCoinInWallet)) {
         
         $dir = base_url() . HelperClass::uploadImgDir;
-        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'")->result_array();
       }
 
       if (!empty($d)) {
@@ -848,7 +854,7 @@ class APIModel extends CI_Model
       $userType = HelperClass::userType[$loginuserType];
 
     
-      $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND schoolUniqueCode = '$schoolUniqueCode' and id = '$giftId'")->result_array();
+      $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' and id = '$giftId'")->result_array();
 
       if (!empty($giftValue)) {
         $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];

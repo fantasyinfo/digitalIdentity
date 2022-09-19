@@ -14,7 +14,7 @@
     $dir = base_url().HelperClass::uploadImgDir;
 
   // fetching city data
-    $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+    $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE status != '4'")->result_array();
     
 
 
@@ -25,7 +25,7 @@
       if($_GET['action'] == 'edit')
       {
         $editId = $_GET['edit_id'];
-        $editUserData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE id='$editId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+        $editUserData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE id='$editId' ")->result_array();
       }
 
  
@@ -33,7 +33,7 @@
       {
         $deleteId = $_GET['delete_id'];
 
-        $sql = "SELECT gift_image FROM " . Table::giftTable . " WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+        $sql = "SELECT gift_image FROM " . Table::giftTable . " WHERE id='$deleteId' ";
 
         $delImg = $this->db->query($sql)->result_array();
 
@@ -43,7 +43,7 @@
           @unlink(HelperClass::uploadImgDir . $imgN);
         }
    
-        $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
+        $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId'");
 
         if($deleteMonthData)
         {
@@ -67,7 +67,7 @@
       {
         $status = $_GET['status'];
         $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::giftTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
+        $updateStatus = $this->db->query("UPDATE " . Table::giftTable . " SET status = '$status' WHERE id = '$updateId'   ");
 
         if($updateStatus)
         {
@@ -155,7 +155,7 @@
       }
       $monthEditId = $_POST['updateMonthId'];
 
-      $updateMonth = $this->db->query("UPDATE " . Table::giftTable . " SET  $set gift_name = '$giftName',redeem_digiCoins = '$redeemDigiCoin' WHERE id = '$monthEditId'  AND schoolUniqueCode = '$schoolUniqueCode' ");
+      $updateMonth = $this->db->query("UPDATE " . Table::giftTable . " SET  $set gift_name = '$giftName',redeem_digiCoins = '$redeemDigiCoin' WHERE id = '$monthEditId' ");
 
       if($updateMonth)
       {
