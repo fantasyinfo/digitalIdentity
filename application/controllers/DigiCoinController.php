@@ -116,7 +116,8 @@ class DigiCoinController extends CI_Controller
 		{
 			$status = $_POST['status'];
 			$updateId = $_POST['editId'];
-			$updateStatus = $this->db->query("UPDATE " . Table::giftRedeemTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
+			$schoolCode = $_POST['schoolCode'];
+			$updateStatus = $this->db->query("UPDATE " . Table::giftRedeemTable . " SET status = '$status' WHERE id = '$updateId'  AND schoolUniqueCode = '$schoolCode' ");
 
 			if($updateStatus)
 			{

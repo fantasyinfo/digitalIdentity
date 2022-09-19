@@ -17,12 +17,12 @@
       $schoolCodeCheck = '';
     }else
     {
-      $schoolCodeCheck = " grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+      $schoolCodeCheck = " WHERE grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
     }
   // fetching city data
     $giftRedeemData = $this->db->query("SELECT grt.*, gt.id as gift_id, gt.gift_image, gt.gift_name, gt.redeem_digiCoins FROM " . Table::giftRedeemTable . " grt 
     LEFT JOIN ".Table::giftTable." gt ON gt.id = grt.gift_id
-    WHERE $schoolCodeCheck ORDER BY grt.id DESC")->result_array();
+   $schoolCodeCheck ORDER BY grt.id DESC")->result_array();
     
 
 
@@ -148,6 +148,7 @@
                             <th>Gift DigiCoin Cost</th>
                             <th>DigiCoin Used</th>
                            <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
+                            <th>School Code</th>
                             <th>Change Status</th>
                             <?php } else
                             { ?>
@@ -193,8 +194,11 @@
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['digiCoin_used'];?> Coins</td>
                                <?php 
                                if(HelperClass::checkIfItsACEOAccount()) { ?>
+                               <td>
+                                <?= $cn['schoolUniqueCode'];?>
+                               </td>
                                 <td>
-                                  <select class="form-control" name="status" onchange="changeStatus(this,'<?= $cn['id']?>')">
+                                  <select class="form-control" name="status" onchange="changeStatus(this,'<?= $cn['id']?>', '<?= $cn['schoolUniqueCode']?>')">
                                     <?php  foreach(HelperClass::giftStatus as $g => $v)
                                     { 
                                       if($cn['status'] == $g)
@@ -213,6 +217,7 @@
                                    
                                   </select>
                                 </td>
+                                
                               <?php }  else
                                    { ?>
                                     <td>
@@ -251,7 +256,7 @@
 
     $("#MonthDataTable").DataTable();
 
-    function changeStatus(x,y)
+    function changeStatus(x,y,schoolCode)
     {
       console.log(x.value);
       console.log(y);
@@ -260,7 +265,8 @@
         method: 'post',
         data: {
           status: x.value,
-          editId: y
+          editId: y,
+          schoolCode: schoolCode
         },
         success: function(response)
         {
