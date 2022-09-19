@@ -774,6 +774,41 @@ public function updateHomeWork()
 		}
 	}
 
+	// showAllStudentsForSwitchProfile
+	public function showAllStudentsForSwitchProfile()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+//  print_r($loginUser);
+		$stuIds = [];
+		$totalStu = count($loginUser);
+		for($i=0;$i<$totalStu; $i++)
+		{
+			$stuIds[] = $loginUser[$i]['login_user_id'];
+		}
+
+		$sString = implode("','",$stuIds);
+
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$notificationsData = $this->APIModel->showAllStudentsForSwitchProfile($schoolUniqueCode,$sString);
+
+		if (!$notificationsData) {
+			return HelperClass::APIresponse(500, 'No Student Found. ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Student Dashboard Data.', $notificationsData);
+		}
+	}
+
 
 
 

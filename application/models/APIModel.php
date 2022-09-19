@@ -95,13 +95,15 @@ class APIModel extends CI_Model
       if(!empty($userData))
       {
         $authToken = HelperClass::generateRandomToken();
-        $this->db->query("UPDATE " . Table::studentTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
-
         $totalStudentsCount = count($userData);
         $responseData = [];
         $responseData['studentsData'] = [];
-        for($i = 0 ; $i < $totalStudentsCount; $i++)
+        for($i = 0; $i < $totalStudentsCount; $i++)
         {
+          // update auth token on all students
+          $this->db->query("UPDATE " . Table::studentTable . " SET auth_token = '$authToken' WHERE id = {$userData[$i]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+
+
           $subArr = [];
           $subArr["studentId"] = @$userData[$i]["id"];
           $subArr["userId"] = @$userData[$i]["user_id"];
@@ -141,7 +143,7 @@ class APIModel extends CI_Model
     } else if ($type == 'Principal') {
       //
     } else if ($type == 'Parent') {
-      $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
+    $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
         $userData[0]['userType'] = $type;
@@ -149,6 +151,39 @@ class APIModel extends CI_Model
       } else {
         return HelperClass::APIresponse(500, 'Auth Token Not Match. Please Use Correct Details.');
       }
+    }
+  }
+
+
+
+// showAllStudentsForSwitchProfile
+  public function showAllStudentsForSwitchProfile($schoolUniqueCode,$stuIds)
+  {
+    $dir = base_url() . HelperClass::uploadImgDir;
+   $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
+    LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
+    LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
+    WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.id in('$stuIds')  AND t.status = '1'";
+    $userData = $this->db->query($sql)->result_array();
+    if(!empty($userData))
+    {
+      $totalStudentsCount = count($userData);
+      $responseData = [];
+      for($i = 0 ; $i < $totalStudentsCount; $i++)
+      {
+        $subArr = [];
+        $subArr["studentId"] = @$userData[$i]["id"];
+        $subArr["name"] = @$userData[$i]["name"];
+        $subArr["image"] = @$userData[$i]["image"];
+        $subArr["user_id"] = @$userData[$i]["user_id"];
+        $subArr["className"] = @$userData[$i]["className"];
+        $subArr["sectionName"] = @$userData[$i]["sectionName"];
+        $subArr["schoolUniqueCode"] = @$schoolUniqueCode;
+        array_push($responseData, $subArr);
+      }
+      return $responseData;
+    } else {
+      return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
     }
   }
 
