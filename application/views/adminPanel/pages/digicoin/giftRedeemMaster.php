@@ -13,10 +13,16 @@
 
     $dir = base_url().HelperClass::uploadImgDir;
 
+    if(HelperClass::checkIfItsACEOAccount()) {
+      $schoolCodeCheck = '';
+    }else
+    {
+      $schoolCodeCheck = " grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+    }
   // fetching city data
     $giftRedeemData = $this->db->query("SELECT grt.*, gt.id as gift_id, gt.gift_image, gt.gift_name, gt.redeem_digiCoins FROM " . Table::giftRedeemTable . " grt 
     LEFT JOIN ".Table::giftTable." gt ON gt.id = grt.gift_id
-    WHERE grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY grt.id DESC")->result_array();
+    WHERE $schoolCodeCheck ORDER BY grt.id DESC")->result_array();
     
 
 
@@ -136,11 +142,17 @@
                             <th>Gift Id</th>
                             <th>Gift Name</th>
                             <th>Gift Image</th>
-                            <th>User Id</th>
+                            <th>User Name</th>
+                            <th>User Unique Id</th>
                             <th>User Type</th>
                             <th>Gift DigiCoin Cost</th>
                             <th>DigiCoin Used</th>
+                           <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
                             <th>Change Status</th>
+                            <?php } else
+                            { ?>
+                            <th>Status</th>
+                          <?php  }?>
                             <th>Gift Redeem Date</th>
                           </tr>
                         </thead>
@@ -154,10 +166,33 @@
                                 <td><?= $cn['gift_id'];?></td>
                                 <td><?= $cn['gift_name'];?></td>
                                 <td><img src="<?= $dir.$cn['gift_image'];?>" alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' /></td>
-                                <td><?= $cn['login_user_id'];?></td>
+
+
+                                <?php 
+                                if(HelperClass::userTypeR[$cn['login_user_type']] == 'Student' || HelperClass::userTypeR[$cn['login_user_type']] == 'Parent' )
+                                {
+                                  $tableName = Table::studentTable;
+                                }else if (HelperClass::userTypeR[$cn['login_user_type']] == 'Teacher')
+                                {
+                                  $tableName = Table::teacherTable;
+                                }
+                                if(HelperClass::checkIfItsACEOAccount()) { 
+                                  $condition = "";
+                                }else
+                                {
+                                  $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+                                }
+                                $s = $this->db->query("SELECT name, id, user_id FROM ".$tableName." WHERE id='{$cn['login_user_id']}' $condition LIMIT 1")->result_array();
+                                
+                                ?>
+
+                                <td><?= $s[0]['name'];?></td>
+                                <td><?= $s[0]['user_id'];?></td>
                                 <td><?= HelperClass::userTypeR[$cn['login_user_type']];?></td>
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['redeem_digiCoins'];?> Coins</td>
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['digiCoin_used'];?> Coins</td>
+                               <?php 
+                               if(HelperClass::checkIfItsACEOAccount()) { ?>
                                 <td>
                                   <select class="form-control" name="status" onchange="changeStatus(this,'<?= $cn['id']?>')">
                                     <?php  foreach(HelperClass::giftStatus as $g => $v)
@@ -173,10 +208,18 @@
                                       ?>
                                         <option <?= $selected?> value="<?= $g?>"><?= $v?></option>
                                    <?php }
+                                  
                                     ?>
                                    
                                   </select>
                                 </td>
+                              <?php }  else
+                                   { ?>
+                                    <td>
+                                      <?= HelperClass::giftStatus[$cn['status']]; ?>
+                                    </td>
+                                  <?php }?>
+                              
                                 <td><?= date('d-m-Y h:i:A', strtotime($cn['created_at']));?></td>
                               </tr>
                           <?php  }

@@ -19,68 +19,154 @@
 
 
     // edit and delete action
-    if(isset($_GET['action']))
-    {
-     
-      if($_GET['action'] == 'edit')
+    if(HelperClass::checkIfItsACEOAccount()) {
+      if(isset($_GET['action']))
       {
-        $editId = $_GET['edit_id'];
-        $editUserData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE id='$editId' ")->result_array();
+      
+        if($_GET['action'] == 'edit')
+        {
+          $editId = $_GET['edit_id'];
+          $editUserData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE id='$editId' ")->result_array();
+        }
+
+  
+        if($_GET['action'] == 'delete')
+        {
+          $deleteId = $_GET['delete_id'];
+
+          $sql = "SELECT gift_image FROM " . Table::giftTable . " WHERE id='$deleteId' ";
+
+          $delImg = $this->db->query($sql)->result_array();
+
+          if(!empty(@$delImg))
+          {
+            $imgN = @$delImg[0]['gift_image'];
+            @unlink(HelperClass::uploadImgDir . $imgN);
+          }
+    
+          $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId'");
+
+          if($deleteMonthData)
+          {
+            $msgArr = [
+              'class' => 'success',
+              'msg' => 'Gift Deleted Successfully',
+            ];
+            $this->session->set_userdata($msgArr);
+          }else
+          {
+            $msgArr = [
+              'class' => 'danger',
+              'msg' => 'Gift Not Deleted Due to this Error. ' . $this->db->last_query(),
+            ];
+            $this->session->set_userdata($msgArr);
+          }
+          header("Refresh:1 ".base_url()."digicoin/giftMaster");
+        }
+
+        if($_GET['action'] == 'status')
+        {
+          $status = $_GET['status'];
+          $updateId = $_GET['edit_id'];
+          $updateStatus = $this->db->query("UPDATE " . Table::giftTable . " SET status = '$status' WHERE id = '$updateId'   ");
+
+          if($updateStatus)
+          {
+            $msgArr = [
+              'class' => 'success',
+              'msg' => 'Gift Status Updated Successfully',
+            ];
+            $this->session->set_userdata($msgArr);
+          }else
+          {
+            $msgArr = [
+              'class' => 'danger',
+              'msg' => 'Gift Status Not Updated Due to this Error. ' . $this->db->last_query(),
+            ];
+            $this->session->set_userdata($msgArr);
+          }
+          header("Refresh:1 ".base_url()."digicoin/giftMaster");
+        }
+
       }
 
- 
-      if($_GET['action'] == 'delete')
+      if(isset($_POST['submit']))
       {
-        $deleteId = $_GET['delete_id'];
-
-        $sql = "SELECT gift_image FROM " . Table::giftTable . " WHERE id='$deleteId' ";
-
-        $delImg = $this->db->query($sql)->result_array();
-
-        if(!empty(@$delImg))
+        $userType = $_POST['user_type'];
+        $giftName = $_POST['gift_name'];
+        $redeemDigiCoin = $_POST['redeem_digiCoins'];
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+  
+        if(isset($_FILES['image']))
         {
-          $imgN = @$delImg[0]['gift_image'];
-          @unlink(HelperClass::uploadImgDir . $imgN);
+          $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
         }
-   
-        $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId'");
-
-        if($deleteMonthData)
+        
+  
+        // $alreadyEnter = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE user_type = '$userType' AND  schoolUniqueCode = '$schoolUniqueCode' AND status != '4' AND redeem_digiCoins = '$redeemDigiCoin'")->result_array();
+  
+        // if(!empty($alreadyEnter))
+        // {
+        //     $msgArr = [
+        //       'class' => 'danger',
+        //       'msg' => 'This Digicoin is already inserted for that occasion, Please Edit That',
+        //     ];
+        //     $this->session->set_userdata($msgArr);
+        //     header('Location: digicoin/giftMaster');
+        //     exit(0);
+        // }
+  
+  
+        $insertNewDigiCoin = $this->db->query("INSERT INTO " . Table::giftTable . " (schoolUniqueCode,gift_name,gift_image,redeem_digiCoins,user_type) VALUES ('$schoolUniqueCode','$giftName','$giftImage','$redeemDigiCoin','$userType')");
+        if($insertNewDigiCoin)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'Gift Deleted Successfully',
+            'msg' => 'New Gift Added Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'Gift Not Deleted Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'Gift Not Added Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        //header("Refresh:1 ".base_url()."digicoin/giftMaster");
+        header("Refresh:1 ".base_url()."digicoin/giftMaster");
       }
 
-      if($_GET['action'] == 'status')
+      if(isset($_POST['update']))
       {
-        $status = $_GET['status'];
-        $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::giftTable . " SET status = '$status' WHERE id = '$updateId'   ");
-
-        if($updateStatus)
+        $userType = $_POST['user_type'];
+        $giftName = $_POST['gift_name'];
+        $redeemDigiCoin = $_POST['redeem_digiCoins'];
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+        $set = '';
+        if(isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0)
+        {
+          $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
+          $set = " gift_image = '$giftImage', ";
+        }else
+        {
+          $set;
+        }
+        $monthEditId = $_POST['updateMonthId'];
+  
+        $updateMonth = $this->db->query("UPDATE " . Table::giftTable . " SET  $set gift_name = '$giftName',redeem_digiCoins = '$redeemDigiCoin' WHERE id = '$monthEditId' ");
+  
+        if($updateMonth)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'Gift Status Updated Successfully',
+            'msg' => 'Gifts Updated Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'Gift Status Not Updated Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'Gifts Not Updated Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
@@ -88,93 +174,13 @@
       }
 
     }
+    
 
-
-    // insert new DigiCoin
-    if(isset($_POST['submit']))
-    {
-      $userType = $_POST['user_type'];
-      $giftName = $_POST['gift_name'];
-      $redeemDigiCoin = $_POST['redeem_digiCoins'];
-      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
-
-      if(isset($_FILES['image']))
-      {
-        $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
-      }
-      
-
-      // $alreadyEnter = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE user_type = '$userType' AND  schoolUniqueCode = '$schoolUniqueCode' AND status != '4' AND redeem_digiCoins = '$redeemDigiCoin'")->result_array();
-
-      // if(!empty($alreadyEnter))
-      // {
-      //     $msgArr = [
-      //       'class' => 'danger',
-      //       'msg' => 'This Digicoin is already inserted for that occasion, Please Edit That',
-      //     ];
-      //     $this->session->set_userdata($msgArr);
-      //     header('Location: digicoin/giftMaster');
-      //     exit(0);
-      // }
-
-
-      $insertNewDigiCoin = $this->db->query("INSERT INTO " . Table::giftTable . " (schoolUniqueCode,gift_name,gift_image,redeem_digiCoins,user_type) VALUES ('$schoolUniqueCode','$giftName','$giftImage','$redeemDigiCoin','$userType')");
-      if($insertNewDigiCoin)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'New Gift Added Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'Gift Not Added Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:1 ".base_url()."digicoin/giftMaster");
-    }
+  
+   
 
     // update exiting city
-    if(isset($_POST['update']))
-    {
-      $userType = $_POST['user_type'];
-      $giftName = $_POST['gift_name'];
-      $redeemDigiCoin = $_POST['redeem_digiCoins'];
-      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
-      $set = '';
-      if(isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0)
-      {
-        $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
-        $set = " gift_image = '$giftImage', ";
-      }else
-      {
-        $set;
-      }
-      $monthEditId = $_POST['updateMonthId'];
-
-      $updateMonth = $this->db->query("UPDATE " . Table::giftTable . " SET  $set gift_name = '$giftName',redeem_digiCoins = '$redeemDigiCoin' WHERE id = '$monthEditId' ");
-
-      if($updateMonth)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'Gifts Updated Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'Gifts Not Updated Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:1 ".base_url()."digicoin/giftMaster");
-    }
-
+  
 
     // print_r($cityData);
   
@@ -243,97 +249,103 @@
                 <!-- /.card-header -->
                 <!-- form start -->
 
-
+               <?php  
+               if(HelperClass::checkIfItsACEOAccount()) 
+               { ?>
                 <div class="row">
-                  <div class="card-body">
-                    <form method="post" action="" enctype="multipart/form-data">
-                    <?php 
-                    if(isset($_GET['action']) && $_GET['action'] == 'edit')
-                    {?>
-                     <input type="hidden" name="updateMonthId" value="<?=$editId?>">
-                    <?php }
-                    
-                    ?>
-                      <div class="row">
+                <div class="card-body">
+                  <form method="post" action="" enctype="multipart/form-data">
+                  <?php 
+                  if(isset($_GET['action']) && $_GET['action'] == 'edit')
+                  {?>
+                   <input type="hidden" name="updateMonthId" value="<?=$editId?>">
+                  <?php }
+                  
+                  ?>
+                    <div class="row">
 
-                      <div class="col-md-8">
-                        <table class="table striped">
-                          <tbody>
-                          <tr>
-                            <td>Gift Name</td>
+                    <div class="col-md-8">
+                      <table class="table striped">
+                        <tbody>
+                        <tr>
+                          <td>Gift Name</td>
+                          <td>
+                          <input type="text" name="gift_name" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editUserData[0]['gift_name'];}?>" class="form-control" required>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td> <label for="city">Select Gift Image</label></td>
                             <td>
-                            <input type="text" name="gift_name" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editUserData[0]['gift_name'];}?>" class="form-control" required>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td> <label for="city">Select Gift Image</label></td>
-                              <td>
-                                <?php if(isset($editUserData[0]['gift_image']))
-                                { ?>
-                                  <img src="<?= $dir. $editUserData[0]['gift_image']; ?>" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
-                              <?php  } else
+                              <?php if(isset($editUserData[0]['gift_image']))
                               { ?>
-                                  <img src="<?= base_url()?>assets/uploads/gift-default.jpg" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
-                             <?php } ?>
-                              
+                                <img src="<?= $dir. $editUserData[0]['gift_image']; ?>" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
+                            <?php  } else
+                            { ?>
+                                <img src="<?= base_url()?>assets/uploads/gift-default.jpg" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
+                           <?php } ?>
+                            
 
 
-                              <div class="input-group mt-2">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" name="image" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
-                              <label class="custom-file-label" for="img">Choose file</label>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>DigiCoin Value <span class="text-danger">( How much digicoin for this gift )</span></td>
-                            <td>
-                            <input type="number" name="redeem_digiCoins" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editUserData[0]['redeem_digiCoins'];}?>" class="form-control" required>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Select User Type </td>
-                            <td>
-                            <div class="form-group">
-                                <select name="user_type" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
-                                  <?php
+                            <div class="input-group mt-2">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="image" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
+                            <label class="custom-file-label" for="img">Choose file</label>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>DigiCoin Value <span class="text-danger">( How much digicoin for this gift )</span></td>
+                          <td>
+                          <input type="number" name="redeem_digiCoins" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editUserData[0]['redeem_digiCoins'];}?>" class="form-control" required>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Select User Type </td>
+                          <td>
+                          <div class="form-group">
+                              <select name="user_type" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                <?php
 
-                                  $selectedUserType = '';
-                                  foreach (HelperClass::userType as $key => $value) {
-                                    if (isset($editUserData) && $editUserData[0]['user_type'] == $value) {
-                                      $selectedUserType = 'selected';
-                                    } else {
-                                      $selectedUserType = '';
-                                    }
-                                  ?>
+                                $selectedUserType = '';
+                                foreach (HelperClass::userType as $key => $value) {
+                                  if (isset($editUserData) && $editUserData[0]['user_type'] == $value) {
+                                    $selectedUserType = 'selected';
+                                  } else {
+                                    $selectedUserType = '';
+                                  }
+                                ?>
 
-                                    <option <?= $selectedUserType ?> value="<?= $value ?>"><?= $key ?></option>
-                                  <?php }
+                                  <option <?= $selectedUserType ?> value="<?= $value ?>"><?= $key ?></option>
+                                <?php }
 
 
-                                  ?>
+                                ?>
 
-                                </select>
-                              </div>
-                            </td>
-                          </tr>
-                       
-                          <tr>
-                            <td>#</td>
-                            <td>
-                            <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary btn-lg btn-block">Add</button>
-                            </td>
-                          </tr>
-                          </tbody>
-                         
-                        </table>
+                              </select>
+                            </div>
+                          </td>
+                        </tr>
                      
-                          
+                        <tr>
+                          <td>#</td>
+                          <td>
+                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary btn-lg btn-block">Add</button>
+                          </td>
+                        </tr>
+                        </tbody>
                        
-                      </div>
-                      </div>
-                    </form>
-                  </div>
-                </div> 
+                      </table>
+                   
+                        
+                     
+                    </div>
+                    </div>
+                  </form>
+                </div>
+              </div> 
+            <?php
+               }
+               ?>
+            
                 <!--/.col (left) -->
                 <!-- right column -->
               </div>
@@ -356,8 +368,11 @@
                             <th>Gift Name</th>
                             <th>User Type</th>
                             <th>How Much DigiCoin</th>
-                            <th>Status</th>
+                            <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
+                              <th>Status</th>
                             <th>Action</th>
+                            <?php   } ?>
+                            
                           </tr>
                         </thead>
                         <tbody>
@@ -371,15 +386,17 @@
                                 <td><?= $cn['gift_name'];?></td>
                                 <td><?= HelperClass::userTypeR[$cn['user_type']];?></td>
                                 <td><i class="fa-solid fa-coins"></i> <?= $cn['redeem_digiCoins'];?> Coins </td>
-                                <td>
-                                <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
-                                    class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
-                                    <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td>
-                                <td>
-                                  <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
-                                  <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td>
+                                <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
+                                  <td>
+                                  <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
+                                      class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
+                                      <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
+                                  </td>
+                                  <td>
+                                    <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
+                                    <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
+                                  </td>
+                                <?php   } ?>
                               </tr>
                           <?php  }
                           } ?>

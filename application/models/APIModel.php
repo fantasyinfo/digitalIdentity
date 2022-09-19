@@ -1177,9 +1177,9 @@ class APIModel extends CI_Model
 
 
   // check if the digiCoin is set 
-  public function checkIsDigiCoinIsSet($for_what, $user_type, $schoolUniqueCode)
+  public function checkIsDigiCoinIsSet($for_what, $user_type)
   {
-    $d = $this->db->query("SELECT digiCoin FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND for_what = '$for_what' AND schoolUniqueCode = '$schoolUniqueCode' AND status ='1' LIMIT 1")->result_array();
+    $d = $this->db->query("SELECT digiCoin FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND for_what = '$for_what' AND status ='1' LIMIT 1")->result_array();
     if (!empty($d)) {
       return $d[0]['digiCoin'];
     } else {

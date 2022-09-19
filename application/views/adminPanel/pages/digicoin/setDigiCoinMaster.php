@@ -10,140 +10,149 @@
 
     $this->load->library('session');
 
+
+    if(HelperClass::checkIfItsACEOAccount()) {
+    
+    }
   // fetching city data
     $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE status != '4'")->result_array();
     
 
 
     // edit and delete action
-    if(isset($_GET['action']))
-    {
-     
-      if($_GET['action'] == 'edit')
+    if(HelperClass::checkIfItsACEOAccount()) {
+      if(isset($_GET['action']))
       {
-        $editId = $_GET['edit_id'];
-        $editUserData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE id='$editId'")->result_array();
+       
+        if($_GET['action'] == 'edit')
+        {
+          $editId = $_GET['edit_id'];
+          $editUserData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE id='$editId'")->result_array();
+        }
+  
+   
+        if($_GET['action'] == 'delete')
+        {
+          $deleteId = $_GET['delete_id'];
+          $deleteMonthData = $this->db->query("DELETE FROM " . Table::setDigiCoinTable . " WHERE id='$deleteId'");
+          if($deleteMonthData)
+          {
+            $msgArr = [
+              'class' => 'success',
+              'msg' => 'DigiCoin Set Deleted Successfully',
+            ];
+            $this->session->set_userdata($msgArr);
+          }else
+          {
+            $msgArr = [
+              'class' => 'danger',
+              'msg' => 'DigiCoin Set Not Deleted Due to this Error. ' . $this->db->last_query(),
+            ];
+            $this->session->set_userdata($msgArr);
+          }
+          header("Refresh:1 ".base_url()."digicoin/setDigiCoinMaster");
+        }
+  
+        if($_GET['action'] == 'status')
+        {
+          $status = $_GET['status'];
+          $updateId = $_GET['edit_id'];
+          $updateStatus = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET status = '$status' WHERE id = '$updateId' ");
+  
+          if($updateStatus)
+          {
+            $msgArr = [
+              'class' => 'success',
+              'msg' => 'DigiCoin Set Status Updated Successfully',
+            ];
+            $this->session->set_userdata($msgArr);
+          }else
+          {
+            $msgArr = [
+              'class' => 'danger',
+              'msg' => 'DigiCoin Set Status Not Updated Due to this Error. ' . $this->db->last_query(),
+            ];
+            $this->session->set_userdata($msgArr);
+          }
+          header("Refresh:1 ".base_url()."digicoin/setDigiCoinMaster");
+        }
+  
       }
-
- 
-      if($_GET['action'] == 'delete')
+        // insert new DigiCoin
+      if(isset($_POST['submit']))
       {
-        $deleteId = $_GET['delete_id'];
-        $deleteMonthData = $this->db->query("DELETE FROM " . Table::setDigiCoinTable . " WHERE id='$deleteId'");
-        if($deleteMonthData)
+        $user_type = $_POST['user_type'];
+        $for_what = $_POST['for_what'];
+        $digiCoin = $_POST['digiCoin'];
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+        
+
+        $alreadyEnter = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND 	for_what = '$for_what' AND status != '4'")->result_array();
+
+        if(!empty($alreadyEnter))
+        {
+            $msgArr = [
+              'class' => 'danger',
+              'msg' => 'This Digicoin is already inserted for that occasion, Please Edit That',
+            ];
+            $this->session->set_userdata($msgArr);
+            header('Location: setDigiCoinMaster');
+            exit(0);
+        }
+
+
+        $insertNewDigiCoin = $this->db->query("INSERT INTO " . Table::setDigiCoinTable . " (schoolUniqueCode,digiCoin,user_type,for_what) VALUES ('$schoolUniqueCode','$digiCoin','$user_type','$for_what')");
+        if($insertNewDigiCoin)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'DigiCoin Set Deleted Successfully',
+            'msg' => 'New DigiCoin Set Added Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'DigiCoin Set Not Deleted Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'DigiCoin Set Not Added Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
+        header("Refresh:1 ".base_url()."digicoin/setDigiCoinMaster");
       }
 
-      if($_GET['action'] == 'status')
+      // update exiting city
+      if(isset($_POST['update']))
       {
-        $status = $_GET['status'];
-        $updateId = $_GET['edit_id'];
-        $updateStatus = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET status = '$status' WHERE id = '$updateId' ");
+        $user_type = $_POST['user_type'];
+        $for_what = $_POST['for_what'];
+        $digiCoin = $_POST['digiCoin'];
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+        $monthEditId = $_POST['updateMonthId'];
 
-        if($updateStatus)
+        $updateMonth = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET digiCoin = '$digiCoin', user_type = '$user_type',for_what = '$for_what' WHERE id = '$monthEditId'  ");
+        if($updateMonth)
         {
           $msgArr = [
             'class' => 'success',
-            'msg' => 'DigiCoin Set Status Updated Successfully',
+            'msg' => 'DigiCoin Set Updated Successfully',
           ];
           $this->session->set_userdata($msgArr);
         }else
         {
           $msgArr = [
             'class' => 'danger',
-            'msg' => 'DigiCoin Set Status Not Updated Due to this Error. ' . $this->db->last_query(),
+            'msg' => 'DigiCoin Set Not Updated Due to this Error. ' . $this->db->last_query(),
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
+        header("Refresh:1 ".base_url()."digicoin/setDigiCoinMaster");
       }
 
     }
+    
 
 
-    // insert new DigiCoin
-    if(isset($_POST['submit']))
-    {
-      $user_type = $_POST['user_type'];
-      $for_what = $_POST['for_what'];
-      $digiCoin = $_POST['digiCoin'];
-      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
-      
-
-      $alreadyEnter = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND 	for_what = '$for_what' AND status != '4'")->result_array();
-
-      if(!empty($alreadyEnter))
-      {
-          $msgArr = [
-            'class' => 'danger',
-            'msg' => 'This Digicoin is already inserted for that occasion, Please Edit That',
-          ];
-          $this->session->set_userdata($msgArr);
-          header('Location: setDigiCoinMaster');
-          exit(0);
-      }
-
-
-      $insertNewDigiCoin = $this->db->query("INSERT INTO " . Table::setDigiCoinTable . " (schoolUniqueCode,digiCoin,user_type,for_what) VALUES ('$schoolUniqueCode','$digiCoin','$user_type','$for_what')");
-      if($insertNewDigiCoin)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'New DigiCoin Set Added Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'DigiCoin Set Not Added Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
-    }
-
-    // update exiting city
-    if(isset($_POST['update']))
-    {
-      $user_type = $_POST['user_type'];
-      $for_what = $_POST['for_what'];
-      $digiCoin = $_POST['digiCoin'];
-      $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
-      $monthEditId = $_POST['updateMonthId'];
-
-      $updateMonth = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET digiCoin = '$digiCoin', user_type = '$user_type',for_what = '$for_what' WHERE id = '$monthEditId'  ");
-      if($updateMonth)
-      {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'DigiCoin Set Updated Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'DigiCoin Set Not Updated Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:1 ".base_url()."master/setDigiCoinMaster");
-    }
+  
 
 
     // print_r($cityData);
@@ -212,7 +221,7 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-
+              <?php  if(HelperClass::checkIfItsACEOAccount()) { ?>
 
                 <div class="row">
                   <div class="card-body">
@@ -304,6 +313,7 @@
                     </form>
                   </div>
                 </div> 
+                <?php } ?>
                 <!--/.col (left) -->
                 <!-- right column -->
               </div>
@@ -325,8 +335,10 @@
                             <th>User Type</th>
                             <th>For What Occasion</th>
                             <th>DigiCoin</th>
+                            <?php  if(HelperClass::checkIfItsACEOAccount()) { ?>
                             <th>Status</th>
                             <th>Action</th>
+                            <?php } ?>
                           </tr>
                         </thead>
                         <tbody>
@@ -339,6 +351,7 @@
                                 <td><?= HelperClass::userTypeR[$cn['user_type']];?></td>
                                 <td><?= HelperClass::actionTypeR[$cn['for_what']];?></td>
                                 <td><i class="fa-solid fa-coins"></i> <?= $cn['digiCoin'];?> Coins </td>
+                                <?php  if(HelperClass::checkIfItsACEOAccount()) { ?>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
@@ -348,6 +361,7 @@
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
                                 </td>
+                                <?php } ?>
                               </tr>
                           <?php  }
                           } ?>
