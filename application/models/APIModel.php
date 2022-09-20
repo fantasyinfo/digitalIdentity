@@ -466,8 +466,7 @@ class APIModel extends CI_Model
       // results with exam
       $returnArr['resultData'] = $this->StudentModel->showResultDataWithExam($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
     
-      // attendence
-      $returnArr['attendenceData'] = $this->StudentModel->showAttendenceData($schoolUniqueCode,$d[0]['className'],$d[0]['sectionName'],$d[0]['id']);
+  
  
       // fees data
       $returnArr['feesData'] = $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
@@ -480,6 +479,16 @@ class APIModel extends CI_Model
   }
 
 
+// showAttendanceDataForStudentId
+  public function showAttendanceDataForStudentId($studentId,$dateWithYear = null,$schoolUniqueCode)
+  {
+    // attendence
+    if($dateWithYear == null)
+    {
+      $dateWithYear = date('Y-m-01');
+    }
+     return $returnArr = $this->StudentModel->showAttendenceData($studentId,$dateWithYear,$schoolUniqueCode);
+  }
   // add Exam
   public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode)
   {

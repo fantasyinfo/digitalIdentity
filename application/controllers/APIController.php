@@ -290,6 +290,33 @@ class APIController extends CI_Controller
 		
 	}
 
+	// show all Attendence Data For Student studentId
+	public function showAttendanceDataForStudentId()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['studentId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$studentId = $apiData['studentId'];
+		$dateWithYear = (@$apiData['dateWithYear']) ? @$apiData['dateWithYear'] : null;
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$allAttendanceList = $this->APIModel->showAttendanceDataForStudentId($studentId,$dateWithYear,$schoolUniqueCode);
+
+		if (!$allAttendanceList) {
+			return HelperClass::APIresponse(500, 'No Attendance Found For This Student.' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Attendance List.',$allAttendanceList);
+		}
+		
+	}
+
 
 	// showSingleExam
 

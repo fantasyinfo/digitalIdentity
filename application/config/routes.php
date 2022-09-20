@@ -217,7 +217,8 @@ $apiRoutesArr = [
     'bannerForApp',
     'notificationsForParent',
     'studentDashboard',
-    'showAllStudentsForSwitchProfile'
+    'showAllStudentsForSwitchProfile',
+    'showAttendanceDataForStudentId'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
