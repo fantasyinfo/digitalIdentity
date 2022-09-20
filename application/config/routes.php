@@ -135,9 +135,23 @@ foreach($digiCoinRoutesArr as $digiRoute)
     $route[$baseDigiCoin.$digiRoute] = "DigiCoinController"."/".$digiRoute;
 }
 
-// get routes of Teacher
 
-//$route[$baseDigiCoin."editPermission/(:any)"] = "DigiCoinController/editPermission/$1";
+
+
+// exam & result
+
+
+$baseExam = "exam/";
+$examRoutesArr = [
+    'allExams',
+    'allResults',
+];
+
+foreach($examRoutesArr as $examRoute)
+{
+    $route[$baseExam.$examRoute] = "ExamController"."/".$examRoute;
+}
+
 
 
 
@@ -153,7 +167,8 @@ $ajaxRoutesArr = [
     'showStudentViaClassAndSectionId',
     'totalFeesDue',
     'listDigiCoinAjax',
-    'showCityViaStateId'
+    'showCityViaStateId',
+    'allExamList'
     
 ];
 

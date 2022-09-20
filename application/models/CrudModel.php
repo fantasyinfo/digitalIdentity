@@ -525,6 +525,139 @@ class CrudModel extends CI_Model
         
     }
 
+    public function allExamList($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+             $condition = "
+            AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND sub.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND tt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+              ";
+            
+            if(isset($data['teacherName']) || isset($data['examName']) || isset($data['studentClass']) || isset($data['studentSection']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
+            {
+                if(!empty($data['teacherName']))
+                {
+                    $condition .= " AND tt.name LIKE '%{$data['teacherName']}%' ";
+                }
+                if(!empty($data['examName']))
+                {
+                    $condition .= " AND e.exam_name LIKE '%{$data['examName']}%' ";
+                }
+                if(!empty($data['studentClass']))
+                {
+                    $condition .= " AND c.id = '{$data['studentClass']}' ";
+                }
+                if(!empty($data['studentSection']))
+                {
+                    $condition .= " AND ss.id = '{$data['studentSection']}' ";
+                }
+            
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                }
+            
+            }
+      
+                $d = $this->db->query("SELECT e.id,e.status,e.exam_name,e.date_of_exam,e.max_marks,e.min_marks,c.className,ss.sectionName,tt.name, tt.id as teacherId,sub.subjectName,e.created_at FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  e.subject_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                WHERE e.status != 4 $condition ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  e.subject_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                WHERE e.status != 4 $condition ORDER BY e.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT e.id,e.status,e.exam_name,e.date_of_exam,e.max_marks,e.min_marks,c.className,ss.sectionName,tt.name, tt.id as teacherId,sub.subjectName,e.created_at FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  e.subject_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                WHERE e.status != 4 ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  e.subject_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                WHERE e.status != 4 ORDER BY e.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = $d[$i]['id'];
+                $subArr[] = $d[$i]['exam_name'];
+                $subArr[] = $d[$i]['subjectName'];
+                $subArr[] = $d[$i]['date_of_exam'];
+                $subArr[] = $d[$i]['max_marks'];
+                $subArr[] = $d[$i]['min_marks'];
+                $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = $d[$i]['teacherId'];
+                $subArr[] = $d[$i]['name'];
+                if($d[$i]['status'] == '1') 
+                {
+                    $ns =  '2';
+                }
+                else{
+                    $ns = '1';
+                }
+
+           
+                if($d[$i]['status'] == '1') 
+                {
+                    $ssus = 'Active';
+                }
+                else if ($d[$i]['status'] == '3'){
+                    $ssus = 'Result Published';
+                }
+
+                
+
+                $subArr[] = $ssus;
+                $subArr[] = $d[$i]['created_at'];
+                // $subArr[] = '
+                // <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
+                // <a href="editTeacher/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
+                // <a href="deleteTeacher/'.$d[$i]['id'].'" class="btn btn-danger" 
+                // onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
+
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr,
+            "query" => $lastQuery
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
 
     public function singleStudent($tableName,$id)
     {

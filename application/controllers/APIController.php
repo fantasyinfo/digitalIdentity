@@ -415,7 +415,7 @@ class APIController extends CI_Controller
 				
 				if (isset($digiCoinToInsert)) {
 					// insert the digicoin
-					$insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserIdFromDB, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
+					$insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserIdFromDB, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode,$examId);
 					if ($insertDigiCoin) {
 						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',['coins' =>$perResultDigiCoin]);
 					} else {

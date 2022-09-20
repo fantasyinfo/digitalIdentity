@@ -20,3 +20,9 @@
 
 
 -- ALTER TABLE `exam` CHANGE `status` `status` ENUM('1','2',"3","4") CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '1 => active 2 => deactive, 3 => resultPublished';
+
+
+-- ALTER TABLE `get_digi_coin` ADD `for_what_id` INT NULL AFTER `for_what`;
+
+
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Exam', '#', 'fa-solid fa-square-poll-horizontal', '0', '1', '0', '1', '2022-09-10 10:40:10');

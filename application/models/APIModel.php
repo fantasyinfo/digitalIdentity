@@ -293,7 +293,7 @@ class APIModel extends CI_Model
 
         if ($digiCoinF) {
           // insert the digicoin
-          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $schoolUniqueCode);
+          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $schoolUniqueCode,$insertId);
           if ($insertDigiCoin) {
             return true;
           } else {
@@ -368,7 +368,7 @@ class APIModel extends CI_Model
 
         if ($digiCoinF) {
           // insert the digicoin
-          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Departure'], $digiCoinF, $schoolUniqueCode);
+          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Departure'], $digiCoinF, $schoolUniqueCode,$insertId);
           if ($insertDigiCoin) {
             return true;
           } else {
@@ -763,7 +763,7 @@ class APIModel extends CI_Model
 
           if ($digiCoinToInsert) {
             // insert the digicoin
-            $insertDigiCoin = $this->insertDigiCoin($studentId, HelperClass::userTypeR['1'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
+            $insertDigiCoin = $this->insertDigiCoin($studentId, HelperClass::userTypeR['1'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode,$examId);
             if ($insertDigiCoin) {
               return true;
             } else {
@@ -1221,9 +1221,9 @@ class APIModel extends CI_Model
   }
 
   // insert digiCoin
-  public function insertDigiCoin($user_id, $user_type, $for_what, $digiCoin, $schoolUniqueCode)
+  public function insertDigiCoin($user_id, $user_type, $for_what, $digiCoin, $schoolUniqueCode,$for_what_id = null)
   {
-    $d = $this->db->query("INSERT INTO " . Table::getDigiCoinTable . " (schoolUniqueCode,user_type,user_id,for_what,digiCoin) VALUES ('$schoolUniqueCode','$user_type','$user_id',$for_what,'$digiCoin')");
+    $d = $this->db->query("INSERT INTO " . Table::getDigiCoinTable . " (schoolUniqueCode,user_type,user_id,for_what,for_what_id,digiCoin) VALUES ('$schoolUniqueCode','$user_type','$user_id',$for_what,'$for_what_id','$digiCoin')");
     if (!empty($d)) {
       return true;
     } else {

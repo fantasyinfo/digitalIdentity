@@ -96,8 +96,8 @@ if(isset($_GET['action']) )
         <div class="row">
         
           <div class="form-group col-md-2">
-          <label >Name</label>
-            <input type="text" class="form-control" id="studentName" placeholder="Search by name">
+          <label >Exam Name</label>
+            <input type="text" class="form-control" id="examName" placeholder="Search by exam name">
           </div>
           <div class="form-group col-md-2">
           <label>Select Class </label>
@@ -126,12 +126,8 @@ if(isset($_GET['action']) )
            </select>
           </div>
           <div class="form-group col-md-2">
-          <label >Mobile No</label>
-            <input type="number" class="form-control" id="studentMobile" placeholder="Search by mobile">
-          </div>
-          <div class="form-group col-md-2">
-          <label >User Id</label>
-            <input type="text" class="form-control" id="studentUserId" placeholder="Search by Student UserId">
+          <label >Teacher Name</label>
+            <input type="text" class="form-control" id="teacherName" placeholder="Search by teacher name">
           </div>
           <div class="form-group col-md-2">
             <label >From Date</label>
@@ -152,8 +148,8 @@ if(isset($_GET['action']) )
           <div class="col-md-12">
           <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Showing All Students Data</h3>
-                <a href="<?=base_url('student/addStudent')?>" class="btn btn-primary ml-4">Add New Student</a>
+                <h3 class="card-title">Showing All Exams Data</h3>
+                
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -161,15 +157,18 @@ if(isset($_GET['action']) )
                   <thead>
                   <tr>
                     <th>Id</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>User Id</th>
-                    <th>Mobile</th>
-                    <th>Class - Section</th>
-                    <th>State - City - Pincode</th>
+                    <th>Exam Id</th>
+                    <th>Exam Name</th>
+                    <th>Subject Name</th>
+                    <th>Exam Date</th>
+                    <th>Max Marks</th>
+                    <th>Min Marks</th>
+                    <th>Class & Section</th>
+                    <th>Teacher Id</th>
+                    <th>Exam Created By Teacher Name</th>
                     <th>Status</th>
-                    <th>Date of Birth</th>
-                    <th>Action</th>
+                    <th>Created At</th>
+                    <!-- <th>Action</th> -->
                   </tr>
                   </thead>
                   <tbody>
@@ -197,11 +196,11 @@ if(isset($_GET['action']) )
 <?php $this->load->view("adminPanel/pages/footer.php");?>
 <!-- ./wrapper -->
 <script>
-  var ajaxUrlForStudentList = '<?= base_url() . 'ajax/listStudentsAjax'?>';
+  var ajaxUrlForStudentList = '<?= base_url() . 'ajax/allExamList'?>';
    // datatable student list intilizing
  loadStudentDataTable();
 
-function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',si = '',fd = '',td = '')
+function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',fd = '',td = '')
 {
    $("#listDatatable").DataTable({
      "responsive": true, "lengthChange": true, "autoWidth": true,
@@ -223,11 +222,10 @@ function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',si = '',fd = '',td
          method: 'post',
          url: ajaxUrlForStudentList,
          data : {
-           studentName: sn,
+          examName: sn,
            studentClass: sc,
            studentSection: ss,
-           studentMobile: sm,
-           studentUserId: si,
+           teacherName: sm,
            studentFromDate: fd,
            studentToDate: td,
          },
@@ -243,11 +241,10 @@ function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',si = '',fd = '',td
    e.preventDefault();
    $("#listDatatable").DataTable().destroy();
    loadStudentDataTable(
-     $("#studentName").val(),
+     $("#examName").val(),
      $("#studentClass").val(),
      $("#studentSection").val(),
-     $("#studentMobile").val(),
-     $("#studentUserId").val(),
+     $("#teacherName").val(),
      $("#fromDate").val(),
      $("#toDate").val(),
      );

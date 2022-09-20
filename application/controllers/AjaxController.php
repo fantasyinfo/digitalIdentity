@@ -13,6 +13,7 @@ class AjaxController extends CI_Controller {
 		$this->load->model('TeacherModel');
 		$this->load->model('CrudModel');
 		$this->load->model('QRModel');
+		$this->load->model('ExamModel');
 	}
 
 	public function listStudentsAjax()
@@ -27,6 +28,13 @@ class AjaxController extends CI_Controller {
 		if(isset($_POST))
 		{
 			return $this->TeacherModel->listTeacher($_POST);
+		}
+	}
+	public function allExamList()
+	{
+		if(isset($_POST))
+		{
+			return $this->ExamModel->allExamList($_POST);
 		}
 	}
 
