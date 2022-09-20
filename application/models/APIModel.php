@@ -724,7 +724,7 @@ class APIModel extends CI_Model
 
 
 
-      $d = $this->db->query("SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+      $d = $this->db->query($sql = "SELECT student_id,exam_id,resultStatus FROM " . Table::resultTable . " WHERE student_id = '$studentId' AND exam_id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if (!empty($d)) {
         return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
@@ -743,8 +743,11 @@ class APIModel extends CI_Model
       ];
 
 
+
       $insertId = $this->CrudModel->insert(Table::resultTable, $insertArr);
       if (!empty($insertId)) {
+
+        
 
 
 
@@ -768,11 +771,6 @@ class APIModel extends CI_Model
             }
           }
         }
-
-
-
-
-
 
 
         return true;

@@ -15,6 +15,7 @@ class APIController extends CI_Controller
 		$this->load->model('StudentModel');
 		$this->load->model('TeacherModel');
 		$this->load->model('APIModel');
+		$this->load->model('CrudModel');
 		$this->load->database();
 	}
 
@@ -396,6 +397,9 @@ class APIController extends CI_Controller
 			return HelperClass::APIresponse(500, 'Result Not Added Successfully beacuse ' . $this->db->last_query());
 		}else
 		{
+				// update on exam table result published
+				$updateExamPublishedStatus = $this->CrudModel->update(Table::examTable, ['status' => '3'],$examId);
+
 				// check digiCoin is set for this result time for students avg
 				$perResultDigiCoin =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Result'], HelperClass::userType['Teacher'], $schoolUniqueCode);
 
@@ -411,7 +415,7 @@ class APIController extends CI_Controller
 				
 				if (isset($digiCoinToInsert)) {
 					// insert the digicoin
-					$insertDigiCoin = $this->APIModel->insertDigiCoin($studentId, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
+					$insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserIdFromDB, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode);
 					if ($insertDigiCoin) {
 						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',['coins' =>$perResultDigiCoin]);
 					} else {
@@ -787,7 +791,7 @@ public function updateHomeWork()
 		$loginuserType = $apiData['userType'];
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
-//  print_r($loginUser);
+
 		$stuIds = [];
 		$totalStu = count($loginUser);
 		for($i=0;$i<$totalStu; $i++)
