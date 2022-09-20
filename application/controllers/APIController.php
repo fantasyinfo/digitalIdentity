@@ -306,7 +306,7 @@ class APIController extends CI_Controller
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$allAttendanceList = $this->APIModel->showAttendanceDataForStudentId($studentId,$dateWithYear,$schoolUniqueCode);
+		$allAttendanceList = $this->APIModel->showAttendanceDataForStudentId($studentId,$schoolUniqueCode,$dateWithYear);
 
 		if (!$allAttendanceList) {
 			return HelperClass::APIresponse(500, 'No Attendance Found For This Student.' . $this->db->last_query());

@@ -480,7 +480,7 @@ class APIModel extends CI_Model
 
 
 // showAttendanceDataForStudentId
-  public function showAttendanceDataForStudentId($studentId,$dateWithYear = null,$schoolUniqueCode)
+  public function showAttendanceDataForStudentId($studentId,$schoolUniqueCode,$dateWithYear = null)
   {
     // attendence
     if($dateWithYear == null)
