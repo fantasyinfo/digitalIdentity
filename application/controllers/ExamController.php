@@ -44,5 +44,18 @@ class ExamController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'allExams');
 	}
 
+	public function allResults()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'All Results',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'allResults');
+	}
+
 
 }

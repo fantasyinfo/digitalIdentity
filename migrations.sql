@@ -26,3 +26,6 @@
 
 
 -- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Exam', '#', 'fa-solid fa-square-poll-horizontal', '0', '1', '0', '1', '2022-09-10 10:40:10');
+
+
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'All Results', 'exam/allResults', NULL, '44', '0', '1', '1', '2022-08-29 09:25:52');

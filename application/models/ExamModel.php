@@ -18,4 +18,12 @@ class ExamModel extends CI_Model
       }
     }
 
+    public function allResultList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->allResultList(Table::resultTable,$post);
+      }
+    }
+
 }

@@ -168,7 +168,8 @@ $ajaxRoutesArr = [
     'totalFeesDue',
     'listDigiCoinAjax',
     'showCityViaStateId',
-    'allExamList'
+    'allExamList',
+    'allResultList'
     
 ];
 
