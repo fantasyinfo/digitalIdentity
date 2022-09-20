@@ -483,6 +483,8 @@ class StudentModel extends CI_Model
       schoolUniqueCode = '$schoolUniqueCode' 
       AND MONTH(att_date) = MONTH('$dateWithYear')
       AND YEAR(att_date) = YEAR('$dateWithYear')
+      AND attendenceStatus IS NOT NULL 
+      AND attendenceStatus != ''
       ")->result_array();
 
         // echo $this->db->last_query(); die();
@@ -516,7 +518,7 @@ class StudentModel extends CI_Model
               }
             
            }
-
+          
            return $returnArr;
     }
 
