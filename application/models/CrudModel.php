@@ -666,23 +666,28 @@ class CrudModel extends CI_Model
         $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
-            //  $condition = "
-            // AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
-            // AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
-            // AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
-            // AND sub.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
-            // AND tt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
-            //   ";
-            $condition = '';
-            if(isset($data['teacherName']) || isset($data['examName']) || isset($data['studentClass']) || isset($data['studentSection']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
+             $condition = "
+                AND r.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+                AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND sub.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND tt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+              ";
+   
+            if(isset($data['examId']) || isset($data['examName']) ||  isset($data['studentName'])  || isset($data['resultDate']) ||isset($data['studentClass']) || isset($data['studentSection']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
             {
-                if(!empty($data['teacherName']))
+                if(!empty($data['studentName']))
                 {
-                    $condition .= " AND tt.name LIKE '%{$data['teacherName']}%' ";
+                    $condition .= " AND s.name LIKE '%{$data['studentName']}%' ";
                 }
                 if(!empty($data['examName']))
                 {
                     $condition .= " AND e.exam_name LIKE '%{$data['examName']}%' ";
+                }
+                if(!empty($data['examId']))
+                {
+                    $condition .= " AND e.id = '{$data['examId']}' ";
                 }
                 if(!empty($data['studentClass']))
                 {
@@ -692,10 +697,14 @@ class CrudModel extends CI_Model
                 {
                     $condition .= " AND ss.id = '{$data['studentSection']}' ";
                 }
+                if(!empty($data['resultDate']))
+                {
+                    $condition .= " AND r.result_date = '{$data['resultDate']}' ";
+                }
             
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND r.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
                 }
             
             }

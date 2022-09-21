@@ -302,8 +302,18 @@ class APIController extends CI_Controller
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$studentId = $apiData['studentId'];
-		$dateWithYear = (@$apiData['dateWithYear']) ? @$apiData['dateWithYear'] : null;
+		$year = (@$apiData['year']) ? @$apiData['year'] : null;
+		$month = (@$apiData['month']) ? @$apiData['month'] : null;
 
+		if(isset($year) && isset($month) && $year != null && $month != null)
+		{
+			$date = $year . "-". $month . "-" . "01";
+			$dateWithYear = date($date);
+		}else
+		{
+			$dateWithYear = null;
+		}
+		
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$allAttendanceList = $this->APIModel->showAttendanceDataForStudentId($studentId,$schoolUniqueCode,$dateWithYear);

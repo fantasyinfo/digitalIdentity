@@ -100,6 +100,10 @@ if(isset($_GET['action']) )
             <input type="text" class="form-control" id="examName" placeholder="Search by exam name">
           </div>
           <div class="form-group col-md-2">
+          <label >Exam Id</label>
+            <input type="number" class="form-control" id="examId" placeholder="Search by exam id">
+          </div>
+          <div class="form-group col-md-2">
           <label>Select Class </label>
           <select  id="studentClass" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
           <option></option>
@@ -126,8 +130,12 @@ if(isset($_GET['action']) )
            </select>
           </div>
           <div class="form-group col-md-2">
-          <label >Teacher Name</label>
-            <input type="text" class="form-control" id="teacherName" placeholder="Search by teacher name">
+          <label >Student Name</label>
+            <input type="text" class="form-control" id="studentName" placeholder="Search by student name">
+          </div>
+          <div class="form-group col-md-2">
+            <label >Result Published Date</label>
+            <input type="date" class="form-control" id="resultDate">
           </div>
           <div class="form-group col-md-2">
             <label >From Date</label>
@@ -205,7 +213,7 @@ if(isset($_GET['action']) )
    // datatable student list intilizing
  loadStudentDataTable();
 
-function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',fd = '',td = '')
+function loadStudentDataTable(en = '',ei = '',sc = '',ss = '',sn = '', rd = '', fd = '',td = '')
 {
    $("#listDatatable").DataTable({
      "responsive": true, "lengthChange": true, "autoWidth": true,
@@ -227,10 +235,12 @@ function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',fd = '',td = '')
          method: 'post',
          url: ajaxUrlForStudentList,
          data : {
-          examName: sn,
+          examName: en,
+          examId : ei,
            studentClass: sc,
            studentSection: ss,
-           teacherName: sm,
+           studentName: sn,
+           resultDate: rd,
            studentFromDate: fd,
            studentToDate: td,
          },
@@ -247,9 +257,11 @@ function loadStudentDataTable(sn = '',sc = '',ss = '',sm = '',fd = '',td = '')
    $("#listDatatable").DataTable().destroy();
    loadStudentDataTable(
      $("#examName").val(),
+     $("#examId").val(),
      $("#studentClass").val(),
      $("#studentSection").val(),
-     $("#teacherName").val(),
+     $("#studentName").val(),
+     $("#resultDate").val(),
      $("#fromDate").val(),
      $("#toDate").val(),
      );
