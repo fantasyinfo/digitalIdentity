@@ -784,7 +784,7 @@ class APIModel extends CI_Model
 
 
 
-          if ($digiCoinToInsert) {
+          if ($digiCoinToInsert > 0) {
             // insert the digicoin
             $insertDigiCoin = $this->insertDigiCoin($studentId, HelperClass::userTypeR['1'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode,$examId);
             if ($insertDigiCoin) {

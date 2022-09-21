@@ -44,6 +44,35 @@ $currentPage = $_SERVER['PATH_INFO'];
         $active = '';
         if (isset($parentMenu)) {
           foreach ($parentMenu as $pM) { 
+
+
+            // select child menu and check if there is any parent menu located with it
+
+            if(isset($exitingPermission) && !empty($exitingPermission))
+            {
+              $permissionIds = implode("','",$exitingPermission);
+
+             $checkIfCurrentParentIdHasNoChildPermission =  $this->db->query($sqlTP = "SELECT count(1) as countTP FROM " . Table::adminPanelMenuTable . " WHERE is_child = '1' AND parent_id ='{$pM['id']}' AND id NOT IN ('$permissionIds') AND status = '1'")->result_array();
+
+
+             $totalChildOFThisParent =  $this->db->query($sqlTC = "SELECT count(1) as countTC FROM " . Table::adminPanelMenuTable . " WHERE is_child = '1' AND parent_id ='{$pM['id']}' AND status = '1'")->result_array();
+
+            //  echo $sqlTC;
+             if(!empty($checkIfCurrentParentIdHasNoChildPermission) && !empty($totalChildOFThisParent))
+             {
+              if($totalChildOFThisParent[0]['countTC'] - $checkIfCurrentParentIdHasNoChildPermission[0]['countTP'] == '0')
+              {
+                continue;
+              }
+             
+             }
+            }
+           
+
+
+
+
+
             ?>
 
             <li class="nav-item menu-open">

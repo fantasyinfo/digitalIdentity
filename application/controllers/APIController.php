@@ -459,7 +459,7 @@ class APIController extends CI_Controller
 					$digiCoinToInsert =   $this->APIModel->calculateStudentResultDigiCoin($perResultDigiCoin, $dataArrOfExam['obtained_max_marks'], $dataArrOfExam['exam_max_marks']);
 				}
 				
-				if (isset($digiCoinToInsert)) {
+				if (isset($digiCoinToInsert) && $digiCoinToInsert > 0) {
 					// insert the digicoin
 					$insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserIdFromDB, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode,$examId);
 					if ($insertDigiCoin) {
