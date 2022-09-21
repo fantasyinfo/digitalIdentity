@@ -609,7 +609,7 @@ class CrudModel extends CI_Model
                
                 $subArr[] = ($j = $i + 1);
                 $subArr[] = $d[$i]['id'];
-                $subArr[] = $d[$i]['exam_name'];
+                $subArr[] = substr($d[$i]['exam_name'],0,30);
                 $subArr[] = $d[$i]['subjectName'];
                 $subArr[] = $d[$i]['date_of_exam'];
                 $subArr[] = $d[$i]['max_marks'];
@@ -628,10 +628,11 @@ class CrudModel extends CI_Model
            
                 if($d[$i]['status'] == '1') 
                 {
-                    $ssus = 'Active';
+                    $ssus = '<span class="badge badge-info">Active</span>';
                 }
                 else if ($d[$i]['status'] == '3'){
-                    $ssus = 'Result Published';
+                    $url = base_url('exam/allResults') . '?action=resultPublished&examId=' . $d[$i]['id'];
+                    $ssus = '<a href="'.$url.'" target="_blank" class="badge badge-success">Check Results</a>';
                 }
 
                 

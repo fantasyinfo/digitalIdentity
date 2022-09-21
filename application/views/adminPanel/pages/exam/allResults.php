@@ -38,9 +38,20 @@
 $this->load->model('CrudModel');
 $classData = $this->CrudModel->allClass(Table::classTable, $_SESSION['schoolUniqueCode']);
 $sectionData = $this->CrudModel->allSection(Table::sectionTable, $_SESSION['schoolUniqueCode']);
-
+$examIdValue = '';
 if(isset($_GET['action']) )
 {
+
+
+  if($_GET['action'] == 'resultPublished')
+  {
+    $examIdValue = $_GET['examId'];
+  }
+
+
+
+
+
   if($_GET['action'] == 'status')
   {
     $status = $_GET['status'];
@@ -101,7 +112,7 @@ if(isset($_GET['action']) )
           </div>
           <div class="form-group col-md-2">
           <label >Exam Id</label>
-            <input type="number" class="form-control" id="examId" placeholder="Search by exam id">
+            <input type="number" class="form-control" id="examId" placeholder="Search by exam id" value="<?= $examIdValue ?>">
           </div>
           <div class="form-group col-md-2">
           <label>Select Class </label>
@@ -265,5 +276,18 @@ function loadStudentDataTable(en = '',ei = '',sc = '',ss = '',sn = '', rd = '', 
      $("#fromDate").val(),
      $("#toDate").val(),
      );
- })
+ });
+
+
+ window.onload=function(){
+  document.getElementById("search").click();
+};
+
+
+
+
+
+
+
+
 </script>

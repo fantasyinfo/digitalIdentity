@@ -251,6 +251,20 @@ class APIModel extends CI_Model
     }
   }
 
+  public function countStudentViaClassAndSectionName($className, $sectionName, $schoolUniqueCode)
+  {
+    $totalStudents =  $this->db->query("SELECT count(1) as count FROM " . Table::studentTable . " s
+    INNER JOIN ".Table::classTable." c ON c.id = s.class_id 
+    INNER JOIN ".Table::sectionTable." ss ON ss.id = s.section_id
+    WHERE c.className = '$className' AND ss.sectionName = '$sectionName' AND s.status = '1' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+    if (!empty($totalStudents)) {
+      return $totalStudents[0]['count'];
+    } else {
+      return false;
+    }
+  }
+
+
   // save attendence
   public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode)
   {
@@ -500,7 +514,7 @@ class APIModel extends CI_Model
         "class_id" => $classId,
         "section_id" => $sectionId,
         "subject_id" => $subjectId,
-        "exam_name" => $examName . " Date: " . $examDate . " Exam Id: " . rand(0000, 9999),
+        "exam_name" => $examName . "-" . rand(0000, 9999),
         "date_of_exam" => $examDate,
         "max_marks" => $maxMarks,
         "min_marks" => $minMarks,

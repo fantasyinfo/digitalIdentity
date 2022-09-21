@@ -91,6 +91,15 @@ class APIController extends CI_Controller
 		}
 		$currentDateTime = date('d-m-Y h:i:s');
 		$totalAttenData = count($attendenceData);
+
+		// check if total student = total attendanceData
+		$totalStudentsInTheClass = $this->APIModel->countStudentViaClassAndSectionName($className, $sectionName, $schoolUniqueCode);
+
+		if($totalStudentsInTheClass != $totalAttenData)
+		{
+			return HelperClass::APIresponse(500, "Please Mark All Students Attandance, Total Students in this Class $totalStudentsInTheClass and you have submitted only $totalAttenData students attendance." );
+		}
+
 		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
