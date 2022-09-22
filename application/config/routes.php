@@ -47,6 +47,7 @@ $teacherRoutesArr = [
     'addTeacher',
     'saveTeacher',
     'updateTeacher',
+    'teacherReviews',
 ];
 
 foreach($teacherRoutesArr as $tRoute)
@@ -169,7 +170,8 @@ $ajaxRoutesArr = [
     'listDigiCoinAjax',
     'showCityViaStateId',
     'allExamList',
-    'allResultList'
+    'allResultList',
+    'teacherReviewsList',
     
 ];
 

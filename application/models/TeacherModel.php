@@ -149,6 +149,14 @@ class TeacherModel extends CI_Model
       }
     }
 
+    public function teacherReviewsList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->teacherReviewsList(Table::ratingAndReviewTable,$post);
+      }
+    }
+
     public function singleTeacher($id)
     {
       return $this->CrudModel->singleTeacher(Table::teacherTable,$id);

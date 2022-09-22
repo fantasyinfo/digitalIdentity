@@ -42,6 +42,7 @@ $currentPage = $_SERVER['PATH_INFO'];
 
         <?php
         $active = '';
+       
         if (isset($parentMenu)) {
           foreach ($parentMenu as $pM) { 
 
@@ -69,11 +70,7 @@ $currentPage = $_SERVER['PATH_INFO'];
             }
            
 
-
-
-
-
-            ?>
+            ?> 
 
             <li class="nav-item menu-open">
               <a href="#" class="nav-link active">
@@ -92,9 +89,11 @@ $currentPage = $_SERVER['PATH_INFO'];
                     if($currentPage == '/'.$cM['link'])
                     {
                       $active = 'active';
+              
                     }else
                     {
                       $active = '';
+                   
                     }
                     
                     if($checkPermission)

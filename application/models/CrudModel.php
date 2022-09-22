@@ -819,6 +819,144 @@ class CrudModel extends CI_Model
         
     }
 
+    public function teacherReviewsList($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+             $condition = "
+                AND rr.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+                AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND tt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+              ";
+            // $condition = "";
+            if(isset($data['examId']) ||  isset($data['teacherName'])  || isset($data['stars']) ||isset($data['resultId']) || isset($data['studentFromDate']) || isset($data['studentToDate']))
+            {
+                if(!empty($data['teacherName']))
+                {
+                    $condition .= " AND tt.name LIKE '%{$data['teacherName']}%' ";
+                }
+                if(!empty($data['examId']))
+                {
+                    $condition .= " AND e.id = '{$data['examId']}' ";
+                }
+                if(!empty($data['stars']))
+                {
+                    $condition .= " AND rr.stars = '{$data['stars']}' ";
+                }
+                if(!empty($data['resultId']))
+                {
+                    $condition .= " AND r.id = '{$data['resultId']}' ";
+                }
+             
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND rr.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                }
+            
+            }
+      
+                $d = $this->db->query("SELECT  rr.id as ratingId, rr.stars,rr.review, rr.review_title,IF(rr.for_what = '1', 'Result Published', '') as reasonForReview,rr.created_at,
+                e.id as examId, 
+                r.id as resultId,
+                s.name,s.mother_name,s.father_name,
+                c.className,ss.sectionName,
+                tt.name as teacherName, 
+                tt.id as teacherId
+                 FROM " .$this->tableName." rr
+                LEFT JOIN " .Table::examTable ." e ON e.id = rr.reason_id
+                LEFT JOIN " .Table::resultTable ." r ON r.exam_id = e.id AND r.student_id = rr.login_user_id
+                LEFT JOIN " .Table::studentTable ." s ON s.id = rr.login_user_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  rr.user_id
+                WHERE rr.status != 4 $condition ORDER BY rr.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(rr.id) as count  FROM " .$this->tableName." rr
+                LEFT JOIN " .Table::examTable ." e ON e.id = rr.reason_id
+                LEFT JOIN " .Table::resultTable ." r ON r.exam_id = e.id AND r.student_id = rr.login_user_id
+                LEFT JOIN " .Table::studentTable ." s ON s.id = rr.login_user_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  rr.user_id
+                WHERE rr.status != 4 $condition ORDER BY rr.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT rr.id as ratingId, rr.stars,rr.review, rr.review_title,IF(rr.for_what = '1', 'Result Published', '') as reasonForReview,rr.created_at,
+                e.id as examId, 
+                r.id as resultId,
+                s.name,s.mother_name,s.father_name,
+                c.className,ss.sectionName,
+                tt.name as teacherName, 
+                tt.id as teacherId
+                 FROM " .$this->tableName." rr
+                LEFT JOIN " .Table::examTable ." e ON e.id = rr.reason_id
+                LEFT JOIN " .Table::resultTable ." r ON r.exam_id = e.id AND r.student_id = rr.login_user_id
+                LEFT JOIN " .Table::studentTable ." s ON s.id = rr.login_user_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  rr.user_id
+                WHERE rr.status != 4 ORDER BY rr.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(rr.id) as count  FROM " .$this->tableName." rr
+                LEFT JOIN " .Table::examTable ." e ON e.id = rr.reason_id
+                LEFT JOIN " .Table::resultTable ." r ON r.exam_id = e.id AND r.student_id = rr.login_user_id
+                LEFT JOIN " .Table::studentTable ." s ON s.id = rr.login_user_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  e.section_id
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  rr.user_id
+                WHERE rr.status != 4 ORDER BY rr.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = $d[$i]['ratingId'];
+                $subArr[] = $d[$i]['teacherName'];
+                $subArr[] = $d[$i]['stars'];
+                $subArr[] = $d[$i]['review_title'];
+                $subArr[] = $d[$i]['review'];
+                $subArr[] = $d[$i]['reasonForReview'];
+                $subArr[] = $d[$i]['examId'];
+                $subArr[] = $d[$i]['resultId'];
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['mother_name'] . " & " . $d[$i]['father_name'];
+                $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = $d[$i]['created_at'];
+                // $subArr[] = '
+                // <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
+                // <a href="editTeacher/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
+                // <a href="deleteTeacher/'.$d[$i]['id'].'" class="btn btn-danger" 
+                // onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
+
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr,
+            "query" => $lastQuery
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
     public function singleStudent($tableName,$id)
     {
         $dir = base_url().HelperClass::uploadImgDir;

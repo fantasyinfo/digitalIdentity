@@ -107,6 +107,19 @@ class TeacherController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/footer');
 	}
 
+	public function teacherReviews()
+	{
+		$this->loginCheck();
+
+		$dataArr = [
+			'pageTitle' => 'Teacher Reviews',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->teacherDir . 'teacherReviews');
+		// $this->load->view($this->viewDir . 'pages/footer');
+	}
+
 	public function saveTeacher()
 	{
 		$this->loginCheck();

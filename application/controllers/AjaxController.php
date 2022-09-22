@@ -45,6 +45,14 @@ class AjaxController extends CI_Controller {
 			return $this->ExamModel->allResultList($_POST);
 		}
 	}
+	
+	public function teacherReviewsList()
+	{
+		if(isset($_POST))
+		{
+			return $this->TeacherModel->teacherReviewsList($_POST);
+		}
+	}
 
 
 	public function showStudentViaClassAndSectionId()
