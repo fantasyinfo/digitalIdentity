@@ -33,7 +33,8 @@ class APIController extends CI_Controller
 		$userId = $apiData['userId'];
 		$passWord = $apiData['password'];
 		$uerType = $apiData['userType'];
-		$userData = $this->APIModel->login($schoolUniqueCode,$userId, $passWord, $uerType);
+		$fcmToken = (isset($apiData['fcm_token'])) ? @$apiData['fcm_token'] : '';
+		$userData = $this->APIModel->login($schoolUniqueCode,$userId, $passWord, $uerType, $fcmToken);
 		return HelperClass::APIresponse( 200, 'Login Successfully.', $userData);
 	}
 

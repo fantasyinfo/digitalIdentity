@@ -32,3 +32,7 @@
 
 
 -- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Teacher Reviews', 'teacher/teacherReviews', NULL, '12', '0', '1', '1', '2022-08-29 09:25:52');
+
+
+ALTER TABLE `teachers` ADD `fcm_token` TEXT NULL AFTER `auth_token`;
+ALTER TABLE `students` ADD `fcm_token` TEXT NULL AFTER `auth_token`;

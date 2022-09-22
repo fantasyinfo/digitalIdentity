@@ -559,6 +559,7 @@ class StudentModel extends CI_Model
                 $subArr['examMarks'] = @$d[$i]['examMarks'];
                 $subArr['resultStatus'] = @$d[$i]['resultStatus'];
                 $subArr['remarks'] = @$d[$i]['remarks'];
+                $subArr['currentDate'] = date('d', strtotime(@$d[$i]['result_date']));
                 array_push($returnArr, $subArr);
               }
             

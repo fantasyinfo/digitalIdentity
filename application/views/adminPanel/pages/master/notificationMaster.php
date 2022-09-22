@@ -20,9 +20,24 @@
       $title = $_POST['title'];
       $body = trim($_POST['body']);
 
+     $tokens =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '9' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  LIMIT 1")->result_array();
 
-      $this->CrudModel->sendWebPush($title,$body);
+     if(!empty( $tokens))
+     {
+      $token = [$tokens[0]['fcm_token']];
+     }
 
+      // $token = ["eKvXhMbkDTg:APA91bE4RrD5zLy_0PB8Ai871giToE3-LXMwVuj1BKGJoSCXAapuZmKIK90cXTZLyQ8GdKw0O6UgQ6sIxStQK_BX2ObqBpaO5DJ-OjcswH0lVF747gDv66VGl6QBVupctg99p4FNisCg"];
+
+    
+        // $title = 'This is from PHP';
+        // $body = 'This is the body from PHP';
+        $image = null;
+        $sound = null;
+     
+      // $this->CrudModel->sendWebPush($title,$body);
+       ;
+die($this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound));
 
       $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web')");
       if($insertNotification)

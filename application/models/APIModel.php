@@ -11,7 +11,7 @@ class APIModel extends CI_Model
   }
 
   // login
-  public function login($schoolUniqueCode, $id, $password, $type)
+  public function login($schoolUniqueCode, $id, $password, $type, $fcmToken)
   {
     $dir = base_url() . HelperClass::uploadImgDir;
     if ($type == 'Teacher') {
@@ -30,7 +30,8 @@ class APIModel extends CI_Model
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
         $authToken = HelperClass::generateRandomToken();
-        $this->db->query("UPDATE " . Table::teacherTable . " SET auth_token = '$authToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id' AND schoolUniqueCode = '$schoolUniqueCode'");
+        $this->db->query($sql = "UPDATE " . Table::teacherTable . " SET auth_token = '$authToken', fcm_token = '$fcmToken' WHERE id = {$userData[0]['teacherId']} AND user_id = '$id' AND schoolUniqueCode = '$schoolUniqueCode'");
+        // echo $sql;die();
         $responseData = [];
         $responseData["teacherId"] = @$userData[0]["teacherId"];
         $responseData["name"] = @$userData[0]["name"];
@@ -50,6 +51,7 @@ class APIModel extends CI_Model
         $responseData["stateName"] = @$userData[0]["stateName"];
         $responseData["cityName"] = @$userData[0]["cityName"];
         $responseData["authToken"] = @$authToken;
+        $responseData["fcm_token"] = @$fcmToken;
         $responseData["userType"] = @$type;
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
 
@@ -101,7 +103,7 @@ class APIModel extends CI_Model
         for($i = 0; $i < $totalStudentsCount; $i++)
         {
           // update auth token on all students
-          $this->db->query("UPDATE " . Table::studentTable . " SET auth_token = '$authToken' WHERE id = {$userData[$i]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+          $this->db->query("UPDATE " . Table::studentTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[$i]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
 
 
           $subArr = [];
@@ -136,7 +138,7 @@ class APIModel extends CI_Model
         $userData[0]['userType'] = $type;
         return $userData;
       } else {
-        return HelperClass::APIresponse(500, 'Auth Token Not Match. Please Use Correct Details.');
+        return HelperClass::APIresponse(500, 'Please Relogin Again. Timeout.');
       }
     } else if ($type == 'Staff') {
       //
@@ -149,7 +151,7 @@ class APIModel extends CI_Model
         $userData[0]['userType'] = $type;
         return $userData;
       } else {
-        return HelperClass::APIresponse(500, 'Auth Token Not Match. Please Use Correct Details.');
+        return HelperClass::APIresponse(500, 'Please Relogin Again. Timeout.');
       }
     }
   }
@@ -576,7 +578,7 @@ class APIModel extends CI_Model
       $condition .= " AND e.subject_id = $subjectId ";
     }
 
-    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName FROM " . Table::examTable . " e
+    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,ct.id as classId,st.sectionName,st.id as sectionId, subt.id as subjectId, subt.subjectName FROM " . Table::examTable . " e
       INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
       INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
       INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
