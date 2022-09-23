@@ -20,43 +20,50 @@
       $title = $_POST['title'];
       $body = trim($_POST['body']);
 
-     $tokens =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '9' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  LIMIT 1")->result_array();
+     $tokens =  $this->db->query("SELECT fcm_token FROM " . Table::studentTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND status = '1' ")->result_array();
 
+     $totalTokens = count($tokens);
+     $token = [];
      if(!empty( $tokens))
      {
-      $token = [$tokens[0]['fcm_token']];
+        if($totalTokens < 500)
+        {
+          for($i=0; $i < $totalTokens; $i++)
+          {
+            array_push($token,$tokens[$i]['fcm_token']);
+          }
+        }
+        
      }
 
-      // $token = ["eKvXhMbkDTg:APA91bE4RrD5zLy_0PB8Ai871giToE3-LXMwVuj1BKGJoSCXAapuZmKIK90cXTZLyQ8GdKw0O6UgQ6sIxStQK_BX2ObqBpaO5DJ-OjcswH0lVF747gDv66VGl6QBVupctg99p4FNisCg"];
-
-    
-        // $title = 'This is from PHP';
-        // $body = 'This is the body from PHP';
         $image = null;
         $sound = null;
      
-      // $this->CrudModel->sendWebPush($title,$body);
-       ;
-die($this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound));
-
-      $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web')");
-      if($insertNotification)
+      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound), TRUE);
+      if($sendPushSMS['success'])
       {
-      
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'New Notification Added Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      }else
-      {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'Notification Not Added Due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
+        $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web')");
+        if($insertNotification)
+        {
+        
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'New Notification Added Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        }else
+        {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Notification Not Added Due to this Error. ' . $this->db->last_query(),
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 ".base_url()."master/notificationMaster");
       }
-      header("Refresh:1 ".base_url()."master/notificationMaster");
+      die();
+
+      
     }
 
 

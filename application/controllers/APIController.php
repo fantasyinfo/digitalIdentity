@@ -86,10 +86,10 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$currentDateTime = date('d-m-Y h:i:s');
 		$totalAttenData = count($attendenceData);
 
@@ -98,17 +98,57 @@ class APIController extends CI_Controller
 
 		if($totalStudentsInTheClass != $totalAttenData)
 		{
-			return HelperClass::APIresponse(500, "Please Mark All Students Attandance, Total Students in this Class $totalStudentsInTheClass and you have submitted only $totalAttenData students attendance." );
+			$msg = "Please Mark All Students Attandance, Total Students in this Class $totalStudentsInTheClass and you have submitted only $totalAttenData students attendance." ;
+			$totalAttenData = 0;
+			return HelperClass::APIresponse(500, $msg);
 		}
 
+		$studentIds = [];
 		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
+			array_push($studentIds,$stu_id);
 			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus,$schoolUniqueCode);
 			if (!$insertAttendeceRecord) {
 				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
 		}
+
+		// send notification now
+		$studentIdsInString = implode("','",$studentIds);
+		$sql = "SELECT fcm_token FROM " . Table::studentTable . " WHERE id IN ('$studentIdsInString') AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' ";
+		// die();
+		$tokensFromDB =  $this->db->query($sql)->result_array();
+
+		// echo $this->db->last_query();
+		$totalTokens = count($tokensFromDB);
+		$tokenArr = [];
+		if(!empty( $tokensFromDB))
+		{
+			if($totalTokens < 500)
+			{
+				for($i=0; $i < $totalTokens; $i++)
+				{
+					if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+					{
+						continue;
+					}
+					array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
+				}
+			}
+			
+		}
+		$title = "Attendance Update ✅";
+		$body = "Hey 👋 Dear Parents, Our 🏨 School Attendance Updated, Please Check The App Now!!";
+        $image = null;
+        $sound = null;
+     
+      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+	  $isNotificationSend = false;
+      if($sendPushSMS['success'])
+	  {
+		$isNotificationSend = true;
+	  }
 
 		 // check digiCoin is set for this attendence time for teachers
 		 $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'],HelperClass::userType['Teacher'],$schoolUniqueCode);
@@ -119,7 +159,7 @@ class APIController extends CI_Controller
 		  $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Attendence'],$digiCoinF,$schoolUniqueCode);
 		  if($insertDigiCoin)
 		  {
-			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',['coins' =>$digiCoinF]);
+			return HelperClass::APIresponse(200, 'Attendence Updated Successfully & DigiCoin Updated at ' . $currentDateTime. ' and Notification Send Status ' . $isNotificationSend,'',['coins' =>$digiCoinF]);
 		  }else
 		  {
 			return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
@@ -127,7 +167,7 @@ class APIController extends CI_Controller
 		 }
 
 		 
-		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime);
+		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime . ' and Notification Send Status ' . $isNotificationSend);
 	}
 
 	// showSubmitAttendenceData
@@ -169,13 +209,14 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$currentDateTime = date('d-m-Y h:i:s');
 
 		$totalDepStu = count($departureData);
+		$studentIds = [];
 		for ($i = 0; $i < $totalDepStu; $i++) {
 			// ignore if the student not present today
 			if($departureData[$i]['attendenceStatus'] == 0)
@@ -185,12 +226,50 @@ class APIController extends CI_Controller
 			
 			$attendenceId = $departureData[$i]['attendenceId'];
 			 $stu_id = $departureData[$i]['studentId'];
+			 array_push($studentIds,$stu_id);
 			$departureStatus = '1';
 			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserIdFromDB, $loginuserType, $departureStatus,$schoolUniqueCode);
 			if (!$insertDepartureRecord) {
 				return HelperClass::APIresponse(500, 'Departure Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
 		}
+
+		// send notification now
+		$studentIdsInString = implode("','",$studentIds);
+		$sql = "SELECT fcm_token FROM " . Table::studentTable . " WHERE id IN ('$studentIdsInString') AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' ";
+		// die();
+		$tokensFromDB =  $this->db->query($sql)->result_array();
+
+		// echo $this->db->last_query();
+		$totalTokens = count($tokensFromDB);
+		$tokenArr = [];
+		if(!empty( $tokensFromDB))
+		{
+			if($totalTokens < 500)
+			{
+				for($i=0; $i < $totalTokens; $i++)
+				{
+					if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+					{
+						continue;
+					}
+					array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
+				}
+			}
+			
+		}
+		$title = "Departure Update ✅";
+		$body = "Hey 👋 Dear Parents, Our 🏨 School Departure Updated, Please Check The App Now!!";
+        $image = null;
+        $sound = null;
+     
+      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+	  $isNotificationSend = false;
+      if($sendPushSMS['success'])
+	  {
+		$isNotificationSend = true;
+	  }
+
 
 		// check digiCoin is set for this departure time for teachers
 		$digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Departure'],HelperClass::userType['Teacher'],$schoolUniqueCode);
@@ -201,13 +280,13 @@ class APIController extends CI_Controller
 		 $insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserId,HelperClass::userTypeR['2'],HelperClass::actionType['Departure'],$digiCoinF,$schoolUniqueCode);
 		 if($insertDigiCoin)
 		 {
-		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime,'',['coins' =>$digiCoinF]);
+		   return HelperClass::APIresponse(200, 'Departure Updated Successfully & DigiCoin Updated at ' . $currentDateTime  . ' and Notification Send Status ' . $isNotificationSend,'',['coins' =>$digiCoinF]);
 		 }else
 		 {
 		   return HelperClass::APIresponse(500, 'DigiCoin Not Inserted For Teachers '. $this->db->last_query());
 		 }
 		}
-		return HelperClass::APIresponse(200, 'Departure Updated Successfully at ' . $currentDateTime);
+		return HelperClass::APIresponse(200, 'Departure Updated Successfully at ' . $currentDateTime .  ' and Notification Send Status ' . $isNotificationSend);
 	}
 
 
@@ -257,10 +336,10 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$addNewExam = $this->APIModel->addExam($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$schoolUniqueCode);
 
 		if (!$addNewExam) {
@@ -392,10 +471,10 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		// $schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$addNewExam = $this->APIModel->updateExam($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$examId);
 
 		if (!$addNewExam) {
@@ -427,13 +506,15 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
+		$studentIds = [];
 		for($i=0;$i<$totalResults;$i++)
 		{
 			$studentId = $results[$i]['studentId'];
+			array_push($studentIds,$studentId);
 			$marks = $results[$i]['marks'];
 			$reMarks = @$results[$i]['reMarks'];
 		
@@ -444,6 +525,42 @@ class APIController extends CI_Controller
 			return HelperClass::APIresponse(500, 'Result Not Added Successfully beacuse ' . $this->db->last_query());
 		}else
 		{
+			// send notification now
+			$studentIdsInString = implode("','",$studentIds);
+			$sql = "SELECT fcm_token FROM " . Table::studentTable . " WHERE id IN ('$studentIdsInString') AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' ";
+			// die();
+			$tokensFromDB =  $this->db->query($sql)->result_array();
+
+			// echo $this->db->last_query();
+			$totalTokens = count($tokensFromDB);
+			$tokenArr = [];
+			if(!empty( $tokensFromDB))
+			{
+				if($totalTokens < 500)
+				{
+					for($i=0; $i < $totalTokens; $i++)
+					{
+						if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+						{
+							continue;
+						}
+						array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
+					}
+				}
+				
+			}
+			$title = "Result Published ✅";
+			$body = "Hey 👋 Dear Parents, Result Has Been Published For Exam Id $examId, Please Check Result In The App Now!!";
+			$image = null;
+			$sound = null;
+		
+		$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+		$isNotificationSend = false;
+		if($sendPushSMS['success'])
+		{
+			$isNotificationSend = true;
+		}
+
 				// update on exam table result published
 				$updateExamPublishedStatus = $this->CrudModel->update(Table::examTable, ['status' => '3'],$examId);
 
@@ -464,12 +581,12 @@ class APIController extends CI_Controller
 					// insert the digicoin
 					$insertDigiCoin = $this->APIModel->insertDigiCoin($loginUserIdFromDB, HelperClass::userTypeR['2'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode,$examId);
 					if ($insertDigiCoin) {
-						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.','',['coins' =>$perResultDigiCoin]);
+						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Inserted For Teacher.' . ' and Notification Send Status ' . $isNotificationSend,'',['coins' =>$perResultDigiCoin]);
 					} else {
-						return HelperClass::APIresponse(500, 'Result Updated & DigiCoin Not Inserted For Teacher ' . $this->db->last_query());
+						return HelperClass::APIresponse(200, 'Result Updated & DigiCoin Not Inserted For Teacher ' . $this->db->last_query());
 					}
 				}
-			return HelperClass::APIresponse(200, 'Result Updated Successfully');
+			return HelperClass::APIresponse(200, 'Result Updated Successfully' . ' and Notification Send Status ' . $isNotificationSend);
 		}
 		
 	}
@@ -498,10 +615,10 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 
 		$addHomeWork = $this->APIModel->addHomeWork($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode);
 		
@@ -667,10 +784,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$walletHistoryData = $this->APIModel->walletHistory($loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
 
 		if (!$walletHistoryData) {
@@ -735,10 +852,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$document_image_name,$schoolUniqueCode);
 
 		if (!$visitorEntry) {
@@ -878,10 +995,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$userTypeId = HelperClass::userType[$loginuserType];
 		$digiCoinCountData = $this->APIModel->getAlreadyDigiCoinCount($loginUserIdFromDB,$userTypeId,$loginuserType,$schoolUniqueCode);
 
@@ -908,10 +1025,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$digiCoinCountData = $this->APIModel->checkAllGifts($loginuserType,$schoolUniqueCode);
 
 		if (!$digiCoinCountData) {
@@ -937,10 +1054,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$digiCoinCountData = $this->APIModel->showGiftsForRedeem($loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
 
 		if (!$digiCoinCountData) {
@@ -968,10 +1085,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$totalCountOfGifts = count($giftsIds);
 
 
@@ -990,6 +1107,7 @@ public function updateHomeWork()
 			return HelperClass::APIresponse(500, 'Gifts Not Redeem, there is some issue contact support.');
 		}else
 		{
+			
 			return HelperClass::APIresponse(200, 'You have successfully redeem your gift, digiCoin balance is updated & you can check your gift status anytime.');
 		}
 	}
@@ -1009,10 +1127,10 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
-		if($loginUserIdFromDB != $loginUserId)
-		{
-			return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
-		}
+		// if($loginUserIdFromDB != $loginUserId)
+		// {
+		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
+		// }
 		$giftStatus = $this->APIModel->giftRedeemStatus($loginUserIdFromDB,$loginuserType,$schoolUniqueCode);
 		if (!$giftStatus) {
 			return HelperClass::APIresponse(500, 'Gifts Redeem Status Not Found.');

@@ -280,7 +280,7 @@ class APIModel extends CI_Model
       $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if (!empty($d)) {
-        return HelperClass::APIresponse(500, 'Attendence Already Submited for this Student id today.' . $d[0]['stu_id']);
+        return HelperClass::APIresponse(500, 'Attendence Already Submited for this Class.');
       }
 
       $insertArr = [
@@ -921,6 +921,18 @@ class APIModel extends CI_Model
         return HelperClass::APIresponse(500, 'This Gift Id\'s Not found, Please Check Another Gift ' . $this->db->last_query());
       }
 
+
+      // send notification now
+
+			  $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+        $tokenArr = [$tokensFromDB[0]['fcm_token']];
+        $title = "🎁 Gift Redeem Successfully.";
+        $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
+        $image = null;
+        $sound = null;
+      
+      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+  
 
       // total digiCoins in wallet
       $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType,$loginuserType, $schoolUniqueCode);
