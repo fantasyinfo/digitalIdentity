@@ -11,6 +11,7 @@ class AjaxController extends CI_Controller {
 		parent::__construct();
 		$this->load->model('StudentModel');
 		$this->load->model('TeacherModel');
+		$this->load->model('DriverModel');
 		$this->load->model('CrudModel');
 		$this->load->model('QRModel');
 		$this->load->model('ExamModel');
@@ -28,6 +29,13 @@ class AjaxController extends CI_Controller {
 		if(isset($_POST))
 		{
 			return $this->TeacherModel->listTeacher($_POST);
+		}
+	}
+	public function listDriversAjax()
+	{
+		if(isset($_POST))
+		{
+			return $this->DriverModel->listDriver($_POST);
 		}
 	}
 	public function allExamList()

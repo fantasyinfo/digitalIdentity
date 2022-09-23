@@ -97,6 +97,17 @@ class CrudModel extends CI_Model
         return HelperClass::tecPrefix . ($id[1] + 1);
     }
 
+
+    public function getDriverId($tableName)
+    {
+        $this->tableName    = $tableName;
+        $dd = $this->db->query("SELECT user_id FROM " .$this->tableName ." WHERE user_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
+        $id = explode(HelperClass::driverPrefix,$dd[0]['user_id']);
+        return HelperClass::driverPrefix . ($id[1] + 1);
+    }
+
+
+
     public function uploadImg(array $file,$id = '')
     {
        
@@ -416,6 +427,122 @@ class CrudModel extends CI_Model
                 <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
                 <a href="editTeacher/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
                 <a href="deleteTeacher/'.$d[$i]['id'].'" class="btn btn-danger" 
+                onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
+
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
+    public function showAllDrivers($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+            $condition = "
+            AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND st.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            AND ct.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             ";
+
+            if(isset($data['dName']) || isset($data['dMobile']) || isset($data['dUserId']))
+            {
+                if(!empty($data['dName']))
+                {
+                    $condition .= " AND s.name LIKE '%{$data['dName']}%' ";
+                }
+                if(!empty($data['dMobile']))
+                {
+                    $condition .= " AND s.mobile LIKE '%{$data['dMobile']}%' ";
+                }
+                if(!empty($data['dUserId']))
+                {
+                    $condition .= " AND s.user_id LIKE '%{$data['dUserId']}%' ";
+                }
+            
+            }
+      
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,
+                s.vechicle_type,s.vechicle_no,s.total_seats,
+                s.pincode,s.address,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 $condition ORDER BY s.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,
+                s.vechicle_type,s.vechicle_no,s.total_seats,
+                s.pincode,s.address,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 ORDER BY s.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['user_id'];
+                $subArr[] = $d[$i]['mobile'];
+                $subArr[] = HelperClass::vehicleType[$d[$i]['vechicle_type']];
+                $subArr[] = $d[$i]['vechicle_no'];
+                $subArr[] = $d[$i]['total_seats'];
+                $subArr[] = $d[$i]['stateName']. " - ".$d[$i]['cityName'] . " - " . $d[$i]['pincode'];
+
+                if($d[$i]['status'] == '1') 
+                {
+                    $ns =  '2';
+                }
+                else{
+                    $ns = '1';
+                }
+
+           
+                if($d[$i]['status'] == '1') 
+                {
+                    $cclas = 'success';
+                    $ssus = 'Active';
+                }
+                else{
+                    $cclas = 'danger';
+                    $ssus = 'Inactive';
+                }
+
+                
+
+                $subArr[] = "<a href='?action=status&edit_id=".$d[$i]['id']."&status=".$ns." ' class='badge badge-".$cclas ."'> ".$ssus."</a>";
+
+                $subArr[] = '
+                <a href="viewDriver/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
+                <a href="editDriver/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
+                <a href="deleteDriver/'.$d[$i]['id'].'" class="btn btn-danger" 
                 onclick="return confirm(\'Are you sure you want to delete this item?\');"><i class="fas fa-trash"></i></a>';
 
                 $sendArr[] = $subArr;
@@ -971,6 +1098,13 @@ class CrudModel extends CI_Model
        return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
     }
 
+    public function singleDriver($tableName,$id)
+    {
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+       return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
+    }
+
     public function showStudentProfile($tableName,$userId)
     {
         $dir = base_url().HelperClass::uploadImgDir;
@@ -1085,7 +1219,7 @@ class CrudModel extends CI_Model
                 @unlink(HelperClass::uploadImgDir . $imgN);
             }
 
-            if($this->db->query("DELETE FROM " . $this->tableName . " WHERE id = " . $this->student_id . " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'"))
+            if($this->db->query("UPDATE " . $this->tableName . " SET status = '4' WHERE id = " . $this->student_id . " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'"))
             {
                 return true;
             }else 

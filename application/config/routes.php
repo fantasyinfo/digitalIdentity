@@ -63,6 +63,32 @@ $route[$baseTeacher."deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$
 
 
 
+// driver
+
+
+$baseDriver = "driver/";
+$driverRouteArr = [
+    'list',
+    'addDriver',
+    'saveDriver',
+    'updateDriver',
+    // 'teacherReviews',
+];
+
+foreach($driverRouteArr as $driverRoute)
+{
+    $route[$baseDriver.$driverRoute] = "DriverController"."/".$driverRoute;
+}
+
+
+// get routes of driver
+
+$route[$baseDriver."viewDriver/(:any)"] = "DriverController/viewDriver/$1";
+$route[$baseDriver."editDriver/(:any)"] = "DriverController/editDriver/$1";
+$route[$baseDriver."deleteDriver/(:any)"] = "DriverController/deleteDriver/$1";
+
+
+
 
 // school routs
  $baseSchool = "school/";
@@ -165,6 +191,7 @@ $baseAjax = 'ajax/';
 $ajaxRoutesArr = [
     'listStudentsAjax',
     'listTeachersAjax',
+    'listDriversAjax',
     'showStudentViaClassAndSectionId',
     'totalFeesDue',
     'listDigiCoinAjax',

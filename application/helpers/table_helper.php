@@ -14,6 +14,7 @@ class Table{
     const qrcodeTable = 'qrcode_students';
     const qrcodeSchoolsTable = 'qrcode_schools';
     const qrcodeTeachersTable = 'qrcode_teachers';
+    const qrcodeDriversTable = 'qrcode_drivers';
     const attendenceTable = 'attendence';
     const departureTable = 'departure';
     const teacherSubjectsTable = 'teachersubjects';
@@ -35,5 +36,6 @@ class Table{
     const visitorTable = 'visitor_entry';
     const ratingAndReviewTable = 'rating_and_reviews';
     const bannerTable = 'banner_for_app';
+    const driverTable = 'driver';
     
 }

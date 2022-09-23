@@ -7,6 +7,7 @@ class HelperClass
 
     const prefix = 'stu0000';
     const tecPrefix = 'tec0000';
+    const driverPrefix = 'dri0000';
     const schoolIDPrefix = 'sch0000';
     const imgPrefix = 'img-';
     const uploadImgDir = 'assets/uploads/';
@@ -21,7 +22,8 @@ class HelperClass
         'Staff' => '3',
         'Principal' => '4',
         'School' => '5',
-        'Parent' => '6'
+        'Parent' => '6',
+        'Driver' => '7'
     ];
     const userTypeForPanel = [
         'Admin' => '1',
@@ -114,6 +116,11 @@ class HelperClass
     ];
 
 
+    const vehicleType = [
+        '1' => 'Bus',
+        '2' => 'Rikshaw',
+        '3' => 'Auto',
+    ];
 
 const invoicePrefix = 'INVOICE-00';
 
