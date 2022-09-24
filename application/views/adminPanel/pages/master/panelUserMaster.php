@@ -79,6 +79,7 @@
     if (isset($_POST['submit'])) {
       $name = $_POST['name'];
       $email = $_POST['email'];
+      $mobile = $_POST['mobile'];
       $user_type = $_POST['user_type'];
       $password = $_POST['password'];
       $salt = HelperClass::generateRandomToken();
@@ -97,7 +98,7 @@
         exit(0);
       }
 
-      $insertNewUser = $this->db->query("INSERT INTO " . Table::userTable . " (schoolUniqueCode,name, email,password,user_type,salt) VALUES ('{$_SESSION['schoolUniqueCode']}','$name','$email','$passWordForSave','$user_type','$salt')");
+      $insertNewUser = $this->db->query("INSERT INTO " . Table::userTable . " (schoolUniqueCode,name, email,password,user_type,salt,mobile) VALUES ('{$_SESSION['schoolUniqueCode']}','$name','$email','$passWordForSave','$user_type','$salt','$mobile')");
 
       $insertId = $this->db->insert_id();
 
@@ -145,6 +146,7 @@
         exit(0);
       }
       $name = $_POST['name'];
+      $mobile = $_POST['mobile'];
       // $email = $_POST['email'];
       $user_type = $_POST['user_type'];
       $password = $_POST['password'];
@@ -152,7 +154,7 @@
 
       $passWordForSave = HelperClass::encode($password, $salt);
 
-      $updateUser = $this->db->query("UPDATE " . Table::userTable . " SET name = '$name', password = '$passWordForSave', user_type = '$user_type', salt = '$salt' WHERE id = '$updateUserId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+      $updateUser = $this->db->query("UPDATE " . Table::userTable . " SET name = '$name', password = '$passWordForSave', user_type = '$user_type', salt = '$salt' , mobile = '$mobile' WHERE id = '$updateUserId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if ($updateUser) {
         $msgArr = [
           'class' => 'success',
@@ -248,13 +250,19 @@
 
                       ?>
                       <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                           <label>Name </label>
                           <input type="text" name="name" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                                   echo $editUserData[0]['name'];
                                                                 } ?>" class="form-control" id="name" required>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
+                          <label>Mobile No </label>
+                          <input type="number" name="mobile" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                                                                  echo $editUserData[0]['mobile'];
+                                                                } ?>" class="form-control" id="name" required>
+                        </div>
+                        <div class="form-group col-md-4">
                           <label>Email </label>
                           <input type="email" name="email" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                                     echo $editUserData[0]['email'];
@@ -262,13 +270,13 @@
                                                                                                                                                                         echo 'disabled';
                                                                                                                                                                       } ?> class="form-control" id="name" required>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                           <label>Password </label>
                           <input type="text" name="password" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                                       echo HelperClass::decode($editUserData[0]['password'], $editUserData[0]['salt']);
                                                                     } ?>" class="form-control" id="name" required>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                           <label>Select User Type </label>
                           <select name="user_type" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
                             <?php
@@ -291,7 +299,7 @@
 
                           </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 mt-4">
                           <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                         echo 'update';
                                                       } else {
@@ -322,6 +330,7 @@
                             <!-- <th>User Id</th> -->
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Mobile</th>
                             <th>User Type</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -336,12 +345,13 @@
                                 <!-- <td><?= $cn['id']; ?></td> -->
                                 <td><?= $cn['name']; ?></td>
                                 <td><?= $cn['email']; ?></td>
+                                <td><?= $cn['mobile']; ?></td>
                                 <td><?= $cn['user_type']; ?></td>
                                 <td>
                                   <?php
 
-                                  $checkIfDefaultUsers = $this->db->query("SELECT * FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$cn['id']}' AND is_head = '1' ")->result_array();
-
+                                  $checkIfDefaultUsers = $this->db->query($sql = "SELECT * FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$cn['id']}' AND is_head = '1' AND is_head IS NOT NULL AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+                                // echo $sql;
                                   if (empty($checkIfDefaultUsers)) { ?>
                                     <a href="?action=status&edit_id=<?= $cn['id']; ?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1'; ?>" class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger'; ?>">
                                       <?php echo ($cn['status'] == '1') ? 'Active' : 'Inactive'; ?> </a>
