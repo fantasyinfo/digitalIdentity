@@ -12,9 +12,9 @@
   <div class="content-wrapper">
     <?php 
     
-    $sd = $data['teacherData'][0];
+    $sd = $data['driverData'][0];
     //print_r($sd);
-    $string = HelperClass::qrcodeUrl . "?tecid=" . HelperClass::schoolPrefix.$sd['user_id'];
+    $string = HelperClass::qrcodeUrl . "?driid=" . HelperClass::schoolPrefix.$sd['user_id'];
     ?>
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -49,7 +49,7 @@
                     <img src="<?=$sd['image'];?>" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
                       <h4><?=$sd['name'];?></h4>
-                      <p class="text-secondary mb-1"><?=$sd['className'] . " - " . $sd['sectionName'];?></p>
+                      <!-- <p class="text-secondary mb-1"><?=$sd['className'] . " - " . $sd['sectionName'];?></p> -->
                       <span class="badge badge-success"><?=$sd['user_id'];?></span>
                     </div>
                     <a href="<?=$string?>" class="btn btn-info text-white my-2" target="_blank">User Profile View</a>
@@ -91,18 +91,6 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Gender</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                    <?php 
-                    if($sd['gender'] == 1) {echo 'Male';}elseif($sd['gender'] == 2){echo 'Female';}else{echo 'Other';}
-                    ?>
-                    </div>
-                  </div>
-                  
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
                       <h6 class="mb-0">Phone</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
@@ -112,19 +100,28 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Mother Name</h6>
+                      <h6 class="mb-0">Vehicle Type</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <?=$sd['mother_name'];?>
+                    <?= HelperClass::vehicleType[$sd['vechicle_type']];?>
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Father Name</h6>
+                      <h6 class="mb-0">Vehicle Number</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                    <?=$sd['father_name'];?>
+                    <?=$sd['vechicle_no'];?>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Total Seats</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                    <?=$sd['total_seats'];?>
                     </div>
                   </div>
                   <hr>
@@ -137,11 +134,7 @@
                     </div>
                   </div>
                   <hr>
-                  <!-- <div class="row">
-                    <div class="col-sm-12">
-                      <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
-                    </div>
-                  </div> -->
+               
                 </div>
               </div>
 

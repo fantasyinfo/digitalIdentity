@@ -89,7 +89,7 @@ class DriverController extends CI_Controller
 
 		$dataArr = [
 			'pageTitle' => 'View Driver',
-			'teacherData' => $this->TeacherModel->viewSingleTeacherAllData($id),
+			'driverData' => $this->DriverModel->viewSingleDriverAllData($id),
 			'adminPanelUrl' => $this->adminPanelURL,
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);

@@ -1152,6 +1152,17 @@ class CrudModel extends CI_Model
         LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
         WHERE s.status != 0 AND s.id = {$id} ORDER BY s.id DESC LIMIT 1")->result_array();
     }
+
+    public function viewSingleDriverAllData($tableName,$id)
+    {
+        $dir = base_url().HelperClass::uploadImgDir;
+        $this->tableName = $tableName;
+        return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,st.stateName,ct.cityName FROM " .$this->tableName." s
+        LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+        LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+        WHERE s.status != 0 AND s.id = {$id} ORDER BY s.id DESC LIMIT 1")->result_array();
+    }
+
     public function allClass($tableName,$schoolUniqueCode)
     {
         $this->tableName = $tableName;

@@ -121,34 +121,38 @@ class APIController extends CI_Controller
 		$tokensFromDB =  $this->db->query($sql)->result_array();
 
 		// echo $this->db->last_query();
-		$totalTokens = count($tokensFromDB);
-		$tokenArr = [];
-		if(!empty( $tokensFromDB))
+		if(!empty($tokensFromDB))
 		{
-			if($totalTokens < 500)
+			$totalTokens = count($tokensFromDB);
+			$tokenArr = [];
+			if(!empty( $tokensFromDB))
 			{
-				for($i=0; $i < $totalTokens; $i++)
+				if($totalTokens < 500)
 				{
-					if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+					for($i=0; $i < $totalTokens; $i++)
 					{
-						continue;
+						if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+						{
+							continue;
+						}
+						array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
 					}
-					array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
 				}
+				
 			}
-			
+			$title = "Attendance Update ✅";
+			$body = "Hey 👋 Dear Parents, Our 🏨 School Attendance Updated, Please Check The App Now!!";
+			$image = null;
+			$sound = null;
+		
+			$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+			$isNotificationSend = false;
+			if($sendPushSMS['success'])
+			{
+				$isNotificationSend = true;
+			}
 		}
-		$title = "Attendance Update ✅";
-		$body = "Hey 👋 Dear Parents, Our 🏨 School Attendance Updated, Please Check The App Now!!";
-        $image = null;
-        $sound = null;
-     
-      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-	  $isNotificationSend = false;
-      if($sendPushSMS['success'])
-	  {
-		$isNotificationSend = true;
-	  }
+			
 
 		 // check digiCoin is set for this attendence time for teachers
 		 $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'],HelperClass::userType['Teacher'],$schoolUniqueCode);
@@ -241,35 +245,38 @@ class APIController extends CI_Controller
 		$tokensFromDB =  $this->db->query($sql)->result_array();
 
 		// echo $this->db->last_query();
-		$totalTokens = count($tokensFromDB);
-		$tokenArr = [];
-		if(!empty( $tokensFromDB))
+		if(!empty($tokensFromDB))
 		{
-			if($totalTokens < 500)
+			$totalTokens = count($tokensFromDB);
+			$tokenArr = [];
+			if(!empty( $tokensFromDB))
 			{
-				for($i=0; $i < $totalTokens; $i++)
+				if($totalTokens < 500)
 				{
-					if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+					for($i=0; $i < $totalTokens; $i++)
 					{
-						continue;
+						if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+						{
+							continue;
+						}
+						array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
 					}
-					array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
 				}
+				
 			}
-			
-		}
-		$title = "Departure Update ✅";
-		$body = "Hey 👋 Dear Parents, Our 🏨 School Departure Updated, Please Check The App Now!!";
-        $image = null;
-        $sound = null;
+			$title = "Departure Update ✅";
+			$body = "Hey 👋 Dear Parents, Our 🏨 School Departure Updated, Please Check The App Now!!";
+			$image = null;
+			$sound = null;
      
-      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-	  $isNotificationSend = false;
-      if($sendPushSMS['success'])
-	  {
-		$isNotificationSend = true;
-	  }
+			$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+			$isNotificationSend = false;
+			if($sendPushSMS['success'])
+			{
+				$isNotificationSend = true;
+			}
 
+		}
 
 		// check digiCoin is set for this departure time for teachers
 		$digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Departure'],HelperClass::userType['Teacher'],$schoolUniqueCode);
@@ -532,34 +539,38 @@ class APIController extends CI_Controller
 			$tokensFromDB =  $this->db->query($sql)->result_array();
 
 			// echo $this->db->last_query();
-			$totalTokens = count($tokensFromDB);
-			$tokenArr = [];
-			if(!empty( $tokensFromDB))
+			if(!empty($tokensFromDB))
 			{
-				if($totalTokens < 500)
+				$totalTokens = count($tokensFromDB);
+				$tokenArr = [];
+				if(!empty( $tokensFromDB))
 				{
-					for($i=0; $i < $totalTokens; $i++)
+					if($totalTokens < 500)
 					{
-						if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+						for($i=0; $i < $totalTokens; $i++)
 						{
-							continue;
+							if(empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null)
+							{
+								continue;
+							}
+							array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
 						}
-						array_push($tokenArr,$tokensFromDB[$i]['fcm_token']);
 					}
+					
 				}
-				
-			}
-			$title = "Result Published ✅";
-			$body = "Hey 👋 Dear Parents, Result Has Been Published For Exam Id $examId, Please Check Result In The App Now!!";
-			$image = null;
-			$sound = null;
+				$title = "Result Published ✅";
+				$body = "Hey 👋 Dear Parents, Result Has Been Published For Exam Id $examId, Please Check Result In The App Now!!";
+				$image = null;
+				$sound = null;
 		
-		$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-		$isNotificationSend = false;
-		if($sendPushSMS['success'])
-		{
-			$isNotificationSend = true;
-		}
+				$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+				$isNotificationSend = false;
+				if($sendPushSMS['success'])
+				{
+					$isNotificationSend = true;
+				}
+			}
+			
 
 				// update on exam table result published
 				$updateExamPublishedStatus = $this->CrudModel->update(Table::examTable, ['status' => '3'],$examId);

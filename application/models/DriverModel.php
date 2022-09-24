@@ -155,9 +155,9 @@ class DriverModel extends CI_Model
           return $this->CrudModel->showTeacherProfile(Table::teacherTable,$userId[1]);
         }
     }
-    public function viewSingleTeacherAllData($id)
+    public function viewSingleDriverAllData($id)
     {
-      return $this->CrudModel->viewSingleTeacherAllData(Table::teacherTable,$id);
+      return $this->CrudModel->viewSingleDriverAllData(Table::driverTable,$id);
     }
 
     public function deleteDriver($id)

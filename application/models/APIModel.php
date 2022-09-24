@@ -925,13 +925,19 @@ class APIModel extends CI_Model
       // send notification now
 
 			  $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
-        $tokenArr = [$tokensFromDB[0]['fcm_token']];
-        $title = "🎁 Gift Redeem Successfully.";
-        $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
-        $image = null;
-        $sound = null;
+
+        if(!empty($tokensFromDB))
+        {
+          $tokenArr = [$tokensFromDB[0]['fcm_token']];
+          $title = "🎁 Gift Redeem Successfully.";
+          $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
+          $image = null;
+          $sound = null;
+          $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+        }
+       
       
-      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+      
   
 
       // total digiCoins in wallet
