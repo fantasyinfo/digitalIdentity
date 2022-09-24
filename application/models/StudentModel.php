@@ -214,6 +214,7 @@ class StudentModel extends CI_Model
         return json_encode($sql);
       }
     }
+    // for panel
     public function totalFeesDue(array $p)
     {
       if(!empty($p))
@@ -330,6 +331,7 @@ class StudentModel extends CI_Model
       }
     }
 
+    // for api
     public function totalFeesDueToday($schoolUniqueCode,$classId,$sectionId,$studentId)
     {
       $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
@@ -404,12 +406,12 @@ class StudentModel extends CI_Model
        return $sendArr = [
           'perMonthFeesForThisClass' => $d[0]['fees_amt'],
           'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
-          'sessionStartedFrom' => $sessionStartingFrom,
-          'currentMonth' => $currentMonth,
+          // 'sessionStartedFrom' => $sessionStartingFrom,
+          // 'currentMonth' => $currentMonth,
           'totalDepositAmount' => @$totalDepsitAmt,
           'totalOfferAmt' => @$totalOfferAmt,
           'totalDueAmt' => @$totalDueAmt,
-          'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
+          // 'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
           'totalBalanceForDeposit' => $totalBalance,
           'totalMonthFeesDue' => floor($totalMonthFeesDue),
           // 'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
@@ -417,6 +419,7 @@ class StudentModel extends CI_Model
     }
 
 
+    // for api
     public function checkFeesSubmitDetails($schoolUniqueCode,$classId,$sectionId,$studentId)
     {
       $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
@@ -472,6 +475,10 @@ class StudentModel extends CI_Model
             
            }
 
+          //  if(empty($returnArr))
+          //  {
+          //   echo $this->db->last_query();
+          //  }
            return $returnArr;
     }
 

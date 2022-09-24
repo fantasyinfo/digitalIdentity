@@ -5,6 +5,12 @@
   border: 1px solid red;
 }
 
+
+#myImage
+{
+  display: none;
+}
+
 /* #content
 {
   height: 120px;
@@ -49,6 +55,14 @@
     
       <div id="map">
       </div>
+      <div class="row mt-5">
+        <div class="col-md-8 mx-auto text-center">
+        <img src="<?=base_url('assets/uploads/updateLocationBtn.png')?>" id="myImage"></img>
+        <button class="btn btn-success btn-lg btn-block" onclick="validate()" id="myButton">Update Location</button>
+        </div>
+      </div>
+      
+      
 </div>
     <!-- /.content -->
   </div>
@@ -160,4 +174,26 @@ let llFromResponse = [];
       
       }
 
+
+
+      function validate(){
+
+        var  myButton= document.getElementById('myButton');
+        var  myImage= document.getElementById('myImage');
+
+        var hide_timeout = 10; // delay 5 sec before hide button;
+        var show_timeout = 500000; // delay 5 minutes before show button;
+
+        setTimeout (function(){
+          loadMap();
+          myButton.style.display ='none';
+          myImage.style.display ='inline';
+        },hide_timeout);
+
+        setTimeout (function(){
+          myButton.style.display ='inline';
+          myImage.style.display ='none';    
+        },show_timeout);
+
+        }
     </script>

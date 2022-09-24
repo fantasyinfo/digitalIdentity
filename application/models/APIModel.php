@@ -535,6 +535,22 @@ class APIModel extends CI_Model
   }
 
 
+
+  public function studentFeesSubmitData($classId,$sectionId,$studentId,$schoolUniqueCode)
+  {
+
+    $sendArr = [
+      'studentFeesDepositData' => $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode,$classId,$sectionId,$studentId),
+      'totalFeesDueDetails' => $this->StudentModel->totalFeesDueToday($schoolUniqueCode,$classId,$sectionId,$studentId),
+    ];
+    return $sendArr;
+  }
+
+
+
+
+
+
 // showAttendanceDataForStudentId
   public function showAttendanceDataForStudentId($studentId,$schoolUniqueCode,$dateWithYear = null)
   {

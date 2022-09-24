@@ -790,6 +790,34 @@ public function updateHomeWork()
 
 
 
+	public function studentFeesSubmitData()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId'])|| empty($apiData['sectionId'])|| empty($apiData['studentId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		// $loginUserId = $apiData['loginUserId'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$studentId = $apiData['studentId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+	
+		$feesDetails = $this->APIModel->studentFeesSubmitData($classId,$sectionId,$studentId,$schoolUniqueCode);
+
+		if (!$feesDetails) {
+			return HelperClass::APIresponse(500, 'No Fees Found For This User');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Fees Data.',$feesDetails);
+		}
+	}
+
 	// wallet history
 	public function walletHistory()
 	{
