@@ -72,6 +72,7 @@ $driverRouteArr = [
     'addDriver',
     'saveDriver',
     'updateDriver',
+    'showMap'
     // 'teacherReviews',
 ];
 
@@ -199,6 +200,7 @@ $ajaxRoutesArr = [
     'allExamList',
     'allResultList',
     'teacherReviewsList',
+    'getLatLng'
     
 ];
 
@@ -248,7 +250,8 @@ $apiRoutesArr = [
     'notificationsForParent',
     'studentDashboard',
     'showAllStudentsForSwitchProfile',
-    'showAttendanceDataForStudentId'
+    'showAttendanceDataForStudentId',
+    'upateDriverLatLng'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

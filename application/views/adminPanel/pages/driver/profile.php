@@ -147,10 +147,10 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">User Id</h6>
+                          <h6 class="mb-0">Mobile Number</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                        <?=$sd['user_id'];?>
+                        <?=$sd['mobile'];?>
                         </div>
                       </div>
                       <hr>

@@ -97,6 +97,19 @@ class DriverController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/footer');
 	}
 
+	public function showMap()
+	{
+		$this->loginCheck();
+
+		$dataArr = [
+			'pageTitle' => 'Show Driver Map',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->driverDir . 'maps');
+		$this->load->view($this->viewDir . 'pages/footer');
+	}
+
 	// public function teacherReviews()
 	// {
 	// 	$this->loginCheck();

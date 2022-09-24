@@ -147,10 +147,14 @@ class APIController extends CI_Controller
 		
 			$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
 			$isNotificationSend = false;
-			if($sendPushSMS['success'])
+			if(!empty($sendPushSMS))
 			{
-				$isNotificationSend = true;
+				if($sendPushSMS['success'])
+				{
+					$isNotificationSend = true;
+				}
 			}
+			
 		}
 			
 
@@ -271,9 +275,12 @@ class APIController extends CI_Controller
      
 			$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
 			$isNotificationSend = false;
-			if($sendPushSMS['success'])
+			if(!empty($sendPushSMS))
 			{
-				$isNotificationSend = true;
+				if($sendPushSMS['success'])
+				{
+					$isNotificationSend = true;
+				}
 			}
 
 		}
@@ -565,9 +572,12 @@ class APIController extends CI_Controller
 		
 				$sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
 				$isNotificationSend = false;
-				if($sendPushSMS['success'])
+				if(!empty($sendPushSMS))
 				{
-					$isNotificationSend = true;
+					if($sendPushSMS['success'])
+					{
+						$isNotificationSend = true;
+					}
 				}
 			}
 			
@@ -822,9 +832,10 @@ public function updateHomeWork()
 		$loginuserType = $apiData['userType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserId =	$loginUser[0]['login_user_id'];
 
 	
-		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode);
+		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode,$loginUserId);
 
 		if (!$leaderBoardData) {
 			return HelperClass::APIresponse(500, 'No LeaderBoard Found For This User ' . $this->db->last_query());
@@ -1148,6 +1159,33 @@ public function updateHomeWork()
 		}else
 		{
 			return HelperClass::APIresponse(200, 'All Your Gifts Redeem Status. ',$giftStatus);
+		}
+	}
+
+	// upateDriverLatLng
+	public function upateDriverLatLng()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']) || empty($apiData['lat']) || empty($apiData['lng']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = $apiData['loginUserId'];
+		$lat = $apiData['lat'];
+		$lng = $apiData['lng'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+	
+		$driverLatLng = $this->APIModel->upateDriverLatLng($loginUserIdFromDB,$loginuserType,$lat,$lng,$schoolUniqueCode);
+		if (!$driverLatLng) {
+			return HelperClass::APIresponse(500, 'Driver Lat Lng Not Added.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Driver Lat Lng Updated Successfully.');
 		}
 	}
 

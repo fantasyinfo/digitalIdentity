@@ -116,4 +116,32 @@ class AjaxController extends CI_Controller {
 			return $this->QRModel->listQR($_POST);
 		}
 	}
+
+
+	public function getLatLng()
+	{
+		header('Access-Control-Allow-Origin: *');
+		$latLng = $this->db->query("SELECT * FROM ".Table::driverTable." WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND lat IS NOT NULL AND lng IS NOT NULL")->result_array();
+  
+		if(!empty($latLng))
+		{
+			$totalC = count($latLng);
+			$latLngArr = [];
+			for($i=0; $i < $totalC; $i++)
+			{
+			$subArr = [
+				'lat' => (float) $latLng[$i]['lat'],
+				'lng' => (float) $latLng[$i]['lng'],
+				'name' =>  $latLng[$i]['name'],
+				'mobile' =>  $latLng[$i]['mobile'],
+				'vechicle_type' =>  HelperClass::vehicleType[$latLng[$i]['vechicle_type']],
+				'vechicle_no' =>  $latLng[$i]['vechicle_no'],
+				'total_seats' =>  $latLng[$i]['total_seats'],
+			];
+			array_push($latLngArr,$subArr);
+			}
+			echo json_encode($latLngArr);
+			die();
+		}
+	}
 }

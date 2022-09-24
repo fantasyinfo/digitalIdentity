@@ -123,6 +123,36 @@ class APIModel extends CI_Model
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
       }
+    }else if($type == 'Driver')
+    {
+      $mobile = $id;
+      $sql = "SELECT t.*, CONCAT('$dir',t.image) as image FROM " . Table::driverTable . " t 
+      WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.password = '$password' AND t.status = '1'";
+      $userData = $this->db->query($sql)->result_array();
+      if(!empty($userData))
+      {
+          $authToken = HelperClass::generateRandomToken();
+           // update auth token on driver
+          $this->db->query("UPDATE " . Table::driverTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+
+          $responseData = [];
+          $responseData["driverId"] = @$userData[0]["id"];
+          $responseData["userId"] = @$userData[0]["user_id"];
+          $responseData["name"] = @$userData[0]["name"];
+          $responseData["image"] = @$userData[0]["image"];
+          $responseData["user_id"] = @$userData[0]["user_id"];
+          $responseData["mobile"] = @$userData[0]["mobile"];
+          $responseData["vechicle_type"] = HelperClass::vehicleType[@$userData[0]["vechicle_type"]];
+          $responseData["vechicle_no"] = @$userData[0]["vechicle_no"];
+          $responseData["total_seats"] = @$userData[0]["total_seats"];
+          $responseData["authToken"] = @$authToken;
+          $responseData["userType"] = @$type;
+          $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+      
+        return $responseData;
+      } else {
+        return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+      }
     }
   }
 
@@ -146,6 +176,16 @@ class APIModel extends CI_Model
       //
     } else if ($type == 'Parent') {
     $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
+      $userData = $this->db->query($sql)->result_array();
+      if (!empty($userData)) {
+        $userData[0]['userType'] = $type;
+        return $userData;
+      } else {
+        return HelperClass::APIresponse(500, 'Please Relogin Again. Timeout.');
+      }
+    }else if($type == 'Driver')
+    {
+      $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::driverTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
         $userData[0]['userType'] = $type;
@@ -566,6 +606,7 @@ class APIModel extends CI_Model
       //
     }
   }
+
 
 
   // showAllExam
@@ -1058,7 +1099,7 @@ class APIModel extends CI_Model
 
 
   // leaderBoard
-  public function leaderBoard($loginuserType, $schoolUniqueCode)
+  public function leaderBoard($loginuserType, $schoolUniqueCode,$loginUserId)
   {
     $dir = base_url().HelperClass::uploadImgDir;
     if ($loginuserType == 'Teacher') {
@@ -1076,13 +1117,19 @@ class APIModel extends CI_Model
         $totalCount = count($d);
         $a = 1;
         for ($i = 0; $i < $totalCount; $i++) {
-         $userDetails =  $this->db->query($sql2 = "SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
+         $userDetails =  $this->db->query($sql2 = "SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
 
+          // for first, second & third position
          if($i == 0 || $i == 1 || $i == 2)
          {
           if($i == 0 )
           {
             $topSubArr = [];
+            $topSubArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $topSubArr['myPosition'] = TRUE;
+            }
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = $d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
@@ -1096,6 +1143,11 @@ class APIModel extends CI_Model
           if($i == 1)
           {
             $topSubArr = [];
+            $topSubArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $topSubArr['myPosition'] = TRUE;
+            }
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = $d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
@@ -1109,6 +1161,11 @@ class APIModel extends CI_Model
           if($i == 2)
           {
             $topSubArr = [];
+            $topSubArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $topSubArr['myPosition'] = TRUE;
+            }
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = $d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
@@ -1125,6 +1182,11 @@ class APIModel extends CI_Model
 
 
           $subArr = [];
+          $subArr['myPosition'] = FALSE;
+          if($loginUserId == @$userDetails[0]['id'])
+          {
+            $subArr['myPosition'] = TRUE;
+          }
           $subArr['position'] = $a++;
           $subArr['userType'] = $d[$i]['user_type'];
           $subArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
@@ -1248,6 +1310,30 @@ class APIModel extends CI_Model
     
   }
   
+
+  // upateDriverLatLng
+  public function upateDriverLatLng($loginUserIdFromDB,$loginuserType,$lat,$lng,$schoolUniqueCode)
+  {
+    //$currentDate = date_create()->format('Y-m-d');
+    if ($loginuserType == 'Driver') {
+
+      $updateArr = [
+        "lat" => $lat,
+        "lng" => $lng,
+      ];
+
+      $update = $this->CrudModel->update(Table::driverTable, $updateArr, $loginUserIdFromDB);
+      if (!empty($update)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if ($loginuserType == 'Staff') {
+      //
+    } else if ($loginuserType == 'Principal') {
+      //
+    }
+  }
 
 
 
