@@ -22,23 +22,23 @@
 
   if(isset($_GET['submit']))
   {
-    if(isset($_GET['sName']))
+    if(isset($_GET['sName']) && !empty($_GET['sName']))
     {
       $condition .= " AND st.name LIKE '%{$_GET['sName']}%' ";
     }
 
-    if(isset($_GET['cId']))
+    if(isset($_GET['cId']) && !empty($_GET['cId']))
     {
       $condition .= " AND ct.className LIKE '%{$_GET['cId']}%' ";
     }
 
 
-    if(isset($_GET['sId']))
+    if(isset($_GET['sId']) && !empty($_GET['sId']))
     {
       $condition .= " AND sect.sectionName LIKE '%{$_GET['sId']}%' ";
     }
 
-    if(isset($_GET['userId']))
+    if(isset($_GET['userId']) && !empty($_GET['userId']))
     {
       $condition .= " AND st.user_id = '{$_GET['userId']}' ";
     }
@@ -46,7 +46,7 @@
 
   
 
-    $sql = "SELECT ffst.*,st.name,st.user_id,ct.className,sect.sectionName FROM ".Table::feesForStudentTable." ffst 
+     $sql = "SELECT ffst.*,st.name,st.user_id,ct.className,sect.sectionName FROM ".Table::feesForStudentTable." ffst 
     LEFT JOIN ".Table::studentTable." st ON st.id = ffst.student_id AND st.schoolUniqueCode= '{$_SESSION['schoolUniqueCode']}'
     LEFT JOIN ".Table::classTable." ct ON ct.id = ffst.class_id AND ct.schoolUniqueCode= '{$_SESSION['schoolUniqueCode']}'
     LEFT JOIN ".Table::sectionTable." sect ON sect.id = ffst.section_id AND sect.schoolUniqueCode= '{$_SESSION['schoolUniqueCode']}'

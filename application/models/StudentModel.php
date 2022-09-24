@@ -460,6 +460,7 @@ class StudentModel extends CI_Model
               {
                 $subArr = [];
                 $subArr = [
+                  'id' => $d[$i]['d'],
                   'invoice_id' => $d[$i]['invoice_id'],
                   'offer_amt' => $d[$i]['offer_amt'],
                   'deposit_amt' => $d[$i]['deposit_amt'],
