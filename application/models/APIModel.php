@@ -220,6 +220,14 @@ class APIModel extends CI_Model
       }
     } else if ($type == 'Staff') {
       //
+      $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::userTable . " WHERE auth_token = '$authToken' AND status = '1'";
+      $userData = $this->db->query($sql)->result_array();
+      if (!empty($userData)) {
+        $userData[0]['userType'] = $type;
+        return $userData;
+      } else {
+        return HelperClass::APIresponse(500, 'Please Relogin Again. Timeout.');
+      }
     } else if ($type == 'Principal') {
       //
     } else if ($type == 'Parent') {
@@ -800,12 +808,37 @@ class APIModel extends CI_Model
       $table = Table::qrcodeDriversTable;
     }
 
-    $d = $this->db->query("SELECT * FROM " . $table . " WHERE qrcodeUrl = '$qrCode' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+    $d = $this->db->query("SELECT * FROM " . $table . " WHERE qrcodeUrl = '$qrCode' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
 
     if (!empty($d)) {
-      return HelperClass::APIresponse(200, 'Identity Verified Successfully.',$d);
+
+      if ($identityType == 'Student') {
+        $tableB = Table::studentTable;
+      }else if ($identityType == 'Teacher')
+      {
+        $tableB = Table::teacherTable;
+      }else if ($identityType == 'Driver')
+      {
+        $tableB = Table::driverTable;
+      }
+
+
+
+      $details = $this->db->query("SELECT name,email,mobile,gender,mother_name,father_name,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
+
+
+      if(!empty($details))
+      {
+        return HelperClass::APIresponse(200, 'Identity Verified Successfully.',$details);
+      }else
+      {
+        return HelperClass::APIresponse(500, 'Identity Not Verified');
+      }
+
+
+      
     } else {
-      return HelperClass::APIresponse(500, 'Identity Not Verified');
+      return HelperClass::APIresponse(500, 'QrCode Not found.');
     }
   }
 
