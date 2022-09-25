@@ -83,7 +83,11 @@
 <script>
   var ajaxUrlForStudentList = '<?= base_url() . 'ajax/getLatLng'?>';
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDONXc92OEi-rHqbVBTz2ktXmHb-PCHRFA&callback=loadMap&v=weekly" defer ></script>
+
+<!-- AIzaSyBzWTxx_ylrDzx2G4fu0RcHtkzLsDumtNw // fido -->
+<!-- AIzaSyBy-jiUL5mBI50nHla9iaJDfieglumEowY // android satyender -->
+<!-- AIzaSyDONXc92OEi-rHqbVBTz2ktXmHb-PCHRFA // our -->
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=loadMap&v=weekly" defer ></script>
 
     <script>
 let llFromResponse = [];
