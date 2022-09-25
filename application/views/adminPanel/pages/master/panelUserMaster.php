@@ -87,11 +87,11 @@
       $passWordForSave = HelperClass::encode($password, $salt);
 
       // check email id is already used 
-      $alreadyEmail = $this->db->query("SELECT email FROM " . Table::userTable . " WHERE email = '$email' AND status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+      $alreadyEmail = $this->db->query("SELECT email FROM " . Table::userTable . " WHERE email = '$email' AND mobile = '$mobile'AND status = 1 AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
       if (!empty($alreadyEmail)) {
         $msgArr = [
           'class' => 'danger',
-          'msg' => 'Email Id Already Used in Other Account, Please Use Another Email Id.',
+          'msg' => 'Email Id OR Mobile Number Already Used in Other Account, Please Use Another Email Id.',
         ];
         $this->session->set_userdata($msgArr);
         header('Location: panelUserMaster');
@@ -146,7 +146,7 @@
         exit(0);
       }
       $name = $_POST['name'];
-      $mobile = $_POST['mobile'];
+      // $mobile = $_POST['mobile'];
       // $email = $_POST['email'];
       $user_type = $_POST['user_type'];
       $password = $_POST['password'];
@@ -154,7 +154,7 @@
 
       $passWordForSave = HelperClass::encode($password, $salt);
 
-      $updateUser = $this->db->query("UPDATE " . Table::userTable . " SET name = '$name', password = '$passWordForSave', user_type = '$user_type', salt = '$salt' , mobile = '$mobile' WHERE id = '$updateUserId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+      $updateUser = $this->db->query("UPDATE " . Table::userTable . " SET name = '$name', password = '$passWordForSave', user_type = '$user_type', salt = '$salt'  WHERE id = '$updateUserId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if ($updateUser) {
         $msgArr = [
           'class' => 'success',
@@ -260,15 +260,13 @@
                           <label>Mobile No </label>
                           <input type="number" name="mobile" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                                   echo $editUserData[0]['mobile'];
-                                                                } ?>" class="form-control" id="name" required>
+                                                                } ?>" <?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo 'disabled';} ?> class="form-control" id="name" required>
                         </div>
                         <div class="form-group col-md-4">
                           <label>Email </label>
                           <input type="email" name="email" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                                     echo $editUserData[0]['email'];
-                                                                  } ?>" <?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-                                                                                                                                                                        echo 'disabled';
-                                                                                                                                                                      } ?> class="form-control" id="name" required>
+                                                                  } ?>" <?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo 'disabled';} ?> class="form-control" id="name" required>
                         </div>
                         <div class="form-group col-md-4">
                           <label>Password </label>

@@ -14,6 +14,13 @@ class APIModel extends CI_Model
   public function login($schoolUniqueCode, $id, $password, $type, $fcmToken)
   {
     $dir = base_url() . HelperClass::uploadImgDir;
+    $schoolData = [];
+    $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+
+
+
+    
     if ($type == 'Teacher') {
       $sql = "
         SELECT t.id as teacherId,t.class_id,t.section_id, t.name, t.user_id,if(t.gender = 1, 'Male', 'Female') as gender, t.mother_name, t.father_name,t.mobile,t.email,t.address,t.dob,t.doj,t.pincode,CONCAT('$dir',t.image) as image,c.className,ss.sectionName,st.stateName,ct.cityName,tst.subject_ids
@@ -54,6 +61,7 @@ class APIModel extends CI_Model
         $responseData["fcm_token"] = @$fcmToken;
         $responseData["userType"] = @$type;
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+        $responseData["schoolData"] = $schoolData;
 
         // total count of students
         $responseData["totalStudentCount"] = ($this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"], $schoolUniqueCode)) ? $this->countStudentViaClassAndSection($userData[0]["class_id"], $userData[0]["section_id"], $schoolUniqueCode) : null;
@@ -83,7 +91,44 @@ class APIModel extends CI_Model
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
       }
     } else if ($type == 'Staff') {
-      //
+      $mobile = $id;
+
+      $sql = "SELECT t.* FROM " . Table::userTable . " t 
+      WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.status = '1'";
+
+      $userData = $this->db->query($sql)->result_array();
+      $passWord = '';
+      if(!empty($userData))
+      {
+        $passWord = HelperClass::decode($userData[0]['password'], $userData[0]['salt']);
+      }
+      
+      if($passWord !== $password)
+      {
+        return HelperClass::APIresponse(500, 'Password Not Matched. Please Use Correct Details.');
+      }
+
+      
+      if(!empty($userData))
+      {
+          $authToken = HelperClass::generateRandomToken();
+           // update auth token on driver
+          $this->db->query("UPDATE " . Table::userTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+
+          $responseData = [];
+          $responseData["staffId"] = @$userData[0]["id"];
+          $responseData["name"] = @$userData[0]["name"];
+          $responseData["email"] = @$userData[0]["email"];
+          $responseData["mobile"] = @$userData[0]["mobile"];
+          $responseData["authToken"] = @$authToken;
+          $responseData["userType"] = @$type;
+          $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+          $responseData["schoolData"] = $schoolData;
+      
+        return $responseData;
+      } else {
+        return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+      }
     } else if ($type == 'Principal') {
       //
     }else if($type == 'Parent' || $type == 'Student')
@@ -100,6 +145,7 @@ class APIModel extends CI_Model
         $totalStudentsCount = count($userData);
         $responseData = [];
         $responseData['studentsData'] = [];
+        $responseData["schoolData"] = $schoolData;
         for($i = 0; $i < $totalStudentsCount; $i++)
         {
           // update auth token on all students
@@ -117,8 +163,10 @@ class APIModel extends CI_Model
           $subArr["authToken"] = @$authToken;
           $subArr["userType"] = @$type;
           $subArr["schoolUniqueCode"] = @$schoolUniqueCode;
+          
           array_push($responseData["studentsData"], $subArr);
         }
+        
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
@@ -148,7 +196,7 @@ class APIModel extends CI_Model
           $responseData["authToken"] = @$authToken;
           $responseData["userType"] = @$type;
           $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
-      
+          $responseData["schoolData"] = $schoolData;
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');

@@ -35,7 +35,14 @@ class APIController extends CI_Controller
 		$uerType = $apiData['userType'];
 		$fcmToken = (isset($apiData['fcm_token'])) ? @$apiData['fcm_token'] : '';
 		$userData = $this->APIModel->login($schoolUniqueCode,$userId, $passWord, $uerType, $fcmToken);
-		return HelperClass::APIresponse( 200, 'Login Successfully.', $userData);
+		if(!empty($userData))
+		{
+			return HelperClass::APIresponse( 200, 'Login Successfully.', $userData);
+		}else
+		{
+			return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
+		}
+		
 	}
 
 
