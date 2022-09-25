@@ -46,7 +46,8 @@ class HelperClass
         '3' => 'Staff',
         '4' => 'Principal',
         '5' => 'School',
-        '6' => 'Parent'
+        '6' => 'Parent',
+        '7' => 'Driver'
     ];
     const userTypeForPanelR = [
         '1'  => 'Admin',

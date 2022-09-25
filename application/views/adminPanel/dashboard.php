@@ -32,7 +32,8 @@
         <div class="container-fluid">
 
           <?php
-
+      
+          
           $this->CrudModel->checkPermission();
 
           $currentDate = date('Y-m-d');

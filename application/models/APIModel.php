@@ -793,17 +793,19 @@ class APIModel extends CI_Model
 
   // validateQRCode
 
-  public function validateQRCode($qrCode,$identityType,$schoolUniqueCode)
+  public function validateQRCode($qrCode,$schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
-    if ($identityType == 'Student') {
+
+    $identityType = $this->CrudModel->extractQrCodeAndReturnUserType($qrCode);
+    if ($identityType == HelperClass::userTypeR[1]) {
       $table = Table::qrcodeTable;
-    }else if ($identityType == 'Teacher')
+    }else if ($identityType == HelperClass::userTypeR[2])
     {
       $table = Table::qrcodeTeachersTable;
-    }else if ($identityType == 'Driver')
+    }else if ($identityType == HelperClass::userTypeR[7])
     {
       $table = Table::qrcodeDriversTable;
     }
@@ -812,20 +814,21 @@ class APIModel extends CI_Model
 
     if (!empty($d)) {
 
-      if ($identityType == 'Student') {
+      if ($identityType == HelperClass::userTypeR[1]) {
         $tableB = Table::studentTable;
-      }else if ($identityType == 'Teacher')
+      }else if ($identityType == HelperClass::userTypeR[2])
       {
         $tableB = Table::teacherTable;
-      }else if ($identityType == 'Driver')
+      }else if ($identityType == HelperClass::userTypeR[7])
       {
         $tableB = Table::driverTable;
       }
 
 
 
-      $details = $this->db->query("SELECT name,email,mobile,gender,mother_name,father_name,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
-
+      $details = $this->db->query("SELECT name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
+     
+      $details[0]['userType'] = $identityType;
 
       if(!empty($details))
       {

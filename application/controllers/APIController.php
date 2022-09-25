@@ -1101,18 +1101,17 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['qrCode']) || empty($apiData['identityType']))
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['qrCode']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$qrCode = $apiData['qrCode'];
-		$identityType = $apiData['identityType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 	
-		$validateQR = $this->APIModel->validateQRCode($qrCode,$identityType,$schoolUniqueCode);
+		$validateQR = $this->APIModel->validateQRCode($qrCode,$schoolUniqueCode);
 
 		if (!$validateQR) {
 			return HelperClass::APIresponse(500, 'Identity Not Verified');

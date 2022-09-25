@@ -1316,6 +1316,25 @@ class CrudModel extends CI_Model
     }
 
 
+    public function extractQrCodeAndReturnUserType($qrCode)
+    {
+        // https://qverify.in?driid=dvm-dri00001
+        $e = explode('?', $qrCode);
+        $qr = (String) $e[1];
+        $userType = '';
+        if(strpos($qr,HelperClass::prefix))
+        {
+            $userType = HelperClass::userTypeR[1];
+        }else if (strpos($qr,HelperClass::tecPrefix))
+        {
+            $userType = HelperClass::userTypeR[2];
+        }else if (strpos($qr,HelperClass::driverPrefix))
+        {
+            $userType = HelperClass::userTypeR[7];
+        }
+        return $userType;
+    }
+
 
     public function sendFirebaseNotification ($to = '', $notif = ''){
 
