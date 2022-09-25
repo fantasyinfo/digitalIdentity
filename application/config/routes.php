@@ -252,7 +252,8 @@ $apiRoutesArr = [
     'showAllStudentsForSwitchProfile',
     'showAttendanceDataForStudentId',
     'upateDriverLatLng',
-    'studentFeesSubmitData'
+    'studentFeesSubmitData',
+    'validateQRCode'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

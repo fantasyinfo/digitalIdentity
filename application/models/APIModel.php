@@ -783,6 +783,32 @@ class APIModel extends CI_Model
     }
   }
 
+  // validateQRCode
+
+  public function validateQRCode($qrCode,$identityType,$schoolUniqueCode)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dir = base_url() . HelperClass::uploadImgDir;
+    $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
+    if ($identityType == 'Student') {
+      $table = Table::qrcodeTable;
+    }else if ($identityType == 'Teacher')
+    {
+      $table = Table::qrcodeTeachersTable;
+    }else if ($identityType == 'Driver')
+    {
+      $table = Table::qrcodeDriversTable;
+    }
+
+    $d = $this->db->query("SELECT * FROM " . $table . " WHERE qrcodeUrl = '$qrCode' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+
+    if (!empty($d)) {
+      return HelperClass::APIresponse(200, 'Identity Verified Successfully.',$d);
+    } else {
+      return HelperClass::APIresponse(500, 'Identity Not Verified');
+    }
+  }
+
 
 
   // showSingleHomeWork
