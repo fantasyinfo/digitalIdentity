@@ -793,7 +793,7 @@ class APIModel extends CI_Model
 
   // validateQRCode
 
-  public function validateQRCode($qrCode,$schoolUniqueCode)
+  public function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -832,6 +832,36 @@ class APIModel extends CI_Model
 
       if(!empty($details))
       {
+        // fetch token
+        $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . $tableB . " WHERE id = '$details[0]['id']' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+
+          if($loginuserType == HelperClass::userType[3])
+          {
+            // staff 
+
+            if(!empty($tokensFromDB))
+            {
+              $tokenArr = [$tokensFromDB[0]['fcm_token']];
+              $title = "$identityType Entry On 🏫 School.";
+              $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
+            }
+          }else if($loginuserType == HelperClass::userType[7])
+          {
+            // driver
+
+            if(!empty($tokensFromDB))
+            {
+              $tokenArr = [$tokensFromDB[0]['fcm_token']];
+              $title = "$identityType Entry On 🚌 Transport.";
+              $body = "Hey 👋 Dear $identityType, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!";
+            }
+          }
+
+
+
+          $image = null;
+          $sound = null;
+          $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
         return HelperClass::APIresponse(200, 'Identity Verified Successfully.',$details);
       }else
       {

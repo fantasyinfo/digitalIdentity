@@ -31,8 +31,7 @@ class DriverModel extends CI_Model
 
       
       // check if the driver is already registerd with us
-      $already = $this->db->query("SELECT * FROM ".Table::driverTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
-
+      $already = $this->db->query($sql = "SELECT * FROM ".Table::driverTable." WHERE name = '{$insertArr['name']}' AND mobile = '{$insertArr['mobile']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
       if(!empty($already))
       {
@@ -50,6 +49,7 @@ class DriverModel extends CI_Model
         $insertArr['image'] = $fileName;
       }
     
+ 
         $insertId = $this->CrudModel->insert(Table::driverTable,$insertArr);
         if($insertId)
         {

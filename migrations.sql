@@ -4,3 +4,7 @@
 
 
 -- ALTER TABLE `users` ADD `fcm_token` TEXT NULL AFTER `auth_token`, ADD `mobile` INT(100) NULL AFTER `fcm_token`;
+
+
+ALTER TABLE `driver` CHANGE `u_qr_id` `u_qr_id` VARCHAR(100) NULL DEFAULT NULL;
+ALTER TABLE `driver` CHANGE `mobile` `mobile` VARCHAR(100) NOT NULL;

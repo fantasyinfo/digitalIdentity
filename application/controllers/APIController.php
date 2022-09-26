@@ -148,7 +148,7 @@ class APIController extends CI_Controller
 				
 			}
 			$title = "Attendance Update ✅";
-			$body = "Hey 👋 Dear Parents, Our 🏨 School Attendance Updated, Please Check The App Now!!";
+			$body = "Hey 👋 Dear Parents, Our 🏫 School Attendance Updated, Please Check The App Now!!";
 			$image = null;
 			$sound = null;
 		
@@ -276,7 +276,7 @@ class APIController extends CI_Controller
 				
 			}
 			$title = "Departure Update ✅";
-			$body = "Hey 👋 Dear Parents, Our 🏨 School Departure Updated, Please Check The App Now!!";
+			$body = "Hey 👋 Dear Parents, Our 🏫 School Departure Updated, Please Check The App Now!!";
 			$image = null;
 			$sound = null;
      
@@ -1111,7 +1111,7 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 	
-		$validateQR = $this->APIModel->validateQRCode($qrCode,$schoolUniqueCode);
+		$validateQR = $this->APIModel->validateQRCode($qrCode,$loginuserType,$schoolUniqueCode);
 
 		if (!$validateQR) {
 			return HelperClass::APIresponse(500, 'Identity Not Verified');
