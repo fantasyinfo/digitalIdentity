@@ -826,16 +826,18 @@ class APIModel extends CI_Model
 
 
 
-      $details = $this->db->query("SELECT name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
+      $details = $this->db->query("SELECT id, name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
      
       $details[0]['userType'] = $identityType;
+
+      $idForUser = (String) $details[0]['id'];
 
       if(!empty($details))
       {
         // fetch token
-        $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . $tableB . " WHERE id = '$details[0]['id']' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+        $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . $tableB . " WHERE id = '$idForUser' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
 
-          if($loginuserType == HelperClass::userType[3])
+          if($loginuserType == HelperClass::userTypeR[3])
           {
             // staff 
 
@@ -845,7 +847,7 @@ class APIModel extends CI_Model
               $title = "$identityType Entry On 🏫 School.";
               $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
             }
-          }else if($loginuserType == HelperClass::userType[7])
+          }else if($loginuserType == HelperClass::userTypeR[7])
           {
             // driver
 
@@ -871,7 +873,7 @@ class APIModel extends CI_Model
 
       
     } else {
-      return HelperClass::APIresponse(500, 'QrCode Not found.');
+      return HelperClass::APIresponse(500, 'QrCode Not found.', '', ['query' => $this->db->last_query()]);
     }
   }
 

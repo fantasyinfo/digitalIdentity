@@ -11,6 +11,9 @@
     $this->load->library('session');
     $this->load->model('CrudModel');
 
+    $classData = $this->CrudModel->allClass(Table::classTable, $_SESSION['schoolUniqueCode']);
+$sectionData = $this->CrudModel->allSection(Table::sectionTable, $_SESSION['schoolUniqueCode']);
+
     $dir = base_url().HelperClass::uploadImgDir;
 
   // fetching city data
@@ -29,13 +32,13 @@
 
     if(isset($_GET['cId']) && !empty($_GET['cId']))
     {
-      $condition .= " AND ct.className LIKE '%{$_GET['cId']}%' ";
+      $condition .= " AND ct.id = '{$_GET['cId']}' ";
     }
 
 
     if(isset($_GET['sId']) && !empty($_GET['sId']))
     {
-      $condition .= " AND sect.sectionName LIKE '%{$_GET['sId']}%' ";
+      $condition .= " AND sect.id = '{$_GET['sId']}' ";
     }
 
     if(isset($_GET['userId']) && !empty($_GET['userId']))
@@ -115,13 +118,31 @@
                         <input type="text" class="form-control" name="sName" placeholder="Search by name">
                       </div>
                       <div class="form-group col-md-2">
-                      <label >Class</label>
-                        <input type="number" class="form-control" name="cId" placeholder="Search by class">
+                      <label>Select Class </label>
+                      <select  id="cId" class="form-control  select2 select2-danger" name="cId"   data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <option></option>
+                          <?php 
+                          if(isset($classData))
+                          {
+                          foreach($classData as $cd)
+                            {  ?>
+                          <option value="<?=$cd['id']?>"><?=$cd['className']?></option>
+                        <?php } } ?>   
+                      </select>
                       </div>
                       <div class="form-group col-md-2">
-                      <label >Section</label>
-                        <input type="text" class="form-control" name="sId" placeholder="Search by mobile">
-                      </div>
+                      <label>Select Section </label>
+                        <select  id="sId" class="form-control  select2 select2-danger" name="sId"  data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        <option></option>
+                            <?php 
+                            if(isset($sectionData))
+                            {
+                            foreach($sectionData as $sd)
+                              {  ?>
+                            <option value="<?=$sd['id']?>"><?=$sd['sectionName']?></option>
+                          <?php } } ?>   
+                        </select>
+                        </div>
                       <div class="form-group col-md-2">
                       <label >User Id</label>
                         <input type="text" class="form-control" name="userId" placeholder="Search by Student UserId">
