@@ -1314,6 +1314,7 @@ public function updateHomeWork()
 		header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 		header("Access-Control-Allow-Headers: Authentication, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Allow-Origin");
 		// check method is post
+
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 			return HelperClass::APIresponse($status = 500, $msg = 'Only POST Method is Allowed');
 		}

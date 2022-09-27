@@ -17,9 +17,6 @@ class APIModel extends CI_Model
     $schoolData = [];
     $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
 
-
-
-
     
     if ($type == 'Teacher') {
       $sql = "

@@ -147,6 +147,7 @@ class DriverController extends CI_Controller
 	}
 	public function updateDriver()
 	{
+		// print_r($_POST);die();
 		$this->loginCheck();
 
 		if (isset($_POST['submit'])) {

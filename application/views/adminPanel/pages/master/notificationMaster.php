@@ -39,7 +39,9 @@
         $image = null;
         $sound = null;
      
-      $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound), TRUE);
+       $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound), TRUE);
+      //  print_r($sendPushSMS);
+      //  die();
       if($sendPushSMS['success'])
       {
         $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web')");
@@ -59,6 +61,14 @@
           ];
           $this->session->set_userdata($msgArr);
         }
+        header("Refresh:1 ".base_url()."master/notificationMaster");
+      }else
+      {
+        $msgArr = [
+          'class' => 'danger',
+          'msg' => 'Notification Not Send. ' . $this->db->last_query(),
+        ];
+        $this->session->set_userdata($msgArr);
         header("Refresh:1 ".base_url()."master/notificationMaster");
       }
       die();
