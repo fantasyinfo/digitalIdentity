@@ -769,7 +769,7 @@ class APIModel extends CI_Model
 
 
   // showAllExam
-  public function showAllHomeWorks($classId, $sectionId, $schoolUniqueCode, $subjectId = '')
+  public function showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$subjectIdsString,$year,$month,$date)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::uploadImgDir;
@@ -778,16 +778,19 @@ class APIModel extends CI_Model
       $condition .= " AND e.subject_id = $subjectId ";
     }
 
-    $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
+    $homeWorkDate = date("$year-$month-$date");
+    $d = $this->db->query($sql = "SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
         INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
         INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
         INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
-        WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.status = '1'")->result_array();
+        WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' AND e.subject_id IN ('$subjectIdsString') AND e.status = '1'
+        AND e.home_work_date = '$homeWorkDate'
+        ")->result_array();
 
     if (!empty($d)) {
       return $d;
     } else {
-      return HelperClass::APIresponse(500, 'No Home Work found for this class');
+      return HelperClass::APIresponse(500, 'No Home Work found for this class ' . $sql);
     }
   }
 
