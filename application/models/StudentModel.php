@@ -532,10 +532,10 @@ class StudentModel extends CI_Model
 
     public function showResultDataWithExam($schoolUniqueCode,$classId,$sectionId,$studentId)
     {
-      $d = $this->db->query("SELECT 
+      $d = $this->db->query($sql = "SELECT 
       examt.exam_name, examt.date_of_exam, examt.min_marks,examt.max_marks,
       CONCAT(rt.marks ,' Out of ', examt.max_marks) as examMarks,
-      rt.result_date,rt.remarks,rt.marks,if(rt.status = '1','Pass', 'Fail') as resultStatus,
+      rt.result_date,rt.remarks,rt.marks,if(rt.resultStatus = '1','Pass', 'Fail') as resultStatus,
       subt.subjectName
        FROM ".Table::examTable." examt
       INNER JOIN ".Table::resultTable." rt ON rt.exam_id = examt.id AND examt.schoolUniqueCode = rt.schoolUniqueCode
@@ -544,6 +544,7 @@ class StudentModel extends CI_Model
       AND rt.schoolUniqueCode = '$schoolUniqueCode' AND examt.schoolUniqueCode = '$schoolUniqueCode'
      ")->result_array();
 
+    //  echo $sql; die();
          //echo $this->db->last_query(); die();
         $returnArr = [];
            if(!empty($d))

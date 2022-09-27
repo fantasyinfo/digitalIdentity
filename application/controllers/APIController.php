@@ -1317,4 +1317,10 @@ public function updateHomeWork()
 		$d = file_get_contents('php://input');
 		return json_decode($d, TRUE);
 	}
+
+	// get headers from API
+	public function getHeaderDataFromRequest()
+	{
+		return apache_request_headers();
+	}
 }

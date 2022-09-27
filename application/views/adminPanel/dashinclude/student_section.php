@@ -5,6 +5,7 @@ $totalStudents = $this->db->query("SELECT count(1) as count FROM ".Table::studen
 $totalPresentStudents = $this->db->query("SELECT count(1) as count FROM ".Table::attendenceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '1' AND DATE(dateTime) = DATE(NOW())")->result_array()[0]['count'];
 
 
+$totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM ".Table::attendenceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '0' AND DATE(dateTime) = DATE(NOW())")->result_array()[0]['count'];
 
 
 
@@ -44,7 +45,7 @@ $totalPresentStudents = $this->db->query("SELECT count(1) as count FROM ".Table:
 
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>44</h3>
+                  <h3><?= $totalAbsentStudents?></h3>
                   <p>Total Absent Students Today</p>
                 </div>
                 <div class="icon">
@@ -54,7 +55,7 @@ $totalPresentStudents = $this->db->query("SELECT count(1) as count FROM ".Table:
               </div>
             </div>
 
-            <div class="col-lg-3 col-6">
+            <!-- <div class="col-lg-3 col-6">
 
               <div class="small-box bg-danger">
                 <div class="inner">
@@ -66,6 +67,6 @@ $totalPresentStudents = $this->db->query("SELECT count(1) as count FROM ".Table:
                 </div>
                 <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
-            </div>
+            </div> -->
 
           </div>

@@ -1572,4 +1572,7 @@ class APIModel extends CI_Model
 
     return array('exam_max_marks' => $maxMarksOfExam, 'obtained_max_marks' => $studentMarksObtained);
   }
+
+
+ 
 }
