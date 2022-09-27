@@ -34,6 +34,29 @@
       <?php 
 
 
+if(isset($_POST['submit']))
+{
+  $updateDriver = $this->db->query("UPDATE " . Table::teacherTable . " SET vechicle_type = '{$_POST['vechicle_type']}', driver_id = '{$_POST['driver_id']}' WHERE id = '{$_POST['stu_id']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+
+  if($updateDriver)
+  {
+    $msgArr = [
+      'class' => 'success',
+      'msg' => 'Driver Assign Successfully',
+    ];
+    $this->session->set_userdata($msgArr);
+  }else
+  {
+    $msgArr = [
+      'class' => 'danger',
+      'msg' => 'Driver Not Assign Due to this Error. ' . $this->db->last_query(),
+    ];
+    $this->session->set_userdata($msgArr);
+  }
+  header("Refresh:1 ".base_url()."teacher/list");
+  }
+
+
 if(isset($_GET['action']) )
 {
   if($_GET['action'] == 'status')
@@ -138,7 +161,7 @@ if(isset($_GET['action']) )
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="listDatatableTeacher" class="table table-bordered table-striped">
+                <table id="listDatatableTeacher" class="table table-bordered table-striped table-responsive">
                   <thead>
                   <tr>
                     <th>Id</th>
@@ -151,6 +174,8 @@ if(isset($_GET['action']) )
                     <th>Experience</th>
                     <th>State - City - Pincode</th>
                     <th>Status</th>
+                    <th>Date Of Birth</th>
+                    <th>Assign Transport</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -171,6 +196,63 @@ if(isset($_GET['action']) )
   <!-- /.content-wrapper -->
 
   <!-- Control Sidebar -->
+
+
+   <!-- bootstrap modal box -->
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <form method="POST">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Select Driver</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <div class="row">
+        <div class="col-md-12">
+          <label>Select Vechicle Type</label>
+            <select  id="vechicle_type" class="form-control  select2 select2-danger" name="vechicle_type" required  data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="vechicleType(this)">
+            <option></option>
+                <?php 
+                
+                foreach(HelperClass::vehicleType as $key => $dList)
+                  {  ?>
+                <option value="<?=$key?>"><?=HelperClass::vehicleType[$key]?></option>
+              <?php  } ?>   
+            </select>
+          
+        </div>
+        <div class="col-md-12">
+          <label>Select Driver Name</label>
+            <select  id="driver_id" class="form-control  select2 select2-danger" name="driver_id" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+            <option></option>
+                  
+            </select>
+        </div>
+       </div>
+            <input type="hidden" name="stu_id" id="stu_id" >
+           
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary">Assign Driver</button>
+      </div>
+    </div>
+      </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 
   <!-- /.control-sidebar -->
 </div>
@@ -236,3 +318,33 @@ if(isset($_GET['action']) )
   </script>
 
 
+<script>
+
+
+
+function vechicleType(x)
+{
+  $('#driver_id').empty();
+
+  $.ajax({
+      url: '<?= base_url() . 'ajax/showDriverListViaVechicleType';?>' ,
+      method: 'POST',
+      data: {
+        'vechicleType' : x.value
+      },
+      success:function(response)
+      {
+        response = $.parseJSON(response);
+          $("#driver_id").append(response);
+      }
+    })
+}
+
+   function assingDriver(x)
+  {
+    $("#stu_id").val(x);
+    $("#exampleModalCenter").modal('show');
+    console.log(x);
+   
+  }
+</script>

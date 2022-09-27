@@ -200,7 +200,8 @@ $ajaxRoutesArr = [
     'allExamList',
     'allResultList',
     'teacherReviewsList',
-    'getLatLng'
+    'getLatLng',
+    'showDriverListViaVechicleType'
     
 ];
 

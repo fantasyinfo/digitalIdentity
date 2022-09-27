@@ -213,11 +213,13 @@ class CrudModel extends CI_Model
                 }
             }
       
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
+                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
@@ -225,14 +227,17 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
+                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName,dt.name as DriverName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
@@ -240,6 +245,7 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 ORDER BY s.id DESC";
             }
 
@@ -285,6 +291,15 @@ class CrudModel extends CI_Model
 
 
                 $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
+                if($d[$i]['driver_id'] != '' || $d[$i]['vechicle_type'] != '' || $d[$i]['vechicle_type'] != null || $d[$i]['driver_id'] != null)
+                {
+                    $subArr[] = HelperClass::vehicleType[$d[$i]['vechicle_type']] . " - " . $d[$i]['DriverName'] . " <br>" . '<button onclick="assingDriver('.$d[$i]['id'].')" class="btn btn-warning mt-1" >Change Driver</button>';
+                }else
+                {
+                    $subArr[] = '<button onclick="assingDriver('.$d[$i]['id'].')" class="btn btn-info" >Assign Transport</button>';
+                   
+                }
+                
                 $subArr[] = '
                 <a href="viewStudent/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  
                 <a href="editStudent/'.$d[$i]['id'].'" class="btn btn-warning" ><i class="fas fa-edit"></i></a>  
@@ -352,11 +367,12 @@ class CrudModel extends CI_Model
                 }
             }
       
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education, s.driver_id, s.vechicle_type, c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
@@ -364,14 +380,16 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
             }else
             {
-                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education, s.driver_id, s.vechicle_type, c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " .$this->tableName." s
                 LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
@@ -379,6 +397,7 @@ class CrudModel extends CI_Model
                 LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
                 LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
                 LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                LEFT JOIN ".Table::driverTable." dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 ORDER BY s.id DESC";
             }
 
@@ -422,6 +441,17 @@ class CrudModel extends CI_Model
                 
 
                 $subArr[] = "<a href='?action=status&edit_id=".$d[$i]['id']."&status=".$ns." ' class='badge badge-".$cclas ."'> ".$ssus."</a>";
+
+                $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
+
+                if($d[$i]['driver_id'] != '' || $d[$i]['vechicle_type'] != '' || $d[$i]['vechicle_type'] != null || $d[$i]['driver_id'] != null)
+                {
+                    $subArr[] = HelperClass::vehicleType[$d[$i]['vechicle_type']] . " - " . $d[$i]['DriverName'] . " <br>" . '<button onclick="assingDriver('.$d[$i]['id'].')" class="btn btn-warning mt-1" >Change Driver</button>';
+                }else
+                {
+                    $subArr[] = '<button onclick="assingDriver('.$d[$i]['id'].')" class="btn btn-info" >Assign Transport</button>';
+                   
+                }
 
                 $subArr[] = '
                 <a href="viewTeacher/'.$d[$i]['id'].'" class="btn btn-primary" ><i class="fas fa-eye"></i></a>  

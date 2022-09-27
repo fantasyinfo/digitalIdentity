@@ -72,6 +72,16 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+
+	public function showDriverListViaVechicleType()
+	{
+		if(isset($_POST))
+		{
+			//HelperClass::prePrintR($_POST);
+			echo $this->DriverModel->showDriverListViaVechicleType($_POST);
+		}
+	}
+
 	public function totalFeesDue()
 	{
 		if(isset($_POST))

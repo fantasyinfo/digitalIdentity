@@ -166,4 +166,25 @@ class DriverModel extends CI_Model
     }
 
 
+    public function showDriverListViaVechicleType($p)
+    {
+      if(!empty($p))
+      {
+        $driverLists = $this->db->query($sql = "SELECT id, name FROM " . Table::driverTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND vechicle_type = '{$p['vechicleType']}'")->result_array();
+        $html = '';
+
+
+        if(!empty($driverLists))
+        {
+          foreach($driverLists as $dd)
+          {
+           $html .= "<option value='{$dd['id']}'>{$dd['name']}</option>";
+          }
+          return json_encode($html);
+        }
+        return json_encode($sql);
+      }
+    }
+
+
 }

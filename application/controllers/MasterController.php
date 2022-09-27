@@ -295,6 +295,8 @@ class MasterController extends CI_Controller
 
 
 
+
+
 	// this is only for super admin
 	public function givePermissionMaster()
 	{

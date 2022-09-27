@@ -8,3 +8,9 @@
 
 ALTER TABLE `driver` CHANGE `u_qr_id` `u_qr_id` VARCHAR(100) NULL DEFAULT NULL;
 ALTER TABLE `driver` CHANGE `mobile` `mobile` VARCHAR(100) NOT NULL;
+
+
+ALTER TABLE `students` ADD `driver_id` INT NULL AFTER `fcm_token`;
+ALTER TABLE `teachers` ADD `driver_id` INT NULL AFTER `fcm_token`;
+ALTER TABLE `students` ADD `vechicle_type` INT NULL AFTER `fcm_token`;
+ALTER TABLE `teachers` ADD `vechicle_type` INT NULL AFTER `fcm_token`;
