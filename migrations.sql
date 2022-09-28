@@ -16,4 +16,7 @@
 -- ALTER TABLE `teachers` ADD `vechicle_type` INT NULL AFTER `fcm_token`;
 
 
-ALTER DATABASE digitalf_dvmProject CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+-- ALTER DATABASE digitalf_dvmProject CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+
+-- ALTER DATABASE digitalf_dvmProject    CHARACTER SET utf8    DEFAULT CHARACTER SET utf8    COLLATE utf8_unicode_ci    DEFAULT COLLATE utf8_unicode_ci;

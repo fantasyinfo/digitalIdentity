@@ -730,6 +730,7 @@ class CrudModel extends CI_Model
                 WHERE e.status != 4 $condition ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
                 $lastQuery = $this->db->last_query();
+    
 
                 $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
                 LEFT JOIN ".Table::classTable." c ON c.id =  e.class_id
@@ -766,7 +767,8 @@ class CrudModel extends CI_Model
                
                 $subArr[] = ($j = $i + 1);
                 $subArr[] = $d[$i]['id'];
-                $subArr[] = substr($d[$i]['exam_name'],0,30);
+                // $subArr[] = substr($d[$i]['exam_name'],0,30);
+                $subArr[] = $d[$i]['exam_name'];
                 $subArr[] = $d[$i]['subjectName'];
                 $subArr[] = $d[$i]['date_of_exam'];
                 $subArr[] = $d[$i]['max_marks'];

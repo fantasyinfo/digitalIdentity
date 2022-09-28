@@ -93,4 +93,7 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
+	
 );
+
+$db['default']['dbcollat'] = "utf8_unicode_ci";
