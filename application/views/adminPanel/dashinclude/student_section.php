@@ -7,8 +7,6 @@ $totalPresentStudents = $this->db->query("SELECT count(1) as count FROM ".Table:
 
 $totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM ".Table::attendenceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '0' AND DATE(dateTime) = DATE(NOW())")->result_array()[0]['count'];
 
-
-
 ?>
 
 

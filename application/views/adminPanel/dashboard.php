@@ -32,8 +32,7 @@
         <div class="container-fluid">
 
           <?php
-      
-          
+
           $this->CrudModel->checkPermission();
 
           $currentDate = date('Y-m-d');
@@ -41,20 +40,50 @@
 
 <div id="accordion">
 
-  <div class="card card-primary card-outline">
-    <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
-        <div class="card-header">
-        <h4 class="card-title w-100">
-        Students Section
-        </h4>
-        </div>
-    </a>
-      <div id="collapseOne" class="collapse show" data-parent="#accordion">
-      <div class="card-body">
-       <?php include("dashinclude/student_section.php"); ?>
-      </div>
-    </div>
-  </div>
+          <div class="card card-primary card-outline">
+            <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
+                <div class="card-header">
+                <h4 class="card-title w-100">
+                Students Section
+                </h4>
+                </div>
+            </a>
+              <div id="collapseOne" class="collapse show" data-parent="#accordion">
+              <div class="card-body">
+              <?php include("dashinclude/student_section.php"); ?>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-primary card-outline">
+            <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false">
+                <div class="card-header">
+                <h4 class="card-title w-100">
+                Academic Section
+                </h4>
+                </div>
+            </a>
+              <div id="collapseTwo" class="collapse show" data-parent="#accordion">
+              <div class="card-body">
+              <?php include("dashinclude/academic_section.php"); ?>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-primary card-outline">
+            <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false">
+                <div class="card-header">
+                <h4 class="card-title w-100">
+                Fees Section
+                </h4>
+                </div>
+            </a>
+              <div id="collapseThree" class="collapse show" data-parent="#accordion">
+              <div class="card-body">
+              <?php include("dashinclude/fees_section.php"); ?>
+              </div>
+            </div>
+          </div>
 
 </div>
 
