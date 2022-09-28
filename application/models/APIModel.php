@@ -555,8 +555,10 @@ class APIModel extends CI_Model
       $returnArr['qrcodeUrl'] = @$d[0]['qrcodeUrl'];
       $returnArr['name'] = @$d[0]['name'];
       $returnArr['user_id'] = @$d[0]['user_id'];
-      $returnArr['class_id'] = @$d[0]['className'];
-      $returnArr['section_id'] = @$d[0]['sectionName'];
+      $returnArr['class_id'] = @$d[0]['classId'];
+      $returnArr['section_id'] = @$d[0]['sectionId'];
+      $returnArr['class_name'] = @$d[0]['className'];
+      $returnArr['section_name'] = @$d[0]['sectionName'];
       $returnArr['roll_no'] = @$d[0]['roll_no'];
       $returnArr['gender'] = (@$d[0]['gender'] == '1') ? 'Male' : 'Female';
       $returnArr['mother_name'] = @$d[0]['mother_name'];
