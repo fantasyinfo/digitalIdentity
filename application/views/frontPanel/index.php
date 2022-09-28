@@ -64,7 +64,8 @@ $stTable = Table::studentTable;
                                         <span>
                                           <img src="<?=@$dir.@$schoolD[0]['image']?>" alt="" class="img-res" />
                                         </span>
-                                        <h4><?= @$schoolD[0]['school_name'] ?></h4>
+                                        <h4><?= @$schoolD[0]['school_name'] ?> </h4> </br>
+                                        <button id="schoolBox"  class="btn btn-primary">Get Admission On School</button>
                                     </div>
                                 </li>
                               
@@ -101,7 +102,7 @@ $stTable = Table::studentTable;
                                     </div>
                                 </li>
 
-                                <li>
+                                <!-- <li>
                                     <label>Phone Number</label>
                                     <div class="box_dts d-flex align-items-center">
                                         <span><img src="<?= $dir . 'profile/'?>dicon5.svg" alt="" class="img-res" /></span>
@@ -115,7 +116,7 @@ $stTable = Table::studentTable;
                                         <span><img src="<?= $dir . 'profile/'?>dicon8.svg" alt="" class="img-res" /></span>
                                         <h4><?= $sd['email']; ?></h4>
                                     </div>
-                                </li>
+                                </li> -->
 
                                 <li>
                                     <label>Mother Name</label>
@@ -137,7 +138,7 @@ $stTable = Table::studentTable;
                                     <label>Address</label>
                                     <div class="box_dts d-flex align-items-center">
                                         <span><img src="<?= $dir . 'profile/'?>dicon7.svg" alt="" class="img-res" /></span>
-                                        <h4><?= $sd['address'] . " - " . $sd['cityName'] . " - " . $sd['stateName'] . " - India"; ?>
+                                        <h4><?=  $sd['cityName'] . " - " . $sd['stateName'] . " - India"; ?>
                                         </h4>
                                     </div>
                                 </li>
@@ -171,6 +172,29 @@ $stTable = Table::studentTable;
 
             </div>
         </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Admission On School</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b>Contact Number: </b> +011 3216547458 </br>
+        <b>Email : </b> abc@email.com
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -246,4 +270,10 @@ $(document).ready(function () {
     });
     console.log('aaya');
 });
+
+
+$("#schoolBox").click(function(e){
+  e.preventDefault();
+  $("#modalBox").modal("show");
+})
 </script>

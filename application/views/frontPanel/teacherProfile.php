@@ -70,7 +70,8 @@ if(isset($_GET['tecid']))
                                         <span>
                                           <img src="<?=@$dir.@$schoolD[0]['image']?>" alt="" class="img-res" />
                                         </span>
-                                        <h4><?= @$schoolD[0]['school_name'] ?></h4>
+                                        <h4><?= @$schoolD[0]['school_name'] ?>  </h4> </br>
+                                        <button id="schoolBox" href="#" class="btn btn-primary">Get Admission On School</button>
                                     </div>
                                 </li>
                            
@@ -90,7 +91,7 @@ if(isset($_GET['tecid']))
                                   </li>
                              
 
-                                <li>
+                                <!-- <li>
                                     <label>Phone Number</label>
                                     <div class="box_dts d-flex align-items-center">
                                         <span><img src="<?= $dir . 'profile/'?>dicon5.svg" alt="" class="img-res" /></span>
@@ -104,7 +105,7 @@ if(isset($_GET['tecid']))
                                         <span><img src="<?= $dir . 'profile/'?>dicon8.svg" alt="" class="img-res" /></span>
                                         <h4><?= $sd['email']; ?></h4>
                                     </div>
-                                </li>
+                                </li> -->
 
                                 <li>
                                     <label>Mother Name</label>
@@ -126,7 +127,7 @@ if(isset($_GET['tecid']))
                                     <label>Address</label>
                                     <div class="box_dts d-flex align-items-center">
                                         <span><img src="<?= $dir . 'profile/'?>dicon7.svg" alt="" class="img-res" /></span>
-                                        <h4><?= $sd['address'] . " - " . $sd['cityName'] . " - " . $sd['stateName'] . " - India"; ?>
+                                        <h4><?=  $sd['cityName'] . " - " . $sd['stateName'] . " - India"; ?>
                                         </h4>
                                     </div>
                                 </li>
@@ -266,6 +267,36 @@ if(isset($_GET['tecid']))
 </div>
 
 
+
+
+
+
+<div class="modal fade" id="modalBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Admission On School</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b>Contact Number: </b> +011 3216547458 </br>
+        <b>Email : </b> abc@email.com
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -326,4 +357,10 @@ $(document).ready(function () {
     });
     console.log('aaya');
 });
+
+
+$("#schoolBox").click(function(e){
+  e.preventDefault();
+  $("#modalBox").modal("show");
+})
 </script>
