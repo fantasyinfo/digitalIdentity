@@ -100,6 +100,15 @@ class APIController extends CI_Controller
 		$currentDateTime = date('d-m-Y h:i:s');
 		$totalAttenData = count($attendenceData);
 
+
+		if($totalAttenData == '0')
+		{
+			$msg = "Please Mark All Students Attandance.";
+			$totalAttenData = 0;
+			return HelperClass::APIresponse(500, $msg);
+		}
+
+
 		// check if total student = total attendanceData
 		$totalStudentsInTheClass = $this->APIModel->countStudentViaClassAndSectionName($className, $sectionName, $schoolUniqueCode);
 
@@ -1254,6 +1263,34 @@ public function updateHomeWork()
 		}else
 		{
 			return HelperClass::APIresponse(200, 'Driver Lat Lng Updated Successfully.');
+		}
+	}
+
+
+	// getDriverLatLng
+
+	public function getDriverLatLng()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['studentId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$studentId = $apiData['studentId'];
+	
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+	
+		$driverLatLng = $this->APIModel->getDriverLatLng($studentId,$schoolUniqueCode);
+		if (!$driverLatLng) {
+			return HelperClass::APIresponse(500, 'Driver Lat Lng Not Found.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Driver Lat Lng Data.',$driverLatLng);
 		}
 	}
 

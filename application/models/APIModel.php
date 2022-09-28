@@ -1496,6 +1496,21 @@ class APIModel extends CI_Model
   }
 
 
+  // get driver lat lng
+  public function getDriverLatLng($studentId,$schoolUniqueCode)
+  {
+    $d = $this->db->query("SELECT d.* FROM " . Table::driverTable . " d
+    INNER JOIN ".Table::studentTable." s ON s.driver_id = d.id AND s.vechicle_type = d.vechicle_type
+    WHERE d.status = '1' AND d.schoolUniqueCode = '$schoolUniqueCode' AND s.id = '$studentId'")->result_array();
+
+    if(!empty($d))
+    {
+      return $d;
+    }else
+    {
+      return HelperClass::APIresponse(500, 'Driver Details Not Found Linking With The Student ');
+    }
+  }
 
 
   // check if the digiCoin is set 

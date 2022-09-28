@@ -270,7 +270,8 @@ $apiRoutesArr = [
     'showAttendanceDataForStudentId',
     'upateDriverLatLng',
     'studentFeesSubmitData',
-    'validateQRCode'
+    'validateQRCode',
+    'getDriverLatLng'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
