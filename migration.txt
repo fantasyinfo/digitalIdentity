@@ -1,1 +1,0 @@
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Fees Submit Master', 'master/submitFeesMaster', NULL, '9', '0', '1', '1', CURRENT_TIMESTAMP);
