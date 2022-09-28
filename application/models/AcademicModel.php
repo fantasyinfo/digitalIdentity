@@ -1,0 +1,29 @@
+<?php
+
+class AcademicModel extends CI_Model
+{
+
+	public function __construct()
+	{
+		$this->load->database();
+        $this->load->model('CrudModel');
+
+	}
+
+    public function allAttendanceList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->allAttendanceList(Table::attendenceTable,$post);
+      }
+    }
+
+    public function allResultList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->allResultList(Table::resultTable,$post);
+      }
+    }
+
+}

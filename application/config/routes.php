@@ -182,6 +182,20 @@ foreach($examRoutesArr as $examRoute)
 
 
 
+// academic
+
+
+$baseAcademic = "academic/";
+$academicRoutesArr = [
+    'allAttendance',
+    'allDeparture',
+];
+
+foreach($academicRoutesArr as $aRoute)
+{
+    $route[$baseAcademic.$aRoute] = "AcademicController"."/".$aRoute;
+}
+
 
 
 
@@ -201,7 +215,9 @@ $ajaxRoutesArr = [
     'allResultList',
     'teacherReviewsList',
     'getLatLng',
-    'showDriverListViaVechicleType'
+    'showDriverListViaVechicleType',
+    'allAttendanceList',
+    'allDepartureList'
     
 ];
 

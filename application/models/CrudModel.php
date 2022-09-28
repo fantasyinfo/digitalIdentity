@@ -819,6 +819,127 @@ class CrudModel extends CI_Model
         
     }
 
+    
+    public function allAttendanceList($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+             $condition = "
+                AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND st.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND tt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+              ";
+      
+            // $condition = "";
+            if(isset($data['teacherName']) || isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentSection']) || isset($data['studentFromDate']) || isset($data['studentToDate']) || isset($data['attendanceStatus']))
+            {
+                if(!empty($data['teacherName']))
+                {
+                    $condition .= " AND tt.name LIKE '%{$data['teacherName']}%' ";
+                }
+                if(!empty($data['studentName']))
+                {
+                    $condition .= " AND st.name LIKE '%{$data['studentName']}%' ";
+                }
+                if(!empty($data['studentClass']))
+                {
+                    $condition .= " AND c.id = '{$data['studentClass']}' ";
+                }
+                if(!empty($data['studentSection']))
+                {
+                    $condition .= " AND ss.id = '{$data['studentSection']}' ";
+                }
+                if(!empty($data['attendanceStatus']))
+                {
+                    if($data['attendanceStatus'] == 'ab')
+                    {
+                        $at = '0';
+                    }else
+                    {
+                        $at = '1';
+                    }
+                    $condition .= " AND e.attendenceStatus = '$at' ";
+                }
+            
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                }
+            
+            }
+      
+                $d = $this->db->query("SELECT e.id,e.attendenceStatus,e.dateTime,c.className,ss.sectionName,tt.name as teacherName, st.name, CONCAT('$dir',st.image) as image, st.user_id
+                FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.className =  e.stu_class
+                LEFT JOIN ".Table::sectionTable." ss ON ss.sectionName =  e.stu_section
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                LEFT JOIN ".Table::studentTable." st ON st.id =  e.stu_id
+                WHERE e.status != 4 $condition ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+    
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.className =  e.stu_class
+                LEFT JOIN ".Table::sectionTable." ss ON ss.sectionName =  e.stu_section
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                LEFT JOIN ".Table::studentTable." st ON st.id =  e.stu_id
+                WHERE e.status != 4 $condition ORDER BY e.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT e.id,e.attendenceStatus,e.dateTime,c.className,ss.sectionName,tt.name  as teacherName, st.name, CONCAT('$dir',st.image) as image, st.user_id FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.className =  e.stu_class
+                LEFT JOIN ".Table::sectionTable." ss ON ss.sectionName =  e.stu_section
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                LEFT JOIN ".Table::studentTable." st ON st.id =  e.stu_id
+                WHERE e.status != 4 ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                LEFT JOIN ".Table::classTable." c ON c.className =  e.stu_class
+                LEFT JOIN ".Table::sectionTable." ss ON ss.sectionName =  e.stu_section
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.login_user_id
+                LEFT JOIN ".Table::studentTable." st ON st.id =  e.stu_id
+                WHERE e.status != 4 ORDER BY e.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = $d[$i]['id'];
+                $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['user_id'];
+                $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = ($d[$i]['attendenceStatus'] == '1') ? '<span class="badge badge-success">Present</span>' : '<span class="badge badge-danger">Absent</span>';
+                $subArr[] = $d[$i]['dateTime'];
+                $subArr[] = $d[$i]['teacherName'];
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr,
+            "query" => $lastQuery
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
 
     public function allResultList($tableName,$data = '')
     {
