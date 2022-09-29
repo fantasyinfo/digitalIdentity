@@ -1,4 +1,11 @@
+ 
+ 
+ 
+ 
+ 
+ 
  <?php
+
 
 $isTeacher = false;
 $stTable = Table::studentTable;
@@ -16,8 +23,36 @@ $stTable = Table::studentTable;
       header('Location: '.HelperClass::brandUrl);
     }
 
+    $shareMsg = "Hey, Friends This is My Amazing Profile Via Digital Identity - Digitalfied. Have A Look.";
     ?>
 
+
+<meta property="og:title" content="<?php echo $shareMsg; ?>" />
+
+    <meta property="og:url" content="<?php echo base_url("?") . $_SERVER['QUERY_STRING']; ?>" />
+
+    <meta property=”og:description” content="Hey, Friends This is my amazing profile via Digital Identity - Digitalfied, have a look." />
+
+    <meta property="og:image" content="<?= @$sd['image']; ?>" />
+
+
+
+    <meta property="og:type" content="article" />
+
+    <meta name="twitter:card" content="Hey, Friends This is my amazing profile via Digital Identity - Digitalfied, have a look." />
+
+    <meta name="twitter:title" content="<?php echo $shareMsg; ?>" />
+
+    <meta name="twitter:url" content="<?php echo base_url("?") . $_SERVER['QUERY_STRING']; ?>" />
+
+    <meta name="twitter:description" content="Hey, Friends This is My Amazing Profile Via Digital Identity - www.digitalfied.com, Have A Look." />
+
+
+    <meta name="twitter:image" content="<?= @$sd['image']; ?>" />
+
+
+    </head>
+  <body>
 <div class="resumebox">
         <div class="container">
             <div class="row">
@@ -28,7 +63,9 @@ $stTable = Table::studentTable;
                         </div>
                         <div class="name_box">
                             <h1><?= $sd['name']; ?></h1>
-                            <span>@<?= $sd['user_id']; ?></span>
+                            <span>@<?= $sd['user_id']; ?></span></br>
+                            <a href="#" id="shareBtn" class="btn_s btn-success btn mt-2">Share<span><img src="<?= $dir . 'profile/'?>share.svg" alt=""
+                                        class="img-res" /></span></a>
                         </div>
                     </div>
 
@@ -45,8 +82,7 @@ $stTable = Table::studentTable;
                         <div class="btnbox d-flex align-items-center justify-content-center">
                             <a href="#" class="btn_p" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Print QR<span><img src="<?= $dir . 'profile/'?>Print.svg" alt=""
                                         class="img-res" /></span></a>
-                            <a href="#" class="btn_s">Share<span><img src="<?= $dir . 'profile/'?>share.svg" alt=""
-                                        class="img-res" /></span></a>
+                        
                             <a href="#" class="btn_d" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Download<span><img src="<?= $dir . 'profile/'?>download.svg" alt=""
                                         class="img-res"  /></span></a>
                         </div>
@@ -65,7 +101,7 @@ $stTable = Table::studentTable;
                                           <img src="<?=@$dir.@$schoolD[0]['image']?>" alt="" class="img-res" />
                                         </span>
                                         <h4><?= @$schoolD[0]['school_name'] ?> </h4> </br>
-                                        <button id="schoolBox"  class="btn btn-primary">Get Admission On School</button>
+                                        <button id="schoolBox"  class="btn btn-primary">Get Admission</button>
                                     </div>
                                 </li>
                               
@@ -161,8 +197,8 @@ $stTable = Table::studentTable;
                         <div class="btnbox d-flex align-items-center justify-content-center">
                             <a href="#" class="btn_p" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Print QR<span><img src="<?= $dir . 'profile/'?>Print.svg" alt=""
                                         class="img-res" /></span></a>
-                            <a href="#" class="btn_s">Share<span><img src="<?= $dir . 'profile/'?>share.svg" alt=""
-                                        class="img-res" /></span></a>
+                            <!-- <a href="#" class="btn_s">Share<span><img src="<?= $dir . 'profile/'?>share.svg" alt=""
+                                        class="img-res" /></span></a> -->
                             <a href="#" class="btn_d" onclick="PrintImage('<?=$google_chart_api_url?>'); return false;">Download<span><img src="<?= $dir . 'profile/'?>download.svg" alt=""
                                         class="img-res"  /></span></a>
                         </div>
@@ -182,20 +218,64 @@ $stTable = Table::studentTable;
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Admission On School</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <!-- <button type="button" class="close" data-dismiss="modal" id="closeMe" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </button> -->
       </div>
       <div class="modal-body">
         <b>Contact Number: </b> +011 3216547458 </br>
         <b>Email : </b> abc@email.com
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" id="closeMe" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+
+
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="socialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Select Social Platform</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" id="closeMe" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+      <!-- <div class="alert alert-warning"> -->
+        <span>Share This Amazing Profile on Social Media</span>
+        <p class="my-1">
+
+<a class="btn btn-primary" href="http://www.facebook.com/sharer.php?u=<?php echo base_url("?") . $_SERVER['QUERY_STRING']; ?>"
+    target="_blank" rel='noreferrer' rel="noopener">FaceBook</a>
+
+
+<a class="btn btn-info"
+    href="http://twitter.com/share?url=<?php echo base_url("?") . $_SERVER['QUERY_STRING']; ?>&text=<?= $shareMsg?>&hashtags=My Digital Id"
+    target="_blank" rel='noreferrer' rel="noopener">Twitter</a>
+
+<a class="btn btn-success"
+    href="https://api.whatsapp.com/send?text=<?php echo urlencode($shareMsg) . " " . base_url("?") . $_SERVER['QUERY_STRING']; ?>"
+    target="_blank" rel='noreferrer' rel="noopener">WhatsApp</a>
+</p>
+
+    <!-- </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeMeShare" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -276,4 +356,21 @@ $("#schoolBox").click(function(e){
   e.preventDefault();
   $("#modalBox").modal("show");
 })
+
+$("#closeMe").click(function(e){
+  e.preventDefault();
+  $("#modalBox").modal("hide");
+})
+
+
+$("#shareBtn").click(function(e){
+  e.preventDefault();
+  $("#socialModal").modal("show");
+})
+
+$("#closeMeShare").click(function(e){
+  e.preventDefault();
+  $("#socialModal").modal("hide");
+})
+
 </script>

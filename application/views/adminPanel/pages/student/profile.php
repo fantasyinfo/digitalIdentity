@@ -13,7 +13,7 @@
     <?php 
     $sd = $data['studentData'][0];
     //print_r($sd);
-    
+    $string = HelperClass::fullPathQR.$sd['user_id'];
     ?>
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -50,13 +50,15 @@
                       <h4><?=$sd['name'];?></h4>
                       <p class="text-secondary mb-1"><?=$sd['className'] . " - " . $sd['sectionName'];?></p>
                       <span class="badge badge-success"><?=$sd['user_id'];?></span>
+                    
                     </div>
+                    <a href="<?=$string?>" class="btn btn-info text-white my-2" target="_blank">User Profile View</a>
                   </div>
                 </div>
               </div>
               <div class="card mt-3">
                 <?php
-                $string = HelperClass::fullPathQR.$sd['user_id'];
+               
               $google_chart_api_url = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=".$string."&choe=UTF-8";
                 // let's display the generated QR code
                   echo "<img src='".$google_chart_api_url."' alt='".$string."'>";
