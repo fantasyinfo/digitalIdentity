@@ -20,8 +20,11 @@
       $title = $_POST['title'];
       $body = trim($_POST['body']);
 
+      // students token
      $tokens =  $this->db->query("SELECT fcm_token FROM " . Table::studentTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND status = '1' ")->result_array();
 
+
+     //stoken
      $totalTokens = count($tokens);
      $token = [];
      if(!empty( $tokens))
@@ -35,6 +38,27 @@
         }
         
      }
+
+
+     // teachers token
+     $ttokens =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND status = '1' ")->result_array();
+
+     // ttoken
+     $ttotalTokens = count($ttokens);
+     $token = [];
+     if(!empty( $ttokens))
+     {
+        if($ttotalTokens < 500)
+        {
+          for($i=0; $i < $ttotalTokens; $i++)
+          {
+            array_push($token,$ttokens[$i]['fcm_token']);
+          }
+        }
+        
+     }
+
+
 
         $image = null;
         $sound = null;

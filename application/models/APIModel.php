@@ -131,7 +131,7 @@ class APIModel extends CI_Model
     }else if($type == 'Parent' || $type == 'Student')
     {
       $mobile = $id;
-      $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
+      $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName , ss.id as sectionId,c.id as classId FROM " . Table::studentTable . " t 
       LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
       LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
       WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.password = '$password' AND t.status = '1'";
@@ -157,6 +157,8 @@ class APIModel extends CI_Model
           $subArr["user_id"] = @$userData[$i]["user_id"];
           $subArr["className"] = @$userData[$i]["className"];
           $subArr["sectionName"] = @$userData[$i]["sectionName"];
+          $subArr["class_id"] = @$userData[$i]["classId"];
+          $subArr["section_id"] = @$userData[$i]["sectionId"];
           $subArr["authToken"] = @$authToken;
           $subArr["userType"] = @$type;
           $subArr["schoolUniqueCode"] = @$schoolUniqueCode;
@@ -287,7 +289,7 @@ class APIModel extends CI_Model
   {
     $dir = base_url() . HelperClass::uploadImgDir;
 
-    $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
+    $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName, ss.id as sectionId,c.id as classId FROM " . Table::studentTable . " t 
     LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
     LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
     WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.id = '$studentId' AND t.status = '1' LIMIT 1";
@@ -310,6 +312,8 @@ class APIModel extends CI_Model
         $responseData["user_id"] = @$userData[0]["user_id"];
         $responseData["className"] = @$userData[0]["className"];
         $responseData["sectionName"] = @$userData[0]["sectionName"];
+        $responseData["section_id"] = @$userData[0]["sectionId"];
+        $responseData["class_id"] = @$userData[0]["classId"];
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
         $responseData["authToken"] = @$userData[0]["auth_token"];
         $responseData["userType"] = @$type;
