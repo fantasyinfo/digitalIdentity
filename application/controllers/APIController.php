@@ -699,8 +699,7 @@ class APIController extends CI_Controller
 		$apiData = $this->getAPIData();
 		if(empty($apiData['authToken']) || empty($apiData['userType']) 
 		|| empty($apiData['classId']) || empty($apiData['sectionId']) 
-		|| empty($apiData['subjectId']) || empty($apiData['month']) 
-		|| empty($apiData['date']) || empty($apiData['year']))
+		|| empty($apiData['date']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
 		}
@@ -708,15 +707,11 @@ class APIController extends CI_Controller
 		$loginuserType = $apiData['userType'];
 		$classId = $apiData['classId'];
 		$sectionId = $apiData['sectionId'];
-		$year = (@$apiData['year']) ? @$apiData['year'] : date("Y") ;
-		$month = $apiData['month'];
 		$date = $apiData['date'];
-		$subjectId = $apiData['subjectId'];
-		$subjectIdsString = implode("','", $subjectId);
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$allHomeWorkList = $this->APIModel->showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$subjectIdsString,$year,$month,$date);
+		$allHomeWorkList = $this->APIModel->showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$date);
 
 		if (!$allHomeWorkList) {
 			return HelperClass::APIresponse(500, 'No Home Work Found For This Class');
