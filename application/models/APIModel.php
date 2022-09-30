@@ -293,9 +293,16 @@ class APIModel extends CI_Model
     WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.id = '$studentId' AND t.status = '1' LIMIT 1";
     $userData = $this->db->query($sql)->result_array();
 
+
+
+    $schoolData = [];
+    $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+    $type = 'Parent';
     if(!empty($userData))
     {
         $responseData = [];
+        $responseData["schoolData"] = @$schoolData;
         $responseData["studentId"] = @$userData[0]["id"];
         $responseData["userId"] = @$userData[0]["user_id"];
         $responseData["name"] = @$userData[0]["name"];
@@ -304,6 +311,8 @@ class APIModel extends CI_Model
         $responseData["className"] = @$userData[0]["className"];
         $responseData["sectionName"] = @$userData[0]["sectionName"];
         $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+        $responseData["authToken"] = @$userData[0]["auth_token"];
+        $responseData["userType"] = @$type;
       return $responseData;
     } else {
       return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
@@ -1494,6 +1503,30 @@ class APIModel extends CI_Model
       //
     }
   }
+
+// add Compalint
+public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName,$guiltyPersonPosition,$subject,$issue,$schoolUniqueCode)
+{
+  //$currentDate = date_create()->format('Y-m-d');
+    $insertArr = [
+      "schoolUniqueCode" => $schoolUniqueCode,
+      "login_user_id" => $loginUserIdFromDB,
+      "login_user_type" => HelperClass::userType[$loginuserType],
+      "guilty_person_name" => $guiltyPersonName,
+      "guilty_person_position" => $guiltyPersonPosition,
+      "subject" => $subject,
+      "issue" => $issue,
+      "complaint_id" => "COMPLAINT-ID-" . rand(0000, 9999),
+    ];
+
+    $insertId = $this->CrudModel->insert(Table::complaintTable, $insertArr);
+    if (!empty($insertId)) {
+      return HelperClass::APIresponse(200, 'Complaint Register Successfully, And Your Complaint Id Is ' . $insertArr['complaint_id'] . " Use This Id For Future Refrence.");
+    } else {
+      return false;
+    }
+  
+}
 
 
   // get driver lat lng

@@ -1294,6 +1294,35 @@ public function updateHomeWork()
 		}
 	}
 
+	// add complaint
+	public function addComplaint()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['guiltyPersonName']) || empty($apiData['guiltyPersonPosition']) || empty($apiData['subject'])  || empty($apiData['issue']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$guiltyPersonName = $apiData['guiltyPersonName'];
+		$guiltyPersonPosition = $apiData['guiltyPersonPosition'];
+		$subject = $apiData['subject'];
+		$issue = $apiData['issue'];
+	
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+	
+		$addComplaint = $this->APIModel->addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName,$guiltyPersonPosition,$subject,$issue,$schoolUniqueCode);
+		if (!$addComplaint) {
+			return HelperClass::APIresponse(500, 'Complaint Not Registerd.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'Complaint Register Successfully.',$addComplaint);
+		}
+	}
+
 	// fetching all classes
 	public function allClasses()
 	{

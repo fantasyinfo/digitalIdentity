@@ -37,5 +37,6 @@ class Table{
     const ratingAndReviewTable = 'rating_and_reviews';
     const bannerTable = 'banner_for_app';
     const driverTable = 'driver';
+    const complaintTable = 'complaint';
     
 }

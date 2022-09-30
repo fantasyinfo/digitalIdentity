@@ -312,8 +312,10 @@ $shareMsg = "Hey, Friends This is My Amazing Profile Via Digital Identity - Digi
         </button> -->
       </div>
       <div class="modal-body">
-        <b>Contact Number: </b> +011 3216547458 </br>
-        <b>Email : </b> abc@email.com
+      <b>Contact Number: </b> <a href="tel:+91<?= $schoolD[0]['mobile'] ?>"><?= $schoolD[0]['mobile'] ?></a> </br>
+        <b>Email : </b> <a href="mailto:<?= $schoolD[0]['email'] ?>" ><?= $schoolD[0]['email'] ?></a> </br>
+        <b>Address : </b> <?= $schoolD[0]['address'] ?> </br>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="closeMe" data-dismiss="modal">Close</button>
