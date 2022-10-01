@@ -156,7 +156,7 @@
                         <div class="col-sm-3">
                           <h6 class="mb-0">User Id</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9 text-secondary" style="font-family:'Times New Roman', Times, serif">
                         <?=$sd['user_id'];?>
                         </div>
                       </div>
@@ -165,14 +165,14 @@
                         <div class="col-sm-3">
                           <h6 class="mb-0">PassWord</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9 text-secondary" style="font-family:'Times New Roman', Times, serif">
                         <?=$sd['password'];?>
                         </div>
                       </div>
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">School Code</h6>
+                          <h6 class="mb-0" style="font-family:'Times New Roman', Times, serif">School Code</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                         <?=$_SESSION['schoolUniqueCode'];?>

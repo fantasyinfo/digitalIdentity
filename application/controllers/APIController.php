@@ -123,6 +123,10 @@ class APIController extends CI_Controller
 		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
+			if(empty($attendenceStatus))
+			{
+				continue;
+			}
 			array_push($studentIds,$stu_id);
 			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus,$schoolUniqueCode);
 			if (!$insertAttendeceRecord) {
@@ -709,6 +713,11 @@ class APIController extends CI_Controller
 		$sectionId = $apiData['sectionId'];
 		$date = $apiData['date'];
 
+		if(!empty($date))
+		{
+			$date = date('Y-m-d');
+		}
+
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$allHomeWorkList = $this->APIModel->showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$date);
@@ -722,6 +731,36 @@ class APIController extends CI_Controller
 	}
 
 
+
+	// show result with exam 
+	public function showResultDataWithExam()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) 
+		|| empty($apiData['classId']) || empty($apiData['sectionId']) 
+		|| empty($apiData['studentId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$studentId = $apiData['studentId'];
+
+	
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$showResultDataWithExam = $this->APIModel->showResultDataWithExam($classId,$sectionId,$studentId,$schoolUniqueCode);
+
+		if (!$showResultDataWithExam) {
+			return HelperClass::APIresponse(500, 'No Result Found For This Student.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Result Data With Exam.',$showResultDataWithExam);
+		}
+	}
 
 // showSingleHomeWork
 

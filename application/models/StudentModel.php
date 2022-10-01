@@ -399,21 +399,29 @@ class StudentModel extends CI_Model
          $totalBalance =  (intval(@$totalDueFeesTillThisMonth) - intval(@$totalDepositAmtAfterOfferAddedAndDueSubtracted));
 
          // calcualte total months fees deposit
-        $totalMonthFeesDue =  (intval($totalBalance) / intval(@$d[0]['fees_amt']));
+
+         if(@$d[0]['fees_amt'] != '0' || $totalBalance != '0')
+         {
+          $totalMonthFeesDue =  (intval($totalBalance) / intval(@$d[0]['fees_amt']));
+         }else
+         {
+          $totalMonthFeesDue =  intval($totalBalance);
+         }
+        
         // $totalMonthFeesDeposit =  (intval($totalBalance) % intval(@$d[0]['fees_amt']));
 
 
        return $sendArr = [
-          'perMonthFeesForThisClass' => $d[0]['fees_amt'],
-          'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
+          'perMonthFeesForThisClass' => ($d[0]['fees_amt']) ? " ₹ " . number_format($d[0]['fees_amt'],2) : " ₹ " .number_format(0,2),
+          'totalFeesTillThisMonth' => (@$totalDueFeesTillThisMonth) ? " ₹ " . number_format(@$totalDueFeesTillThisMonth,2) : " ₹ " . number_format(0,2),
           // 'sessionStartedFrom' => $sessionStartingFrom,
           // 'currentMonth' => $currentMonth,
-          'totalDepositAmount' => @$totalDepsitAmt,
-          'totalOfferAmt' => @$totalOfferAmt,
-          'totalDueAmt' => @$totalDueAmt,
+          'totalDepositAmount' => (@$totalDepsitAmt) ? " ₹ " . number_format(@$totalDepsitAmt,2) : " ₹ " . '0',
+          'totalOfferAmt' => (@$totalOfferAmt) ? " ₹ " . number_format(@$totalOfferAmt,2) : " ₹ " . '0',
+          'totalDueAmt' => (@$totalDueAmt) ? " ₹ " . number_format(@$totalDueAmt,2) : " ₹ " . number_format(0,2),
           // 'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
-          'totalBalanceForDeposit' => $totalBalance,
-          'totalMonthFeesDue' => floor($totalMonthFeesDue),
+          'totalBalanceForDeposit' => (@$totalBalance) ? " ₹ " . number_format(@$totalBalance,2) : " ₹ " . number_format(0,2),
+          'totalMonthFeesDue' => (@$totalMonthFeesDue) ? floor(@$totalMonthFeesDue) . " Months" : "0" . " Months",
           // 'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
         ];
     }
@@ -544,7 +552,7 @@ class StudentModel extends CI_Model
       AND rt.schoolUniqueCode = '$schoolUniqueCode' AND examt.schoolUniqueCode = '$schoolUniqueCode'
      ")->result_array();
 
-    //  echo $sql; die();
+      // echo $sql; die();
          //echo $this->db->last_query(); die();
         $returnArr = [];
            if(!empty($d))

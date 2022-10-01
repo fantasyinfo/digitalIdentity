@@ -162,9 +162,9 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Mobile Number</h6>
+                          <h6 class="mb-0" style="font-family:'Times New Roman', Times, serif">Mobile Number</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9 text-secondary" style="font-family:'Times New Roman', Times, serif">
                         <?=$sd['mobile'];?>
                         </div>
                       </div>
@@ -173,7 +173,7 @@
                         <div class="col-sm-3">
                           <h6 class="mb-0">PassWord</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9 text-secondary" style="font-family:'Times New Roman', Times, serif">
                         <?=$sd['password'];?>
                         </div>
                       </div>

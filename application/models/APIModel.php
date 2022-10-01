@@ -229,7 +229,7 @@ class APIModel extends CI_Model
       }
     } else if ($type == 'Principal') {
       //
-    } else if ($type == 'Parent') {
+    } else if ($type == 'Parent' || $type == 'Student') {
     $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
@@ -616,6 +616,13 @@ class APIModel extends CI_Model
 
 
 
+  public function showResultDataWithExam($classId,$sectionId,$studentId,$schoolUniqueCode)
+  {
+
+   return $this->StudentModel->showResultDataWithExam($schoolUniqueCode,$classId,$sectionId,$studentId);
+
+
+  }
 
 
 
@@ -798,7 +805,7 @@ class APIModel extends CI_Model
     if (!empty($d)) {
       return $d;
     } else {
-      return HelperClass::APIresponse(500, 'No Home Work found for this class ' . $sql);
+      return HelperClass::APIresponse(500, 'No Home Work found for this class.');
     }
   }
 
