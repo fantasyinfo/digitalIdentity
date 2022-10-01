@@ -57,5 +57,18 @@ class AcademicController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'allDeparture');
 	}
 
+	public function allComplaints()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'All Complaints',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'allComplaints');
+	}
+
 
 }

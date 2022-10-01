@@ -940,6 +940,90 @@ class CrudModel extends CI_Model
         
     }
 
+    public function allComplaintList($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+             $condition = " AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  ";
+      
+      
+            if(isset($data['complaintId']) || isset($data['guiltyPersonName']) || isset($data['studentFromDate']) || isset($data['studentToDate']) )
+            {
+                if(!empty($data['complaintId']))
+                {
+                    $condition .= " AND e.complaint_id LIKE '%{$data['complaintId']}%' ";
+                }
+                if(!empty($data['guiltyPersonName']))
+                {
+                    $condition .= " AND e.guilty_person_name LIKE '%{$data['guiltyPersonName']}%' ";
+                }
+           
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                }
+            
+            }
+      
+                $d = $this->db->query("SELECT e.*
+                FROM " .$this->tableName." e
+                WHERE e.status != 4 $condition ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+    
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                WHERE e.status != 4 $condition ORDER BY e.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT e.* FROM " .$this->tableName." e
+                WHERE e.status != 4 ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                WHERE e.status != 4 ORDER BY e.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                // $subArr[] = $d[$i]['id'];
+                $subArr[] = $d[$i]['complaint_id'];
+                $subArr[] = HelperClass::userTypeR[$d[$i]['login_user_type']];
+                $subArr[] = $d[$i]['login_user_id'];
+                $subArr[] = $d[$i]['guilty_person_name'];
+                $subArr[] = $d[$i]['guilty_person_position'];
+                $subArr[] = $d[$i]['subject'];
+                $subArr[] = $d[$i]['issue'];
+                $subArr[] = ($d[$i]['action']) ? $d[$i]['action'] : '<button class="btn btn-warning" onclick="takeAction('.$d[$i]['id'].' , '.$d[$i]['login_user_id'].')">Take Action</button>';
+                $subArr[] = ($d[$i]['action_taken_user_type']) ? HelperClass::userTypeR[$d[$i]['action_taken_user_type']] : "";
+                $subArr[] = $d[$i]['action_taken_id'];
+                $subArr[] = $d[$i]['action_taken_date'];
+                $subArr[] = ($d[$i]['status'] == '1') ? '<span class="badge badge-info">Pending</span>' : '<span class="badge badge-success">Completed</span>';
+                $subArr[] = $d[$i]['created_at'];
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr,
+            "query" => $lastQuery
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
 
     public function allResultList($tableName,$data = '')
     {

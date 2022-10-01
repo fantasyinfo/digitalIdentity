@@ -26,4 +26,12 @@ class AcademicModel extends CI_Model
       }
     }
 
+    public function allComplaintList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->allComplaintList(Table::complaintTable,$post);
+      }
+    }
+
 }

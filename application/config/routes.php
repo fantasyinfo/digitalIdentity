@@ -189,6 +189,7 @@ $baseAcademic = "academic/";
 $academicRoutesArr = [
     'allAttendance',
     'allDeparture',
+    'allComplaints'
 ];
 
 foreach($academicRoutesArr as $aRoute)
@@ -217,7 +218,8 @@ $ajaxRoutesArr = [
     'getLatLng',
     'showDriverListViaVechicleType',
     'allAttendanceList',
-    'allDepartureList'
+    'allDepartureList',
+    'allComplaintList'
     
 ];
 

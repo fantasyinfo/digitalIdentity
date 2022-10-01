@@ -55,6 +55,14 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+	public function allComplaintList()
+	{
+		if(isset($_POST))
+		{
+			return $this->AcademicModel->allComplaintList($_POST);
+		}
+	}
+
 	public function allResultList()
 	{
 		if(isset($_POST))
