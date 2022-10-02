@@ -1,0 +1,1 @@
+ALTER TABLE `users` CHANGE `mobile` `mobile` VARCHAR(100) NULL DEFAULT NULL;

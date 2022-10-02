@@ -16,6 +16,7 @@ class Table{
     const qrcodeTeachersTable = 'qrcode_teachers';
     const qrcodeDriversTable = 'qrcode_drivers';
     const attendenceTable = 'attendence';
+    const attendenceTeachersTable = 'attendenceteachers';
     const departureTable = 'departure';
     const teacherSubjectsTable = 'teachersubjects';
     const classSheduleTable = 'classshedule';

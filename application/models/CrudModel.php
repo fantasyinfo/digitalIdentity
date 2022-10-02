@@ -6,10 +6,14 @@ class CrudModel extends CI_Model
     private $student_id = '';
     private $messageArr = array();
 
+    private $startTime = "00:00:00";
+    private $endTime = "23:59:59";
+
 	public function __construct()
 	{
 		$this->load->database();
         $this->load->library('session');
+
 	}
 
 
@@ -197,11 +201,21 @@ class CrudModel extends CI_Model
                 {
                     $condition .= " AND s.user_id LIKE '%{$data['studentUserId']}%' ";
                 }
+              
+            
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND s.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND s.created_at >= '{$data['studentFromDate']}' AND  s.created_at <= '{$data['studentToDate']}' ";
                 }
-            
+                // if(!empty($data['studentFromDate']) )
+                // {
+                //     $condition .= " AND s.created_at = '{$data['studentFromDate']}'  ";
+                // }
+                // if( !empty($data['studentToDate']))
+                // {
+                //     $condition .= "  AND  s.created_at = '{$data['studentToDate']}' ";
+                // }
+
                 if(!empty($data['search']['value']))
                 {
                     $condition .= " 
@@ -351,11 +365,24 @@ class CrudModel extends CI_Model
                 {
                     $condition .= " AND s.user_id LIKE '%{$data['teacherUserId']}%' ";
                 }
+          
+            
+            
+                // if(!empty($data['teacherFromDate']))
+                // {
+                //     $condition .= " AND s.created_at = '{$data['teacherFromDate']}'  ";
+                // }
+            
+                // if( !empty($data['teacherToDate']))
+                // {
+                //     $condition .= "  AND  s.created_at = '{$data['teacherToDate']}' ";
+                // }
+            
                 if(!empty($data['teacherFromDate']) && !empty($data['teacherToDate']))
                 {
-                    $condition .= " AND s.created_at BETWEEN '{$data['teacherFromDate']}' AND  '{$data['teacherToDate']}' ";
+                    $condition .= " AND s.created_at >= '{$data['teacherFromDate']}' AND  s.created_at <= '{$data['teacherToDate']}' ";
                 }
-            
+
                 if(!empty($data['search']['value']))
                 {
                     $condition .= " 
@@ -626,9 +653,18 @@ class CrudModel extends CI_Model
                 {
                     $condition .= " AND u.user_id LIKE '%{$data['userId']}%' ";
                 }
+          
+                // if(!empty($data['toDate']))
+                // {
+                //     $condition .= " AND g.created_at = '{$data['fromDate']}'  ";
+                // }
+                // if(!empty($data['toDate']))
+                // {
+                //     $condition .= "  AND  g.created_at = '{$data['toDate']}' ";
+                // }
                 if(!empty($data['fromDate']) && !empty($data['toDate']))
                 {
-                    $condition .= " AND g.created_at BETWEEN '{$data['fromDate']}' AND  '{$data['toDate']}' ";
+                    $condition .= " AND g.created_at >= '{$data['fromDate']}' AND  g.created_at <= '{$data['toDate']}' ";
                 }
           
             }
@@ -715,9 +751,17 @@ class CrudModel extends CI_Model
                     $condition .= " AND ss.id = '{$data['studentSection']}' ";
                 }
             
+                // if(!empty($data['studentFromDate']) )
+                // {
+                //     $condition .= " AND e.created_at = '{$data['studentFromDate']}'  ";
+                // }
+                // if(!empty($data['studentToDate']))
+                // {
+                //     $condition .= "  AND  e.created_at = '{$data['studentToDate']}' ";
+                // }
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND e.created_at >= '{$data['studentFromDate']}' AND  e.created_at <= '{$data['studentToDate']}' ";
                 }
             
             }
@@ -865,10 +909,23 @@ class CrudModel extends CI_Model
                     $condition .= " AND e.attendenceStatus = '$at' ";
                 }
             
+                // if(!empty($data['studentFromDate']))
+                // {
+                //     $condition .= " AND e.att_date = '{$data['studentFromDate']}' AND  e.att_date = '{$data['studentFromDate']}' ";
+                // }
+                // if(!empty($data['studentToDate']))
+                // {
+                //     $condition .= " AND e.att_date = '{$data['studentToDate']}' AND  e.att_date = '{$data['studentToDate']}' ";
+                // }
+
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND e.att_date >= '{$data['studentFromDate']}' AND  e.att_date <= '{$data['studentToDate']}' ";
                 }
+
+
+
+
             
             }
       
@@ -923,8 +980,105 @@ class CrudModel extends CI_Model
                 $subArr[] = $d[$i]['user_id'];
                 $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
                 $subArr[] = ($d[$i]['attendenceStatus'] == '1') ? '<span class="badge badge-success">Present</span>' : '<span class="badge badge-danger">Absent</span>';
-                $subArr[] = $d[$i]['dateTime'];
+                $subArr[] = date('d-m-Y h:i:A' , strtotime($d[$i]['dateTime']));
                 $subArr[] = $d[$i]['teacherName'];
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr,
+            "query" => $lastQuery
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
+    public function allTeachersAttendanceList($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+             $condition = "
+                AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+                AND tt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+              ";
+      
+            // $condition = "";
+            if(isset($data['teacherName']) || isset($data['studentFromDate']) || isset($data['studentToDate']) || isset($data['attendanceStatus']))
+            {
+                if(!empty($data['teacherName']))
+                {
+                    $condition .= " AND tt.name LIKE '%{$data['teacherName']}%' ";
+                }
+                
+                if(!empty($data['attendanceStatus']))
+                {
+                    if($data['attendanceStatus'] == 'ab')
+                    {
+                        $at = '0';
+                    }else
+                    {
+                        $at = '1';
+                    }
+                    $condition .= " AND e.attendenceStatus = '$at' ";
+                }
+            
+            
+
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND e.att_date >= '{$data['studentFromDate']}' AND  e.att_date <= '{$data['studentToDate']}' ";
+                }
+
+
+
+
+            
+            }
+      
+                $d = $this->db->query("SELECT e.id,e.attendenceStatus,e.dateTime,tt.name as teacherName, tt.user_id
+                FROM " .$this->tableName." e
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.tec_id
+                WHERE e.status != 4 $condition ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+    
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.tec_id
+                WHERE e.status != 4 $condition ORDER BY e.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT e.id,e.attendenceStatus,e.dateTime,tt.name  as teacherName, tt.user_id FROM " .$this->tableName." e
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.tec_id
+                WHERE e.status != 4 ORDER BY e.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(e.id) as count  FROM " .$this->tableName." e
+                LEFT JOIN ".Table::teacherTable." tt ON tt.id =  e.tec_id
+                WHERE e.status != 4 ORDER BY e.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = $d[$i]['id'];
+                $subArr[] = $d[$i]['teacherName'];
+                $subArr[] = $d[$i]['user_id'];
+                $subArr[] = ($d[$i]['attendenceStatus'] == '1') ? '<span class="badge badge-success">Present</span>' : '<span class="badge badge-danger">Absent</span>';
+                $subArr[] = date('d-m-Y h:i:A' , strtotime($d[$i]['dateTime']));
                 $sendArr[] = $subArr;
             }
 
@@ -960,9 +1114,17 @@ class CrudModel extends CI_Model
                     $condition .= " AND e.guilty_person_name LIKE '%{$data['guiltyPersonName']}%' ";
                 }
            
+                // if(!empty($data['studentFromDate']) )
+                // {
+                //     $condition .= " AND e.created_at = '{$data['studentFromDate']}'  ";
+                // }
+                // if(!empty($data['studentToDate']))
+                // {
+                //     $condition .= " AND  e.created_at = '{$data['studentToDate']}' ";
+                // }
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND e.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND e.created_at >= '{$data['studentFromDate']}' AND  e.created_at <= '{$data['studentToDate']}' ";
                 }
             
             }
@@ -1067,9 +1229,17 @@ class CrudModel extends CI_Model
                     $condition .= " AND r.result_date = '{$data['resultDate']}' ";
                 }
             
+                // if(!empty($data['studentFromDate']) )
+                // {
+                //     $condition .= " AND r.created_at = '{$data['studentFromDate']}' ";
+                // }
+                // if(!empty($data['studentToDate']))
+                // {
+                //     $condition .= " AND  r.created_at = '{$data['studentToDate']}' ";
+                // }
                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND r.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND r.created_at >= '{$data['studentFromDate']}' AND  r.created_at <= '{$data['studentToDate']}' ";
                 }
             
             }
@@ -1217,9 +1387,17 @@ class CrudModel extends CI_Model
                     $condition .= " AND r.id = '{$data['resultId']}' ";
                 }
              
-                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                //  if(!empty($data['studentFromDate']) )
+                // {
+                //     $condition .= " AND rr.created_at = '{$data['studentFromDate']}'  ";
+                // }
+                //  if( !empty($data['studentToDate']))
+                // {
+                //     $condition .= "  AND  rr.created_at = '{$data['studentToDate']}' ";
+                // }
+                 if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
                 {
-                    $condition .= " AND rr.created_at BETWEEN '{$data['studentFromDate']}' AND  '{$data['studentToDate']}' ";
+                    $condition .= " AND rr.created_at >= '{$data['studentFromDate']}' AND  rr.created_at <= '{$data['studentToDate']}' ";
                 }
             
             }

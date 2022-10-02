@@ -17,6 +17,13 @@ class AcademicModel extends CI_Model
        return $this->CrudModel->allAttendanceList(Table::attendenceTable,$post);
       }
     }
+    public function allTeachersAttendanceList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->allTeachersAttendanceList(Table::attendenceTeachersTable,$post);
+      }
+    }
 
     public function allResultList($post)
     {

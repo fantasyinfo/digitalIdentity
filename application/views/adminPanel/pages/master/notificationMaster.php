@@ -1,3 +1,7 @@
+<style>
+  .big-checkbox {width: 1.5rem; height: 1.5rem;top:0.5rem}
+</style>
+
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
@@ -14,11 +18,15 @@
   // fetching city data
     $notificatonData = $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
 
+
     // insert new city
     if(isset($_POST['submit']))
     {
       $title = $_POST['title'];
       $body = trim($_POST['body']);
+
+      $image = null;
+      $sound = null;
 
       // students token
      $tokens =  $this->db->query("SELECT fcm_token FROM " . Table::studentTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND status = '1' ")->result_array();
@@ -29,13 +37,19 @@
      $token = [];
      if(!empty( $tokens))
      {
-        if($totalTokens < 500)
+       
+        for($i=0; $i < $totalTokens; $i++)
         {
-          for($i=0; $i < $totalTokens; $i++)
+          if( $i > 499  && $i % 500 == '0')
           {
-            array_push($token,$tokens[$i]['fcm_token']);
+            // if token is modules 500 then send push
+            $sendPushSMS= $this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound);
+            $token = [];
+            continue;
           }
+          array_push($token,$tokens[$i]['fcm_token']);
         }
+        
         
      }
 
@@ -45,23 +59,21 @@
 
      // ttoken
      $ttotalTokens = count($ttokens);
-     $token = [];
+    
      if(!empty( $ttokens))
      {
-        if($ttotalTokens < 500)
-        {
+
           for($i=0; $i < $ttotalTokens; $i++)
           {
             array_push($token,$ttokens[$i]['fcm_token']);
           }
-        }
+        
         
      }
 
 
 
-        $image = null;
-        $sound = null;
+       
      
        $sendPushSMS= $this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound);
       //  print_r($sendPushSMS);
@@ -156,7 +168,9 @@
                 <div class="row">
                   <div class="card-body">
                     <form method="post" action="">
+
                       <div class="row">
+
                         <div class="form-group col-md-12 mb-2">
                           <label>Enter Notification Title</label>
                           <input type="text" name="title" class="form-control" id="name" placeholder="Enter notification title" required>

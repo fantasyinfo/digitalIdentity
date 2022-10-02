@@ -44,6 +44,19 @@ class AcademicController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'allAttendance');
 	}
 
+	public function allTeachersAttendance()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'All Teachers Attendance',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'allTeachersAttendance');
+	}
+
 	public function allDeparture()
 	{
 		$this->loginCheck();

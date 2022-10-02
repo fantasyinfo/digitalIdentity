@@ -120,6 +120,19 @@ class TeacherController extends CI_Controller
 		// $this->load->view($this->viewDir . 'pages/footer');
 	}
 
+	public function attendance()
+	{
+		$this->loginCheck();
+
+		$dataArr = [
+			'pageTitle' => 'Teacher Attendance',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->teacherDir . 'attendance');
+		// $this->load->view($this->viewDir . 'pages/footer');
+	}
+
 	public function saveTeacher()
 	{
 		$this->loginCheck();
@@ -185,5 +198,6 @@ class TeacherController extends CI_Controller
 		}
 	}
 
+	
 
 }

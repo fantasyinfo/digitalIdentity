@@ -48,6 +48,7 @@ $teacherRoutesArr = [
     'saveTeacher',
     'updateTeacher',
     'teacherReviews',
+    'attendance'
 ];
 
 foreach($teacherRoutesArr as $tRoute)
@@ -189,7 +190,8 @@ $baseAcademic = "academic/";
 $academicRoutesArr = [
     'allAttendance',
     'allDeparture',
-    'allComplaints'
+    'allComplaints',
+    'allTeachersAttendance'
 ];
 
 foreach($academicRoutesArr as $aRoute)
@@ -219,7 +221,8 @@ $ajaxRoutesArr = [
     'showDriverListViaVechicleType',
     'allAttendanceList',
     'allDepartureList',
-    'allComplaintList'
+    'allComplaintList',
+    'allTeachersAttendanceList'
     
 ];
 
