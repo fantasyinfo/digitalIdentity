@@ -39,5 +39,6 @@ class Table{
     const bannerTable = 'banner_for_app';
     const driverTable = 'driver';
     const complaintTable = 'complaint';
+    const holidayCalendarTable = 'holiday_calendar';
     
 }

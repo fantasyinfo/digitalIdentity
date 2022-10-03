@@ -83,5 +83,18 @@ class AcademicController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'allComplaints');
 	}
 
+	public function holidayCalendar()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Holiday Calendar',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'holidayCalendar');
+	}
+
 
 }

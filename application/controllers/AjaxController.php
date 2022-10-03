@@ -124,6 +124,40 @@ class AjaxController extends CI_Controller {
 			return $this->CrudModel->listDigiCoin(Table::getDigiCoinTable,$_POST['user_type'], $_POST);
 		}
 	}
+	public function addHolidayEvent()
+	{
+		if(isset($_POST))
+		{
+			$add = $this->db->query("INSERT INTO ".Table::holidayCalendarTable." (schoolUniqueCode,title,event_date) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['title']}','{$_POST['start']}')");
+		}
+	}
+	public function editHolidayEvent()
+	{
+		if(isset($_POST))
+		{
+			$update = $this->db->query("UPDATE ".Table::holidayCalendarTable." SET event_date = '{$_POST['start']}' WHERE id = '{$_POST['event_id']}'");
+		}
+	}
+	public function getHolidayEvent()
+	{
+		
+			$result = $this->db->query("SELECT * FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  ORDER BY id DESC")->result_array();
+
+			$data = array();
+			if(!empty($result))
+			{
+				foreach ($result as $row) {
+					$data[] = array(
+						'id' => $row["id"],
+						'title' => $row["title"],
+						'start' => $row["event_date"]
+					);
+				}
+				// print_r($data);
+				echo json_encode($data);
+			}
+		
+	}
 
 	public function showCityViaStateId()
 	{

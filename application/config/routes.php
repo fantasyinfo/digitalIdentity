@@ -191,7 +191,8 @@ $academicRoutesArr = [
     'allAttendance',
     'allDeparture',
     'allComplaints',
-    'allTeachersAttendance'
+    'allTeachersAttendance',
+    'holidayCalendar'
 ];
 
 foreach($academicRoutesArr as $aRoute)
@@ -222,7 +223,10 @@ $ajaxRoutesArr = [
     'allAttendanceList',
     'allDepartureList',
     'allComplaintList',
-    'allTeachersAttendanceList'
+    'allTeachersAttendanceList',
+    'addHolidayEvent',
+    'editHolidayEvent',
+    'getHolidayEvent'
     
 ];
 
