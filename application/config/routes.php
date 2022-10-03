@@ -290,7 +290,9 @@ foreach($apiRoutesArr as $apiRoute)
 
 
 
-
+// cron routes
+$route['cron/examAlert'] = 'CronController/examAlert';
+$route['cron/resultAlert'] = 'CronController/resultAlert';
 
 
 
