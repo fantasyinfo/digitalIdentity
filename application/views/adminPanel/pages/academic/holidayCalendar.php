@@ -1,6 +1,6 @@
 
 <link rel="stylesheet" href="<?= base_url() .$data['adminPanelUrl']?>fullcalendar/fullcalendar.min.css" />
-<!-- <script src="<?= base_url() .$data['adminPanelUrl']?>fullcalendar/lib/jquery.min.js"></script> -->
+
 
 
 
@@ -118,10 +118,16 @@ $this->load->model('CrudModel');
 
   <!-- /.control-sidebar -->
 </div>
-  <?php $this->load->view("adminPanel/pages/footer-copyright.php");?>
+
+
+
+
+  <?php //$this->load->view("adminPanel/pages/footer-copyright.php");?>
 </div>
-<?php $this->load->view("adminPanel/pages/footer.php");?>
+<?php //$this->load->view("adminPanel/pages/footer.php");?>
 <!-- ./wrapper -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
 
 
 <script src="<?= base_url() .$data['adminPanelUrl']?>fullcalendar/lib/moment.min.js"></script>

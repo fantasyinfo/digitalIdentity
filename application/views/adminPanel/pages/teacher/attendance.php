@@ -27,6 +27,29 @@
               }
 
             $today = date_create()->format('Y-m-d');
+
+
+
+
+
+              // check if today is holiday
+
+                $holiday = $this->db->query("SELECT title FROM " . Table::holidayCalendarTable . " WHERE event_date = '$today' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+
+                if (!empty($holiday)) {
+                    $msgArr = [
+                        'class' => 'danger',
+                        'msg' => "Today is $holiday[0]['title'] Holiday. Try on School Working Days" ,
+                    ];
+                    $this->session->set_userdata($msgArr);
+                   header("Refresh:1 " . base_url() . "teacher/attendance");
+                   exit();
+                    
+                }
+
+
+
+                // is today already attendance mark
             $alreadyAttendance = $this->db->query("SELECT * FROM " . Table::attendenceTeachersTable . " WHERE status = '1'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND att_date = '$today'")->result_array();
 
             if(!empty($alreadyAttendance))

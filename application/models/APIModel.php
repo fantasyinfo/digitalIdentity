@@ -376,10 +376,30 @@ class APIModel extends CI_Model
   // save attendence
   public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode)
   {
+
+
+    $currentDate = date_create()->format('Y-m-d');
+
+
+
     if( date('D') == 'Sun') { 
       return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
     }
-    $currentDate = date_create()->format('Y-m-d');
+
+
+    // check if today is holiday
+
+
+      $holiday = $this->db->query("SELECT title FROM " . Table::holidayCalendarTable . " WHERE event_date = '$currentDate' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+      if (!empty($holiday)) {
+        return HelperClass::APIresponse(500, "Today is $holiday[0]['title'] Holiday. Try on School Working Days.");
+      }
+
+
+
+
+    
     if ($login_user_type == 'Teacher') {
 
 
