@@ -24,3 +24,7 @@
 
 
 -- ALTER TABLE `sec_exam_table` CHANGE `exam_day` `exam_day` VARCHAR(100) NOT NULL;
+
+
+ALTER TABLE `sec_exam_table` CHANGE `exam_start_time` `exam_start_time` TIME NULL;
+ALTER TABLE `sec_exam_table` CHANGE `exam_end_time` `exam_end_time` TIME NULL;

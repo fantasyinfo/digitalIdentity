@@ -37,8 +37,8 @@
       $subject_id = $_POST['subject_id'];
       $exam_date = $_POST['exam_date'];
       $exam_day = date('l', strtotime($_POST['exam_date']));
-      $exam_start_time = $_POST['exam_start_time'];
-      $exam_end_time = $_POST['exam_end_time'];
+      // $exam_start_time = ($_POST['exam_start_time']) ? $_POST['exam_start_time'] : "";
+      // $exam_end_time = (@$_POST['exam_end_time']) ?$_POST['exam_end_time'] : "";
       $min_marks = $_POST['min_marks'];
       $max_marks = $_POST['max_marks'];
       $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
@@ -66,8 +66,8 @@
 
 
       $addExamSemester = $this->db->query("INSERT INTO " . Table::secExamTable . " 
-      (schoolUniqueCode,sem_exam_id,class_id,section_id,subject_id,exam_date,exam_day,exam_start_time,exam_end_time,min_marks,max_marks) 
-      VALUES ('$schoolUniqueCode','$sem_exam_id','$class_id','$section_id', '$subject_id','$exam_date','$exam_day','$exam_start_time','$exam_end_time','$min_marks','$max_marks')");
+      (schoolUniqueCode,sem_exam_id,class_id,section_id,subject_id,exam_date,exam_day,min_marks,max_marks) 
+      VALUES ('$schoolUniqueCode','$sem_exam_id','$class_id','$section_id', '$subject_id','$exam_date','$exam_day','$min_marks','$max_marks')");
 
       if ($addExamSemester) {
 
@@ -151,8 +151,8 @@
       $subject_id = $_POST['subject_id'];
       $exam_date = $_POST['exam_date'];
       $exam_day = date('l', strtotime($_POST['exam_date']));
-      $exam_start_time = $_POST['exam_start_time'];
-      $exam_end_time = $_POST['exam_end_time'];
+      // $exam_start_time = ($_POST['exam_start_time']) ? $_POST['exam_start_time'] : "";
+      // $exam_end_time = ($_POST['exam_end_time']) ?$_POST['exam_end_time'] : "";
       $min_marks = $_POST['min_marks'];
       $max_marks = $_POST['max_marks'];
       $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
@@ -303,22 +303,22 @@
                               <input type="date" name="exam_date" class="form-control" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editExamSem[0]['exam_date'];} ?>" required>
                               </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                               <td>
-                                <label>Exam Start Time</label>
+                                <label>Exam Start Time (optional)</label>
                               </td>
                               <td>
-                              <input type="time" name="exam_start_time" class="form-control" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editExamSem[0]['exam_start_time'];} ?>" required>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <label>Exam End Time</label>
-                              </td>
-                              <td>
-                              <input type="time" name="exam_end_time" class="form-control" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editExamSem[0]['exam_end_time'];} ?>" required>
+                              <input type="time" name="exam_start_time" class="form-control" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editExamSem[0]['exam_start_time'];} ?>" >
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <label>Exam End Time (optional)</label>
+                              </td>
+                              <td>
+                              <input type="time" name="exam_end_time" class="form-control" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editExamSem[0]['exam_end_time'];} ?>" >
+                              </td>
+                            </tr> -->
                             <tr>
                               <td>
                                 <label>Select Class</label>

@@ -1071,6 +1071,7 @@ class APIModel extends CI_Model
     if($user_type_key == 'Parent' || $user_type_key == 'Student')
     {
       $user_type_key = 'Student';
+      $user_type_id = '1';
     }
     // check total digicoin earn
     $d = $this->db->query("SELECT SUM(digiCoin) as digiCoin FROM " . Table::getDigiCoinTable . " WHERE user_type = '$user_type_key' AND user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
@@ -1114,6 +1115,17 @@ class APIModel extends CI_Model
       } else {
         return 0;
       }
+    }else if($user_type == 'Student' || $user_type == 'Parent')
+    {
+      $user_type = 'Student';
+      $dir = base_url() . HelperClass::uploadImgDir;
+      $userTypeId = HelperClass::userType[$user_type];
+      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId'")->result_array();
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return 0;
+      }
     }
   }
   // checkAllGifts
@@ -1134,8 +1146,21 @@ class APIModel extends CI_Model
       } else {
         return 0;
       }
-    } else if ($loginuserType == 'Student') {
-      //
+    } else if ($loginuserType == 'Student' || $loginuserType == 'Parent') {
+      $loginuserType = 'Student';
+      $userType = HelperClass::userType[$loginuserType];
+      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
+      if (!empty($totalDigiCoinInWallet)) {
+        
+        $dir = base_url() . HelperClass::uploadImgDir;
+        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'")->result_array();
+      }
+
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return 0;
+      }
     }
   }
 
@@ -1192,8 +1217,56 @@ class APIModel extends CI_Model
       } else {
         return false;
       }
-    } else if ($loginuserType == 'Student') {
-      //
+    } else if ($loginuserType == 'Student' || $loginuserType == 'Parent') {
+      $giftValueDigiCoin = 0;
+      // check sum of there digicoins first
+      $loginuserType = 'Student';
+      $userType = HelperClass::userType[$loginuserType];
+
+    
+      $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' and id = '$giftId'")->result_array();
+
+      if (!empty($giftValue)) {
+        $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];
+      }else
+      {
+        return HelperClass::APIresponse(500, 'This Gift Id\'s Not found, Please Check Another Gift ' . $this->db->last_query());
+      }
+
+
+      // send notification now
+
+			  $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+
+        if(!empty($tokensFromDB))
+        {
+          $tokenArr = [$tokensFromDB[0]['fcm_token']];
+          $title = "🎁 Gift Redeem Successfully.";
+          $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
+          $image = null;
+          $sound = null;
+          $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
+        }
+       
+      
+      
+  
+
+      // total digiCoins in wallet
+      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType,$loginuserType, $schoolUniqueCode);
+
+      if ($totalDigiCoinInWallet['balanceDigiCoin'] >= $giftValueDigiCoin) {
+        $insertRedeem = $this->db->query("INSERT INTO " . Table::giftRedeemTable . " (schoolUniqueCode,login_user_id,login_user_type,gift_id,digiCoin_used) VALUES ('$schoolUniqueCode','$loginUserId','$userType','$giftId','$giftValueDigiCoin')");
+      }else
+      {
+        return HelperClass::APIresponse(500, 'This Gifts Not Redeem, Because Your DigiCoins are too low. Gift Id is ' . $giftId . ' if you have redeem 1 or more gifts then check all other is redeem successfully.');
+      }
+
+      if (!empty($insertRedeem)) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -1264,6 +1337,59 @@ class APIModel extends CI_Model
      ORDER BY whatDate DESC
      ";
 
+      $d = $this->db->query($sql)->result_array();
+      
+      if (!empty($d)) {
+
+        $sendArr = [];
+        $totalCount = count($d);
+   
+        $sendArr['totalDigiCoins'] = 0;
+        $sendArr['transactions'] = [];
+        $totalCoins = 0;
+        for ($i = 0; $i < $totalCount; $i++) {
+          $subArr = [];
+          $subArr['tId'] = $d[$i]['tId'];
+          $subArr['digiCoin'] = $d[$i]['digiCoin'];
+          $subArr['for_what'] = $d[$i]['for_what'];
+          $subArr['tStatus'] = $d[$i]['tStatus'];
+          $subArr['whatDate'] = $d[$i]['whatDate'];
+          $subArr['image'] = $d[$i]['image'];
+          array_push($sendArr['transactions'], $subArr);
+        }
+        $sendArr['totalDigiCoins'] = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
+
+        return $sendArr;
+      } else {
+        return 0;
+      }
+    }else if($loginuserType == 'Parent' || $loginuserType == 'Student')
+    {
+      $userType = '1';
+      //$userType = HelperClass::userType[$loginuserType];
+
+      $loginuserType = 'Student';
+
+      $sql = "SELECT * FROM ( SELECT gdc.id as tId,  
+      CASE 
+      WHEN gdc.for_what = '1' THEN 'Attendence'  
+      WHEN gdc.for_what = '2' THEN 'Departure'
+      WHEN gdc.for_what = '3' THEN 'Result'  
+      END as for_what, gdc.digiCoin,  'Earning' as tStatus, 
+      gdc.created_at as whatDate,
+       CASE 
+       WHEN gdc.for_what = '1' THEN CONCAT('$dir','attendance.png')
+       WHEN gdc.for_what = '2' THEN CONCAT('$dir','clock.png')
+       WHEN gdc.for_what = '3' THEN CONCAT('$dir','exam.png')
+       END as image
+
+        FROM " . Table::getDigiCoinTable . " gdc  WHERE gdc.user_type = '$loginuserType' AND gdc.user_id = '$loginUserId' AND gdc.schoolUniqueCode = '$schoolUniqueCode' ) as a  
+      UNION ALL
+     SELECT * FROM (SELECT grt.id as tId,gift.gift_name as for_what, grt.digiCoin_used as digiCoin, 'Redeem' as tStatus,grt.created_at as whatDate, CONCAT('$dir',gift.gift_image)  as image   FROM " . Table::giftRedeemTable . " grt  LEFT JOIN " . Table::giftTable . "  ON gift.id = grt.gift_id WHERE grt.login_user_type = '$userType' AND grt.login_user_id = '$loginUserId' AND grt.schoolUniqueCode = '$schoolUniqueCode' ) as b
+     ORDER BY whatDate DESC
+     ";
+
+      // echo $sql;
       $d = $this->db->query($sql)->result_array();
       
       if (!empty($d)) {
