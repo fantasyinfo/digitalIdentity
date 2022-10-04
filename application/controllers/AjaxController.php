@@ -124,6 +124,14 @@ class AjaxController extends CI_Controller {
 			return $this->CrudModel->listDigiCoin(Table::getDigiCoinTable,$_POST['user_type'], $_POST);
 		}
 	}
+
+	public function dateSheetList()
+	{
+		if(isset($_POST))
+		{
+			return $this->CrudModel->dateSheetList(Table::secExamTable, $_POST);
+		}
+	}
 	public function addHolidayEvent()
 	{
 		if(isset($_POST))

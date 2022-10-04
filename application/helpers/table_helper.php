@@ -40,5 +40,7 @@ class Table{
     const driverTable = 'driver';
     const complaintTable = 'complaint';
     const holidayCalendarTable = 'holiday_calendar';
+    const semExamNameTable = 'sem_exam';
+    const secExamTable = 'sec_exam_table';
     
 }

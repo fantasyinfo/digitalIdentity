@@ -204,6 +204,23 @@ foreach($academicRoutesArr as $aRoute)
 
 
 
+// semester Wise Exam
+
+
+$semesterBase = "semester/";
+$semesterRoutesArr = [
+    'semesterMaster',
+    'dateSheetMaster',
+    'dateSheetList'
+];
+
+foreach($semesterRoutesArr as $semRoute)
+{
+    $route[$semesterBase.$semRoute] = "SemesterController"."/".$semRoute;
+}
+
+
+
 
 // Ajax routes
 $baseAjax = 'ajax/';
@@ -226,7 +243,8 @@ $ajaxRoutesArr = [
     'allTeachersAttendanceList',
     'addHolidayEvent',
     'editHolidayEvent',
-    'getHolidayEvent'
+    'getHolidayEvent',
+    'dateSheetList'
     
 ];
 

@@ -1186,6 +1186,112 @@ class CrudModel extends CI_Model
         
     }
 
+    public function dateSheetList($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::uploadImgDir;
+        if(!empty($data))
+        {
+             $condition = " AND se.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  ";
+      
+      
+            if(isset($data['complaintId']) || isset($data['guiltyPersonName']) || isset($data['studentFromDate']) || isset($data['studentToDate']) )
+            {
+                if(!empty($data['complaintId']))
+                {
+                    $condition .= " AND e.complaint_id LIKE '%{$data['complaintId']}%' ";
+                }
+                if(!empty($data['guiltyPersonName']))
+                {
+                    $condition .= " AND e.guilty_person_name LIKE '%{$data['guiltyPersonName']}%' ";
+                }
+           
+                // if(!empty($data['studentFromDate']) )
+                // {
+                //     $condition .= " AND e.created_at = '{$data['studentFromDate']}'  ";
+                // }
+                // if(!empty($data['studentToDate']))
+                // {
+                //     $condition .= " AND  e.created_at = '{$data['studentToDate']}' ";
+                // }
+                if(!empty($data['studentFromDate']) && !empty($data['studentToDate']))
+                {
+                    $condition .= " AND e.created_at >= '{$data['studentFromDate']}' AND  e.created_at <= '{$data['studentToDate']}' ";
+                }
+            
+            }
+      
+                $d = $this->db->query("SELECT se.id as semId, se.exam_date,se.exam_day,se.exam_start_time,se.exam_end_time, se.min_marks, se.max_marks, se.status,sen.id as semNameId, sen.sem_exam_name, sen.exam_year,c.className,sec.sectionName,sub.subjectName
+                FROM " .$this->tableName." se 
+                LEFT JOIN ".Table::semExamNameTable." sen ON sen.id =  se.sem_exam_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  se.class_id
+                LEFT JOIN ".Table::sectionTable." sec ON sec.id =  se.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  se.subject_id
+                WHERE se.status != 4 $condition ORDER BY se.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+    
+                $countSql = "SELECT count(se.id) as count  FROM " .$this->tableName." se
+                LEFT JOIN ".Table::semExamNameTable." sen ON sen.id =  se.sem_exam_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  se.class_id
+                LEFT JOIN ".Table::sectionTable." sec ON sec.id =  se.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  se.subject_id
+                WHERE se.status != 4 $condition ORDER BY se.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT se.id as semId, se.exam_date,se.exam_day,se.exam_start_time,se.exam_end_time, se.min_marks, se.max_marks, se.status,sen.id as semNameId, sen.sem_exam_name, sen.exam_year,c.className,sec.sectionName,sub.subjectName
+                 FROM " .$this->tableName." se
+                LEFT JOIN ".Table::semExamNameTable." sen ON sen.id =  se.sem_exam_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  se.class_id
+                LEFT JOIN ".Table::sectionTable." sec ON sec.id =  se.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  se.subject_id
+                WHERE se.status != 4 ORDER BY se.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $lastQuery = $this->db->last_query();
+
+                $countSql = "SELECT count(se.id) as count  FROM " .$this->tableName." se
+                LEFT JOIN ".Table::semExamNameTable." sen ON sen.id =  se.sem_exam_id
+                LEFT JOIN ".Table::classTable." c ON c.id =  se.class_id
+                LEFT JOIN ".Table::sectionTable." sec ON sec.id =  se.section_id
+                LEFT JOIN ".Table::subjectTable." sub ON sub.id =  se.subject_id
+                WHERE se.status != 4 ORDER BY se.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = $d[$i]['sem_exam_name'];
+                $subArr[] = $d[$i]['semId'];
+                $subArr[] = $d[$i]['exam_date'];
+                $subArr[] = $d[$i]['exam_day'];
+                $subArr[] = $d[$i]['className'] . " - " .$d[$i]['sectionName'];
+                $subArr[] = $d[$i]['subjectName'];
+                $subArr[] = $d[$i]['exam_start_time'] . " - " .$d[$i]['exam_end_time'];
+                $subArr[] = $d[$i]['min_marks'] . " - " .$d[$i]['max_marks'];
+                $subArr[] = ($d[$i]['status'] == '1') ? '<span class="badge badge-info">Pending</span>' : '<span class="badge badge-success">Completed</span>';
+                $subArr[] = '<a href="'.base_url('semester/dateSheetMaster').'?action=edit&edit_id='.$d[$i]['semId'].'" class="btn btn-warning">Edit</a>
+                <a href="'.base_url('semester/dateSheetMaster').'?action=delete&delete_id='.$d[$i]['semId'].'" class="btn btn-danger" onclick="return confirm(\'Are you sure want to delete this?\');">Delete</a>';
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr,
+            "query" => $lastQuery
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
 
     public function allResultList($tableName,$data = '')
     {
