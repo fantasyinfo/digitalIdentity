@@ -26,6 +26,7 @@ class Table{
     const examTable = 'exam';
     const resultTable = 'result';
     const pushNotificationTable = 'push_notification';
+    const setNotificationTable = 'notificationmaster';
     const feesTable = 'fees';
     const feesForStudentTable = 'feesforstudent';
     const monthTable = 'month';

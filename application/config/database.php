@@ -96,4 +96,6 @@ $db['default'] = array(
 	
 );
 
-$db['default']['dbcollat'] = "utf8_unicode_ci";
+
+$db['default']['char_set'] = 'utf8mb4';
+$db['default']['dbcollat'] = 'utf8mb4_unicode_ci';

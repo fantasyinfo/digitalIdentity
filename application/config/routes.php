@@ -128,6 +128,7 @@ $masterRoutesArr = [
     'monthMaster',
     'setDigiCoinMaster',
     'bannerMaster',
+    'setNotificationMaster',
     'givePermissionMaster' // only for super Admin
     
 ];

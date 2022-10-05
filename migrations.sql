@@ -26,5 +26,12 @@
 -- ALTER TABLE `sec_exam_table` CHANGE `exam_day` `exam_day` VARCHAR(100) NOT NULL;
 
 
-ALTER TABLE `sec_exam_table` CHANGE `exam_start_time` `exam_start_time` TIME NULL;
-ALTER TABLE `sec_exam_table` CHANGE `exam_end_time` `exam_end_time` TIME NULL;
+-- ALTER TABLE `sec_exam_table` CHANGE `exam_start_time` `exam_start_time` TIME NULL;
+-- ALTER TABLE `sec_exam_table` CHANGE `exam_end_time` `exam_end_time` TIME NULL;
+
+
+
+CREATE TABLE `notificationmaster` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `for_what` INT NOT NULL , `title` VARCHAR(255) NOT NULL , `body` TEXT NOT NULL , `image` VARCHAR(255) NULL , `sound` VARCHAR(255) NULL , `status` ENUM("1","2","3","4") NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+ALTER TABLE notificationmaster CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -128,6 +128,26 @@ const invoicePrefix = 'INVOICE-00';
 
 
 
+const setNotificationForWhat = [
+    '1' => 'Attendance',
+    '2' => 'Departure',
+    '3' => 'School Bus Entry',
+    '4' => 'School Gate Entry',
+    '5' => 'Results Published',
+    '6' => 'Fees Deposits',
+    '7' => 'Complaint Submited',
+    '8' => 'Complaint Action Taken',
+    '9' => 'Complaint Submited',
+    '10' => 'Gifts Redeem',
+    '11' => 'Gifts Redeem Status Changed',
+    '12' => 'Exam Alert',
+    '13' => 'Result Alert',
+
+];
+
+
+
+
     const experience = ['Fresher', '1 to 3 Years', '3 to 5 Years', '5 to 10 Years', '10 to 15 Years', '15 Years +'
     ];
     public static function uniqueI()
