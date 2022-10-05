@@ -1462,4 +1462,39 @@ public function updateHomeWork()
 	{
 		return apache_request_headers();
 	}
+
+
+
+	// check App Update
+	public function checkAppUpdate()
+	{
+		$this->load->config('app_version');
+        $this->checkAPIRequest();
+        $apiData = $this->getAPIData();
+
+		$userVersionName = $apiData['data']['app_version_name'];
+		$userVersionCode = $apiData['data']['app_version_code'];
+		$appVersion = $this->config->item('app')['connect'];
+
+		if (stripos($userVersionName, 'beta'))
+		{
+			$app = $appVersion['beta'];
+		}
+		else
+		{
+			$app = $appVersion['live'];
+			$app['link'] = $app['playstore'];
+		}
+	
+		$versionCode = $app['version_code'];
+		$versionName = $app['version_name'];
+		$link = $app['link'];
+		if (!in_array($userVersionName, $versionName) || !in_array($userVersionCode, $versionCode))
+		{
+			return HelperClass::APIresponse(500, 'Update Available.' .end($versionName) ,[],['url' => $link,'is_compulsory' => '1']);
+		}
+			return HelperClass::APIresponse(200, 'You are using latest version.');
+		
+	} 
+	
 }

@@ -303,7 +303,8 @@ $apiRoutesArr = [
     'validateQRCode',
     'getDriverLatLng',
     'addComplaint',
-    'showResultDataWithExam'
+    'showResultDataWithExam',
+    'checkAppUpdate'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
