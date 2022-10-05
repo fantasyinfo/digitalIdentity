@@ -160,8 +160,22 @@ class APIController extends CI_Controller
 				}
 				
 			}
-			$title = "Attendance Update ✅";
-			$body = "Hey 👋 Dear Parents, Our 🏫 School Attendance Updated, Please Check The App Now!!";
+
+
+			// fetch notification from db
+			$notificationFromDB = $this->db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '1' LIMIT 1")->result_array();
+
+			if(!empty($notificationFromDB))
+			{
+				$title = $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['title']);
+				$body =  $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['body']);
+			}else
+			{
+				$title = "Attendance Update ✅";
+				$body = "Hey 👋 Dear Parents, Our 🏫 School Attendance Updated, Please Check The App Now!!";
+			}
+
+			
 			$image = null;
 			$sound = null;
 		
@@ -288,8 +302,24 @@ class APIController extends CI_Controller
 				}
 				
 			}
-			$title = "Departure Update ✅";
+
+
+			// fetch notification from db
+			$notificationFromDB = $this->db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '2' LIMIT 1")->result_array();
+
+			if(!empty($notificationFromDB))
+			{
+				$title = $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['title']);
+				$body =  $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['body']);
+			}else
+			{
+				$title = "Departure Update ✅";
 			$body = "Hey 👋 Dear Parents, Our 🏫 School Departure Updated, Please Check The App Now!!";
+			}
+
+
+
+			
 			$image = null;
 			$sound = null;
      

@@ -387,13 +387,14 @@ class APIModel extends CI_Model
     }
 
 
-    // check if today is holiday
+    //check if today is holiday
 
 
       $holiday = $this->db->query("SELECT title FROM " . Table::holidayCalendarTable . " WHERE event_date = '$currentDate' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if (!empty($holiday)) {
-        return HelperClass::APIresponse(500, "Today is $holiday[0]['title'] Holiday. Try on School Working Days.");
+        $h = (String) $holiday[0]['title'];
+        return HelperClass::APIresponse(500, "Today is $h Holiday. Try on School Working Days.");
       }
 
 
@@ -882,8 +883,18 @@ class APIModel extends CI_Model
             if(!empty($tokensFromDB))
             {
               $tokenArr = [$tokensFromDB[0]['fcm_token']];
-              $title = "$identityType Entry On 🏫 School.";
-              $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
+              // fetch notification from db
+              $notificationFromDB = $this->db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '4' LIMIT 1")->result_array();
+
+              if(!empty($notificationFromDB))
+              {
+                $title = $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['title'],['identity'=>$identityType]);
+                $body =  $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['body'],['identity'=>$identityType]);
+              }else
+              {
+                $title = "$identityType Entry On 🏫 School.";
+                $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
+              }
             }
           }else if($loginuserType == HelperClass::userTypeR[7])
           {
@@ -892,8 +903,22 @@ class APIModel extends CI_Model
             if(!empty($tokensFromDB))
             {
               $tokenArr = [$tokensFromDB[0]['fcm_token']];
-              $title = "$identityType Entry On 🚌 Transport.";
-              $body = "Hey 👋 Dear $identityType, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!";
+
+              	// fetch notification from db
+                  $notificationFromDB = $this->db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '3' LIMIT 1")->result_array();
+
+                  if(!empty($notificationFromDB))
+                  {
+                    $title = $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['title'],['identity'=>$identityType]);
+                    $body =  $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['body'],['identity'=>$identityType]);
+                  }else
+                  {
+                    $title = "$identityType Entry On 🚌 Transport.";
+                    $body = "Hey 👋 Dear $identityType, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!";
+                  }
+
+
+              
             }
           }
 
@@ -1609,7 +1634,10 @@ class APIModel extends CI_Model
 
   public function bannerForApp($schoolUniqueCode)
   {
-    return $this->db->query("SELECT * FROM " . Table::bannerTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+
+    $dir = base_url() . HelperClass::uploadImgDir;
+
+    return $this->db->query("SELECT *, CONCAT('$dir',image) as image FROM " . Table::bannerTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
   }
 
   public function notificationsForParent($schoolUniqueCode)
@@ -1691,7 +1719,7 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
 
     if(!empty($d))
     {
-      return $d;
+      return $d[0];
     }else
     {
       return HelperClass::APIresponse(500, 'Driver Details Not Found Linking With The Student ');

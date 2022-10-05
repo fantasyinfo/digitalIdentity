@@ -1965,6 +1965,71 @@ class CrudModel extends CI_Model
 
 
 
+
+
+
+// replace notifications words
+
+    public function replaceNotificationsWords($str,$data = [])
+    {
+        $str = str_replace("{parents}", "Parents", $str);
+        $str = str_replace("{student}", "Students", $str);
+
+        if(!empty($data) && is_array($data))
+        {
+            if(!empty($data['examId']))
+            {
+
+                $str = str_replace("{examid}", $data['examId'], $str);
+            }
+
+            if(!empty($data['invoiceId']))
+            {
+
+                $str = str_replace("{invoice}", $data['invoiceId'], $str);
+            }
+
+            if(!empty($data['complaintId']))
+            {
+
+                $str = str_replace("{complaintid}", $data['complaintId'], $str);
+            }
+
+            if(!empty($data['identity']))
+            {
+
+                $str = str_replace("{identity}", $data['identity'], $str);
+            }
+
+            if(!empty($data['subjectName']))
+            {
+
+                $str = str_replace("{subjectName}", $data['subjectName'], $str);
+            }
+
+            if(!empty($data['teacherName']))
+            {
+
+                $str = str_replace("{teacherName}", $data['teacherName'], $str);
+            }
+
+            if(!empty($data['examName']))
+            {
+
+                $str = str_replace("{examName}", $data['examName'], $str);
+            }
+
+
+        }
+
+        return $str;
+    }
+
+
+
+
+
+
     // firebase notification system
     
     public function sendFireBaseNotificationWithDeviceId($registration_ids, $title,$body,$image,$sound) {
