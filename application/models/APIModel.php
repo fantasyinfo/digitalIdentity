@@ -826,7 +826,7 @@ class APIModel extends CI_Model
     if (!empty($d)) {
       return $d;
     } else {
-      return HelperClass::APIresponse(500, 'No Home Work found for this class.');
+      return HelperClass::APIresponse(500, 'No Home Work Found For ' .$date. ' & This Class');
     }
   }
 

@@ -743,7 +743,7 @@ class APIController extends CI_Controller
 		$sectionId = $apiData['sectionId'];
 		$date = $apiData['date'];
 
-		if(!empty($date))
+		if(empty($date))
 		{
 			$date = date('Y-m-d');
 		}
@@ -753,7 +753,7 @@ class APIController extends CI_Controller
 		$allHomeWorkList = $this->APIModel->showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$date);
 
 		if (!$allHomeWorkList) {
-			return HelperClass::APIresponse(500, 'No Home Work Found For This Class');
+			return HelperClass::APIresponse(500, 'No Home Work Found For ' .$date. ' & This Class');
 		}else
 		{
 			return HelperClass::APIresponse(200, 'All Home Work List.',$allHomeWorkList);
