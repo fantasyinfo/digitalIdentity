@@ -16,7 +16,7 @@
     $this->load->model('CrudModel');
 
   // fetching city data
-    $notificatonData = $this->db->query("SELECT * FROM " . Table::setNotificationTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
+    $notificatonData = $this->db->query("SELECT * FROM " . Table::setNotificationTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
 
 
     // insert new city
@@ -115,6 +115,7 @@
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Showing All Notifications</h3>
+                      <a href="<?= base_url('master/notificationDefault')?>" class="ml-2 btn btn-primary float-right" >Update Default Notifications</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">

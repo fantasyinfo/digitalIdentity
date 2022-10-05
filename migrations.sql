@@ -31,7 +31,11 @@
 
 
 
-CREATE TABLE `notificationmaster` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `for_what` INT NOT NULL , `title` VARCHAR(255) NOT NULL , `body` TEXT NOT NULL , `image` VARCHAR(255) NULL , `sound` VARCHAR(255) NULL , `status` ENUM("1","2","3","4") NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+-- CREATE TABLE `notificationmaster` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `for_what` INT NOT NULL , `title` VARCHAR(255) NOT NULL , `body` TEXT NOT NULL , `image` VARCHAR(255) NULL , `sound` VARCHAR(255) NULL , `status` ENUM("1","2","3","4") NOT NULL , `updated_at` DATETIME NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
-ALTER TABLE notificationmaster CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- ALTER TABLE notificationmaster CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- ALTER TABLE `notificationmaster` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1';
+
+-- ALTER TABLE `notificationmaster` CHANGE `updated_at` `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;

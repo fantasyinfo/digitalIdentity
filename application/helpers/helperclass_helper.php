@@ -137,13 +137,66 @@ const setNotificationForWhat = [
     '6' => 'Fees Deposits',
     '7' => 'Complaint Submited',
     '8' => 'Complaint Action Taken',
-    '9' => 'Complaint Submited',
-    '10' => 'Gifts Redeem',
-    '11' => 'Gifts Redeem Status Changed',
-    '12' => 'Exam Alert',
-    '13' => 'Result Alert',
+    '9' => 'Gifts Redeem',
+    '10' => 'Gifts Redeem Status Changed',
+    '11' => 'Exam Alert',
+    '12' => 'Result Alert',
 
 ];
+
+
+ const defaultNotifications = [
+    '1' => [
+        'title' => "Attendance Update ✅",
+		'body' => "Hey 👋 Dear {parents}, Our 🏫 School Attendance Updated, Please Check The App Now!!"
+    ],
+    '2' => [
+        'title' => "Departure Update ✅",
+		'body' => "Hey 👋 Dear {parents}, Our 🏫 School Departure Updated, Please Check The App Now!!"
+    ],
+    '3' => [
+        'title' => "{student} Entry On 🚌 Transport.",
+		'body' => "Hey 👋 Dear {student}, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!"
+    ],
+    '4' => [
+        'title' => "{student} Entry On 🏫 School.",
+		'body' => "Hey 👋 Dear {student}, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate."
+    ],
+    '5' => [
+        'title' => "Result Published ✅",
+		'body' => "Hey 👋 Dear {student}, Result Has Been Published For Exam Id {examid}, Please Check Result In The App Now!!"
+    ],
+    '6' => [
+        'title' => "Fees Submit Update ✅",
+		'body' => "Hey 👋 Dear {student}, Fees Has Been Submited & Invoice is {invoice}, Please Check The App Now!!"
+    ],
+    '7' => [
+        'title' => "Complaint Submit Update ✅",
+		'body' => "Hey 👋 Dear {parents}, Complaint Register Successfully, And Your Complaint Id Is {complaintid}, Please Check The App Now!!"
+    ],
+    '8' => [
+        'title' => "Complaint Action Taken Update ✅",
+		'body' => "Hey 👋 Dear {parents}, Your Complaint id {complaintid} Status Has Been Updated. Please Check The App Now!!"
+    ],
+    '9' => [
+        'title' => "🎁 Gift Redeem Successfully.",
+		'body' => "Hey 👋 Dear {identity}, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon."
+    ],
+    '10' => [
+        'title' => "🎁 Gifts Redeem Status Updated ✅",
+		'body' => "Hey 👋 Dear {identity}, Your Gifts Redeem Status Has Been Changed, Please Check The App Now!!"
+    ],
+    '11' => [
+        'title' => "Hey 👋, Students Greetings From School 🏫, Are You Ready For Your Today Exam 📝. Check The App 📱 For Exam Details.",
+		'body' => "Today is Exam {subjectName} Exam Created By {teacherName} Check Details into App Notification Exam Section.  Please Check The App Now!!"
+    ],
+    '12' => [
+        'title' => "Hey 👋, Students Greetings From School 🏫, Your Exam 📝 Result Has Been Published Today. Check The App 📱 For Result Status.",
+		'body' => "{examName} Exam Result Has Been Published By {teacherName} Check Yoru Result in Result Section into APP. "
+    ]
+
+];
+
 
 
 

@@ -203,6 +203,8 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->masterDir . 'setNotificationMaster');
 	}
 
+
+
 	public function visitorMaster()
 	{
 		$this->loginCheck();
@@ -322,5 +324,22 @@ class MasterController extends CI_Controller
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->masterDir . 'givePermissionMaster');
+	}
+
+
+
+
+
+	public function notificationDefault()
+	{
+		$this->loginCheck();
+		// check permission
+		//$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Default Notifications',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view('adminPanel/pages/cron/notificationDefault');
 	}
 }

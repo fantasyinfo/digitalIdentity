@@ -111,7 +111,16 @@
         }
 
 
-        
+
+
+
+        // update default notifications
+        foreach(HelperClass::setNotificationForWhat as $key => $value)
+        {
+          $insert =  $this->db->query("INSERT INTO ".Table::setNotificationTable." (schoolUniqueCode,for_what,title,body) 
+            VALUES ('$schoolUniqueCode', $key,'".htmlspecialchars(HelperClass::defaultNotifications[$key]['title'])."', '".htmlspecialchars(HelperClass::defaultNotifications[$key]['body'])."' )");
+          
+        }
 
         // insert a user for login to panel
         $pass = 'abc012';
