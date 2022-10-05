@@ -70,4 +70,17 @@ class SemesterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->digiDir . 'dateSheetList');
 	}
 
+	public function downloadDateSheet()
+	{
+		$this->loginCheck();
+		// check permission
+		// $this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Download DateSheet List',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'downloadDateSheet');
+	}
+
 }

@@ -966,13 +966,13 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['loginUserId']) || empty($apiData['visit_date'])|| empty($apiData['visit_time'])|| empty($apiData['visitor_name']) || empty($apiData['person_to_meet'])|| empty($apiData['purpose_to_meet'])|| empty($apiData['visitor_mobile_no']))
+		if(empty($apiData['authToken']) || empty($apiData['userType'])  || empty($apiData['visit_date'])|| empty($apiData['visit_time'])|| empty($apiData['visitor_name']) || empty($apiData['person_to_meet'])|| empty($apiData['purpose_to_meet'])|| empty($apiData['visitor_mobile_no']))
 		{
-			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.', $apiData);
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
-		$loginUserId = $apiData['loginUserId'];
+		$loginUserId = @$apiData['loginUserId'];
 		$visit_date = $apiData['visit_date'];
 		$visit_time = $apiData['visit_time'];
 		$visitor_name = $apiData['visitor_name'];
@@ -981,8 +981,8 @@ public function updateHomeWork()
 		$visitor_mobile_no = $apiData['visitor_mobile_no'];
 		$document_image_name = '';
 		
-		$documentType=$apiData['image'];
-	    $document = base64_decode($apiData['image']);
+		$documentType=@$apiData['image'];
+	    $document = base64_decode(@$apiData['image']);
         $document_image_name='visitor_img_'.time().'.png';
     	$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/".$document_image_name;
         $success = file_put_contents($document_file, $document);

@@ -1,3 +1,10 @@
+<style>
+  #dwnDateSheet
+  {
+    display: none;
+  }
+</style>
+
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
@@ -185,7 +192,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Showing All Class Exams</h3>
-                 
+                 <button onclick="dwnDateSheet()" id="dwnDateSheet" class="btn btn-primary">Download DateSheet</button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -288,6 +295,7 @@
 
   <script>
     var ajaxUrlForTeacherList = '<?= base_url() . 'ajax/dateSheetList' ?>';
+    let baseUrl = '<?= base_url(); ?>';
     // datatable for teacher
     loadTeacherDataTable();
 
@@ -333,7 +341,31 @@
         $("#class_id").val(),
         $("#section_id").val()
       );
-    })
+      if($("#sem_exam_id").val() != '' && $("#class_id").val() != '' && $("#section_id").val() != '')
+      {
+        $("#dwnDateSheet").show();
+      }
+      
+    });
+
+    function dwnDateSheet()
+    {
+      let classId = $("#class_id").val();
+      let sectionId = $("#section_id").val();
+      let semExamId = $("#sem_exam_id").val();
+
+      if(classId != '' && sectionId!= '' && semExamId != '')
+      {
+        window.location.href = baseUrl + 'semester/downloadDateSheet?classId=' + classId + '&sectionId=' + sectionId + '&secExamNameId=' + semExamId;
+      }else
+      {
+        alert('Please Select Exam Name And Class With Section On Filters');
+      }
+
+
+
+      
+    }
   </script>
 
 

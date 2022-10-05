@@ -213,7 +213,8 @@ $semesterBase = "semester/";
 $semesterRoutesArr = [
     'semesterMaster',
     'dateSheetMaster',
-    'dateSheetList'
+    'dateSheetList',
+    'downloadDateSheet'
 ];
 
 foreach($semesterRoutesArr as $semRoute)
