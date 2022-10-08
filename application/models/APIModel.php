@@ -830,6 +830,28 @@ class APIModel extends CI_Model
     }
   }
 
+
+  // holiday calender
+    // showAllExam
+    public function holidayCalender($schoolUniqueCode,$dateWithYear = null)
+    {
+   
+      if($dateWithYear == null)
+      {
+        $dateWithYear = date('Y-m-01');
+      }
+      $d = $this->db->query($sql = "SELECT * FROM " . Table::holidayCalendarTable . " e
+          WHERE e.status = '1' AND e.schoolUniqueCode = '$schoolUniqueCode'
+          AND MONTH(e.event_date) = MONTH('$dateWithYear')
+          AND YEAR(e.event_date) = YEAR('$dateWithYear')
+          ")->result_array();
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return HelperClass::APIresponse(500, 'No Holiday\'s Found.');
+      }
+    }
+
   // validateQRCode
 
   public function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode)
@@ -1451,8 +1473,10 @@ class APIModel extends CI_Model
     $dir = base_url().HelperClass::uploadImgDir;
     if ($loginuserType == 'Teacher') {
       $tableName = Table::teacherTable;
-      $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      // $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       
+  
       if (!empty($d)) {
 
         $sendArr = [];
@@ -1466,6 +1490,11 @@ class APIModel extends CI_Model
         for ($i = 0; $i < $totalCount; $i++) {
          $userDetails =  $this->db->query($sql2 = "SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
 
+        //  if(empty($userDetails)) 
+        //  {
+        //   continue;
+        //  }
+
           // for first, second & third position
          if($i == 0 || $i == 1 || $i == 2)
          {
@@ -1478,13 +1507,13 @@ class APIModel extends CI_Model
               $topSubArr['myPosition'] = TRUE;
             }
             $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = $d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['userType'] = @$d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
             $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
             $sendArr['topOne']= $topSubArr;
           }
           if($i == 1)
@@ -1496,13 +1525,13 @@ class APIModel extends CI_Model
               $topSubArr['myPosition'] = TRUE;
             }
             $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = $d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['userType'] = @$d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
             $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
             $sendArr['topTwo'] = $topSubArr;
           }
           if($i == 2)
@@ -1514,13 +1543,13 @@ class APIModel extends CI_Model
               $topSubArr['myPosition'] = TRUE;
             }
             $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = $d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['userType'] = @$d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
             $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
             $sendArr['topThree'] =$topSubArr;
           }
          
@@ -1535,13 +1564,13 @@ class APIModel extends CI_Model
             $subArr['myPosition'] = TRUE;
           }
           $subArr['position'] = $a++;
-          $subArr['userType'] = $d[$i]['user_type'];
-          $subArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+          $subArr['userType'] = @$d[$i]['user_type'];
+          $subArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
           $subArr['name'] = @$userDetails[0]['name'];
           $subArr['uniqueId'] = @$userDetails[0]['user_id'];
           $subArr['className'] = @$userDetails[0]['className'];
           $subArr['sectionName'] = @$userDetails[0]['sectionName'];
-          $subArr['image'] = $dir.@$userDetails[0]['image'];
+          $subArr['image'] = @$dir.@$userDetails[0]['image'];
           array_push($sendArr['restAll'], $subArr);
         }
         
@@ -1553,7 +1582,8 @@ class APIModel extends CI_Model
     {
       $tableName = Table::studentTable;
       $loginuserType = 'Student';
-      $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      // $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       
       if (!empty($d)) {
 
@@ -1568,45 +1598,49 @@ class APIModel extends CI_Model
         for ($i = 0; $i < $totalCount; $i++) {
          $userDetails =  $this->db->query("SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
 
+        //  if(empty($userDetails)) 
+        //  {
+        //   continue;
+        //  }
          if($i == 0 || $i == 1 || $i == 2)
          {
           if($i == 0 )
           {
             $topSubArr = [];
             $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = $d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['userType'] = @$d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
             $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
             $sendArr['topOne'] =  $topSubArr;
           }
           if($i == 1)
           {
             $topSubArr = [];
             $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = $d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['userType'] = @$d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
             $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
             $sendArr['topTwo'] = $topSubArr;
           }
           if($i == 2)
           {
             $topSubArr = [];
             $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = $d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['userType'] = @$d[$i]['user_type'];
+            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
             $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = $dir.@$userDetails[0]['image'];
+            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
             $sendArr['topThree'] =  $topSubArr;
           }
            continue;
@@ -1615,13 +1649,13 @@ class APIModel extends CI_Model
 
           $subArr = [];
           $subArr['position'] = $a++;
-          $subArr['userType'] = $d[$i]['user_type'];
-          $subArr['totalDigiCoinsEarn'] = $d[$i]['totalDigiCoinsEarn'];
-          $subArr['name'] = $userDetails[0]['name'];
-          $subArr['uniqueId'] = $userDetails[0]['user_id'];
-          $subArr['className'] = $userDetails[0]['className'];
-          $subArr['sectionName'] = $userDetails[0]['sectionName'];
-          $subArr['image'] = $dir.$userDetails[0]['image'];
+          $subArr['userType'] = @$d[$i]['user_type'];
+          $subArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+          $subArr['name'] = @$userDetails[0]['name'];
+          $subArr['uniqueId'] = @$userDetails[0]['user_id'];
+          $subArr['className'] = @$userDetails[0]['className'];
+          $subArr['sectionName'] = @$userDetails[0]['sectionName'];
+          $subArr['image'] = @$dir.@$userDetails[0]['image'];
          array_push($sendArr['restAll'], $subArr);
         }
         

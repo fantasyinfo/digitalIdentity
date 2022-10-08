@@ -761,6 +761,41 @@ class APIController extends CI_Controller
 	}
 
 
+		// showHoliday Claender
+		public function holidayCalender()
+		{
+			
+			$this->checkAPIRequest();
+			$apiData = $this->getAPIData();
+			if(empty($apiData['authToken']) || empty($apiData['userType']) )
+			{
+				return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+			}
+			$authToken = $apiData['authToken'];
+			$loginuserType = $apiData['userType'];
+			$year = (@$apiData['year']) ? @$apiData['year'] : null;
+			$month = (@$apiData['month']) ? @$apiData['month'] : null;
+
+			if(isset($year) && isset($month) && $year != null && $month != null)
+			{
+				$date = $year . "-". $month . "-" . "01";
+				$dateWithYear = date($date);
+			}else
+			{
+				$dateWithYear = null;
+			}
+	
+			$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+			$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+			$holidayList = $this->APIModel->holidayCalender($schoolUniqueCode,$dateWithYear);
+	
+			if (!$holidayList) {
+				return HelperClass::APIresponse(500, 'No Holiday\'s Found.');
+			}else
+			{
+				return HelperClass::APIresponse(200, 'All Holidays List.',$holidayList);
+			}
+		}
 
 	// show result with exam 
 	public function showResultDataWithExam()

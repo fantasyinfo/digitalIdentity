@@ -304,7 +304,8 @@ $apiRoutesArr = [
     'getDriverLatLng',
     'addComplaint',
     'showResultDataWithExam',
-    'checkAppUpdate'
+    'checkAppUpdate',
+    'holidayCalender'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
