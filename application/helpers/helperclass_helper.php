@@ -141,6 +141,7 @@ const setNotificationForWhat = [
     '10' => 'Gifts Redeem Status Changed',
     '11' => 'Exam Alert',
     '12' => 'Result Alert',
+    '13' => 'Fees Due Alert'
 
 ];
 
@@ -193,6 +194,10 @@ const setNotificationForWhat = [
     '12' => [
         'title' => "Hey 👋, Students Greetings From School 🏫, Your Exam 📝 Result Has Been Published Today. Check The App 📱 For Result Status.",
 		'body' => "{examName} Exam Result Has Been Published By {teacherName} Check Yoru Result in Result Section into APP. "
+    ],
+    '13' => [
+        'title' => "Hey 👋, Parents Greetings From School 🏫, Fees Due Notification ✅.",
+		'body' => "Hey 👋 Dear Parents, Please Pay Your Fee. Check The App Fees Section For Total Due."
     ]
 
 ];

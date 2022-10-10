@@ -130,6 +130,7 @@ $masterRoutesArr = [
     'bannerMaster',
     'setNotificationMaster',
     'notificationDefault',
+    'feeDueNotification',
     'givePermissionMaster' // only for super Admin
     
 ];

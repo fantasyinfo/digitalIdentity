@@ -244,6 +244,19 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->masterDir . 'feesMaster');
 	}
 
+	public function feeDueNotification()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Fees Due Notification',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'feeDueNotification');
+	}
+
 	public function submitFeesMaster()
 	{
 		$this->loginCheck();

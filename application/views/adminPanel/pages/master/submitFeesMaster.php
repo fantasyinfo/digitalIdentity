@@ -140,7 +140,7 @@
                     <div class="form-group col-md-12">
                       <label>Select Class </label>
                       <select name="classId" id="classId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
-                      <option >Classes</option>
+                      <option >Please Select Class</option>
                         <?php
                         if (isset($classData)) {
                           foreach ($classData as $class) {
@@ -156,7 +156,7 @@
                     <div class="form-group col-md-12">
                       <label>Select Section </label>
                       <select name="sectionId" id="sectionId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showStudents()">
-                        <option >Sections</option>
+                        <option >Please Select Section</option>
                         <?php
                         if (isset($sectionData)) {
                           foreach ($sectionData as $section) {
@@ -172,7 +172,7 @@
                     <div class="form-group col-md-12">
                       <label>Select Students </label>
                       <select name="studentId" id="studentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="totalFeesDue(this)">
-                        <option disabled >Students</option>
+                        <option >Please Select Student</option>
                       </select>
                     </div>
                     <div class="form-group col-md-12">

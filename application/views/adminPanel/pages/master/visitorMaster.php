@@ -14,7 +14,7 @@
     $dir = base_url().HelperClass::uploadImgDir;
 
   // fetching city data
-    $visitorMasterData = $this->db->query("SELECT * FROM " . Table::visitorTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+    $visitorMasterData = $this->db->query("SELECT * FROM " . Table::visitorTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
     
 
 
