@@ -979,7 +979,7 @@ class CrudModel extends CI_Model
                 $subArr[] = $d[$i]['name'];
                 $subArr[] = $d[$i]['user_id'];
                 $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
-                $subArr[] = ($d[$i]['attendenceStatus'] == '1') ? '<span class="badge badge-success">Present</span>' : '<span class="badge badge-danger">Absent</span>';
+                $subArr[] = ($d[$i]['attendenceStatus'] == '0') ? '<span class="badge badge-danger">Absent</span>' : '<span class="badge badge-success">Present</span>';
                 $subArr[] = date('d-m-Y h:i:A' , strtotime($d[$i]['dateTime']));
                 $subArr[] = $d[$i]['teacherName'];
                 $sendArr[] = $subArr;

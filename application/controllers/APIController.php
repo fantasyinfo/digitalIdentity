@@ -123,10 +123,10 @@ class APIController extends CI_Controller
 		for ($i = 0; $i < $totalAttenData; $i++) {
 			$stu_id = $attendenceData[$i]['stu_id'];
 			$attendenceStatus = $attendenceData[$i]['attendence'];
-			if(empty($attendenceStatus))
-			{
-				continue;
-			}
+			// if(empty($attendenceStatus))
+			// {
+			// 	continue;
+			// }
 			array_push($studentIds,$stu_id);
 			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus,$schoolUniqueCode);
 			if (!$insertAttendeceRecord) {
@@ -668,6 +668,7 @@ class APIController extends CI_Controller
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
+
 		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['loginUserId']) || empty($apiData['subjectId'])|| empty($apiData['homeWorkNote'])|| empty($apiData['homeWorkDate'])|| empty($apiData['homeWorkDueDate']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
@@ -681,6 +682,13 @@ class APIController extends CI_Controller
 		$homeWorkNote = $apiData['homeWorkNote'];
 		$homeWorkDate = $apiData['homeWorkDate'];
 		$homeWorkDueDate = $apiData['homeWorkDueDate'];
+		$document_image_name = '';
+		
+		$documentType=@$apiData['image'];
+	    $document = base64_decode(@$apiData['image']);
+        $document_image_name='homework_img'.time().'.png';
+    	$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/".$document_image_name;
+        $success = file_put_contents($document_file, $document);
 
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
@@ -691,7 +699,7 @@ class APIController extends CI_Controller
 		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
 		// }
 
-		$addHomeWork = $this->APIModel->addHomeWork($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode);
+		$addHomeWork = $this->APIModel->addHomeWork($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$homeWorkNote,$homeWorkDate,$homeWorkDueDate,$schoolUniqueCode,$document_image_name);
 		
 
 		if (!$addHomeWork) {
@@ -983,7 +991,8 @@ public function updateHomeWork()
 		$loginuserType = $apiData['userType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$loginUserId =	$loginUser[0]['login_user_id'];
+		$loginUserId = $apiData['loginUserId'];
+
 
 	
 		$leaderBoardData = $this->APIModel->leaderBoard($loginuserType,$schoolUniqueCode,$loginUserId);

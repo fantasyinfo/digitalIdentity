@@ -39,3 +39,6 @@
 -- ALTER TABLE `notificationmaster` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1';
 
 -- ALTER TABLE `notificationmaster` CHANGE `updated_at` `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+
+ALTER TABLE `home_work` ADD `image` TEXT NULL AFTER `home_work_finish_date`;

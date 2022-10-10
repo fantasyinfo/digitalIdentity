@@ -746,7 +746,7 @@ class APIModel extends CI_Model
 
 
   // add homeWork
-  public function addHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $schoolUniqueCode)
+  public function addHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $schoolUniqueCode,$document_image_name)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -761,6 +761,7 @@ class APIModel extends CI_Model
         "home_work_note" => $homeWorkNote,
         "home_work_date" => $homeWorkDate,
         "home_work_finish_date" => $homeWorkDueDate,
+        "image" => $document_image_name
       ];
 
       $insertId = $this->CrudModel->insert(Table::homeWorkTable, $insertArr);
@@ -845,8 +846,23 @@ class APIModel extends CI_Model
           AND MONTH(e.event_date) = MONTH('$dateWithYear')
           AND YEAR(e.event_date) = YEAR('$dateWithYear')
           ")->result_array();
-      if (!empty($d)) {
-        return $d;
+
+
+         $totalC =  count($d);
+
+         $sendArr = [];
+         for($i=0; $i < $totalC; $i++)
+         {
+          $subArr = [];
+          $subArr['date'] = date('d',strtotime($d[$i]['event_date']));
+          $subArr['event_date'] = date('d-m-Y',strtotime($d[$i]['event_date']));
+          $subArr['title'] = $d[$i]['title'];
+          array_push($sendArr,$subArr);
+         }
+
+
+      if (!empty($sendArr)) {
+        return $sendArr;
       } else {
         return HelperClass::APIresponse(500, 'No Holiday\'s Found.');
       }
