@@ -132,7 +132,7 @@
                           </tr>
                           <tr>
                               <td> <label for="mobile">Mobile Number</label></td>
-                              <td> <input type="number" name="mobile" class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
+                              <td> <input type="number" name="mobile" disabled class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
                           </tr>
                           <tr>
                               <td> <label for="dob">Select Date of Birth</label></td>

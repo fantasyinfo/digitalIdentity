@@ -3,12 +3,12 @@
 
 
 <?php
-$dir = base_url().HelperClass::uploadImgDir;
-@$schoolD = $this->db->query("SELECT * FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1 ")->result_array();?>
+$dir = base_url() . HelperClass::uploadImgDir;
+@$schoolD = $this->db->query("SELECT * FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1 ")->result_array(); ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
-    <img src="<?= @$dir.@$schoolD[0]['image'] ?>" alt="School Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <img src="<?= @$dir . @$schoolD[0]['image'] ?>" alt="School Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light"><?= @$schoolD[0]['school_name'] ?></span>
   </a>
 
@@ -16,9 +16,9 @@ $dir = base_url().HelperClass::uploadImgDir;
 
 
 
-$checkPermission = (HelperClass::checkIfItsACEOAccount()) ? true : false;
+  $checkPermission = (HelperClass::checkIfItsACEOAccount()) ? true : false;
 
-$currentPage = $_SERVER['PATH_INFO'];
+  $currentPage = $_SERVER['PATH_INFO'];
 
 
 
@@ -30,7 +30,7 @@ $currentPage = $_SERVER['PATH_INFO'];
 
   $exitingPermission = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$_SESSION['id']}' AND user_type = '{$_SESSION['user_type']}' AND status = '1'")->result_array();
 
-  @$exitingPermission = json_decode( @$exitingPermission[0]['permissions'],TRUE);
+  @$exitingPermission = json_decode(@$exitingPermission[0]['permissions'], TRUE);
   ?>
   <!-- Sidebar -->
   <div class="sidebar">
@@ -42,38 +42,45 @@ $currentPage = $_SERVER['PATH_INFO'];
 
         <?php
         $active = '';
-       
+
         if (isset($parentMenu)) {
-          foreach ($parentMenu as $pM) { 
+          foreach ($parentMenu as $pM) {
 
 
             // select child menu and check if there is any parent menu located with it
 
-            if(isset($exitingPermission) && !empty($exitingPermission))
-            {
-              $permissionIds = implode("','",$exitingPermission);
+            if (isset($exitingPermission) && !empty($exitingPermission)) {
+              $permissionIds = implode("','", $exitingPermission);
 
-             $checkIfCurrentParentIdHasNoChildPermission =  $this->db->query($sqlTP = "SELECT count(1) as countTP FROM " . Table::adminPanelMenuTable . " WHERE is_child = '1' AND parent_id ='{$pM['id']}' AND id NOT IN ('$permissionIds') AND status = '1'")->result_array();
+              $checkIfCurrentParentIdHasNoChildPermission =  $this->db->query($sqlTP = "SELECT count(1) as countTP FROM " . Table::adminPanelMenuTable . " WHERE is_child = '1' AND parent_id ='{$pM['id']}' AND id NOT IN ('$permissionIds') AND status = '1'")->result_array();
 
 
-             $totalChildOFThisParent =  $this->db->query($sqlTC = "SELECT count(1) as countTC FROM " . Table::adminPanelMenuTable . " WHERE is_child = '1' AND parent_id ='{$pM['id']}' AND status = '1'")->result_array();
+              $totalChildOFThisParent =  $this->db->query($sqlTC = "SELECT count(1) as countTC FROM " . Table::adminPanelMenuTable . " WHERE is_child = '1' AND parent_id ='{$pM['id']}' AND status = '1'")->result_array();
 
-            //  echo $sqlTC;
-             if(!empty($checkIfCurrentParentIdHasNoChildPermission) && !empty($totalChildOFThisParent))
-             {
-              if($totalChildOFThisParent[0]['countTC'] - $checkIfCurrentParentIdHasNoChildPermission[0]['countTP'] == '0')
-              {
-                continue;
+              //  echo $sqlTC;
+              if (!empty($checkIfCurrentParentIdHasNoChildPermission) && !empty($totalChildOFThisParent)) {
+                if ($totalChildOFThisParent[0]['countTC'] - $checkIfCurrentParentIdHasNoChildPermission[0]['countTP'] == '0') {
+                  continue;
+                }
               }
-             
-             }
             }
-           
 
-            ?> 
+            // open parent menu active or incactive
+            $menuOpen = '';
+            $pActive = '';
+            if (isset($_COOKIE['TOP_HEADER']) && $_COOKIE['TOP_HEADER'] == TRUE) {
+              if ($pM['id'] == $_COOKIE['PARENT_ID']) {
+                $menuOpen = @$_COOKIE['TOP_HEADER_MSG'];
+                $pActive = 'active';
+              } else {
+                $menuOpen = '';
+                $pActive = '';
+              }
+            }
+        ?>
 
-            <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+            <li class="nav-item <?= $menuOpen ?>">
+              <a href="#" class="nav-link <?= $pActive ?>">
                 <i class="nav-icon <?= $pM['icon']; ?>"></i>
                 <p>
                   <?= $pM['name']; ?>
@@ -86,30 +93,24 @@ $currentPage = $_SERVER['PATH_INFO'];
 
                   if ($pM['id'] == $cM['parent_id']) {
 
-                    if($currentPage == '/'.$cM['link'])
-                    {
+                    if ($currentPage == '/' . $cM['link']) {
                       $active = 'active';
-              
-                    }else
-                    {
+                      setcookie('TOP_HEADER', TRUE);
+                      setcookie('TOP_HEADER_MSG', 'menu-open');
+                      setcookie('PARENT_ID', $cM['parent_id']);
+                    } else {
                       $active = '';
-                   
                     }
-                    
-                    if($checkPermission)
-                    {
+
+                    if ($checkPermission) {
                       $display = 'block';
-                    }else if (isset($exitingPermission))
-                    {
-                     
-                      for($i=0;$i<count($exitingPermission);$i++)
-                      {
-                        if($exitingPermission[$i] == $cM['id'])
-                        {
+                    } else if (isset($exitingPermission)) {
+
+                      for ($i = 0; $i < count($exitingPermission); $i++) {
+                        if ($exitingPermission[$i] == $cM['id']) {
                           $display = 'block';
-                           break;
-                        }else
-                        {
+                          break;
+                        } else {
                           $display = 'none';
                         }
                       }
@@ -117,7 +118,7 @@ $currentPage = $_SERVER['PATH_INFO'];
 
               ?>
                     <ul class="nav nav-treeview">
-                      <li class="nav-item" style="display:<?=$display?>">
+                      <li class="nav-item" style="display:<?= $display ?>">
                         <a href="<?= base_url($cM['link']) ?>" class="nav-link <?= $active; ?>">
                           <i class="<?= $cM['icon']; ?> nav-icon"></i>
                           <p><?= $cM['name']; ?></p>

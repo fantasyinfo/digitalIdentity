@@ -134,7 +134,7 @@
                           </tr>
                           <tr>
                               <td> <label for="mobile">Mobile Number</label></td>
-                              <td> <input type="number" name="mobile" class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
+                              <td> <input type="number" disabled name="mobile" class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
                           </tr>
                           <tr>
                               <td> <label for="education">Education</label></td>
