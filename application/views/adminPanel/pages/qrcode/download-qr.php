@@ -7,8 +7,11 @@
 
   <!-- Main Sidebar Container -->
   <?php $this->load->view("adminPanel/pages/sidebar.php");
-     $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
-     $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+  
+  $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+  $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+  
+  
   
   ?>
 
@@ -76,40 +79,7 @@
             
           </div> -->
         
-          <div class="col-md-12">
-          <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Showing All QR Code Data</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="listDatatableQR" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <!-- <th>Id</th> -->
-                    <th>QR Code URL</th>
-                    <th>Value</th>
-                    <th>Class</th>
-                    <th>Roll No</th>
-                    <!-- <th>User Id</th>
-                    <th>Mobile</th>
-                    <th>Class - Section</th>
-                    <th>State - City - Pincode</th>
-                    <th>Status</th>
-                    <th>Date of Birth</th>
-                    <th>Action</th> -->
-                  </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-               
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-          </div>
-        </div>
-     
+</div>
       <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
@@ -125,49 +95,19 @@
 <?php $this->load->view("adminPanel/pages/footer.php");?>
 <!-- ./wrapper -->
 <script>
-  var ajaxUrlForStudentList = '<?= base_url() . 'listQRCodeAjax'?>';
-   // datatable student list intilizing
- loadStudentDataTable();
 
-function loadStudentDataTable(sc = '',ss = '')
-{
-   $("#listDatatableQR").DataTable({
-     "responsive": true, "lengthChange": true, "autoWidth": true,
-     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-       dom: 'lBfrtip',
-       buttons: [
-           'copyHtml5',
-           'excelHtml5',
-           'csvHtml5',
-           'pdfHtml5'
-       ],
-       lengthMenu: [10,50,100,500,1000,2000,5000,10000,50000,100000],
-       pageLength: 10,
-       processing: true,
-       serverSide: true,
-       searching: false,
-       paging: true,
-       ajax : {
-         method: 'post',
-         url: ajaxUrlForStudentList,
-         data : {
-           studentClass: sc,
-           studentSection: ss,
-         },
-         error: function ()
-         {
-           console.log('something went wrong.');
-         }
-       }
-   });
-}
+  var schoolUniqueCode = '<?= $_SESSION['schoolUniqueCode']?>';
+
 
  $("#search").click(function(e){
    e.preventDefault();
-   $("#listDatatableQR").DataTable().destroy();
-   loadStudentDataTable(
-     $("#studentClass").val(),
-     $("#studentSection").val(),
-     );
+   let classId = $("#studentClass").val();
+   let sectionId =   $("#studentSection").val();
+
+     if(classId != '' && sectionId != '')
+     {
+      window.location.href = 'https://digitalfied.in/qrcodeDownload/new.php?classId='+classId+'&sectionId='+sectionId+'&schoolUniqueCode='+schoolUniqueCode;
+     }
+
  })
 </script>

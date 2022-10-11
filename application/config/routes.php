@@ -262,7 +262,8 @@ foreach($ajaxRoutesArr as $ajRoute)
 // qr code list
 $route['listQR'] = 'AjaxController/listQR';
 $route['listQRCodeAjax'] = 'AjaxController/listQRCodeAjax';
-
+$route['showDownloadQR'] = 'AjaxController/showDownloadQR';
+$route["downloadQR/(:any)/(:any)/(:any)"] = "AjaxController/downloadQR/$1/$2/$3"; // user_id / 
 
 // api routes
 $baseAPI = 'api/v1/';

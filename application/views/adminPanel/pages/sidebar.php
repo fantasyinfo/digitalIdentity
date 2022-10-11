@@ -66,12 +66,13 @@ $dir = base_url() . HelperClass::uploadImgDir;
             }
 
             // open parent menu active or incactive
-            $menuOpen = '';
-            $pActive = '';
+            $menuOpen = 'menu-open';
+            $pActive = 'active';
             if (isset($_COOKIE['TOP_HEADER']) && $_COOKIE['TOP_HEADER'] == TRUE) {
               if ($pM['id'] == $_COOKIE['PARENT_ID']) {
                 $menuOpen = @$_COOKIE['TOP_HEADER_MSG'];
                 $pActive = 'active';
+                // header("Refresh:0");
               } else {
                 $menuOpen = '';
                 $pActive = '';
@@ -98,6 +99,7 @@ $dir = base_url() . HelperClass::uploadImgDir;
                       setcookie('TOP_HEADER', TRUE);
                       setcookie('TOP_HEADER_MSG', 'menu-open');
                       setcookie('PARENT_ID', $cM['parent_id']);
+                      // header("Refresh:0");
                     } else {
                       $active = '';
                     }

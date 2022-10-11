@@ -22,11 +22,11 @@ class QRModel extends CI_Model
                 {
                     if(!empty($data['studentClass']))
                     {
-                        $condition .= " AND cl.className LIKE '%{$data['studentClass']}%' ";
+                        $condition .= " AND cl.id = '{$data['studentClass']}' ";
                     }
                     if(!empty($data['studentSection']))
                     {
-                        $condition .= " AND se.sectionName LIKE '%{$data['studentSection']}%' ";
+                        $condition .= " AND se.id = '{$data['studentSection']}' ";
                     }
                 }
           

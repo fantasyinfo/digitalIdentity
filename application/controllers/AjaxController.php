@@ -179,6 +179,7 @@ class AjaxController extends CI_Controller {
 
 	public function listQR()
 	{
+		$this->loginCheck();
 		$dataArr = [
 			'pageTitle' => 'QR Code List',
 			'adminPanelUrl' => $this->adminPanelURL,
@@ -186,14 +187,50 @@ class AjaxController extends CI_Controller {
 		$this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
 		$this->load->view('adminPanel/pages/qrcode/list');
 	}
+
 	public function listQRCodeAjax()
 	{
+
 		if(isset($_POST))
 		{
 			return $this->QRModel->listQR($_POST);
 		}
 	}
 
+
+	public function showDownloadQR()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Download QR List',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
+		$this->load->view('adminPanel/pages/qrcode/download-qr');
+	}
+	public function downloadQR($classId,$sectionId)
+	{
+
+		$this->loginCheck();
+		$d = $this->db->query("SELECT qr.qrcodeUrl,qr.uniqueValue as qrName, CONCAT(cl.className, ' - ', se.sectionName) as classNames, st.roll_no
+                    FROM ".Table::qrcodeTable." qr 
+                    JOIN ".Table::studentTable." st ON st.user_id = qr.uniqueValue
+                    JOIN ".Table::classTable." cl ON cl.id = st.class_id
+                    JOIN ".Table::sectionTable." se ON se.id = st.section_id
+                    WHERE qr.status != 0 AND cl.id = '$classId' AND se.id = '$sectionId' ORDER BY qr.id DESC")->result_array();
+
+					HelperClass::prePrintR($d);
+
+
+
+
+		// $dataArr = [
+		// 	'pageTitle' => 'Download QR List',
+		// 	'adminPanelUrl' => $this->adminPanelURL,
+		// ];
+		// $this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
+		// $this->load->view('adminPanel/pages/qrcode/download-qr');
+	}
 
 	public function getLatLng()
 	{
@@ -219,6 +256,23 @@ class AjaxController extends CI_Controller {
 			}
 			echo json_encode($latLngArr);
 			die();
+		}
+	}
+
+
+	public function loginCheck()
+	{
+		if(!$this->CrudModel->checkIsLogin())
+		{
+			header('Location: '.base_url());
+		}
+	}
+
+	public function checkPermission()
+	{
+		if(!$this->CrudModel->checkPermission())
+		{
+			header('Location: '.base_url());
 		}
 	}
 }
