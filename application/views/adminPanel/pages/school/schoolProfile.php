@@ -11,7 +11,7 @@
     <div class="content-wrapper">
       <?php 
           $this->load->model('CrudModel');
-          $dir = base_url().HelperClass::uploadImgDir;
+          $dir = base_url().HelperClass::schoolLogoImagePath;
       $sd = $data['schoolData'][0];
 
 
@@ -40,7 +40,7 @@
         if(!empty($_FILES['image']))
         {
           // upload files and get image path
-          $fileName = $this->CrudModel->uploadImg($_FILES,'SCHOOL');
+          $fileName = $this->CrudModel->uploadImg($_FILES,'SCHOOL',HelperClass::schoolLogoImagePath);
         }
 
 
@@ -125,7 +125,7 @@
                 <?php 
                 if(isset($sd['logo']))
                 {
-                  $bExt = $dir = base_url().HelperClass::uploadImgDir;
+                  $bExt = $dir = base_url().HelperClass::schoolLogoImagePath;
                   $imgDD = explode($bExt,$sd['logo']);
                   //print_r($imgDD);
                 ?>

@@ -684,11 +684,15 @@ class APIController extends CI_Controller
 		$homeWorkDueDate = $apiData['homeWorkDueDate'];
 		$document_image_name = '';
 		
-		$documentType=@$apiData['image'];
-	    $document = base64_decode(@$apiData['image']);
-        $document_image_name='homework_img'.time().'.png';
-    	$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/".$document_image_name;
-        $success = file_put_contents($document_file, $document);
+		if(isset($apiData['image']) && !empty(@$apiData['image']))
+		{
+			$documentType=@$apiData['image'];
+			$document = base64_decode(@$apiData['image']);
+			$document_image_name='homework_img'.time().'.png';
+			$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/homework/".$document_image_name;
+			$success = file_put_contents($document_file, $document);
+		}
+		
 
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
@@ -1025,12 +1029,16 @@ public function updateHomeWork()
 		$visitor_mobile_no = $apiData['visitor_mobile_no'];
 		$document_image_name = '';
 		
-		$documentType=@$apiData['image'];
-	    $document = base64_decode(@$apiData['image']);
-        $document_image_name='visitor_img_'.time().'.png';
-    	$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/".$document_image_name;
-        $success = file_put_contents($document_file, $document);
-
+		if(isset($apiData['image']) && !empty(@$apiData['image']))
+		{
+			$documentType=@$apiData['image'];
+			$document = base64_decode(@$apiData['image']);
+			$document_image_name='visitor_img_'.time().'.png';
+			$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/visitorentry".$document_image_name;
+			$success = file_put_contents($document_file, $document);
+	
+		}
+		
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];

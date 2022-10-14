@@ -11,7 +11,7 @@
     $this->load->library('session');
     $this->load->model('CrudModel');
 
-    $dir = base_url().HelperClass::uploadImgDir;
+    $dir = base_url().HelperClass::schoolBannerImagePath;
 
   // fetching city data
     $bannerData = $this->db->query("SELECT * FROM " . Table::bannerTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
@@ -40,7 +40,7 @@
         if(!empty(@$delImg))
         {
           $imgN = @$delImg[0]['image'];
-          @unlink(HelperClass::uploadImgDir . $imgN);
+          @unlink(HelperClass::schoolBannerImagePath . $imgN);
         }
    
         $deleteMonthData = $this->db->query("DELETE FROM " . Table::bannerTable . " WHERE id='$deleteId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
@@ -97,7 +97,7 @@
 
       if(isset($_FILES['image']))
       {
-        $bannerImage = $this->CrudModel->uploadImg($_FILES,'Banner');
+        $bannerImage = $this->CrudModel->uploadImg($_FILES,'Banner',HelperClass::schoolBannerImagePath);
       }
 
       $insertBanner = $this->db->query("INSERT INTO " . Table::bannerTable . " (schoolUniqueCode,image) VALUES ('$schoolUniqueCode','$bannerImage')");
@@ -126,7 +126,7 @@
       $set = '';
       if(isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0)
       {
-        $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
+        $giftImage = $this->CrudModel->uploadImg($_FILES,'Banner',HelperClass::schoolBannerImagePath);
         $set = " image = '$giftImage' ";
       }else
       {

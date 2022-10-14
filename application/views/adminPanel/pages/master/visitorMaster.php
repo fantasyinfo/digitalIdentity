@@ -11,7 +11,7 @@
     $this->load->library('session');
     $this->load->model('CrudModel');
 
-    $dir = base_url().HelperClass::uploadImgDir;
+    $dir = base_url().HelperClass::visitorEntryImagePath;
 
   // fetching city data
     $visitorMasterData = $this->db->query("SELECT * FROM " . Table::visitorTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();

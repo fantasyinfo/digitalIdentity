@@ -17,10 +17,12 @@ $this->load->library('session');
 $this->load->model('CrudModel');
 
 $dir = base_url().HelperClass::uploadImgDir;
+$schoolLogo = base_url().HelperClass::schoolLogoImagePath;
+$studentImage = base_url().HelperClass::studentImagePath;
 
 $sql = "SELECT ffst.invoice_id, ffst.offer_amt,ffst.deposit_amt,ffst.fee_deposit_date,IF(ffst.payment_mode = '2','Offline','Online') as payment_mode,ffst.depositer_name,ffst.depositer_mobile,ffst.depositer_address,
 s.school_name,s.mobile as schoolMobile,s.email as schoolEmail,s.address as schoolAddress,s.pincode as schoolPincode,
-CONCAT('$dir',s.image) as logo, st.name as studentName,st.email as studentEmail, st.mobile as studentMobile, st.address as studentAddress, st.pincode as studentPincode, state.stateName as studentState,city.cityName studentCity,CONCAT('$dir',st.image) as studentImage,ct.className as studentClass, sect.sectionName as studentSection
+CONCAT('$schoolLogo',s.image) as logo, st.name as studentName,st.email as studentEmail, st.mobile as studentMobile, st.address as studentAddress, st.pincode as studentPincode, state.stateName as studentState,city.cityName studentCity,CONCAT('$studentImage',st.image) as studentImage,ct.className as studentClass, sect.sectionName as studentSection
 FROM ".Table::schoolMasterTable." s 
 LEFT JOIN ".Table::feesForStudentTable." ffst ON ffst.schoolUniqueCode = s.unique_id
 LEFT JOIN ".Table::studentTable." st ON st.id = ffst.student_id

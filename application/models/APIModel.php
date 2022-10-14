@@ -13,12 +13,13 @@ class APIModel extends CI_Model
   // login
   public function login($schoolUniqueCode, $id, $password, $type, $fcmToken)
   {
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::schoolLogoImagePath;
     $schoolData = [];
     $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
 
     
     if ($type == 'Teacher') {
+      $dir = base_url() . HelperClass::teacherImagePath;
       $sql = "
         SELECT t.id as teacherId,t.class_id,t.section_id, t.name, t.user_id,if(t.gender = 1, 'Male', 'Female') as gender, t.mother_name, t.father_name,t.mobile,t.email,t.address,t.dob,t.doj,t.pincode,CONCAT('$dir',t.image) as image,c.className,ss.sectionName,st.stateName,ct.cityName,tst.subject_ids
         FROM " . Table::teacherTable . " t
@@ -88,6 +89,7 @@ class APIModel extends CI_Model
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
       }
     } else if ($type == 'Staff') {
+      $dir = base_url() . HelperClass::staffImagePath;
       $mobile = $id;
 
       $sql = "SELECT t.* FROM " . Table::userTable . " t 
@@ -130,6 +132,7 @@ class APIModel extends CI_Model
       //
     }else if($type == 'Parent' || $type == 'Student')
     {
+      $dir = base_url() . HelperClass::studentImagePath;
       $mobile = $id;
       $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName , ss.id as sectionId,c.id as classId FROM " . Table::studentTable . " t 
       LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
@@ -172,6 +175,7 @@ class APIModel extends CI_Model
       }
     }else if($type == 'Driver')
     {
+      $dir = base_url() . HelperClass::driverImagePath;
       $mobile = $id;
       $sql = "SELECT t.*, CONCAT('$dir',t.image) as image FROM " . Table::driverTable . " t 
       WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.password = '$password' AND t.status = '1'";
@@ -256,7 +260,7 @@ class APIModel extends CI_Model
 // showAllStudentsForSwitchProfile
   public function showAllStudentsForSwitchProfile($schoolUniqueCode,$stuIds)
   {
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::studentImagePath;
    $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
     LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
     LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
@@ -287,7 +291,7 @@ class APIModel extends CI_Model
   // student dashboard
   public function studentDashboard($schoolUniqueCode,$studentId)
   {
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::studentImagePath;
 
     $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName, ss.id as sectionId,c.id as classId FROM " . Table::studentTable . " t 
     LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
@@ -330,7 +334,7 @@ class APIModel extends CI_Model
   
 
     if ($type == 'Teacher') {
-      $dir = base_url() . HelperClass::uploadImgDir;
+      $dir = base_url() . HelperClass::studentImagePath;
       $sql = "SELECT stu.name,CONCAT('$dir',stu.image) as image,stu.id, stu.roll_no, c.id as classId, c.className,ss.sectionName , ss.id as sectionId
       FROM " . Table::studentTable . " stu 
       LEFT JOIN " . Table::classTable . " c ON c.id =  stu.class_id
@@ -460,7 +464,7 @@ class APIModel extends CI_Model
   {
 
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() .HelperClass::studentImagePath;
     $d = $this->db->query("SELECT at.id as attendenceId, at.attendenceStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::attendenceTable . " at 
       LEFT JOIN " . Table::studentTable . " stu ON at.stu_id = stu.id
       LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
@@ -535,7 +539,7 @@ class APIModel extends CI_Model
   public function showSubmitDepartureData($className, $sectionName, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::studentImagePath;
     $d = $this->db->query("SELECT dt.id as departureId, dt.departureStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::departureTable . " dt
        LEFT JOIN " . Table::studentTable . " stu ON dt.stu_id = stu.id
        LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
@@ -553,7 +557,7 @@ class APIModel extends CI_Model
   public function showStudentDetails($classId, $sectionId, $qrCode, $studentId, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::studentImagePath;
     $condition = " AND s.schoolUniqueCode = '$schoolUniqueCode' ";
     if (!empty($classId) && !empty($sectionId) && !empty($studentId)) {
       $condition .= " AND s.id = '{$studentId}' AND ss.id = '{$sectionId}' AND c.id = '{$classId}' ";
@@ -725,7 +729,7 @@ class APIModel extends CI_Model
   public function showAllExam($classId, $sectionId, $schoolUniqueCode, $subjectId = '')
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    // $dir = base_url() . HelperClass::uploadImgDir;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
     if (!empty($subjectId)) {
       $condition .= " AND e.subject_id = $subjectId ";
@@ -813,10 +817,10 @@ class APIModel extends CI_Model
   public function showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$date)
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::homeworkImagePath;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
-    $d = $this->db->query($sql = "SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
+    $d = $this->db->query($sql = "SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName,CONCAT('$dir',s.image) as image FROM " . Table::homeWorkTable . " e
         INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
         INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
         INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
@@ -873,7 +877,7 @@ class APIModel extends CI_Model
   public function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
     $identityType = $this->CrudModel->extractQrCodeAndReturnUserType($qrCode);
@@ -893,12 +897,15 @@ class APIModel extends CI_Model
 
       if ($identityType == HelperClass::userTypeR[1]) {
         $tableB = Table::studentTable;
+        $dir = base_url() . HelperClass::studentImagePath;
       }else if ($identityType == HelperClass::userTypeR[2])
       {
         $tableB = Table::teacherTable;
+        $dir = base_url() . HelperClass::teacherImagePath;
       }else if ($identityType == HelperClass::userTypeR[7])
       {
         $tableB = Table::driverTable;
+        $dir = base_url() . HelperClass::driverImagePath;
       }
 
 
@@ -984,7 +991,7 @@ class APIModel extends CI_Model
   public function showSingleHomeWork($classId, $sectionId,  $homeWorkId, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::homeworkImagePath;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
     $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
@@ -1010,7 +1017,7 @@ class APIModel extends CI_Model
   public function showSingleExam($classId, $sectionId,  $examId, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() . HelperClass::uploadImgDir;
+    // $dir = base_url() . HelperClass::uploadImgDir;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
     $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName FROM " . Table::examTable . " e
@@ -1170,7 +1177,7 @@ class APIModel extends CI_Model
   public function checkAllGifts($user_type, $schoolUniqueCode)
   {
     if ($user_type == 'Teacher') {
-      $dir = base_url() . HelperClass::uploadImgDir;
+      $dir = base_url() . HelperClass::giftsImagePath;
       $userTypeId = HelperClass::userType[$user_type];
       $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId'")->result_array();
       if (!empty($d)) {
@@ -1181,7 +1188,7 @@ class APIModel extends CI_Model
     }else if($user_type == 'Student' || $user_type == 'Parent')
     {
       $user_type = 'Student';
-      $dir = base_url() . HelperClass::uploadImgDir;
+      $dir = base_url() . HelperClass::giftsImagePath;
       $userTypeId = HelperClass::userType[$user_type];
       $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId'")->result_array();
       if (!empty($d)) {
@@ -1200,7 +1207,7 @@ class APIModel extends CI_Model
       $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
       if (!empty($totalDigiCoinInWallet)) {
         
-        $dir = base_url() . HelperClass::uploadImgDir;
+        $dir = base_url() . HelperClass::giftsImagePath;
         $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'")->result_array();
       }
 
@@ -1215,7 +1222,7 @@ class APIModel extends CI_Model
       $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
       if (!empty($totalDigiCoinInWallet)) {
         
-        $dir = base_url() . HelperClass::uploadImgDir;
+        $dir = base_url() . HelperClass::giftsImagePath;
         $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'")->result_array();
       }
 
@@ -1337,7 +1344,7 @@ class APIModel extends CI_Model
 // gift redeem status
   public function giftRedeemStatus($loginUserId, $loginuserType, $schoolUniqueCode)
   {
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::giftsImagePath;
       if ($loginuserType == 'Teacher') {
         $userType = HelperClass::userType[$loginuserType];
 
@@ -1377,7 +1384,7 @@ class APIModel extends CI_Model
   // wallet History
   public function walletHistory($loginUserId, $loginuserType, $schoolUniqueCode)
   {
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::giftsImagePath;
     if ($loginuserType == 'Teacher') {
       $userType = HelperClass::userType[$loginuserType];
 
@@ -1486,8 +1493,9 @@ class APIModel extends CI_Model
   // leaderBoard
   public function leaderBoard($loginuserType, $schoolUniqueCode,$loginUserId)
   {
-    $dir = base_url().HelperClass::uploadImgDir;
+    
     if ($loginuserType == 'Teacher') {
+      $dir = base_url().HelperClass::teacherImagePath;
       $tableName = Table::teacherTable;
       // $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
@@ -1525,6 +1533,7 @@ class APIModel extends CI_Model
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = @$d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['id'] = @$userDetails[0]['id'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
@@ -1543,6 +1552,7 @@ class APIModel extends CI_Model
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = @$d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['id'] = @$userDetails[0]['id'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
@@ -1561,6 +1571,7 @@ class APIModel extends CI_Model
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = @$d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['id'] = @$userDetails[0]['id'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
@@ -1582,6 +1593,7 @@ class APIModel extends CI_Model
           $subArr['position'] = $a++;
           $subArr['userType'] = @$d[$i]['user_type'];
           $subArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+          $subArr['id'] = @$userDetails[0]['id'];
           $subArr['name'] = @$userDetails[0]['name'];
           $subArr['uniqueId'] = @$userDetails[0]['user_id'];
           $subArr['className'] = @$userDetails[0]['className'];
@@ -1596,6 +1608,7 @@ class APIModel extends CI_Model
       }
     }else if($loginuserType == 'Student' || $loginuserType == 'Parent')
     {
+      $dir = base_url().HelperClass::studentImagePath;
       $tableName = Table::studentTable;
       $loginuserType = 'Student';
       // $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
@@ -1612,7 +1625,7 @@ class APIModel extends CI_Model
         $totalCount = count($d);
         $a = 1;
         for ($i = 0; $i < $totalCount; $i++) {
-         $userDetails =  $this->db->query("SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
+         $userDetails =  $this->db->query("SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
 
         //  if(empty($userDetails)) 
         //  {
@@ -1623,9 +1636,15 @@ class APIModel extends CI_Model
           if($i == 0 )
           {
             $topSubArr = [];
+            $topSubArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $topSubArr['myPosition'] = TRUE;
+            }
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = @$d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['id'] = @$userDetails[0]['id'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
@@ -1636,9 +1655,15 @@ class APIModel extends CI_Model
           if($i == 1)
           {
             $topSubArr = [];
+            $topSubArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $topSubArr['myPosition'] = TRUE;
+            }
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = @$d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['id'] = @$userDetails[0]['id'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
@@ -1649,9 +1674,15 @@ class APIModel extends CI_Model
           if($i == 2)
           {
             $topSubArr = [];
+            $topSubArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $topSubArr['myPosition'] = TRUE;
+            }
             $topSubArr['position'] = $a++;
             $topSubArr['userType'] = @$d[$i]['user_type'];
             $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+            $topSubArr['id'] = @$userDetails[0]['id'];
             $topSubArr['name'] = @$userDetails[0]['name'];
             $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
             $topSubArr['className'] = @$userDetails[0]['className'];
@@ -1664,9 +1695,15 @@ class APIModel extends CI_Model
 
 
           $subArr = [];
+          $subArr['myPosition'] = FALSE;
+            if($loginUserId == @$userDetails[0]['id'])
+            {
+              $subArr['myPosition'] = TRUE;
+            }
           $subArr['position'] = $a++;
           $subArr['userType'] = @$d[$i]['user_type'];
           $subArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+          $subArr['id'] = @$userDetails[0]['id'];
           $subArr['name'] = @$userDetails[0]['name'];
           $subArr['uniqueId'] = @$userDetails[0]['user_id'];
           $subArr['className'] = @$userDetails[0]['className'];
@@ -1685,7 +1722,7 @@ class APIModel extends CI_Model
   public function bannerForApp($schoolUniqueCode)
   {
 
-    $dir = base_url() . HelperClass::uploadImgDir;
+    $dir = base_url() . HelperClass::schoolBannerImagePath;
 
     return $this->db->query("SELECT *, CONCAT('$dir',image) as image FROM " . Table::bannerTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
   }

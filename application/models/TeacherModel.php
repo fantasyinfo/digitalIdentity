@@ -53,7 +53,7 @@ class TeacherModel extends CI_Model
       if(!empty($files['image']))
       {
         // upload files and get image path
-        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id']);
+        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id'],HelperClass::teacherImagePath);
         $insertArr['image'] = $fileName;
       }
     
@@ -127,8 +127,8 @@ class TeacherModel extends CI_Model
       if(!empty($files['image']['tmp_name']))
       {
         // upload files and get image path
-        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id']);
-        $insertArr['image'] = $fileName;
+        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id'],HelperClass::teacherImagePath);
+        $insertArr['*'] = $fileName;
       }
     
         if($this->CrudModel->update(Table::teacherTable,$insertArr,$tecId))

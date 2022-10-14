@@ -11,7 +11,7 @@
     $this->load->library('session');
     $this->load->model('CrudModel');
 
-    $dir = base_url().HelperClass::uploadImgDir;
+    $dir = base_url().HelperClass::giftsImagePath;
 
   // fetching city data
     $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE status != '4'")->result_array();
@@ -41,7 +41,7 @@
           if(!empty(@$delImg))
           {
             $imgN = @$delImg[0]['gift_image'];
-            @unlink(HelperClass::uploadImgDir . $imgN);
+            @unlink(HelperClass::giftsImagePath . $imgN);
           }
     
           $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId'");
@@ -99,7 +99,7 @@
   
         if(isset($_FILES['image']))
         {
-          $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
+          $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT',HelperClass::giftsImagePath);
         }
         
   
@@ -145,7 +145,7 @@
         $set = '';
         if(isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0)
         {
-          $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT');
+          $giftImage = $this->CrudModel->uploadImg($_FILES,'GIFT',HelperClass::giftsImagePath);
           $set = " gift_image = '$giftImage', ";
         }else
         {

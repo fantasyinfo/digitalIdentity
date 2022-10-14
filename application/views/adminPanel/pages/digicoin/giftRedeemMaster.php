@@ -11,7 +11,7 @@
     $this->load->library('session');
     $this->load->model('CrudModel');
 
-    $dir = base_url().HelperClass::uploadImgDir;
+    $dir = base_url().HelperClass::giftsImagePath;
 
     if(HelperClass::checkIfItsACEOAccount()) {
       $schoolCodeCheck = '';

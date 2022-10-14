@@ -17,6 +17,24 @@ class HelperClass
     const schoolLogoImg = 'https://media.istockphoto.com/vectors/education-book-logo-vector-design-vector-id1221128440?k=20&m=1221128440&s=612x612&w=0&h=Fuv907LF6eO9AGc7gRgg2a0MljpzYFoUsazjstEAOWg=';
     const fullPathQR = HelperClass::qrcodeUrl . "?stuid=" . HelperClass::schoolPrefix;
     const fullPathQRTec = HelperClass::qrcodeUrl . "?tecid=" . HelperClass::schoolPrefix;
+
+    const driverImagePath = HelperClass::uploadImgDir.'driver/';
+    const giftBannerImagePath = HelperClass::uploadImgDir.'giftbanner/';
+    const giftsImagePath = HelperClass::uploadImgDir.'gifts/';
+    const homeworkImagePath = HelperClass::uploadImgDir.'homework/';
+    const profileImagePath = HelperClass::uploadImgDir.'profile/';
+    const schoolBannerImagePath = HelperClass::uploadImgDir.'schoolbanner/';
+    const schoolLogoImagePath = HelperClass::uploadImgDir.'schoollogo/';
+    const staffImagePath = HelperClass::uploadImgDir.'staff/';
+    const studentImagePath = HelperClass::uploadImgDir.'student/';
+    const teacherImagePath = HelperClass::uploadImgDir.'teacher/';
+    const visitorEntryImagePath = HelperClass::uploadImgDir.'visitorentry/';
+
+
+
+
+
+
     const userType = [
         'Student' => '1',
         'Teacher' => '2',

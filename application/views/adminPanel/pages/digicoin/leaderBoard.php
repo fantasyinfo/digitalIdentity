@@ -11,7 +11,7 @@
     $this->load->library('session');
     $this->load->model('CrudModel');
 
-    $dir = base_url().HelperClass::uploadImgDir;
+    $dir = base_url().HelperClass::studentImagePath;
 
   // fetching city data
 
@@ -24,9 +24,11 @@
     if($_GET['user_type'] == 'Student')
     {
       $userType = 'Student';
+      $dir = base_url().HelperClass::studentImagePath;
     }else if ($_GET['user_type'] == 'Teacher')
     {
       $userType= 'Teacher';
+      $dir = base_url().HelperClass::teacherImagePath;
     }
   }
 

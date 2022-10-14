@@ -3,7 +3,7 @@
 
 
 <?php
-$dir = base_url() . HelperClass::uploadImgDir;
+$dir = base_url() . HelperClass::schoolLogoImagePath;
 @$schoolD = $this->db->query("SELECT * FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1 ")->result_array(); ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->

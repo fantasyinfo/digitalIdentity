@@ -112,7 +112,7 @@ class CrudModel extends CI_Model
 
 
 
-    public function uploadImg(array $file,$id = '')
+    public function uploadImg(array $file,$id = '',$uploadImagePath = '')
     {
        
         $errors= array();
@@ -138,9 +138,17 @@ class CrudModel extends CI_Model
            
            //move_uploaded_file($file_tmp,HelperClass::uploadImgDir.$file_name);
         //    return $file_name;
+
+        if(empty($uploadImagePath) && $uploadImagePath == "")
+        {
+            $uploadDir = HelperClass::uploadImgDir;
+        }else
+        {
+            $uploadDir = $uploadImagePath;
+        }
            
-           $destUrl =  $this->compressImg($file_tmp,HelperClass::uploadImgDir.$file_name,80);
-           $exp = explode(HelperClass::uploadImgDir,$destUrl);
+           $destUrl =  $this->compressImg($file_tmp,$uploadDir.$file_name,80);
+           $exp = explode($uploadDir,$destUrl);
            return $exp[1]; // return upload url
         }else{
           return false;
@@ -167,7 +175,7 @@ class CrudModel extends CI_Model
     public function showAllStudents($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::studentImagePath;
         if(!empty($data))
         {
             // print_r($data);
@@ -336,7 +344,7 @@ class CrudModel extends CI_Model
     public function showAllTeachers($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::teacherImagePath;
         if(!empty($data))
         {
             $condition = "
@@ -503,7 +511,7 @@ class CrudModel extends CI_Model
     public function showAllDrivers($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::driverImagePath;
         if(!empty($data))
         {
             $condition = "
@@ -721,7 +729,7 @@ class CrudModel extends CI_Model
     public function allExamList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        // $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
              $condition = "
@@ -867,7 +875,7 @@ class CrudModel extends CI_Model
     public function allAttendanceList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::studentImagePath;
         if(!empty($data))
         {
              $condition = "
@@ -1000,7 +1008,7 @@ class CrudModel extends CI_Model
     public function allTeachersAttendanceList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        // $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
              $condition = "
@@ -1097,7 +1105,7 @@ class CrudModel extends CI_Model
     public function allComplaintList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        // $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
              $condition = " AND e.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  ";
@@ -1189,7 +1197,7 @@ class CrudModel extends CI_Model
     public function dateSheetList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        // $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
              $condition = " AND se.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  
@@ -1292,7 +1300,7 @@ class CrudModel extends CI_Model
     public function allResultList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        // $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
              $condition = "
@@ -1458,7 +1466,7 @@ class CrudModel extends CI_Model
     public function teacherReviewsList($tableName,$data = '')
     {
         $this->tableName = $tableName;
-        $dir = base_url().HelperClass::uploadImgDir;
+        // $dir = base_url().HelperClass::uploadImgDir;
         if(!empty($data))
         {
              $condition = "
@@ -1603,28 +1611,28 @@ class CrudModel extends CI_Model
 
     public function singleStudent($tableName,$id)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::studentImagePath;
         $this->tableName = $tableName;
        return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
     }
 
     public function singleTeacher($tableName,$id)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::teacherImagePath;
         $this->tableName = $tableName;
        return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
     }
 
     public function singleDriver($tableName,$id)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::driverImagePath;
         $this->tableName = $tableName;
        return $d = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . $this->tableName ." WHERE id=$id AND status != 0 LIMIT 1")->result_array();
     }
 
     public function showStudentProfile($tableName,$userId)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::studentImagePath;
         $this->tableName = $tableName;
         return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
         LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
@@ -1636,7 +1644,7 @@ class CrudModel extends CI_Model
 
     public function showTeacherProfile($tableName,$userId)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::teacherImagePath;
         $this->tableName = $tableName;
         return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
         LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
@@ -1648,7 +1656,7 @@ class CrudModel extends CI_Model
 
     public function viewSingleStudentAllData($tableName,$id)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::studentImagePath;
         $this->tableName = $tableName;
         return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
         LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
@@ -1660,7 +1668,7 @@ class CrudModel extends CI_Model
 
     public function viewSingleTeacherAllData($tableName,$id)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::teacherImagePath;
         $this->tableName = $tableName;
         return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
         LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
@@ -1672,7 +1680,7 @@ class CrudModel extends CI_Model
 
     public function viewSingleDriverAllData($tableName,$id)
     {
-        $dir = base_url().HelperClass::uploadImgDir;
+        $dir = base_url().HelperClass::driverImagePath;
         $this->tableName = $tableName;
         return $d = $this->db->query("SELECT s.*, CONCAT('$dir',s.image) as image,if(s.status = '1', 'Active','InActive')as status,st.stateName,ct.cityName FROM " .$this->tableName." s
         LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
@@ -1733,7 +1741,7 @@ class CrudModel extends CI_Model
 
 
 
-    public function deleteStudent($tableName = "", $student_id = "")
+    public function deleteStudent($tableName = "", $student_id = "", $imageDir = "")
     {
         if (!empty($tableName)) {
             $this->tableName    = $tableName;
@@ -1744,7 +1752,14 @@ class CrudModel extends CI_Model
             if(!empty(@$delImg))
             {
                 $imgN = @$delImg[0]['image'];
-                @unlink(HelperClass::uploadImgDir . $imgN);
+                if(!empty($imageDir))
+                {
+                    $imgNewDir = $imageDir;
+                }else
+                {
+                    $imgNewDir = HelperClass::uploadImgDir;
+                }
+                @unlink($imgNewDir . $imgN);
             }
 
             if($this->db->query("UPDATE " . $this->tableName . " SET status = '4' WHERE id = " . $this->student_id . " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'"))

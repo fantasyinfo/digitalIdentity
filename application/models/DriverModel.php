@@ -45,7 +45,7 @@ class DriverModel extends CI_Model
       if(!empty($files['image']))
       {
         // upload files and get image path
-        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id']);
+        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id'], HelperClass::driverImagePath);
         $insertArr['image'] = $fileName;
       }
     
@@ -113,7 +113,7 @@ class DriverModel extends CI_Model
       if(!empty($files['image']['tmp_name']))
       {
         // upload files and get image path
-        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id']);
+        $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id'],HelperClass::driverImagePath);
         $insertArr['image'] = $fileName;
       }
     
