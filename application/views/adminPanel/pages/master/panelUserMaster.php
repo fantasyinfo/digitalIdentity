@@ -110,6 +110,9 @@
           $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND is_head = '1' AND status = '1'")->result_array();
         } else if ($user_type == 'Principal') {
           $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE  user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND is_head = '1' AND status = '1'")->result_array();
+        }else
+        {
+          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = 'Admin' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND is_head = '1' AND status = '1'")->result_array();
         }
 
         $p = $this->db->query("INSERT INTO " . Table::panelMenuPermissionTable . " (schoolUniqueCode,user_id, user_type,permissions) VALUES ('{$_SESSION['schoolUniqueCode']}','$insertId','$user_type','{$permissions[0]['permissions']}')");

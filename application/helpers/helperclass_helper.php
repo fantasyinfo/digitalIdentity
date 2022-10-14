@@ -48,6 +48,11 @@ class HelperClass
         'Admin' => '1',
         'Staff' => '2',
         'Principal' => '3',
+        'Vice Principal' => '4',
+        'Accountant' =>'5',
+        'Manager' =>'6',
+        'ChairMan' => '7',
+        'Director' => '8'
     ];
 
 

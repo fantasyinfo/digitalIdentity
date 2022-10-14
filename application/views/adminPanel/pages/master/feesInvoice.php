@@ -33,6 +33,8 @@ LEFT JOIN ".Table::cityTable." city ON city.id = st.city_id
 WHERE s.unique_id = '{$_SESSION['schoolUniqueCode']}' AND s.status = '2' AND ffst.id = '$feesId'
 LIMIT 1";
 
+
+
 $schoolData = $this->db->query($sql)->result_array()[0];
 
 ?>
@@ -170,20 +172,21 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th style="width:50%">Subtotal:</th>
+                                    <th style="width:50%">Total Deposit Amt: </th>
                                     <td>₹ <?= number_format($schoolData['deposit_amt'],2);?>/-</td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <th>Tax </th>
                                    <td>₹ 00</td> 
                                 </tr>
                                 <tr>
                                     <th>GST</th>
                                    <td>₹ 00</td>
-                                </tr>
+                                </tr> -->
                                 <tr>
-                                    <th>Total:</th>
-                                    <td>₹ <?= number_format($schoolData['deposit_amt'],2);?>/-</td>
+                                    <th>Total Deposit & Offer:</th>
+                                    <?php $totalAmt =  intval($schoolData['deposit_amt']) +  intval($schoolData['offer_amt']);  ?>
+                                    <td>₹ <?= number_format($totalAmt,2) ;?>/-</td>
                                 </tr>
                               
                                    

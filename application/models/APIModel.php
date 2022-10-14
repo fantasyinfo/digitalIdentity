@@ -820,7 +820,7 @@ class APIModel extends CI_Model
     $dir = base_url() . HelperClass::homeworkImagePath;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
-    $d = $this->db->query($sql = "SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName,CONCAT('$dir',s.image) as image FROM " . Table::homeWorkTable . " e
+    $d = $this->db->query($sql = "SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName,CONCAT('$dir',e.image) as image FROM " . Table::homeWorkTable . " e
         INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
         INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
         INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
