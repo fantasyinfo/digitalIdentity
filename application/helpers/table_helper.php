@@ -43,5 +43,6 @@ class Table{
     const holidayCalendarTable = 'holiday_calendar';
     const semExamNameTable = 'sem_exam';
     const secExamTable = 'sec_exam_table';
+    const semExamResults = 'sem_exam_results';
     
 }

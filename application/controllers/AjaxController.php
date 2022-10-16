@@ -175,6 +175,26 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+	public function showAllSemExamsWithStudents()
+	{
+		if(isset($_POST))
+		{
+			$examDetails = $this->db->query("SELECT setT.*, sub.subjectName FROM ".Table::secExamTable." setT 
+			JOIN ".Table::semExamNameTable." se ON se.id = setT.sem_exam_id
+			JOIN ".Table::subjectTable." sub ON sub.id = setT.subject_id
+			WHERE setT.class_id = '{$_POST['classId']}'
+			AND setT.section_id = '{$_POST['sectionId']}' 
+			AND se.id = '{$_POST['semExamId']}'")->result_array();
+
+			$studentsViaClass = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$_POST['classId']}' AND section_id = '{$_POST['sectionId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+
+			$sendArr = [
+				'examDetails' => $examDetails,
+				'students' => $studentsViaClass
+			];
+			echo json_encode($sendArr);
+		}
+	}
 
 
 	public function listQR()

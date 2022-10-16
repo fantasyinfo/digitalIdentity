@@ -52,7 +52,8 @@ class HelperClass
         'Accountant' =>'5',
         'Manager' =>'6',
         'ChairMan' => '7',
-        'Director' => '8'
+        'Director' => '8',
+        'Coordinator' => '9'
     ];
 
 

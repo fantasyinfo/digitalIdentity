@@ -34,6 +34,7 @@
         $session_ended_to = $_POST['session_ended_to'];
         $session_started_from_year = $_POST['session_started_from_year'];
         $session_ended_to_year = $_POST['session_ended_to_year'];
+        $fee_invoice_start = $_POST['fee_invoice_start'];
 
 
         $fileName = "";
@@ -54,7 +55,8 @@
         session_started_from = '$session_started_from', 
         session_ended_to = '$session_ended_to',
         session_started_from_year = '$session_started_from_year', 
-        session_ended_to_year = '$session_ended_to_year'
+        session_ended_to_year = '$session_ended_to_year',
+        fee_invoice_start = '$fee_invoice_start'
         WHERE id = '$schoolId' AND unique_id = '{$_SESSION['schoolUniqueCode']}'");
         if($updateSchool)
         {
@@ -110,6 +112,31 @@
       <!-- Main content -->
       <div class="content">
         <div class="container-fluid">
+        <?php 
+              if(!empty($this->session->userdata('msg')))
+              {  
+                if($this->session->userdata('class') == 'success')
+                 {
+                   HelperClass::swalSuccess($this->session->userdata('msg'));
+                 }else if($this->session->userdata('class') == 'danger')
+                 {
+                   HelperClass::swalError($this->session->userdata('msg'));
+                 }
+                
+                
+                ?>
+
+              <div class="alert alert-<?=$this->session->userdata('class')?> alert-dismissible fade show" role="alert">
+                <strong>New Message!</strong> <?=$this->session->userdata('msg')?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <?php
+              $this->session->unset_userdata('class') ;
+              $this->session->unset_userdata('msg') ;
+              }
+              ?>
           <div class="row">
             <!-- left column -->
             <div class="col-md-12 mx-auto">
@@ -267,6 +294,10 @@
                               <td> <label for="pincode">Pincode</label></td>
                               <td> <input type="text" name="pincode" class="form-control" id="pincode" value="<?=$sd['pincode'];?>"></td>
                           </tr>
+                          <tr>
+                              <td> <label for="fee_invoice_start">Fees Invoice Start</label></td>
+                              <td> <input type="text" name="fee_invoice_start" class="form-control" id="fee_invoice_start" value="<?=$sd['fee_invoice_start'];?>" placeholder="1001"></td>
+                          </tr>
                            <tr>
                               <td>#</td>
                               <td><button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Update</button></td>
@@ -281,6 +312,7 @@
                   
                 </form>
               </div>
+                            
               <!-- /.card -->
             </div>
             <!--/.col (left) -->

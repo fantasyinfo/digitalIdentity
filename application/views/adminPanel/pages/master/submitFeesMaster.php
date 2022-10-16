@@ -17,10 +17,37 @@
 
    function getInvoiceNumber($db)
     {
+      $invoiceNumber = '';
+      $checkFromSchoolTable = $db->query("SELECT fee_invoice_start FROM " .Table::schoolMasterTable ." WHERE fee_invoice_start IS NOT NULL AND unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
 
-        $dd = $db->query("SELECT invoice_id FROM " .Table::feesForStudentTable ." WHERE invoice_id IS NOT NULL ORDER BY id DESC LIMIT 1")->result_array();
-        $id = explode(HelperClass::invoicePrefix,$dd[0]['invoice_id']);
+      if(!empty($checkFromSchoolTable))
+      {
+        $invoiceNumber = HelperClass::invoicePrefix . $checkFromSchoolTable[0]['fee_invoice_start'];
+
+        $dd = $db->query("SELECT invoice_id FROM " .Table::feesForStudentTable ." WHERE invoice_id IS NOT NULL AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
+
+        if(!empty($dd))
+        {
+          $id = explode(HelperClass::invoicePrefix,$dd[0]['invoice_id']);
+          $invoiceNumber = HelperClass::invoicePrefix . ($id[1] + 1);
+        }
+         
+         return $invoiceNumber;
+      }else
+      {
+        $dd = $db->query("SELECT invoice_id FROM " .Table::feesForStudentTable ." WHERE invoice_id IS NOT NULL AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
+
+        if(!empty($dd))
+        {
+          $id = explode(HelperClass::invoicePrefix,$dd[0]['invoice_id']);
+        }
+         
+          
         return HelperClass::invoicePrefix . ($id[1] + 1);
+      }
+
+
+     
     }
 
     if(isset($_POST['submit']))

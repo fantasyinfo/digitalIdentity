@@ -78,7 +78,7 @@
   
 <?php 
 
-print_r($_GET);
+// print_r($_GET);
 $condition = '';
 if(!empty($_GET['classId']) && !empty($_GET['sectionId']) && !empty($_GET['secExamNameId']))
 {
@@ -98,6 +98,8 @@ if(!empty($_GET['classId']) && !empty($_GET['sectionId']) && !empty($_GET['secEx
     if(!empty($d))
     {
         $data = $d;
+
+        $schoolName = $this->db->query("SELECT school_name FROM ".Table::schoolMasterTable ." WHERE status = '2' AND unique_id = '{$_SESSION['schoolUniqueCode']}'")->result_array()[0]['school_name'];
     }
 
 }else
@@ -112,13 +114,13 @@ if(!empty($_GET['classId']) && !empty($_GET['sectionId']) && !empty($_GET['secEx
     <div class="container mt-5" >
         <div class="row" id="printableArea">
             <div class="col-md-8 mx-auto text-center">
-                <p class="h2">Digitalfied - Online Digital School</p>
+                <p class="h2"><?=  $schoolName; ?></p>
             </div>
             <div class="col-md-12  text-center">
                 <div class="row my-2">
                     <div class="col-md-8 mx-auto">
-                        <p>Date Sheet For Half Yearly Exam 2022</p>
-                        <p>Class 2nd B</p>
+                        <p>Date Sheet For <?=  $data[0]['sem_exam_name'] . " " . $data[0]['exam_year']; ?> </p>
+                        <p>Class <?=  $data[0]['className'] . " " . $data[0]['sectionName']; ?></p>
                     </div>
                 </div>
             </div>
@@ -138,7 +140,7 @@ if(!empty($_GET['classId']) && !empty($_GET['sectionId']) && !empty($_GET['secEx
                         foreach($data as $dd)
                         { ?>
                          <tr>
-                            <td><?=$dd['exam_date'];?></td>
+                            <td><?= date('d-m-Y', strtotime($dd['exam_date']));?></td>
                             <td><?=$dd['exam_day'];?></td>
                             <td scope="row"><?=$dd['subjectName'];?></td>
                          </tr>
@@ -157,11 +159,11 @@ if(!empty($_GET['classId']) && !empty($_GET['sectionId']) && !empty($_GET['secEx
 
 
     
-    <div class="row mt-5">
+    <div class="row mt-5" id="hideMe">
         <div class="col-md-12 mx-auto text-center">
-            <button  class="btn btn-primary" onclick="printDiv('printableArea')">Download</button>
+            <!-- <button  class="btn btn-primary" onclick="printDiv('printableArea')">Download</button> -->
             <a href="javascript:getScreen()"  class="btn btn-primary">Capture</a>
-            <button class="btn btn-success">Share</button>
+            <!-- <button class="btn btn-success">Share</button> -->
         </div>
     </div>
 
@@ -187,16 +189,19 @@ if(!empty($_GET['classId']) && !empty($_GET['sectionId']) && !empty($_GET['secEx
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-//  function screenshot(){
-//          html2canvas(document.getElementById('container')).then(function(canvas) {
-//             document.body.appendChild(canvas);
-//          });
-//       }
+ function screenshot(){
+         html2canvas(document.getElementById('container')).then(function(canvas) {
+            document.body.appendChild(canvas);
+         });
+      }
 
 function getScreen()
 {
+    $("#hideMe").hide();
+   let screenshotName = '<?=  $data[0]['sem_exam_name'] . " " . $data[0]['exam_year'] . " DateSheet For Class  ". $data[0]['className'] . " " . $data[0]['sectionName']; ?>';
     // html2canvas(document.body,{
     //     dpi:192,
     //     onrendered: function(canvas)
@@ -207,8 +212,9 @@ function getScreen()
     html2canvas(document.body).then(function(canvas) {
     document.body.appendChild(canvas);
     $("#dd").attr('href',canvas.toDataURL("image/png"));
-    $("#dd").attr('download','dateSheet.png');
+    $("#dd").attr('download',screenshotName);
     $("#dd")[0].click();
+    $("#hideMe").show();
 });
 }
 </script> 
