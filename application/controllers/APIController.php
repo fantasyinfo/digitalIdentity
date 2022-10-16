@@ -1480,6 +1480,76 @@ public function updateHomeWork()
 	}
 
 
+	// show semester Exam Names
+
+	public function showSemesterExamNames()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$allSemesterExamNames = $this->APIModel->showSemesterExamNames($schoolUniqueCode);
+
+		if (!$allSemesterExamNames) {
+			return HelperClass::APIresponse(500, 'No Semester Exam Found');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Semester Exams.',$allSemesterExamNames);
+		}
+		
+	}
+
+// show all semester Exams
+	
+	public function showAllSemesterExam()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['subjectId']) || empty($apiData['semExamId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$subjectId = $apiData['subjectId']; 
+		$semExamId = $apiData['semExamId']; 
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$allSemesterExamList = $this->APIModel->showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode);
+
+		if (!$allSemesterExamList) {
+			return HelperClass::APIresponse(500, 'No Semester Exam Found For This Class And Section And Subject');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Semester Exam List.',$allSemesterExamList);
+		}
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// check api request is post method
 	public function checkAPIRequest()
@@ -1548,5 +1618,8 @@ public function updateHomeWork()
 			return HelperClass::APIresponse(200, 'You are using latest version.');
 		
 	} 
+
+
+
 	
 }

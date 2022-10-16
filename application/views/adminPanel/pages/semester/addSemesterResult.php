@@ -5,8 +5,7 @@
     top: 0.5rem
   }
 
-  .custom_width
-  {
+  .custom_width {
     width: 40px;
     margin-left: 20px;
   }
@@ -37,316 +36,8 @@
 
     if (isset($_POST['submit'])) {
 
-      //  HelperClass::prePrintR($_POST);
+      HelperClass::prePrintR($_POST);
 
-//        Array
-// (
-//     [sem_id] => 2
-//     [class_id] => 20
-//     [section_id] => 2
-//     [student_id] => Array
-//         (
-//             [0] => Array
-//                 (
-//                     [0] => 26
-//                 )
-
-//             [1] => Array
-//                 (
-//                     [1] => 27
-//                 )
-
-//             [2] => Array
-//                 (
-//                     [2] => 28
-//                 )
-
-//         )
-
-//     [sec_exam_id] => Array
-//         (
-//             [0] => Array
-//                 (
-//                     [0] => 1
-//                 )
-
-//             [1] => Array
-//                 (
-//                     [0] => 2
-//                 )
-
-//             [2] => Array
-//                 (
-//                     [0] => 16
-//                 )
-
-//             [3] => Array
-//                 (
-//                     [0] => 17
-//                 )
-
-//             [4] => Array
-//                 (
-//                     [0] => 18
-//                 )
-
-//             [5] => Array
-//                 (
-//                     [0] => 19
-//                 )
-
-//             [6] => Array
-//                 (
-//                     [1] => 1
-//                 )
-
-//             [7] => Array
-//                 (
-//                     [1] => 2
-//                 )
-
-//             [8] => Array
-//                 (
-//                     [1] => 16
-//                 )
-
-//             [9] => Array
-//                 (
-//                     [1] => 17
-//                 )
-
-//             [10] => Array
-//                 (
-//                     [1] => 18
-//                 )
-
-//             [11] => Array
-//                 (
-//                     [1] => 19
-//                 )
-
-//             [12] => Array
-//                 (
-//                     [2] => 1
-//                 )
-
-//             [13] => Array
-//                 (
-//                     [2] => 2
-//                 )
-
-//             [14] => Array
-//                 (
-//                     [2] => 16
-//                 )
-
-//             [15] => Array
-//                 (
-//                     [2] => 17
-//                 )
-
-//             [16] => Array
-//                 (
-//                     [2] => 18
-//                 )
-
-//             [17] => Array
-//                 (
-//                     [2] => 19
-//                 )
-
-//         )
-
-//     [subject_id] => Array
-//         (
-//             [0] => Array
-//                 (
-//                     [0] => 6
-//                 )
-
-//             [1] => Array
-//                 (
-//                     [0] => 10
-//                 )
-
-//             [2] => Array
-//                 (
-//                     [0] => 4
-//                 )
-
-//             [3] => Array
-//                 (
-//                     [0] => 2
-//                 )
-
-//             [4] => Array
-//                 (
-//                     [0] => 3
-//                 )
-
-//             [5] => Array
-//                 (
-//                     [0] => 1
-//                 )
-
-//             [6] => Array
-//                 (
-//                     [1] => 6
-//                 )
-
-//             [7] => Array
-//                 (
-//                     [1] => 10
-//                 )
-
-//             [8] => Array
-//                 (
-//                     [1] => 4
-//                 )
-
-//             [9] => Array
-//                 (
-//                     [1] => 2
-//                 )
-
-//             [10] => Array
-//                 (
-//                     [1] => 3
-//                 )
-
-//             [11] => Array
-//                 (
-//                     [1] => 1
-//                 )
-
-//             [12] => Array
-//                 (
-//                     [2] => 6
-//                 )
-
-//             [13] => Array
-//                 (
-//                     [2] => 10
-//                 )
-
-//             [14] => Array
-//                 (
-//                     [2] => 4
-//                 )
-
-//             [15] => Array
-//                 (
-//                     [2] => 2
-//                 )
-
-//             [16] => Array
-//                 (
-//                     [2] => 3
-//                 )
-
-//             [17] => Array
-//                 (
-//                     [2] => 1
-//                 )
-
-//         )
-
-//     [marks] => Array
-//         (
-//             [0] => Array
-//                 (
-//                     [0] => 1
-//                 )
-
-//             [1] => Array
-//                 (
-//                     [0] => 2
-//                 )
-
-//             [2] => Array
-//                 (
-//                     [0] => 3
-//                 )
-
-//             [3] => Array
-//                 (
-//                     [0] => 4
-//                 )
-
-//             [4] => Array
-//                 (
-//                     [0] => 5
-//                 )
-
-//             [5] => Array
-//                 (
-//                     [0] => 6
-//                 )
-
-//             [6] => Array
-//                 (
-//                     [1] => 7
-//                 )
-
-//             [7] => Array
-//                 (
-//                     [1] => 8
-//                 )
-
-//             [8] => Array
-//                 (
-//                     [1] => 9
-//                 )
-
-//             [9] => Array
-//                 (
-//                     [1] => 10
-//                 )
-
-//             [10] => Array
-//                 (
-//                     [1] => 11
-//                 )
-
-//             [11] => Array
-//                 (
-//                     [1] => 12
-//                 )
-
-//             [12] => Array
-//                 (
-//                     [2] => 13
-//                 )
-
-//             [13] => Array
-//                 (
-//                     [2] => 14
-//                 )
-
-//             [14] => Array
-//                 (
-//                     [2] => 15
-//                 )
-
-//             [15] => Array
-//                 (
-//                     [2] => 16
-//                 )
-
-//             [16] => Array
-//                 (
-//                     [2] => 17
-//                 )
-
-//             [17] => Array
-//                 (
-//                     [2] => 18
-//                 )
-
-//         )
-
-//     [submit] => 
-// )
 
       $totalStudentsCount = count($_POST['student_id']);
 
@@ -356,15 +47,13 @@
       $section_id = $_POST['section_id'];
       $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
 
-      for($a=0; $a < $totalStudentsCount; $a++)
-      {
+      for ($a = 0; $a < $totalStudentsCount; $a++) {
 
-       $studentId = $_POST['student_id'][$a][$a];
+        $studentId = $_POST['student_id'][$a][$a];
         // innerLoop
         $totalExamsCount = count($_POST['sec_exam_id']);
 
-        for($b=0; $b < $totalExamsCount; $b++)
-        {
+        for ($b = 0; $b < $totalExamsCount; $b++) {
           $sec_exam_id = $_POST['sec_exam_id'][$b][$a];
           $subject_id = $_POST['subject_id'][$b][$a];
           $marks = $_POST['marks'][$b][$a];
@@ -397,7 +86,7 @@
       // }
 
 
-      
+
 
       if ($addResult) {
 
@@ -413,7 +102,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-     // header("Refresh:1 " . base_url() . "semester/addSemesterResult");
+      // header("Refresh:1 " . base_url() . "semester/addSemesterResult");
     }
 
 
@@ -584,119 +273,125 @@
 
                 <div class="row">
                   <div class="card-body">
-                    <form method="post" action="">
-                      <?php
-                      if (isset($_GET['action']) && $_GET['action'] == 'edit') { ?>
-                        <input type="hidden" name="updateSemExamId" value="<?= $editId ?>">
-                      <?php }
 
-                      ?>
-                      <div class="row">
-                       
+                    <?php
+                    if (isset($_GET['action']) && $_GET['action'] == 'edit') { ?>
+                      <input type="hidden" name="updateSemExamId" value="<?= $editId ?>">
+                    <?php }
 
-                          <div class="col-md-4">
-                            <select id="sem_id" class="form-control  select2 select2-danger" name="sem_id" data-dropdown-css-class="select2-danger" style="width: 100%;" required>
-                              <option>Please Select Semester</option>
-                              <?php
-                              $selected = '';
-                              if (isset($examNameSem) && !empty($examNameSem)) {
+                    ?>
+                    <div class="row">
 
 
-                                foreach ($examNameSem as $sd) {
-
-                                  if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-                                    if ($editExamSem[0]['sem_exam_id'] == $sd['id']) {
-                                      $selected = 'selected';
-                                    } else {
-                                      $selected = '';
-                                    }
-                                  }
+                      <div class="col-md-4">
+                        <select id="sem_id" class="form-control  select2 select2-danger" name="sem_id" data-dropdown-css-class="select2-danger" style="width: 100%;" required>
+                          <option>Please Select Semester</option>
+                          <?php
+                          $selected = '';
+                          if (isset($examNameSem) && !empty($examNameSem)) {
 
 
-                              ?>
-                                  <option <?= $selected ?> value="<?= $sd['id'] ?>"><?= $sd['sem_exam_name'] . ' - ' . $sd['exam_year'] ?></option>
-                              <?php }
-                              } ?>
-                            </select>
-                          </div>
-                          <div class="col-md-4">
-                            <select id="class_id" class="form-control  select2 select2-danger" name="class_id" data-dropdown-css-class="select2-danger" style="width: 100%;" required>
-                              <option>Please Select Class</option>
-                              <?php
-                              $selected = '';
-                              if (isset($classData) && !empty($classData)) {
+                            foreach ($examNameSem as $sd) {
+
+                              if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                                if ($editExamSem[0]['sem_exam_id'] == $sd['id']) {
+                                  $selected = 'selected';
+                                } else {
+                                  $selected = '';
+                                }
+                              }
 
 
-                                foreach ($classData as $sd) {
-
-                                  if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-                                    if ($editExamSem[0]['class_id'] == $sd['id']) {
-                                      $selected = 'selected';
-                                    } else {
-                                      $selected = '';
-                                    }
-                                  }
-
-
-                              ?>
-                                  <option <?= $selected ?> value="<?= $sd['id'] ?>"><?= $sd['className'] ?></option>
-                              <?php }
-                              } ?>
-                            </select>
-                          </div>
-                          <div class="col-md-4">
-                            <select id="section_id" class="form-control  select2 select2-danger" name="section_id" data-dropdown-css-class="select2-danger" style="width: 100%;" required onchange="showExamsWithStudents()">
-                              <option>Please Select Section</option>
-                              <?php
-                              $selected = '';
-                              if (isset($sectionData) && !empty($sectionData)) {
-
-
-                                foreach ($sectionData as $sd) {
-
-                                  if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-                                    if ($editExamSem[0]['section_id'] == $sd['id']) {
-                                      $selected = 'selected';
-                                    } else {
-                                      $selected = '';
-                                    }
-                                  }
-
-
-                              ?>
-                                  <option <?= $selected ?> value="<?= $sd['id'] ?>"><?= $sd['sectionName'] ?></option>
-                              <?php }
-                              } ?>
-                            </select>
-                          </div>
-
-
-                         
-
-
-
-
-                       
+                          ?>
+                              <option <?= $selected ?> value="<?= $sd['id'] ?>"><?= $sd['sem_exam_name'] . ' - ' . $sd['exam_year'] ?></option>
+                          <?php }
+                          } ?>
+                        </select>
                       </div>
-                      <div class="row mt-3">
-                        <table class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>UserId</th>
-                              <th>Name</th>
-                              <th>Roll No</th>
-                              <th>Subjects</th>
-                              <!-- <th>Marks</th> -->
-                            </tr>
-                          </thead>
-                          <tbody id="showStudents">
-                           
-                          </tbody>
-                        </table>
-                            
-                     </div>
-                     <button type="submit" onclick="return confirm('Are You Sure Want to Submit?');" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo 'update'; } else { echo 'submit';  } ?>" class="btn btn-primary btn-lg btn-block">Submit</button>
-                    </form>
+                      <div class="col-md-4">
+                        <select id="class_id" class="form-control  select2 select2-danger" name="class_id" data-dropdown-css-class="select2-danger" style="width: 100%;" required>
+                          <option>Please Select Class</option>
+                          <?php
+                          $selected = '';
+                          if (isset($classData) && !empty($classData)) {
+
+
+                            foreach ($classData as $sd) {
+
+                              if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                                if ($editExamSem[0]['class_id'] == $sd['id']) {
+                                  $selected = 'selected';
+                                } else {
+                                  $selected = '';
+                                }
+                              }
+
+
+                          ?>
+                              <option <?= $selected ?> value="<?= $sd['id'] ?>"><?= $sd['className'] ?></option>
+                          <?php }
+                          } ?>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <select id="section_id" class="form-control  select2 select2-danger" name="section_id" data-dropdown-css-class="select2-danger" style="width: 100%;" required onchange="showExamsWithStudents()">
+                          <option>Please Select Section</option>
+                          <?php
+                          $selected = '';
+                          if (isset($sectionData) && !empty($sectionData)) {
+
+
+                            foreach ($sectionData as $sd) {
+
+                              if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                                if ($editExamSem[0]['section_id'] == $sd['id']) {
+                                  $selected = 'selected';
+                                } else {
+                                  $selected = '';
+                                }
+                              }
+
+
+                          ?>
+                              <option <?= $selected ?> value="<?= $sd['id'] ?>"><?= $sd['sectionName'] ?></option>
+                          <?php }
+                          } ?>
+                        </select>
+                      </div>
+
+
+
+
+
+
+
+
+                    </div>
+                    <div class="row mt-3">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>UserId</th>
+                            <th>Name</th>
+                            <th>Roll No</th>
+                            <th>Subjects</th>
+                            <!-- <th>Marks</th> -->
+                          </tr>
+                        </thead>
+                        <tbody id="showStudents">
+                              <tr class="newClass">
+
+                              </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                    <!-- <button type="submit" onclick="return confirm('Are You Sure Want to Submit?');" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                                                                                                                  echo 'update';
+                                                                                                                } else {
+                                                                                                                  echo 'submit';
+                                                                                                                } ?>" class="btn btn-primary btn-lg btn-block">Submit</button> -->
+
                   </div>
                   <!-- /.card -->
                 </div>
@@ -746,34 +441,41 @@
           let totalStudents = response.students.length;
           let examDetails = response.examDetails.length;
           let showHTML = '';
-          for(let $j=0; $j < totalStudents; $j++)
-          {
+          for (let $j = 0; $j < totalStudents; $j++) {
 
             let subjects = '';
-            for(let $k=0; $k < examDetails; $k++)
-                { 
-                  subjects += `
-                  <input type="hidden" name="sec_exam_id[][${$j}]" value="${response.examDetails[$k].id}">
-                  <input type="hidden" name="subject_id[][${$j}]" value="${response.examDetails[$k].subject_id}">
+            for (let $k = 0; $k < examDetails; $k++) {
+              subjects += `
+                  <input type="hidden" name="sec_exam_id" value="${response.examDetails[$k].id}">
+                  <input type="hidden" name="subject_id[]" value="${response.examDetails[$k].subject_id}">
                   <div class="col ml-1">
-                    ${response.examDetails[$k].subjectName} <input type="number" name="marks[][${$j}]" class="custom_width">
+                    ${response.examDetails[$k].subjectName} <input type="number" name="marks[]" class="custom_width">
                   </div>`;
-                }
             
-            showHTML += ` <tr>
-                              <input type="hidden" name="student_id[][${$j}]" value="${response.students[$j].id}">  
-                              <td>${$j}</td>
-                              <td>${response.students[$j].name}</td>
-                              <td>${response.students[$j].roll_no}</td>
-                              <td>
-                                <div class="row">` + subjects + `</div>
-                              </td>
-                            </tr>`;
+            }
+
+            showHTML += `  
+            
+              <form method="post">
+             
+                <input type="hidden" name="student_id" value="${response.students[$j].id}">  
+                  <td>${$j}</td>
+                  <td>${response.students[$j].name}</td>
+                  <td>${response.students[$j].roll_no}</td>
+                  <td><div class="row">` + subjects + `</div></td>
+                  <td><input type="submit" name="submit"></td>
+                 
+              </form>
+              `;
+        
+
           }
 
-            
 
-          $("#showStudents").html(showHTML);
+   
+
+          // $("#showStudents").html(showHTML);
+          $(".newClass").html(showHTML);
         }
       })
 

@@ -1498,7 +1498,7 @@ class APIModel extends CI_Model
       $dir = base_url().HelperClass::teacherImagePath;
       $tableName = Table::teacherTable;
       // $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
-      $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id AND schoolUniqueCode = '$schoolUniqueCode') as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       
   
       if (!empty($d)) {
@@ -1512,7 +1512,7 @@ class APIModel extends CI_Model
         $totalCount = count($d);
         $a = 1;
         for ($i = 0; $i < $totalCount; $i++) {
-         $userDetails =  $this->db->query($sql2 = "SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
+         $userDetails =  $this->db->query($sql2 = "SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
         //  if(empty($userDetails)) 
         //  {
@@ -1612,7 +1612,7 @@ class APIModel extends CI_Model
       $tableName = Table::studentTable;
       $loginuserType = 'Student';
       // $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
-      $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
+      $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id AND schoolUniqueCode = '$schoolUniqueCode') as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       
       if (!empty($d)) {
 
@@ -1625,7 +1625,7 @@ class APIModel extends CI_Model
         $totalCount = count($d);
         $a = 1;
         for ($i = 0; $i < $totalCount; $i++) {
-         $userDetails =  $this->db->query("SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}'")->result_array();
+         $userDetails =  $this->db->query("SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
         //  if(empty($userDetails)) 
         //  {
@@ -1892,5 +1892,48 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
   }
 
 
+
+    // showAll Semester Exam Name
+    public function showSemesterExamNames($schoolUniqueCode)
+    {
+ 
+      $d = $this->db->query("SELECT sem.* , sem.id as semExamId FROM " . Table::semExamNameTable . " sem
+        WHERE  sem.schoolUniqueCode = '$schoolUniqueCode' AND sem.status = '1'")->result_array();
+  
+      if (!empty($d)) {
+        return $d;
+      } else {
+        return HelperClass::APIresponse(500, 'No Semesters Exams found for this school');
+      }
+    }
+
+
+     // showAll Semester Exam
+  public function showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode)
+  {
+    $d = $this->db->query("SELECT 
+    sec.id, sec.exam_date,sec.exam_day,sec.min_marks,sec.max_marks,
+    sem.sem_exam_name, sem.exam_year,
+    c.className,se.sectionName,sub.subjectName
+     FROM " . Table::secExamTable . " sec
+    JOIN ".Table::classTable." c ON c.id = sec.class_id
+    JOIN ".Table::sectionTable." se ON se.id = sec.section_id
+    JOIN ".Table::subjectTable." sub ON sub.id = sec.subject_id
+    JOIN ".Table::semExamNameTable." sem ON sem.id = sec.sem_exam_id
+      WHERE sec.class_id = '$classId' 
+      AND sec.section_id = '$sectionId' 
+      AND sec.subject_id = '$subjectId' 
+      AND sec.sem_exam_id = '$semExamId' 
+      AND sec.schoolUniqueCode = '$schoolUniqueCode' 
+      AND sec.status = '1'")->result_array();
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'No Semester Exams found for this class & subject');
+    }
+  }
+
+  
  
 }
