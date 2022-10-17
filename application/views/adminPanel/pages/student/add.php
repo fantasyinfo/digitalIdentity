@@ -196,6 +196,10 @@
                              ?>
                           </select></td>
                           </tr>
+                          <tr>
+                              <td>  <label for="sr_number">SR Number</label></td>
+                              <td> <input type="text" name="sr_number" class="form-control" id="sr_number" placeholder="Enter sr no"></td>
+                          </tr>
                            <tr>
                               <td>#</td>
                               <td><button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Submit</button></td>

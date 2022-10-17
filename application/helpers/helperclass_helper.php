@@ -146,6 +146,9 @@ class HelperClass
         '1' => 'Bus',
         '2' => 'Rikshaw',
         '3' => 'Auto',
+        '4' => 'Cab',
+        '5' => 'Magic',
+        '6' => 'Van'
     ];
 
 const invoicePrefix = 'INVOICE-00';

@@ -81,6 +81,19 @@
     {
       $classId = $_POST['classId'];
       $feesAmt = $_POST['fees_amt'];
+      $tution_fees_amt = ($_POST['tution_fees_amt']) ? $_POST['tution_fees_amt'] : 0.0;
+      $reg_fees = ($_POST['reg_fees'])? $_POST['reg_fees'] : 0.0;
+      $adm_fees = ($_POST['adm_fees'])? $_POST['adm_fees'] : 0.0;
+      $id_card_fees = ($_POST['id_card_fees'])? $_POST['id_card_fees'] : 0.0;
+      $development_fees = ($_POST['development_fees'])? $_POST['development_fees'] : 0.0;
+      $annual_function_fees = ($_POST['annual_function_fees'])? $_POST['annual_function_fees'] : 0.0;
+      $book_and_stationary_fees = ($_POST['book_and_stationary_fees'])? $_POST['book_and_stationary_fees'] : 0.0;
+      $uniform_fees = ($_POST['uniform_fees'])? $_POST['uniform_fees'] : 0.0;
+      $worksheet_examination_fees = ($_POST['worksheet_examination_fees'])? $_POST['worksheet_examination_fees'] : 0.0;
+      $extra_curricular_fees = ($_POST['extra_curricular_fees'])? $_POST['extra_curricular_fees'] : 0.0;
+      $smart_class_fees = ($_POST['smart_class_fees'])? $_POST['smart_class_fees'] : 0.0;
+      $transport_fees = ($_POST['transport_fees'])? $_POST['transport_fees'] : 0.0;
+
 
       $alreadyFees = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '$classId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
@@ -95,7 +108,7 @@
           exit(0);
       }
 
-      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (schoolUniqueCode,class_id,fees_amt) VALUES ('{$_SESSION['schoolUniqueCode']}','$classId','$feesAmt')");
+      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (schoolUniqueCode,class_id,fees_amt,tution_fees_amt,reg_fees,adm_fees,id_card_fees,development_fees,annual_function_fees,book_and_stationary_fees,uniform_fees,worksheet_examination_fees,extra_curricular_fees,smart_class_fees,transport_fees) VALUES ('{$_SESSION['schoolUniqueCode']}','$classId','$feesAmt','$tution_fees_amt','$reg_fees','$adm_fees','$id_card_fees','$development_fees','$annual_function_fees','$book_and_stationary_fees','$uniform_fees','$worksheet_examination_fees','$extra_curricular_fees','$smart_class_fees','$transport_fees')");
       if($insertNewFees)
       {
       
@@ -120,8 +133,24 @@
     {
       $classId = $_POST['classId'];
       $feesAmt = $_POST['fees_amt'];
+      $tution_fees_amt = ($_POST['tution_fees_amt']) ? $_POST['tution_fees_amt'] : 0.0;
+      $reg_fees = ($_POST['reg_fees'])? $_POST['reg_fees'] : 0.0;
+      $adm_fees = ($_POST['adm_fees'])? $_POST['adm_fees'] : 0.0;
+      $id_card_fees = ($_POST['id_card_fees'])? $_POST['id_card_fees'] : 0.0;
+      $development_fees = ($_POST['development_fees'])? $_POST['development_fees'] : 0.0;
+      $annual_function_fees = ($_POST['annual_function_fees'])? $_POST['annual_function_fees'] : 0.0;
+      $book_and_stationary_fees = ($_POST['book_and_stationary_fees'])? $_POST['book_and_stationary_fees'] : 0.0;
+      $uniform_fees = ($_POST['uniform_fees'])? $_POST['uniform_fees'] : 0.0;
+      $worksheet_examination_fees = ($_POST['worksheet_examination_fees'])? $_POST['worksheet_examination_fees'] : 0.0;
+      $extra_curricular_fees = ($_POST['extra_curricular_fees'])? $_POST['extra_curricular_fees'] : 0.0;
+      $smart_class_fees = ($_POST['smart_class_fees'])? $_POST['smart_class_fees'] : 0.0;
+      $transport_fees = ($_POST['transport_fees'])? $_POST['transport_fees'] : 0.0;
       $cityEditId = $_POST['updateCityId'];
-      $updateFees = $this->db->query("UPDATE " . Table::feesTable . " SET class_id = '$classId',fees_amt = '$feesAmt' WHERE id = '$cityEditId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+
+      $updateFees = $this->db->query("UPDATE " . Table::feesTable . " SET class_id = '$classId',fees_amt = '$feesAmt' ,tution_fees_amt = '$tution_fees_amt',reg_fees = '$reg_fees',adm_fees = '$adm_fees',id_card_fees = '$id_card_fees',development_fees = '$development_fees',
+      annual_function_fees = '$annual_function_fees', book_and_stationary_fees = '$book_and_stationary_fees',uniform_fees = '$uniform_fees',
+      worksheet_examination_fees = '$worksheet_examination_fees', extra_curricular_fees = '$extra_curricular_fees', smart_class_fees = '$smart_class_fees',transport_fees = '$transport_fees'
+      WHERE id = '$cityEditId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if($updateFees)
       {
         $msgArr = [
@@ -219,31 +248,115 @@
                     
                     ?>
                       <div class="row">
+                        <table class="table  col-md-8 ">
+                          <thead>
+                              <th>
+                               Options
+                              </th>
+                              <th>
+                                Values
+                              </th>
+
+                          </thead>
+                          <tbody>
+                           
+                            <tr>
+                              <td>
+                              <label>Select Class </label>
+                              </td>
+                              <td>
+                              <select name="classId" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                <?php 
+                                if(isset($classData))
+                                {
+                                  $selectedClass = '';
+                                  foreach($classData as $class)
+                                  { 
+                                    if(isset($editTeachersSubjectData) && $editTeachersSubjectData[0]['teacher_id'] == $class['id'])
+                                    {
+                                      $selectedClass = 'selected';
+                                    }
+                                    ?>
+                                    <option <?= $selectedClass?> value="<?=$class['id']?>"><?=$class['className']?></option>
+                                <?php }
+                                }
+                                
+                                ?>
+                                
+                              </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                              <label>Please Enter Fees Amount <b> Per Month </b> </label>
+                              </td>
+                              <td>
+                              <input type="number" name="fees_amt" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['fees_amt'];}?>" class="form-control" id="name" placeholder="Enter Fees Amount Per Month" required>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                              <label>Please Enter Tution Fees Amount <b> Per Month </b> </label>
+                              </td>
+                              <td>
+                              <input type="number" name="tution_fees_amt" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['tution_fees_amt'];}?>" class="form-control" id="name" placeholder="Enter Fees Amount Per Month" required>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><label>Please Enter Transport Fees Amount <b> Per Month </b></label> </td>
+                              <td><input type="number"  class="form-control" name="transport_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['transport_fees'];}?>" placeholder="Enter Fees Amount Per Month"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Registration Fees</label></td>
+                              <td><input type="number"  class="form-control" name="reg_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['reg_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Admission Fees</label></td>
+                              <td><input type="number"  class="form-control" name="adm_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['adm_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>ID Card Fee</label></td>
+                              <td><input type="number" class="form-control" name="id_card_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['id_card_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Development Fees</label></td>
+                              <td><input type="number"  class="form-control" name="development_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['development_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Annual Function Fees</label></td>
+                              <td><input type="number"  class="form-control" name="annual_function_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['annual_function_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Books & Stationary Fees</label></td>
+                              <td><input type="number"  class="form-control" name="book_and_stationary_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['book_and_stationary_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Uniform Charges</label></td>
+                              <td><input type="number"  class="form-control" name="uniform_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['uniform_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Worksheet & Board Examination Fees</label></td>
+                              <td><input type="number"  class="form-control" name="worksheet_examination_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['worksheet_examination_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Extra Curricular Activities Fees</label></td>
+                              <td><input type="number"  class="form-control" name="extra_curricular_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['extra_curricular_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                            <tr>
+                              <td><label>Smart Class Activity Fees</label></td>
+                              <td><input type="number"  class="form-control" name="smart_class_fees" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['smart_class_fees'];}?>" placeholder="Enter Fees Amount"></td>
+                            </tr>
+                         
+                          
+                          </tbody>
+                        </table>
                       <div class="form-group col-md-6">
-                        <label>Select Class </label>
-                        <select name="classId" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
-                          <?php 
-                          if(isset($classData))
-                          {
-                            $selectedClass = '';
-                            foreach($classData as $class)
-                            { 
-                              if(isset($editTeachersSubjectData) && $editTeachersSubjectData[0]['teacher_id'] == $class['id'])
-                              {
-                                $selectedClass = 'selected';
-                              }
-                              ?>
-                              <option <?= $selectedClass?> value="<?=$class['id']?>"><?=$class['className']?></option>
-                           <?php }
-                          }
-                          
-                          ?>
-                          
-                        </select>
+                        <label></label>
+                     
                         </div>
                         <div class="form-group col-md-6">
-                        <label>Please Enter Fees Amount in Indian Rupees </label>
-                          <input type="number" name="fees_amt" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['fees_amt'];}?>" class="form-control" id="name" placeholder="Enter Fees Amount" required>
+                        <label></label>
+                         
                         </div>
                         <div class="form-group col-md-12">
                           <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary btn-lg btn-block">Submit</button>
@@ -266,13 +379,25 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="cityDataTable" class="table table-bordered table-striped">
+                      <table id="cityDataTable" class="table table-bordered table-striped table-responsive">
                         <thead>
                           <tr>
                             <th>Id</th>
                             <th>Fees Id</th>
-                            <th>Class Name</th>
-                            <th>Fees Amount</th>
+                            <th>Class</th>
+                            <th>Fees Per Month</th>
+                            <th>Tution Fees Per Month</th>
+                            <th>Transport Fees Per Month</th>
+                            <th>Registration Fees</th>
+                            <th>Admission Fees</th>
+                            <th>ID Card Fees</th>
+                            <th>Development Fees</th>
+                            <th>Annual Function Fees</th>
+                            <th>Books & Stationary Fees</th>
+                            <th>Uniform Charges Fees</th>
+                            <th>Worksheet & Board Fees</th>
+                            <th>Extra Curricular Fees</th>
+                            <th>Smart Class Fees</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
@@ -288,6 +413,18 @@
                                 echo $cf[0]['className'];?>
                                 </td>
                                 <td>₹ <?= number_format($cn['fees_amt'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['tution_fees_amt'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['transport_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['reg_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['adm_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['id_card_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['development_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['annual_function_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['book_and_stationary_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['uniform_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['worksheet_examination_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['extra_curricular_fees'],2);?>/- </td>
+                                <td>₹ <?= number_format($cn['smart_class_fees'],2);?>/- </td>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">

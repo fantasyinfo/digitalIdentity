@@ -33,6 +33,7 @@ class StudentModel extends CI_Model
       $insertArr['city_id'] = $post['city'];
       $insertArr['pincode'] = $post['pincode'];
       $insertArr['state_id'] = $post['state'];
+      $insertArr['sr_number'] = $post['sr_number'];
       $insertArr['image'] = '';
 
 
@@ -74,6 +75,18 @@ class StudentModel extends CI_Model
         $insertId = $this->CrudModel->insert(Table::studentTable,$insertArr);
         if($insertId)
         {
+
+
+          // welcome bonus 10 digicoins
+
+          // insert the digicoin
+          $this->load->model('APIModel');
+
+          $insertDigiCoin = $this->APIModel->insertDigiCoin($insertId, HelperClass::userTypeR['1'], '0', '10', $_SESSION['schoolUniqueCode'],'0');
+
+
+
+
           // insert qrcode data
           $qrDataArr = [];
           $qrDataArr['schoolUniqueCode'] = $_SESSION['schoolUniqueCode'];
@@ -129,6 +142,7 @@ class StudentModel extends CI_Model
       $insertArr['city_id'] = $post['city'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['pincode'] = $post['pincode'];
+      $insertArr['sr_number'] = $post['sr_number'];
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 
@@ -264,6 +278,8 @@ class StudentModel extends CI_Model
           $totalMonthsForFees = intval($currentMonth) - intval($sessionStartingFrom);
 
           $totalDueFeesTillThisMonth =  (intval($d[0]['fees_amt']) * intval($totalMonthsForFees));
+          $tution_fees_amt =  (intval($d[0]['tution_fees_amt']) * intval($totalMonthsForFees));
+          $transport_fees =  (intval($d[0]['transport_fees']) * intval($totalMonthsForFees));
 
           // check total fees submited by this student
 
@@ -308,6 +324,8 @@ class StudentModel extends CI_Model
 
         $sendArr = [
           'perMonthFeesForThisClass' => $d[0]['fees_amt'],
+          'perMonthTutionFees' => $d[0]['tution_fees_amt'],
+          'perMonthTransportFees' => $d[0]['transport_fees'],
           'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
           'sessionStartedFrom' => $sessionStartingFrom,
           'currentMonth' => $currentMonth,
@@ -318,6 +336,7 @@ class StudentModel extends CI_Model
           'totalBalanceForDeposit' => $totalBalance,
           'totalMonthFeesDue' => floor($totalMonthFeesDue),
           'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
+          'totalFeesDueMontyPlusTutionPlusTransport' => $totalBalance + $d[0]['tution_fees_amt']+ $d[0]['transport_fees']
 
         ];
 

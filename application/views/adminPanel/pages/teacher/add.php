@@ -147,11 +147,11 @@
                           </tr>
                           <tr>
                               <td> <label for="dob">Select Date of Birth</label></td>
-                              <td>  <input type="text" name="dob" class="form-control datepicker" id="dob" placeholder="Enter date of birth"></td>
+                              <td>  <input type="date" name="dob" class="form-control" id="dob" placeholder="Enter date of birth"></td>
                           </tr>
                           <tr>
                               <td> <label for="dob">Select Date of Joining</label></td>
-                              <td>   <input type="text" name="doj" class="form-control  datepicker" id="doj" placeholder="Enter date of joining"></td>
+                              <td>   <input type="date" name="doj" class="form-control " id="doj" placeholder="Enter date of joining"></td>
                           </tr>
                           <tr>
                               <td> <label for="address">Address</label></td>
@@ -209,6 +209,10 @@
                               <?php }
                              ?>
                           </select></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="cbse_id">CBSE ID</label></td>
+                              <td> <input type="text" name="cbse_id" class="form-control" id="cbse_id" placeholder="Enter cbs id"></td>
                           </tr>
                            <tr>
                               <td>#</td>

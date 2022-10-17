@@ -33,6 +33,7 @@ class TeacherModel extends CI_Model
       $insertArr['pincode'] = $post['pincode'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['education'] = $post['education'];
+      $insertArr['cbse_id'] = $post['cbse_id'];
       $insertArr['experience'] = $post['experience'];
       $insertArr['image'] = '';
 
@@ -60,6 +61,14 @@ class TeacherModel extends CI_Model
         $insertId = $this->CrudModel->insert(Table::teacherTable,$insertArr);
         if($insertId)
         {
+
+           // insert the digicoin
+           $this->load->model('APIModel');
+
+           $insertDigiCoin = $this->APIModel->insertDigiCoin($insertId, HelperClass::userTypeR['2'], '0', '10', $_SESSION['schoolUniqueCode'],'0');
+
+           
+
           // return true;
           // die();
           //insert qrcode data
@@ -118,6 +127,7 @@ class TeacherModel extends CI_Model
       $insertArr['pincode'] = $post['pincode'];
       $insertArr['education'] = $post['education'];
       $insertArr['experience'] = $post['experience'];
+      $insertArr['cbse_id'] = $post['cbse_id'];
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 
@@ -128,7 +138,7 @@ class TeacherModel extends CI_Model
       {
         // upload files and get image path
         $fileName = $this->CrudModel->uploadImg($files,$insertArr['user_id'],HelperClass::teacherImagePath);
-        $insertArr['*'] = $fileName;
+        $insertArr['image'] = $fileName;
       }
     
         if($this->CrudModel->update(Table::teacherTable,$insertArr,$tecId))

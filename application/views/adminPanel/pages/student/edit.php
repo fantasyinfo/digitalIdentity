@@ -132,7 +132,7 @@
                           </tr>
                           <tr>
                               <td> <label for="mobile">Mobile Number</label></td>
-                              <td> <input type="number" name="mobile" disabled class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
+                              <td> <input type="number" name="mobile" class="form-control" id="mobile" value="<?=$sd['mobile'];?>"></td>
                           </tr>
                           <tr>
                               <td> <label for="dob">Select Date of Birth</label></td>
@@ -220,6 +220,10 @@
                               <?php }
                              }?>
                           </select></td>
+                          </tr>
+                          <tr>
+                              <td>  <label for="sr_number">SR Number</label></td>
+                              <td> <input type="text" name="sr_number" class="form-control" id="sr_number" value="<?=$sd['sr_number'];?>"></td>
                           </tr>
                            <tr>
                               <td>#</td>
