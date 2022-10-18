@@ -136,7 +136,7 @@ $sql = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_typ
                                   $tableName = Table::teacherTable;
                                 }
                               }
-                              $studentDetails = $this->db->query("SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$cn['user_id']}'")->result_array();
+                              $studentDetails = $this->db->query("SELECT s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$cn['user_id']}' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
                               
                               ?>
                               <tr>

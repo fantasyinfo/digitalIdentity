@@ -61,6 +61,7 @@ class HelperClass
         'Attendence' => '1',
         'Departure' => '2',
         'Result' => '3',
+        'Welcome Bonus' => '0'
 
     ];
 
@@ -85,6 +86,7 @@ class HelperClass
         '1'  => 'Attendence',
         '2'  => 'Departure',
         '3'  => 'Result',
+        '0' => 'Welcome Bonus'
 
     ];
 

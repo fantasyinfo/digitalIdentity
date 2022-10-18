@@ -380,7 +380,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                       <table id="cityDataTable" class="table table-bordered table-striped table-responsive">
-                        <thead>
+                        <thead> 
                           <tr>
                             <th>Id</th>
                             <th>Fees Id</th>

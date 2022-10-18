@@ -15,26 +15,26 @@
     
     }
   // fetching city data
-    $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE status != '4'")->result_array();
+    $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
     
 
 
     // edit and delete action
-    if(HelperClass::checkIfItsACEOAccount()) {
+   // if(HelperClass::checkIfItsACEOAccount()) {
       if(isset($_GET['action']))
       {
        
         if($_GET['action'] == 'edit')
         {
           $editId = $_GET['edit_id'];
-          $editUserData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE id='$editId'")->result_array();
+          $editUserData = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE id='$editId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
         }
   
    
         if($_GET['action'] == 'delete')
         {
           $deleteId = $_GET['delete_id'];
-          $deleteMonthData = $this->db->query("DELETE FROM " . Table::setDigiCoinTable . " WHERE id='$deleteId'");
+          $deleteMonthData = $this->db->query("DELETE FROM " . Table::setDigiCoinTable . " WHERE id='$deleteId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
           if($deleteMonthData)
           {
             $msgArr = [
@@ -57,7 +57,7 @@
         {
           $status = $_GET['status'];
           $updateId = $_GET['edit_id'];
-          $updateStatus = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET status = '$status' WHERE id = '$updateId' ");
+          $updateStatus = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET status = '$status' WHERE id = '$updateId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
   
           if($updateStatus)
           {
@@ -87,7 +87,7 @@
         $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
         
 
-        $alreadyEnter = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND 	for_what = '$for_what' AND status != '4'")->result_array();
+        $alreadyEnter = $this->db->query("SELECT * FROM " . Table::setDigiCoinTable . " WHERE user_type = '$user_type' AND 	for_what = '$for_what' AND status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
         if(!empty($alreadyEnter))
         {
@@ -129,7 +129,7 @@
         $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
         $monthEditId = $_POST['updateMonthId'];
 
-        $updateMonth = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET digiCoin = '$digiCoin', user_type = '$user_type',for_what = '$for_what' WHERE id = '$monthEditId'  ");
+        $updateMonth = $this->db->query("UPDATE " . Table::setDigiCoinTable . " SET digiCoin = '$digiCoin', user_type = '$user_type',for_what = '$for_what' WHERE id = '$monthEditId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
         if($updateMonth)
         {
           $msgArr = [
@@ -148,7 +148,7 @@
         header("Refresh:1 ".base_url()."digicoin/setDigiCoinMaster");
       }
 
-    }
+    //}
     
 
 
@@ -221,7 +221,7 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-              <?php  if(HelperClass::checkIfItsACEOAccount()) { ?>
+              <?php  //if(HelperClass::checkIfItsACEOAccount()) { ?>
 
                 <div class="row">
                   <div class="card-body">
@@ -313,7 +313,7 @@
                     </form>
                   </div>
                 </div> 
-                <?php } ?>
+                <?php //} ?>
                 <!--/.col (left) -->
                 <!-- right column -->
               </div>
@@ -351,7 +351,7 @@
                                 <td><?= HelperClass::userTypeR[$cn['user_type']];?></td>
                                 <td><?= HelperClass::actionTypeR[$cn['for_what']];?></td>
                                 <td><i class="fa-solid fa-coins"></i> <?= $cn['digiCoin'];?> Coins </td>
-                                <?php  if(HelperClass::checkIfItsACEOAccount()) { ?>
+                                <?php // if(HelperClass::checkIfItsACEOAccount()) { ?>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
@@ -364,7 +364,7 @@
                                 <?php } ?>
                               </tr>
                           <?php  }
-                          } ?>
+                          //} ?>
 
                         </tbody>
 

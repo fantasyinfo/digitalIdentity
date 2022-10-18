@@ -699,7 +699,7 @@ class CrudModel extends CI_Model
                 $subArr[] = $d[$i]['user_type'];
                 $subArr[] = $d[$i]['name'];
                 $subArr[] = $d[$i]['uniqueId'];
-                $subArr[] = HelperClass::actionTypeR[$d[$i]['for_what']];
+                $subArr[] = @HelperClass::actionTypeR[$d[$i]['for_what']];
                 $subArr[] = $d[$i]['digiCoin'];
                   if($d[$i]['status'] == '1')
                     {

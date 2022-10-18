@@ -147,13 +147,8 @@
                             <th>User Type</th>
                             <th>Gift DigiCoin Cost</th>
                             <th>DigiCoin Used</th>
-                           <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
                             <th>School Code</th>
                             <th>Change Status</th>
-                            <?php } else
-                            { ?>
-                            <th>Status</th>
-                          <?php  }?>
                             <th>Gift Redeem Date</th>
                           </tr>
                         </thead>
@@ -177,12 +172,12 @@
                                 {
                                   $tableName = Table::teacherTable;
                                 }
-                                if(HelperClass::checkIfItsACEOAccount()) { 
-                                  $condition = "";
-                                }else
-                                {
+                                // if(HelperClass::checkIfItsACEOAccount()) { 
+                                //   $condition = "";
+                                // }else
+                                // {
                                   $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
-                                }
+                                // }
                                 $s = $this->db->query("SELECT name, id, user_id FROM ".$tableName." WHERE id='{$cn['login_user_id']}' $condition LIMIT 1")->result_array();
                                 
                                 ?>
@@ -193,7 +188,7 @@
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['redeem_digiCoins'];?> Coins</td>
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['digiCoin_used'];?> Coins</td>
                                <?php 
-                               if(HelperClass::checkIfItsACEOAccount()) { ?>
+                               //if(HelperClass::checkIfItsACEOAccount()) { ?>
                                <td>
                                 <?= $cn['schoolUniqueCode'];?>
                                </td>
@@ -218,17 +213,18 @@
                                   </select>
                                 </td>
                                 
-                              <?php }  else
-                                   { ?>
-                                    <td>
-                                      <?= HelperClass::giftStatus[$cn['status']]; ?>
-                                    </td>
-                                  <?php }?>
+                              <?php //}  else
+                                 //  { ?>
+                                    <!-- <td> -->
+                                      <?php // echo HelperClass::giftStatus[$cn['status']]; ?>
+                                    <!-- </td> -->
+                                  <?php //}?>
                               
                                 <td><?= date('d-m-Y h:i:A', strtotime($cn['created_at']));?></td>
                               </tr>
                           <?php  }
-                          } ?>
+                          } 
+                          ?>
 
                         </tbody>
 
