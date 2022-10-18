@@ -34,6 +34,9 @@ class StudentModel extends CI_Model
       $insertArr['pincode'] = $post['pincode'];
       $insertArr['state_id'] = $post['state'];
       $insertArr['sr_number'] = $post['sr_number'];
+      $insertArr['cast_category'] = $post['cast_category'];
+      $insertArr['admission_no'] = $post['admission_no'];
+      $insertArr['date_of_admission'] = $post['date_of_admission'];
       $insertArr['image'] = '';
 
 
@@ -143,6 +146,9 @@ class StudentModel extends CI_Model
       $insertArr['state_id'] = $post['state'];
       $insertArr['pincode'] = $post['pincode'];
       $insertArr['sr_number'] = $post['sr_number'];
+      $insertArr['cast_category'] = $post['cast_category'];
+      $insertArr['admission_no'] = $post['admission_no'];
+      $insertArr['date_of_admission'] = $post['date_of_admission'];
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 

@@ -35,6 +35,7 @@
         $session_started_from_year = $_POST['session_started_from_year'];
         $session_ended_to_year = $_POST['session_ended_to_year'];
         $fee_invoice_start = $_POST['fee_invoice_start'];
+        $gifts_system = $_POST['gifts_system'];
 
 
         $fileName = "";
@@ -56,7 +57,8 @@
         session_ended_to = '$session_ended_to',
         session_started_from_year = '$session_started_from_year', 
         session_ended_to_year = '$session_ended_to_year',
-        fee_invoice_start = '$fee_invoice_start'
+        fee_invoice_start = '$fee_invoice_start',
+        gifts_system = '$gifts_system'
         WHERE id = '$schoolId' AND unique_id = '{$_SESSION['schoolUniqueCode']}'");
         if($updateSchool)
         {
@@ -297,6 +299,36 @@
                           <tr>
                               <td> <label for="fee_invoice_start">Fees Invoice Start</label></td>
                               <td> <input type="text" name="fee_invoice_start" class="form-control" id="fee_invoice_start" value="<?=$sd['fee_invoice_start'];?>" placeholder="1001"></td>
+                          </tr>
+                          <tr>
+                            <td><label>Gifts System</label></td>
+                            <td>
+                              <select name="gifts_system" class="form-control  select2 select2-danger" id="gifts_system">
+                                <?php
+                                $selectedGiftsSystem = '';
+                                $giftsSystem = [
+                                  '1' => 'Yes, Enabled',
+                                  '2' => 'No, Disabled'
+                                ];
+                                foreach($giftsSystem as $key => $val)
+                                { 
+                                  if(isset($sd['gifts_system'])) {
+                                    if($sd['gifts_system'] == $key)
+                                    {
+                                      $selectedGiftsSystem = 'selected';
+                                    }else
+                                    {
+                                      $selectedGiftsSystem = '';
+                                    }
+                                  }
+                                  
+                                  ?>
+                                <option value="<?=$key?>" <?=$selectedGiftsSystem?>><?=$val?></option>
+                             <?php   }
+                               
+                                 ?>
+                              </select>
+                            </td>
                           </tr>
                            <tr>
                               <td>#</td>

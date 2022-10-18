@@ -74,6 +74,14 @@
                     <table class="table">
                       <tbody>
                           <tr>
+                              <td><label for="admission_no">Admission Number</label></td>
+                              <td><input type="text" name="admission_no" class="form-control" id="admission_no" placeholder="Admission No"></td>
+                          </tr>
+                          <tr>
+                              <td><label for="date_of_admission">Date of Admission</label></td>
+                              <td><input type="date" name="date_of_admission" class="form-control" id="date_of_admission" placeholder="Date of Admission"></td>
+                          </tr>
+                          <tr>
                               <td><label for="name">Full Name</label></td>
                               <td><input type="text" name="name" class="form-control" id="name" placeholder="Enter full name"></td>
                           </tr>
@@ -109,6 +117,21 @@
                                 <option  value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option>
                            <?php }
                           }
+                          ?>
+                        </select></td>
+                          </tr>
+                          <tr>
+                              <td><label for="category">Select Category</label></td>
+                              <td> <select class="form-control select2 select2-danger" name="cast_category" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                          <?php 
+                           
+                            foreach(HelperClass::casteCategory as $value => $caste)
+                            {
+                              
+                              ?>
+                                <option  value="<?= $value ?>"><?= $caste ?></option>
+                           <?php }
+                          
                           ?>
                         </select></td>
                           </tr>

@@ -3,13 +3,19 @@
 
 -- ALTER TABLE `schoolmaster` ADD `fee_invoice_start` VARCHAR(100) NULL AFTER `session_ended_to_year`;
 
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Download Students QR Code', 'showDownloadQR', NULL, '4', '0', '1', '1', '2022-08-29 03:55:52');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Download Students QR Code', 'showDownloadQR', NULL, '4', '0', '1', '1', '2022-08-29 03:55:52');
 
 
-ALTER TABLE `fees` ADD `tution_fees_amt` FLOAT NULL DEFAULT '0' AFTER `fees_amt`, ADD `reg_fees` FLOAT NULL DEFAULT '0' AFTER `tution_fees_amt`, ADD `adm_fees` FLOAT NULL DEFAULT '0' AFTER `reg_fees`, ADD `id_card_fees` FLOAT NULL DEFAULT '0' AFTER `adm_fees`, ADD `development_fees` FLOAT NULL DEFAULT '0' AFTER `id_card_fees`, ADD `annual_function_fees` FLOAT NULL DEFAULT '0' AFTER `development_fees`, ADD `book_and_stationary_fees` FLOAT NULL DEFAULT '0' AFTER `annual_function_fees`, ADD `uniform_fees` FLOAT NULL DEFAULT '0' AFTER `book_and_stationary_fees`, ADD `worksheet_examination_fees` FLOAT NULL DEFAULT '0' AFTER `uniform_fees`, ADD `extra_curricular_fees` FLOAT NULL DEFAULT '0' AFTER `worksheet_examination_fees`;
+-- ALTER TABLE `fees` ADD `tution_fees_amt` FLOAT NULL DEFAULT '0' AFTER `fees_amt`, ADD `reg_fees` FLOAT NULL DEFAULT '0' AFTER `tution_fees_amt`, ADD `adm_fees` FLOAT NULL DEFAULT '0' AFTER `reg_fees`, ADD `id_card_fees` FLOAT NULL DEFAULT '0' AFTER `adm_fees`, ADD `development_fees` FLOAT NULL DEFAULT '0' AFTER `id_card_fees`, ADD `annual_function_fees` FLOAT NULL DEFAULT '0' AFTER `development_fees`, ADD `book_and_stationary_fees` FLOAT NULL DEFAULT '0' AFTER `annual_function_fees`, ADD `uniform_fees` FLOAT NULL DEFAULT '0' AFTER `book_and_stationary_fees`, ADD `worksheet_examination_fees` FLOAT NULL DEFAULT '0' AFTER `uniform_fees`, ADD `extra_curricular_fees` FLOAT NULL DEFAULT '0' AFTER `worksheet_examination_fees`;
 
-ALTER TABLE `fees` ADD `smart_class_fees` FLOAT NULL DEFAULT '0' AFTER `extra_curricular_fees`, ADD `transport_fees` FLOAT NULL DEFAULT '0' AFTER `smart_class_fees`;
+-- ALTER TABLE `fees` ADD `smart_class_fees` FLOAT NULL DEFAULT '0' AFTER `extra_curricular_fees`, ADD `transport_fees` FLOAT NULL DEFAULT '0' AFTER `smart_class_fees`;
 
 
-ALTER TABLE `students` ADD `sr_number` VARCHAR(100) NULL AFTER `driver_id`;
-ALTER TABLE `teachers` ADD `cbse_id` VARCHAR(100) NULL AFTER `experience`;
+-- ALTER TABLE `students` ADD `sr_number` VARCHAR(100) NULL AFTER `driver_id`;
+-- ALTER TABLE `teachers` ADD `cbse_id` VARCHAR(100) NULL AFTER `experience`;
+
+
+-- ALTER TABLE `schoolmaster` ADD `gifts_system` ENUM('1','2',"3","4") NULL DEFAULT '1' COMMENT '1 => enabled, 2 => disabled' AFTER `fee_invoice_start`;
+
+ALTER TABLE `students` ADD `cast_category` VARCHAR(100) NULL AFTER `sr_number`, ADD `date_of_admission` DATE NULL AFTER `cast_category`;
+ALTER TABLE `students` ADD `admission_no` VARCHAR(100) NULL AFTER `date_of_admission`;

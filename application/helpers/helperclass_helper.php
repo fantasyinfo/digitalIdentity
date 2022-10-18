@@ -136,6 +136,14 @@ class HelperClass
         '4' => 'Deliverd'
     ];
 
+
+    const casteCategory = [
+        '1' =>'General',
+        '2' => 'OBC',
+        '3' => 'SC',
+        '4' => 'ST'
+    ];
+
     const sessionYears = [
         '2022',
         '2023',
