@@ -131,6 +131,7 @@ $masterRoutesArr = [
     'setNotificationMaster',
     'notificationDefault',
     'feeDueNotification',
+    'sessionMaster',
     'givePermissionMaster' // only for super Admin
     
 ];

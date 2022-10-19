@@ -45,7 +45,7 @@ if(isset($_POST['submit']))
 
   $userData = $this->db->query("SELECT * FROM " . Table::userTable . " WHERE email = '$email' AND schoolUniqueCode = '$schoolUniqueCode' AND status = 1 LIMIT 1")->result_array();
 
-  
+  $currentSession = $this->db->query("SELECT * FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$_SESSION['schoolUniqueCode']}'")->result_array()[0]['current_session'];
 
   if($userData)
   {
@@ -63,13 +63,17 @@ if(isset($_POST['submit']))
       $userArr['email'] = $userData[0]['email'];
       $userArr['user_type'] = $userData[0]['user_type'];
       $userArr['schoolUniqueCode'] = $userData[0]['schoolUniqueCode'];
+      $userArr['currentSession'] = $currentSession;
+
+      
 
       $userArr['userData'] = [
         'id' => $userData[0]['id'],
         'name' => $userData[0]['name'],
         'email' => $userData[0]['email'],
         'user_type' => $userData[0]['user_type'],
-        'schoolUniqueCode' => $userData[0]['schoolUniqueCode']
+        'schoolUniqueCode' => $userData[0]['schoolUniqueCode'],
+        'currentSession' => $currentSession
        
       ];
       $this->session->set_userdata($userArr);

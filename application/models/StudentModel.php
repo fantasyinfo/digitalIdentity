@@ -104,7 +104,29 @@ class StudentModel extends CI_Model
             $updateArr['u_qr_id'] = $qrInsertId;
             if($this->CrudModel->update(Table::studentTable,$updateArr,$insertId))
             {
-              return true;
+
+
+              
+              // add history
+              $historyArr = [
+                'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+                'student_id' => $insertId,
+                'session_table_id' => ($_SESSION['currentSession']) ? $_SESSION['currentSession'] : '0',
+                'class_id' => $post['class'],
+                'section_id' => $post['section'],
+                'fees_due' => '0'
+
+              ];
+              if($this->CrudModel->insert(Table::studentHistoryTable,$historyArr))
+              {
+                return true;
+              }else
+              {
+                echo $this->db->last_query();
+                die();
+                return false;
+              }
+              
             }else
             {
               echo $this->db->last_query();
