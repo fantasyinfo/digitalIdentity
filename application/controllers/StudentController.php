@@ -150,6 +150,19 @@ class StudentController extends CI_Controller
 			}
 		}
 	}
+
+	public function permoteStudent()
+	{
+		$this->loginCheck();
+		$this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'Permote Student',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'permoteStudent');
+	}
 	public function deleteStudent($id)
 	{
 		$this->loginCheck();

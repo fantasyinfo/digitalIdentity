@@ -157,7 +157,7 @@
                           </tr>
                           <tr>
                               <td> <label for="email">Email address</label></td>
-                              <td>  <input type="email" name="email" class="form-control" id="email" value="<?=$sd['email'];?>"></td>
+                              <td>  <input type="email" name="email" class="form-control" value="<?=$sd['email'];?>"></td>
                           </tr>
                           <tr>
                               <td> <label for="mobile">Mobile Number</label></td>

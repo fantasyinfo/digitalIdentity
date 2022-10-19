@@ -145,7 +145,7 @@
                           </tr>
                           <tr>
                               <td> <label for="email">Email address</label></td>
-                              <td>  <input type="email" name="email" class="form-control" id="email" placeholder="Enter email address"></td>
+                              <td>  <input type="email" name="email" class="form-control"  placeholder="Enter email address"></td>
                           </tr>
                           <tr>
                               <td> <label for="mobile">Mobile Number</label></td>

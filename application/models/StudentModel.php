@@ -202,6 +202,14 @@ class StudentModel extends CI_Model
       }
     }
 
+    public function listStudentsPermote($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->listStudentsPermote(Table::studentTable,$post);
+      }
+    }
+
     public function singleStudent($id)
     {
       return $this->CrudModel->singleStudent(Table::studentTable,$id);
@@ -262,19 +270,19 @@ class StudentModel extends CI_Model
       if(!empty($p))
       {
         // sessionStrtingFrom
-       $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+       $school =  $this->db->query("SELECT sst.session_start_year,sst.session_start_month, sst.session_end_year,sst.session_end_month FROM ".Table::schoolSessionTable." sst JOIN ".Table::schoolMasterTable." smt ON smt.current_session = sst.id AND sst.schoolUniqueCode = smt.unique_id WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
 
 
        if(!empty($school))
        {
-        $sessionStartingFrom = $school[0]['session_started_from']; // month
-        $sessionStartingYear = $school[0]['session_started_from_year'];
+        $sessionStartingFrom = HelperClass::monthsForSchool[$school[0]['session_start_month']]; // month
+        $sessionStartingYear = $school[0]['session_start_year'];
         $sessionStartDate = 1;
 
         $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
       
-        $sessionEndingFrom =  $school[0]['session_ended_to']; // month
-        $sessionEndingYear =  $school[0]['session_ended_to_year'];
+        $sessionEndingFrom =  HelperClass::monthsForSchool[$school[0]['session_end_month']]; // month
+        $sessionEndingYear =  $school[0]['session_end_year'];
         $sessionEndDate = 31;
 
         $sessionEnd = date("$sessionEndingYear-$sessionEndingFrom-$sessionEndDate");
@@ -381,18 +389,18 @@ class StudentModel extends CI_Model
     // for api
     public function totalFeesDueToday($schoolUniqueCode,$classId,$sectionId,$studentId)
     {
-      $school =  $this->db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+      $school =  $this->db->query("SELECT sst.session_start_year,sst.session_start_month, sst.session_end_year,sst.session_end_month FROM ".Table::schoolSessionTable." sst JOIN ".Table::schoolMasterTable." smt ON smt.current_session = sst.id AND sst.schoolUniqueCode = smt.unique_id WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
 
       if(!empty($school))
-       {
-        $sessionStartingFrom = $school[0]['session_started_from']; // month
-        $sessionStartingYear = $school[0]['session_started_from_year'];
-        $sessionStartDate = 1;
+      {
+       $sessionStartingFrom = HelperClass::monthsForSchool[$school[0]['session_start_month']]; // month
+       $sessionStartingYear = $school[0]['session_start_year'];
+       $sessionStartDate = 1;
 
-        $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
-      
-        $sessionEndingFrom =  $school[0]['session_ended_to']; // month
-        $sessionEndingYear =  $school[0]['session_ended_to_year'];
+       $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
+     
+       $sessionEndingFrom =  HelperClass::monthsForSchool[$school[0]['session_end_month']]; // month
+       $sessionEndingYear =  $school[0]['session_end_year'];
         $sessionEndDate = 31;
 
         $sessionEnd = date("$sessionEndingYear-$sessionEndingFrom-$sessionEndDate");
@@ -405,7 +413,7 @@ class StudentModel extends CI_Model
 
        $d = $this->db->query("SELECT * FROM ".Table::feesTable." WHERE class_id = '$classId' AND status = '1' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
-            // echo $this->db->last_query(); die();
+            //  echo $this->db->last_query(); die();
        if(!empty($d))
        {
         $totalMonthsForFees = intval($currentMonth) - intval($sessionStartingFrom);
@@ -468,6 +476,7 @@ class StudentModel extends CI_Model
           'totalDueAmt' => (@$totalDueAmt) ? " ₹ " . number_format(@$totalDueAmt,2) : " ₹ " . number_format(0,2),
           // 'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
           'totalBalanceForDeposit' => (@$totalBalance) ? " ₹ " . number_format(@$totalBalance,2) : " ₹ " . number_format(0,2),
+          'totalBalanceForDepositToday' => @$totalBalance ,
           'totalMonthFeesDue' => (@$totalMonthFeesDue) ? floor(@$totalMonthFeesDue) . " Months" : "0" . " Months",
           // 'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
         ];

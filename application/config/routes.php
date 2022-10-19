@@ -24,6 +24,7 @@ $studentRoutesArr = [
     'addStudent',
     'saveStudent',
     'updateStudent',
+    'permoteStudent'
 ];
 
 foreach($studentRoutesArr as $stRoute)
@@ -251,7 +252,8 @@ $ajaxRoutesArr = [
     'editHolidayEvent',
     'getHolidayEvent',
     'dateSheetList',
-    'showAllSemExamsWithStudents'
+    'showAllSemExamsWithStudents',
+    'listStudentsPermote'
     
 ];
 

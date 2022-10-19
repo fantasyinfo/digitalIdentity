@@ -17,10 +17,10 @@ $(document).ready(function(){
             section: {
               required: true
             },
-            email: {
-              required: true,
-              email: true,
-            },
+            // email: {
+            //   required: true,
+            //   email: true,
+            // },
             mobile: {
               required: true,
               minlength: 10
@@ -47,10 +47,10 @@ $(document).ready(function(){
             },
           },
           messages: {
-            email: {
-              required: "Please enter a email address",
-              email: "Please enter a valid email address"
-            },
+            // email: {
+            //   required: "Please enter a email address",
+            //   email: "Please enter a valid email address"
+            // },
             mobile: {
               required: "Please provide a mobile number",
               minlength: "Your password must be at least 10 digit"

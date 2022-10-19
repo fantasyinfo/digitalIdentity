@@ -341,6 +341,104 @@ class CrudModel extends CI_Model
         echo json_encode($dataTableArr);
         
     }
+
+    public function listStudentsPermote($tableName,$data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url().HelperClass::studentImagePath;
+        if(!empty($data))
+        {
+            // print_r($data);
+            $condition = " 
+             AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND c.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND ss.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND st.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+             AND ct.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
+            ";
+
+            if(isset($data['studentName']) || isset($data['studentClass']) || isset($data['studentMobile']) || isset($data['studentUserId']) || isset($data['studentFromDate']) || isset($data['studentToDate']) || isset($data['studentSection']))
+            {
+                if(!empty($data['studentName']))
+                {
+                    $condition .= " AND s.name LIKE '%{$data['studentName']}%' ";
+                }
+                if(!empty($data['studentClass']))
+                {
+                    $condition .= " AND c.id = '{$data['studentClass']}' ";
+                }
+                if(!empty($data['studentSection']))
+                {
+                    $condition .= " AND ss.id = '{$data['studentSection']}' ";
+                }
+                
+            }
+      
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
+                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count  FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 $condition ORDER BY s.id DESC";
+            }else
+            {
+                $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
+                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+                $countSql = "SELECT count(s.id) as count FROM " .$this->tableName." s
+                LEFT JOIN ".Table::classTable." c ON c.id =  s.class_id
+                LEFT JOIN ".Table::sectionTable." ss ON ss.id =  s.section_id
+                LEFT JOIN ".Table::stateTable." st ON st.id =  s.state_id
+                LEFT JOIN ".Table::cityTable." ct ON ct.id =  s.city_id
+                WHERE s.status != 4 ORDER BY s.id DESC";
+            }
+
+
+            $tCount = $this->db->query($countSql)->result_array();
+
+            $sendArr = [];
+            for($i=0;$i<count($d);$i++)
+            {
+                $subArr = [];
+               
+                $subArr[] = ($j = $i + 1);
+                $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
+                $subArr[] = $d[$i]['name'];
+                $subArr[] = $d[$i]['user_id'];
+                $subArr[] = $d[$i]['mobile'];
+                $subArr[] = $d[$i]['className']. " - ".$d[$i]['sectionName'];
+                $subArr[] = '<button onclick="permoteStudent('.$d[$i]['id'].')" class="btn btn-info" >Permote Student</button>';
+                $sendArr[] = $subArr;
+            }
+
+        $dataTableArr = [
+            "draw"=> $data['draw'],
+            "recordsTotal"=> $tCount[0]['count'],
+            "recordsFiltered"=> $tCount[0]['count'],
+            "data"=>$sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+        
+    }
+
+
+
+
+
     public function showAllTeachers($tableName,$data = '')
     {
         $this->tableName = $tableName;

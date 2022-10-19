@@ -25,6 +25,13 @@ class AjaxController extends CI_Controller {
 			return $this->StudentModel->listStudents($_POST);
 		}
 	}
+	public function listStudentsPermote()
+	{
+		if(isset($_POST))
+		{
+			return $this->StudentModel->listStudentsPermote($_POST);
+		}
+	}
 	public function listTeachersAjax()
 	{
 		if(isset($_POST))

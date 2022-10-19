@@ -21,16 +21,28 @@
 -- ALTER TABLE `students` ADD `admission_no` VARCHAR(100) NULL AFTER `date_of_admission`;
 
 
-CREATE TABLE `school_sessions` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `session_start_year` INT NOT NULL , `session_start_month` INT NOT NULL , `session_end_year` INT NOT NULL , `session_end_month` INT NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+-- CREATE TABLE `school_sessions` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `session_start_year` INT NOT NULL , `session_start_month` INT NOT NULL , `session_end_year` INT NOT NULL , `session_end_month` INT NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
-CREATE TABLE `student_history` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT NULL , `student_id` INT NOT NULL , `session_table_id` INT NOT NULL , `class_id` INT NOT NULL , `section_id` INT NOT NULL , `fees_due` FLOAT NULL , `status` ENUM("1","2","3","4") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+-- CREATE TABLE `student_history` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT NULL , `student_id` INT NOT NULL , `session_table_id` INT NOT NULL , `class_id` INT NOT NULL , `section_id` INT NOT NULL , `fees_due` FLOAT NULL , `status` ENUM("1","2","3","4") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
-ALTER TABLE `sem_exam_results` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `sem_exam_results` ADD `session_table_id` INT NULL AFTER `status`;
 
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Session Master', 'master/sessionMaster', NULL, '40', '0', '1', '1', '2022-08-29 09:25:52');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Session Master', 'master/sessionMaster', NULL, '40', '0', '1', '1', '2022-08-29 09:25:52');
 
-ALTER TABLE `school_sessions` CHANGE `session_start_month` `session_start_month` VARCHAR(100) NOT NULL;
-ALTER TABLE `school_sessions` CHANGE `session_end_month` `session_end_month` VARCHAR(100) NOT NULL;
-ALTER TABLE `schoolmaster` ADD `current_session` INT NULL AFTER `gifts_system`;
+-- ALTER TABLE `school_sessions` CHANGE `session_start_month` `session_start_month` VARCHAR(100) NOT NULL;
+-- ALTER TABLE `school_sessions` CHANGE `session_end_month` `session_end_month` VARCHAR(100) NOT NULL;
+-- ALTER TABLE `schoolmaster` ADD `current_session` INT NULL AFTER `gifts_system`;
+
+
+INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Permote Students', 'student/permoteStudent', NULL, '4', '0', '1', '1', '2022-08-29 09:25:52');
+
+ALTER TABLE `student_history` CHANGE `schoolUniqueCode` `schoolUniqueCode` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+ALTER TABLE `student_history` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1';
+
+
+ALTER TABLE school_sessions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+ALTER TABLE schoolmaster CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
