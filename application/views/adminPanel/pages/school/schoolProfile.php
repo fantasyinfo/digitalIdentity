@@ -292,7 +292,9 @@
     <!-- Control Sidebar -->
 
     <!-- /.control-sidebar -->
-
+    
     <?php $this->load->view("adminPanel/pages/footer-copyright.php"); ?>
+    <?php $this->load->view("adminPanel/pages/footer.php");?>
 
-                </div>
+               
+    </div>        

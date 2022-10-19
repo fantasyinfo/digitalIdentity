@@ -1,5 +1,35 @@
 <!-- REQUIRED SCRIPTS -->
 
+<style>
+  .float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	top:450px;
+	right:5px;
+	background-color:#25d366;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+  font-size:30px;
+	box-shadow: 2px 2px 3px #999;
+  z-index:100;
+}
+
+.my-float{
+	margin-top:16px;
+}
+</style>
+
+<a href="https://api.whatsapp.com/send?phone=916397520221&text=Hi,I need help in digitalfied digital identity software." class="float" target="_blank">
+<i class="fa-brands fa-whatsapp"></i>
+</a>
+
+
+
+
+
+
 <!-- jQuery -->
 <script src="<?= base_url() .$data['adminPanelUrl']?>plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->

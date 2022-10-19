@@ -21,7 +21,7 @@ $totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM ".Table::
                 <div class="icon">
                 <i class="fa-solid fa-user"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="<?= base_url('student/list');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
 
@@ -35,7 +35,7 @@ $totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM ".Table::
                 <div class="icon">
                 <i class="fa-solid fa-user-plus"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="<?= base_url('academic/allAttendance');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
 
@@ -49,7 +49,7 @@ $totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM ".Table::
                 <div class="icon">
                 <i class="fa-solid fa-user-minus"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="<?= base_url('academic/allAttendance');?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             
