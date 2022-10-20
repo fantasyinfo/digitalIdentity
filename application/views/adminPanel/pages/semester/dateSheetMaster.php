@@ -66,8 +66,8 @@
 
 
       $addExamSemester = $this->db->query("INSERT INTO " . Table::secExamTable . " 
-      (schoolUniqueCode,sem_exam_id,class_id,section_id,subject_id,exam_date,exam_day,min_marks,max_marks) 
-      VALUES ('$schoolUniqueCode','$sem_exam_id','$class_id','$section_id', '$subject_id','$exam_date','$exam_day','$min_marks','$max_marks')");
+      (schoolUniqueCode,sem_exam_id,class_id,section_id,subject_id,exam_date,exam_day,min_marks,max_marks,session_table_id) 
+      VALUES ('$schoolUniqueCode','$sem_exam_id','$class_id','$section_id', '$subject_id','$exam_date','$exam_day','$min_marks','$max_marks','{$_SESSION['currentSession']}')");
 
       if ($addExamSemester) {
 

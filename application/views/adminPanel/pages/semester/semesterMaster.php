@@ -32,7 +32,7 @@
       $end_date = $_POST['end_date'];
       $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
 
-      $addSemester = $this->db->query("INSERT INTO " . Table::semExamNameTable . " (schoolUniqueCode,sem_exam_name,exam_year,start_date,end_date) VALUES ('$schoolUniqueCode','$sem_exam_name','$exam_year','$start_date', '$end_date')");
+      $addSemester = $this->db->query("INSERT INTO " . Table::semExamNameTable . " (schoolUniqueCode,sem_exam_name,exam_year,start_date,end_date, session_table_id) VALUES ('$schoolUniqueCode','$sem_exam_name','$exam_year','$start_date', '$end_date','{$_SESSION['currentSession']}')");
       if($addSemester)
       {
       
