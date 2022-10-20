@@ -95,7 +95,7 @@
       $transport_fees = ($_POST['transport_fees'])? $_POST['transport_fees'] : 0.0;
 
 
-      $alreadyFees = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '$classId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+      $alreadyFees = $this->db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '$classId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND session_table_id = '{$_SESSION['currentSession']}'")->result_array();
 
       if(!empty($alreadyFees))
       {
@@ -108,7 +108,7 @@
           exit(0);
       }
 
-      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (schoolUniqueCode,class_id,fees_amt,tution_fees_amt,reg_fees,adm_fees,id_card_fees,development_fees,annual_function_fees,book_and_stationary_fees,uniform_fees,worksheet_examination_fees,extra_curricular_fees,smart_class_fees,transport_fees) VALUES ('{$_SESSION['schoolUniqueCode']}','$classId','$feesAmt','$tution_fees_amt','$reg_fees','$adm_fees','$id_card_fees','$development_fees','$annual_function_fees','$book_and_stationary_fees','$uniform_fees','$worksheet_examination_fees','$extra_curricular_fees','$smart_class_fees','$transport_fees')");
+      $insertNewFees = $this->db->query("INSERT INTO " . Table::feesTable . " (schoolUniqueCode,class_id,fees_amt,tution_fees_amt,reg_fees,adm_fees,id_card_fees,development_fees,annual_function_fees,book_and_stationary_fees,uniform_fees,worksheet_examination_fees,extra_curricular_fees,smart_class_fees,transport_fees,session_table_id) VALUES ('{$_SESSION['schoolUniqueCode']}','$classId','$feesAmt','$tution_fees_amt','$reg_fees','$adm_fees','$id_card_fees','$development_fees','$annual_function_fees','$book_and_stationary_fees','$uniform_fees','$worksheet_examination_fees','$extra_curricular_fees','$smart_class_fees','$transport_fees','{$_SESSION['currentSession']}')");
       if($insertNewFees)
       {
       
@@ -299,7 +299,7 @@
                               <label>Please Enter Tution Fees Amount <b> Per Month </b> </label>
                               </td>
                               <td>
-                              <input type="number" name="tution_fees_amt" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['tution_fees_amt'];}?>" class="form-control" id="name" placeholder="Enter Fees Amount Per Month" required>
+                              <input type="number" name="tution_fees_amt" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editCityData[0]['tution_fees_amt'];}?>" class="form-control" id="name" placeholder="Enter Fees Amount Per Month" >
                               </td>
                             </tr>
                             <tr>

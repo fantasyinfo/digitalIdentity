@@ -93,6 +93,7 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
 		// if($loginUserIdFromDB != $loginUserId)
 		// {
 		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
@@ -128,7 +129,7 @@ class APIController extends CI_Controller
 			// 	continue;
 			// }
 			array_push($studentIds,$stu_id);
-			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus,$schoolUniqueCode);
+			$insertAttendeceRecord = $this->APIModel->submitAttendence($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus,$schoolUniqueCode,$session_table_id);
 			if (!$insertAttendeceRecord) {
 				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -251,6 +252,7 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
 		// if($loginUserIdFromDB != $loginUserId)
 		// {
 		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
@@ -270,7 +272,7 @@ class APIController extends CI_Controller
 			 $stu_id = $departureData[$i]['studentId'];
 			 array_push($studentIds,$stu_id);
 			$departureStatus = '1';
-			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserIdFromDB, $loginuserType, $departureStatus,$schoolUniqueCode);
+			$insertDepartureRecord = $this->APIModel->submitDeparture($stu_id, $attendenceId,$className, $sectionName, $loginUserIdFromDB, $loginuserType, $departureStatus,$schoolUniqueCode,$session_table_id);
 			if (!$insertDepartureRecord) {
 				return HelperClass::APIresponse(500, 'Departure Not Updated Successfully beacuse ' . $this->db->last_query());
 			}
@@ -400,11 +402,12 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
 		// if($loginUserIdFromDB != $loginUserId)
 		// {
 		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
 		// }
-		$addNewExam = $this->APIModel->addExam($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$schoolUniqueCode);
+		$addNewExam = $this->APIModel->addExam($loginUserIdFromDB,$loginuserType,$classId,$sectionId,$subjectId,$examDate,$examName,$maxMarks,$minMarks,$schoolUniqueCode,$session_table_id);
 
 		if (!$addNewExam) {
 			return HelperClass::APIresponse(500, 'Exam Not Added Successfully beacuse ' . $this->db->last_query());
@@ -570,6 +573,7 @@ class APIController extends CI_Controller
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
 		// if($loginUserIdFromDB != $loginUserId)
 		// {
 		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
@@ -582,7 +586,7 @@ class APIController extends CI_Controller
 			$marks = $results[$i]['marks'];
 			$reMarks = @$results[$i]['reMarks'];
 		
-			$addExamResult = $this->APIModel->addResult($loginUserIdFromDB,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$examId,$schoolUniqueCode);
+			$addExamResult = $this->APIModel->addResult($loginUserIdFromDB,$loginuserType,$resultDate,$studentId,$marks,$reMarks,$examId,$schoolUniqueCode,$session_table_id);
 		}
 
 		if (!$addExamResult) {
@@ -1042,11 +1046,12 @@ public function updateHomeWork()
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
 		// if($loginUserIdFromDB != $loginUserId)
 		// {
 		// 	return HelperClass::APIresponse(500, "Login User Id And Auth Token Not Matched, Please Use Correct Login User Id. " );
 		// }
-		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$document_image_name,$schoolUniqueCode);
+		$visitorEntry = $this->APIModel->visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$document_image_name,$schoolUniqueCode,$session_table_id);
 
 		if (!$visitorEntry) {
 			return HelperClass::APIresponse(500, 'There is some technical issue, visitor entry not inserted ' . $this->db->last_query());

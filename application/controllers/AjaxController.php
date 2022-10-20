@@ -143,7 +143,7 @@ class AjaxController extends CI_Controller {
 	{
 		if(isset($_POST))
 		{
-			$add = $this->db->query("INSERT INTO ".Table::holidayCalendarTable." (schoolUniqueCode,title,event_date) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['title']}','{$_POST['start']}')");
+			$add = $this->db->query("INSERT INTO ".Table::holidayCalendarTable." (schoolUniqueCode,title,event_date,session_table_id) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['title']}','{$_POST['start']}','{$_SESSION['currentSession']}')");
 		}
 	}
 	public function editHolidayEvent()

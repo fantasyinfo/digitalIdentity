@@ -70,8 +70,8 @@
       $total_due_balance = $_POST['total_due_balance'];
 
       $insert =  $this->db->query("INSERT INTO ".Table::feesForStudentTable." 
-       (schoolUniqueCode,invoice_id,login_user_id,login_user_type,student_id,class_id,section_id,offer_amt,deposit_amt,fee_deposit_date,payment_mode,depositer_name,depositer_mobile,depositer_address,total_due_balance) 
-       VALUES ('$schoolUniqueCode','$invoice_id','$login_user_id','$login_user_type','$student_id','$class_id','$section_id','$offer_amt','$deposit_amt','$fee_deposit_date','$payment_mode','$depositer_name','$depositer_mobile','$depositer_address','$total_due_balance')");
+       (schoolUniqueCode,invoice_id,login_user_id,login_user_type,student_id,class_id,section_id,offer_amt,deposit_amt,fee_deposit_date,payment_mode,depositer_name,depositer_mobile,depositer_address,total_due_balance,session_table_id) 
+       VALUES ('$schoolUniqueCode','$invoice_id','$login_user_id','$login_user_type','$student_id','$class_id','$section_id','$offer_amt','$deposit_amt','$fee_deposit_date','$payment_mode','$depositer_name','$depositer_mobile','$depositer_address','$total_due_balance','{$_SESSION['currentSession']}')");
 
        if($insert)
        {

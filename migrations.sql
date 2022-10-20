@@ -36,13 +36,26 @@
 -- ALTER TABLE `schoolmaster` ADD `current_session` INT NULL AFTER `gifts_system`;
 
 
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Permote Students', 'student/permoteStudent', NULL, '4', '0', '1', '1', '2022-08-29 09:25:52');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Permote Students', 'student/permoteStudent', NULL, '4', '0', '1', '1', '2022-08-29 09:25:52');
 
-ALTER TABLE `student_history` CHANGE `schoolUniqueCode` `schoolUniqueCode` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+-- ALTER TABLE `student_history` CHANGE `schoolUniqueCode` `schoolUniqueCode` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 
-ALTER TABLE `student_history` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1';
+-- ALTER TABLE `student_history` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1';
 
 
-ALTER TABLE school_sessions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- ALTER TABLE school_sessions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-ALTER TABLE schoolmaster CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- ALTER TABLE schoolmaster CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+-- ALTER TABLE `attendence` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `attendenceteachers` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `departure` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `exam` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `fees` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `feesforstudent` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `holiday_calendar` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `result` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `sec_exam_table` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `sem_exam` ADD `session_table_id` INT NULL AFTER `status`;
+-- ALTER TABLE `visitor_entry` ADD `session_table_id` INT NULL AFTER `status`;

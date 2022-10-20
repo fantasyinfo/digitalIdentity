@@ -211,11 +211,14 @@ class APIModel extends CI_Model
   public function validateLogin($authToken, $type)
   {
 
+    
     if ($type == 'Teacher') {
 
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::teacherTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
+        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
         $userData[0]['userType'] = $type;
         return $userData;
       } else {
@@ -226,6 +229,9 @@ class APIModel extends CI_Model
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::userTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
+        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
+
         $userData[0]['userType'] = $type;
         return $userData;
       } else {
@@ -237,6 +243,9 @@ class APIModel extends CI_Model
     $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
+        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
+
         $userData[0]['userType'] = $type;
         return $userData;
       } else {
@@ -247,6 +256,9 @@ class APIModel extends CI_Model
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::driverTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
+        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
+
         $userData[0]['userType'] = $type;
         return $userData;
       } else {
@@ -378,7 +390,7 @@ class APIModel extends CI_Model
 
 
   // save attendence
-  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode)
+  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode,$session_table_id)
   {
 
 
@@ -424,6 +436,7 @@ class APIModel extends CI_Model
         "attendenceStatus" => $attendenceStatus,
         "dateTime" => date_create()->format('Y-m-d h:i:s'),
         "att_date" => date_create()->format('Y-m-d'),
+        "session_table_id" => $session_table_id
       ];
       $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
       if (!empty($insertId)) {
@@ -479,7 +492,7 @@ class APIModel extends CI_Model
   }
 
   // save departure
-  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode)
+  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode,$session_table_id)
   {
     if( date('D') == 'Sun') { 
       return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
@@ -504,6 +517,7 @@ class APIModel extends CI_Model
         "departureStatus" => $departureStatus,
         "dateTime" => date_create()->format('Y-m-d h:i:s'),
         "dept_date" => date_create()->format('Y-m-d'),
+        "session_table_id" => $session_table_id
       ];
 
       $insertId = $this->CrudModel->insert(Table::departureTable, $insertArr);
@@ -662,7 +676,7 @@ class APIModel extends CI_Model
      return $returnArr = $this->StudentModel->showAttendenceData($studentId,$dateWithYear,$schoolUniqueCode);
   }
   // add Exam
-  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode)
+  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode,$session_table_id)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -678,6 +692,7 @@ class APIModel extends CI_Model
         "min_marks" => $minMarks,
         "login_user_id" => $loginUserId,
         "login_user_type" => $loginuserType,
+        "session_table_id" => $session_table_id
       ];
 
       $insertId = $this->CrudModel->insert(Table::examTable, $insertArr);
@@ -1035,7 +1050,7 @@ class APIModel extends CI_Model
 
 
   // save attendence
-  public function addResult($loginUserId, $loginuserType, $resultDate, $studentId, $marks, $reMarks, $examId, $schoolUniqueCode)
+  public function addResult($loginUserId, $loginuserType, $resultDate, $studentId, $marks, $reMarks, $examId, $schoolUniqueCode,$session_table_id)
   {
     $currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -1072,6 +1087,7 @@ class APIModel extends CI_Model
         "login_user_type" => $loginuserType,
         "login_user_id" => $loginUserId,
         "result_date" => $resultDate,
+        "session_table_id" => $session_table_id
       ];
 
 
@@ -1735,10 +1751,10 @@ class APIModel extends CI_Model
   }
 
   // leaderBoard
-  public function visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode)
+  public function visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode,$session_table_id)
   {
     
-      $d = $this->db->query("INSERT INTO ".Table::visitorTable." (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$file')");
+      $d = $this->db->query("INSERT INTO ".Table::visitorTable." (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image,session_table_id) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$file','$session_table_id')");
       // echo $this->db->last_query();
       
       if (($d)) {

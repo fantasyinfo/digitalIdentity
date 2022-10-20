@@ -75,6 +75,7 @@
                     "attendenceStatus" => $_POST['attendance'][$j],
                     "dateTime" => date_create()->format('Y-m-d h:i:s'),
                     "att_date" => date_create()->format('Y-m-d'),
+                    "session_table_id" => $_SESSION['currentSession']
 
                 ];
                 $insertId = $this->CrudModel->insert(Table::attendenceTeachersTable, $insertArr);
