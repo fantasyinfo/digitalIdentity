@@ -163,6 +163,43 @@ class StudentController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'permoteStudent');
 	}
+
+	public function generateTC()
+	{
+		$this->loginCheck();
+		$this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'Generate TC',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'generateTC');
+	}
+	public function editTC()
+	{
+		$this->loginCheck();
+		// $this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'Edit TC',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'editTC');
+	}
+	public function tc()
+	{
+		// $this->loginCheck();
+		// $this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'Generate TC',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		// $this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'tc');
+	}
 	public function deleteStudent($id)
 	{
 		$this->loginCheck();

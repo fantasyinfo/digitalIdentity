@@ -59,3 +59,14 @@
 -- ALTER TABLE `sec_exam_table` ADD `session_table_id` INT NULL AFTER `status`;
 -- ALTER TABLE `sem_exam` ADD `session_table_id` INT NULL AFTER `status`;
 -- ALTER TABLE `visitor_entry` ADD `session_table_id` INT NULL AFTER `status`;
+
+
+-- CREATE TABLE `student_tc` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `book_register_no` VARCHAR(100) NOT NULL , `s_i_s_r_no` VARCHAR(100) NOT NULL , `admission_no` VARCHAR(100) NOT NULL , `student_id` INT NOT NULL , `student_name` VARCHAR(100) NOT NULL , `father_name` VARCHAR(100) NOT NULL , `mother_name` VARCHAR(100) NOT NULL , `gender` VARCHAR(100) NOT NULL , `date_of_birth` DATE NOT NULL , `category` VARCHAR(100) NOT NULL , `nationality` VARCHAR(100) NOT NULL , `date_of_admission` DATE NOT NULL , `last_class_studies` VARCHAR(100) NOT NULL , `board_exam_last_taken` VARCHAR(100) NOT NULL , `failed_in_class` VARCHAR(100) NOT NULL , `subjects_studies` JSON NOT NULL , `qualify_for_permotion` VARCHAR(100) NOT NULL , `fees_due` VARCHAR(100) NOT NULL , `total_working_days` INT NOT NULL , `total_present_days` INT NOT NULL , `ncc_cadet` VARCHAR(100) NOT NULL , `game_played` VARCHAR(100) NOT NULL , `general_conduct` VARCHAR(100) NOT NULL , `date_of_application` DATE NOT NULL , `date_of_issue` DATE NOT NULL , `reason_for_leaving` VARCHAR(100) NOT NULL , `remark` VARCHAR(100) NOT NULL , `other_details` VARCHAR(100) NOT NULL , `session_table_id` INT NOT NULL , `status` ENUM("1","2") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+ALTER TABLE `student_tc` CHANGE `other_details` `shedule_tribe` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `student_tc` CHANGE `subjects_studies` `subjects_studies` VARCHAR(100) NOT NULL;
+
+
+ALTER TABLE student_tc CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+ALTER TABLE `student_tc` ADD `user_id` VARCHAR(100) NULL AFTER `student_id`;

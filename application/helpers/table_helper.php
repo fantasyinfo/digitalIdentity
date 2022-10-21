@@ -46,5 +46,6 @@ class Table{
     const semExamResults = 'sem_exam_results';
     const schoolSessionTable = 'school_sessions';
     const studentHistoryTable = 'student_history';
+    const studentTC = 'student_tc';
     
 }

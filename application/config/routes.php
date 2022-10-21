@@ -24,7 +24,10 @@ $studentRoutesArr = [
     'addStudent',
     'saveStudent',
     'updateStudent',
-    'permoteStudent'
+    'permoteStudent',
+    'generateTC',
+    'editTC',
+    'tc'
 ];
 
 foreach($studentRoutesArr as $stRoute)
