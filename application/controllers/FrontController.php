@@ -102,4 +102,10 @@ class FrontController extends CI_Controller {
 
 		redirect(base_url());
 	}
+
+	public function tc()
+	{
+
+		$this->load->view($this->frontViewDir . 'tc');
+	}
 }

@@ -31,7 +31,7 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
          $this->session->set_userdata($msgArr);
          $insert = $tcDetails[0]['id'];
          $user_id = $tcDetails[0]['user_id'];
-         header("Location: " . base_url() . "student/tc?tc_id=" . $insert . "&user_id=" . $user_id);
+         header("Location: " . base_url() . "tc?tc_id=" . $insert . "&user_id=" . $user_id);
     }
 
     
@@ -83,7 +83,7 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
             'msg' => 'Student Transfer Certificate Generated Successfully. Please Click on Download Button for Download.',
         ];
         $this->session->set_userdata($msgArr);
-        header("Location: " . base_url() . "student/tc?tc_id=" . $insert . "&user_id=" . $_POST['user_id']);
+        header("Location: " . base_url() . "tc?tc_id=" . $insert . "&user_id=" . $_POST['user_id']);
         ?>
         <style>#form_w {display:none;}</style>
         <?php

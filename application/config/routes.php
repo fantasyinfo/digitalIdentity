@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['/'] = 'FrontController/index'; // login or studentview
  $route['register'] = 'FrontController/register'; // register
  $route['logout'] = 'FrontController/logout'; // logout
+ $route['tc'] = 'FrontController/tc'; // tc verify
  // front-end routes
 
 
@@ -26,8 +27,7 @@ $studentRoutesArr = [
     'updateStudent',
     'permoteStudent',
     'generateTC',
-    'editTC',
-    'tc'
+    'editTC'
 ];
 
 foreach($studentRoutesArr as $stRoute)
