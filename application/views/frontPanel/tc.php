@@ -3,10 +3,12 @@
 
 error_reporting(0);
 $schoolLogo = base_url().HelperClass::schoolLogoImagePath;
-if(isset($_GET['tc_id']) && isset($_GET['user_id']))
+if(isset($_GET['tc_id']))
 {
-	$tcId = $_GET['tc_id'];
-	$userId = $_GET['user_id'];
+	$userId = explode('-',$_GET['tc_id']);
+	;
+	$tcId = $userId[0];
+	$userId = $userId[1];
 
 	$tcDetails = $this->db->query("SELECT st.*, sm.school_name, sm.mobile,sm.email,sm.address,CONCAT('$schoolLogo',sm.image) as logo,sm.pincode FROM ".Table::studentTC." st 
 	JOIN ".Table::schoolMasterTable." sm ON sm.unique_id = st.schoolUniqueCode 
@@ -178,7 +180,7 @@ if(isset($_GET['tc_id']) && isset($_GET['user_id']))
 			<p style="font-size:20px">Mobile: <?=$tcDetails['mobile']?> Email:  <?=$tcDetails['email']?></p>
 		</td>
 		<td >
-		<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('tc?tc_id=') . $tcDetails['id'] . "&user_id=" . $tcDetails['user_id'];?>&amp;choe=UTF-8" alt="QR code" /> </br><p><center>Scan To Verfify</center></p>
+		<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('tc?tc_id=') . $tcDetails['id'] . "-" . $tcDetails['user_id'];?>&amp;choe=UTF-8" alt="QR code" /> </br><p><center>Scan To Verfify</center></p>
 		</td>
 	</tr>
 </table>
