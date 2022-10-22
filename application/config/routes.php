@@ -221,7 +221,7 @@ $semesterRoutesArr = [
     'dateSheetMaster',
     'dateSheetList',
     'downloadDateSheet',
-    'addSemesterResult'
+    'showAllSemesterResults'
 ];
 
 foreach($semesterRoutesArr as $semRoute)
@@ -256,7 +256,8 @@ $ajaxRoutesArr = [
     'getHolidayEvent',
     'dateSheetList',
     'showAllSemExamsWithStudents',
-    'listStudentsPermote'
+    'listStudentsPermote',
+    'showAllSemesterResultsList'
     
 ];
 

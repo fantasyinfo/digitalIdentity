@@ -1579,6 +1579,8 @@ public function addSemesterExamResult()
 		return HelperClass::APIresponse(500, 'Result Not Added Successfully beacuse ' . $this->db->last_query());
 	}else
 	{
+		// update on exam table result published
+		$updateExamPublishedStatus = $this->CrudModel->update(Table::secExamTable, ['status' => '3'],$examId);
 		return HelperClass::APIresponse(200, 'Result Updated Successfully');
 	}
 	

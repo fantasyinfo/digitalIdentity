@@ -25,5 +25,12 @@ class ExamModel extends CI_Model
        return $this->CrudModel->allResultList(Table::resultTable,$post);
       }
     }
+    public function showAllSemesterResultsList($post)
+    {
+      if(isset($post))
+      {
+       return $this->CrudModel->showAllSemesterResultsList(Table::semExamResults,$post);
+      }
+    }
 
 }
