@@ -1499,7 +1499,8 @@ public function updateHomeWork()
 		$loginuserType = $apiData['userType'];
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$allSemesterExamNames = $this->APIModel->showSemesterExamNames($schoolUniqueCode);
+		$session_table_id = $loginUser[0]['session_table_id'];
+		$allSemesterExamNames = $this->APIModel->showSemesterExamNames($schoolUniqueCode,$session_table_id);
 
 		if (!$allSemesterExamNames) {
 			return HelperClass::APIresponse(500, 'No Semester Exam Found');
@@ -1516,7 +1517,7 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['subjectId']) || empty($apiData['semExamId']))
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['subjectId']) || empty($apiData['semExamNameId']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
 		}
@@ -1525,10 +1526,11 @@ public function updateHomeWork()
 		$classId = $apiData['classId'];
 		$sectionId = $apiData['sectionId'];
 		$subjectId = $apiData['subjectId']; 
-		$semExamId = $apiData['semExamId']; 
+		$semExamId = $apiData['semExamNameId']; 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$allSemesterExamList = $this->APIModel->showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode);
+		$session_table_id = $loginUser[0]['session_table_id'];
+		$allSemesterExamList = $this->APIModel->showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode,$session_table_id);
 
 		if (!$allSemesterExamList) {
 			return HelperClass::APIresponse(500, 'No Semester Exam Found For This Class And Section And Subject');
@@ -1541,7 +1543,46 @@ public function updateHomeWork()
 
 
 
+// add Semster Exam Result
+public function addSemesterExamResult()
+{
+	$this->checkAPIRequest();
+	$apiData = $this->getAPIData();
+	if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['results']) || empty($apiData['loginUserId']) || empty($apiData['semExamId']))
+	{
+		return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+	}
+	$authToken = $apiData['authToken'];
+	$loginuserType = $apiData['userType'];
+	$loginUserId = $apiData['loginUserId'];
+	$examId = $apiData['semExamId'];
+	$semExamNameId = $apiData['semExamNameId'];
+	$results = $apiData['results'];
+	$totalResults = count($results);
 
+	$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+	$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+	$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+	$session_table_id = $loginUser[0]['session_table_id'];
+
+	$studentIds = [];
+	for($i=0;$i<$totalResults;$i++)
+	{
+		$studentId = $results[$i]['studentId'];
+		array_push($studentIds,$studentId);
+		$marks = $results[$i]['marks'];
+
+		$addExamResult = $this->APIModel->addSemesterExamResult($studentId,$marks,$examId,$semExamNameId,$schoolUniqueCode,$session_table_id);
+	}
+
+	if (!$addExamResult) {
+		return HelperClass::APIresponse(500, 'Result Not Added Successfully beacuse ' . $this->db->last_query());
+	}else
+	{
+		return HelperClass::APIresponse(200, 'Result Updated Successfully');
+	}
+	
+}
 
 
 

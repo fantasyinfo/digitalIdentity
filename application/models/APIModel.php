@@ -1912,11 +1912,11 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
 
 
     // showAll Semester Exam Name
-    public function showSemesterExamNames($schoolUniqueCode)
+    public function showSemesterExamNames($schoolUniqueCode,$session_table_id)
     {
  
-      $d = $this->db->query("SELECT sem.* , sem.id as semExamId FROM " . Table::semExamNameTable . " sem
-        WHERE  sem.schoolUniqueCode = '$schoolUniqueCode' AND sem.status = '1'")->result_array();
+      $d = $this->db->query("SELECT sem.* , sem.id as semExamNameId FROM " . Table::semExamNameTable . " sem
+        WHERE  sem.schoolUniqueCode = '$schoolUniqueCode' AND sem.status = '1' AND session_table_id = '$session_table_id'")->result_array();
   
       if (!empty($d)) {
         return $d;
@@ -1927,10 +1927,10 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
 
 
      // showAll Semester Exam
-  public function showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode)
+  public function showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode,$session_table_id)
   {
     $d = $this->db->query("SELECT 
-    sec.id, sec.exam_date,sec.exam_day,sec.min_marks,sec.max_marks,
+    sec.id as semExamId, sec.sem_exam_id as semExamNameId, sec.exam_date,sec.exam_day,sec.min_marks,sec.max_marks,
     sem.sem_exam_name, sem.exam_year,
     c.className,se.sectionName,sub.subjectName
      FROM " . Table::secExamTable . " sec
@@ -1943,13 +1943,58 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
       AND sec.subject_id = '$subjectId' 
       AND sec.sem_exam_id = '$semExamId' 
       AND sec.schoolUniqueCode = '$schoolUniqueCode' 
-      AND sec.status = '1'")->result_array();
+      AND sec.status = '1'
+      AND sec.session_table_id = '$session_table_id'
+      ")->result_array();
 
     if (!empty($d)) {
       return $d;
     } else {
       return HelperClass::APIresponse(500, 'No Semester Exams found for this class & subject');
     }
+  }
+
+
+
+ // add semester exam result
+
+  public function addSemesterExamResult($studentId,$marks,$examId,$semExamNameId,$schoolUniqueCode,$session_table_id)
+  {
+
+      $e = $this->db->query($s = "SELECT min_marks,max_marks,class_id,section_id,subject_id FROM " . Table::secExamTable . " WHERE 
+      id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' AND session_table_id = '$session_table_id' AND sem_exam_id = '$semExamNameId'  LIMIT 1")->result_array()[0];
+
+      if (!empty($e)) {
+        if ($marks >= $e['min_marks'] && $marks <= $e['max_marks']) {
+          $resultStatus = '1'; // pass
+        } else {
+          $resultStatus = '2'; // fail
+        }
+      }
+
+
+      $d = $this->db->query($sql = "SELECT * FROM " . Table::semExamResults . " WHERE sem_id = '$semExamNameId' AND sec_exam_id = '$examId' AND student_id = '$studentId' AND session_table_id = '$session_table_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+      if (!empty($d)) {
+        return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
+      }
+
+      $insertArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
+        "sem_id" => $semExamNameId,
+        "sec_exam_id" => $examId,
+        "class_id" => $e['class_id'],
+        "section_id" => $e['section_id'],
+        "subject_id" => $e['subject_id'],
+        "student_id" => $studentId,
+        "marks" => $marks,
+        "result_status" => $resultStatus,
+        "session_table_id" => $session_table_id
+      ];
+
+
+      $insertId = $this->CrudModel->insert(Table::semExamResults, $insertArr);
+      return  ($insertId) ? true : false;
   }
 
   

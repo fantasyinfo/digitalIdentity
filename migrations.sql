@@ -70,3 +70,5 @@ ALTER TABLE `student_tc` CHANGE `subjects_studies` `subjects_studies` VARCHAR(10
 
 ALTER TABLE student_tc CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 ALTER TABLE `student_tc` ADD `user_id` VARCHAR(100) NULL AFTER `student_id`;
+
+ALTER TABLE `sem_exam_results` ADD `result_status` INT NOT NULL COMMENT '1 => Pass || 2 => Fail' AFTER `marks`;

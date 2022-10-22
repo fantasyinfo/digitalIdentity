@@ -317,7 +317,8 @@ $apiRoutesArr = [
     'checkAppUpdate',
     'holidayCalender',
     'showSemesterExamNames',
-    'showAllSemesterExam'
+    'showAllSemesterExam',
+    'addSemesterExamResult'
 ];
 
 foreach($apiRoutesArr as $apiRoute)
