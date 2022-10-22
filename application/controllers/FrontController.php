@@ -108,4 +108,10 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'tc');
 	}
+
+	public function semResult()
+	{
+
+		$this->load->view($this->frontViewDir . 'semResult');
+	}
 }

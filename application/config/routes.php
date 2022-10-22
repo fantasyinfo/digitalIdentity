@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['register'] = 'FrontController/register'; // register
  $route['logout'] = 'FrontController/logout'; // logout
  $route['tc'] = 'FrontController/tc'; // tc verify
+ $route['semResult'] = 'FrontController/semResult'; // semResult
  // front-end routes
 
 
