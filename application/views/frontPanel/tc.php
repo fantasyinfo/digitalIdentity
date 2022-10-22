@@ -180,7 +180,7 @@ if(isset($_GET['tc_id']))
 			<p style="font-size:20px">Mobile: <?=$tcDetails['mobile']?> Email:  <?=$tcDetails['email']?></p>
 		</td>
 		<td >
-		<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('tc?tc_id=') . $tcDetails['id'] . "-" . $tcDetails['user_id'];?>&amp;choe=UTF-8" alt="QR code" /> </br><p><center>Scan To Verfify</center></p>
+		<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('tc?tc_id=') . $tcDetails['id'] . "-" . $tcDetails['user_id'];?>&amp;choe=UTF-8" alt="QR code" /> </br><p><center>Scan To Verify</center></p>
 		</td>
 	</tr>
 </table>

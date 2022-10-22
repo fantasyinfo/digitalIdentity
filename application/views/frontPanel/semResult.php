@@ -15,7 +15,7 @@ if (isset($_GET['data'])) {
 
 
 	$marksheet = $this->db->query("SELECT 
-r.id,r.marks,IF(r.result_status = '1', 'Pass', 'Fail') as resultStatus,
+r.id,r.marks,r.result_status as  resultStatus,
 e.id as examId, sen.sem_exam_name, sen.exam_year, e.exam_date,e.max_marks,e.min_marks,
 s.name,s.id as studentId, s.father_name,s.roll_no,s.mother_name,
 c.className,ss.sectionName,
@@ -33,25 +33,25 @@ JOIN " . Table::schoolMasterTable . " sm ON sm.unique_id = r.schoolUniqueCode
 WHERE r.status != 4 $condition ")->result_array();
 
 
-	// if (empty($marksheet[0])) {
-	// 	$msgArr = [
-	// 		'class' => 'danger',
-	// 		'msg' => 'Transfer Certificate Details Not Found. Please Generate Again.',
-	// 	];
-	// 	$this->session->set_userdata($msgArr);
+	if (empty($marksheet[0])) {
+		$msgArr = [
+			'class' => 'danger',
+			'msg' => 'Result Details Not Found. Please Generate Again.',
+		];
+		$this->session->set_userdata($msgArr);
 
-	// 	header("Location: " . HelperClass::brandUrl);
-	// }
+		header("Location: " . HelperClass::brandUrl);
+	}
 }
-// else{
-// 	$msgArr = [
-//         'class' => 'danger',
-//         'msg' => 'Transfer Certificate Not Found. Please Generate Again.',
-//     ];
-//     $this->session->set_userdata($msgArr);
+else{
+	$msgArr = [
+        'class' => 'danger',
+        'msg' => 'Result Not Found.',
+    ];
+    $this->session->set_userdata($msgArr);
 
-//     header("Location: ". HelperClass::brandUrl);
-// }
+    header("Location: ". HelperClass::brandUrl);
+}
 
 
 
@@ -186,7 +186,7 @@ WHERE r.status != 4 $condition ")->result_array();
 					<h2 style="font-size:26px;font-weight:bold"><?= strtoupper($marksheet[0]['school_name']) ?></h2>
 
 					<p style="font-size:20px;font-weight:bold"><?= strtoupper($marksheet[0]['address'] . " " . $marksheet[0]['pincode']) ?></p>
-					<p style="font-size:20px">Mobile: <?= $marksheet[0]['mobile'] ?> Email: <?= $marksheet[0]['email'] ?></p>
+					<p style="font-size:16px">Mobile: <?= $marksheet[0]['mobile'] ?>, Email: <?= $marksheet[0]['email'] ?></p>
 				</td>
 				<td>
 
@@ -199,7 +199,7 @@ WHERE r.status != 4 $condition ")->result_array();
 		</table>
 
 		<h4 style="font-size: 25px; font-weight:bold">
-			<center><?= $marksheet[0]['sem_exam_name'] ?> (Class <?=$marksheet[0]['className'] . " - " . $marksheet[0]['sectionName']?>) Result <?= $marksheet[0]['exam_year'] ?> </center>
+			<center><?= $marksheet[0]['sem_exam_name'] ?> Exam (Class <?=$marksheet[0]['className'] . " - " . $marksheet[0]['sectionName']?>) Result <?= $marksheet[0]['exam_year'] ?> </center>
 		</h4>
 		<br><br>
 		<table border="0" width="100%">
@@ -239,11 +239,13 @@ WHERE r.status != 4 $condition ")->result_array();
 				$minMarks = 0;
 				$totalObtainedMarks = 0;
 				$j = 0;
+				$resultStatusArr = [];
 				for($i=0; $total = count($marksheet), $i < $total; $i++)
 				{ 
 					$maxMarks += $marksheet[$i]['max_marks'];
 					$minMarks += $marksheet[$i]['min_marks'];
 					$totalObtainedMarks += $marksheet[$i]['marks'];
+					array_push($resultStatusArr,$marksheet[$i]['resultStatus']);
 					
 					?>
 				<tr>
@@ -252,15 +254,16 @@ WHERE r.status != 4 $condition ")->result_array();
 					<td><?= $marksheet[$i]['max_marks']; ?></td>
 					<td><?= $marksheet[$i]['min_marks']; ?></td>
 					<td><?= $marksheet[$i]['marks']; ?></td>
-					<td><?= $marksheet[$i]['resultStatus']; ?></td>
+					<td><?= ($marksheet[$i]['resultStatus'] == '1') ? 'Pass' : 'Fail'; ?></td>
 				</tr>
 				<?php } ?>
+			
 				<tr style="border:1px;">
 					<th style="border:1px;" colspan="2" class="text-center">Total</th>
 					<th style="border:1px;" class="text-center"><?= $maxMarks; ?></th>
 					<th style="border:1px;" class="text-center"><?= $minMarks; ?></th>
 					<th style="border:1px;" class="text-center"><?= $totalObtainedMarks; ?></th>
-					<th style="border:1px;" class="text-center"></th>
+					<th style="border:1px;" class="text-center"><?= (in_array('2',$resultStatusArr)) ? 'Fail' : 'Pass' ?></th>
 				</tr>
 			</tbody>
 		</table>
@@ -303,13 +306,6 @@ WHERE r.status != 4 $condition ")->result_array();
 	</div>
 
 
-	</br>
-	</br>
-	<div class="container">
-		<div class="row">
-			<p style="text-align:justify">Disclaimer: This is a computer generated marksheet.</p>
-		</div>
-	</div>
 
 </body>
 
