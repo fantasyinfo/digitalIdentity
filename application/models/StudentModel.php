@@ -389,7 +389,7 @@ class StudentModel extends CI_Model
     // for api
     public function totalFeesDueToday($schoolUniqueCode,$classId,$sectionId,$studentId)
     {
-      $school =  $this->db->query("SELECT sst.session_start_year,sst.session_start_month, sst.session_end_year,sst.session_end_month FROM ".Table::schoolSessionTable." sst JOIN ".Table::schoolMasterTable." smt ON smt.current_session = sst.id AND sst.schoolUniqueCode = smt.unique_id WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+      $school =  $this->db->query("SELECT sst.session_start_year,sst.session_start_month, sst.session_end_year,sst.session_end_month FROM ".Table::schoolSessionTable." sst JOIN ".Table::schoolMasterTable." smt ON smt.current_session = sst.id AND sst.schoolUniqueCode = smt.unique_id WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
 
       if(!empty($school))
       {

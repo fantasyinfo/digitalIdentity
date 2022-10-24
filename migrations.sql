@@ -83,3 +83,6 @@
 -- ALTER TABLE section CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE subject CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 -- ALTER TABLE schoolmaster  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+ALTER TABLE `push_notification` ADD `image` TEXT NULL AFTER `for_what`;

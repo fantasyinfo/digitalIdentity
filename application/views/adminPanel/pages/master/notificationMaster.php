@@ -16,7 +16,7 @@
     $this->load->model('CrudModel');
 
   // fetching city data
-    $notificatonData = $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
+    $notificatonData = $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND device_type = 'Web' ORDER BY id DESC")->result_array();
 
 
     // insert new city
@@ -26,6 +26,10 @@
       $body = trim($_POST['body']);
 
       $image = null;
+      if(isset($_FILES['image']))
+      {
+        $image = $this->CrudModel->uploadImg($_FILES,'NOTIFICATION',HelperClass::notificationsImagePath);
+      }
       $sound = null;
 
       // students token
@@ -78,7 +82,7 @@
        $sendPushSMS= $this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title,$body,$image,$sound);
       //  print_r($sendPushSMS);
       //  die();
-        $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web')");
+        $insertNotification = $this->db->query("INSERT INTO " . Table::pushNotificationTable . " (schoolUniqueCode,title,body,device_type,image) VALUES ('{$_SESSION['schoolUniqueCode']}','$title','$body','Web','$image')");
         if($insertNotification)
         {
         
@@ -167,7 +171,7 @@
 
                 <div class="row">
                   <div class="card-body">
-                    <form method="post" action="">
+                    <form method="post" action="" enctype="multipart/form-data">
 
                       <div class="row">
 
@@ -179,7 +183,15 @@
                         <label>Enter Body Content</label>
                           <textarea  name="body" class="form-control"  required></textarea>
                         </div>
-                        <div class="form-group col-md-3 my-3">
+                        <div class="form-group col-md-12 mb-2">
+                       <label for="city">Select Gift Image</label>
+                        <img id="img" height='100px' width='100px' class='img-fluid' />
+                       
+                          <div class="custom-file mt-1">
+                            <input type="file" class="custom-file-input" name="image" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
+                            <label class="custom-file-label" for="img">Choose file</label>
+            </div>
+                        <div class="form-group col-md-12 my-3">
                           <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">Send New Notification</button>
                         </div>
                       </div>

@@ -29,6 +29,7 @@ class HelperClass
     const studentImagePath = HelperClass::uploadImgDir.'student/';
     const teacherImagePath = HelperClass::uploadImgDir.'teacher/';
     const visitorEntryImagePath = HelperClass::uploadImgDir.'visitorentry/';
+    const notificationsImagePath = HelperClass::uploadImgDir.'notifications/';
 
     const monthsForSchool = [
         'January' => '1',
