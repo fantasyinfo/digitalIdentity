@@ -114,4 +114,9 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'semResult');
 	}
+	public function feesInvoice()
+	{
+
+		$this->load->view($this->frontViewDir . 'feesInvoice');
+	}
 }

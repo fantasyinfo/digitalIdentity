@@ -1,15 +1,25 @@
 <?php
 
+// id=9638521478-12326325-098Bn77OP-10-10-12-12-14
 
 if(isset($_GET['id']))
 {
-    $feesId = $_GET['id'];
+    $e = explode("-",$_GET['id']);
+    if($e[2] !== '098Bn77OP' || strlen($e[0]) != 4)
+    {
+         // redirect to homepage
+    }
+    $feesId = $e[3];
 }else
 {
     // redirect to homepage
 }
 
 
+
+
+				
+	
 
 
 
@@ -30,7 +40,7 @@ LEFT JOIN ".Table::classTable." ct ON ct.id = ffst.class_id
 LEFT JOIN ".Table::sectionTable." sect ON sect.id = ffst.section_id
 LEFT JOIN ".Table::stateTable." state ON state.id = st.state_id
 LEFT JOIN ".Table::cityTable." city ON city.id = st.city_id
-WHERE s.unique_id = '{$_SESSION['schoolUniqueCode']}' AND s.status = '2' AND ffst.id = '$feesId'
+WHERE ffst.id = '$feesId'
 LIMIT 1";
 
 
@@ -116,6 +126,7 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                     <b># <?= $schoolData['invoice_id']; ?></b><br>
                     <img src="<?=$schoolData['logo']?>" alt="school_img" height="100px" width="100px">
                 </div>
+           
                 <!-- /.col -->
             </div>
             <!-- /.row -->
@@ -153,7 +164,8 @@ $schoolData = $this->db->query($sql)->result_array()[0];
             <div class="row">
                 <!-- accepted payments column -->
                 <div class="col-6">
-                
+               
+                <img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('feesInvoice') . "?id=" . $_GET['id'];?>&amp;choe=UTF-8" alt="QR code"><br> <b>Scan To Verify</b>
                     <!-- <p class="lead">Payment Methods:</p>
                     <img src="../../dist/img/credit/visa.png" alt="Visa">
                     <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
@@ -197,7 +209,9 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                         
                     </div>
                     <img src="<?=$dir?>cerfified.png" alt="certified" class="float-end" height="100px" width="100px">
+        
                 </div>
+         
                 <!-- /.col -->
             </div>
             <!-- /.row -->
