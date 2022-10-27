@@ -9,6 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['tc'] = 'FrontController/tc'; // tc verify
  $route['semResult'] = 'FrontController/semResult'; // semResult
  $route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
+ $route['idcard'] = 'FrontController/idcard'; // idcard
  // front-end routes
 
 

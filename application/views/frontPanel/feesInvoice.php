@@ -85,7 +85,7 @@ $schoolData = $this->db->query($sql)->result_array()[0];
 
 
 
-<div class="container shadow my-5" >
+<div class="container shadow my-2" >
     <div class="row">
     <div class="invoice p-3 mb-3">
         <div id="printableArea">

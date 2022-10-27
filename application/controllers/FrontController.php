@@ -119,4 +119,9 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'feesInvoice');
 	}
+	public function idcard()
+	{
+
+		$this->load->view($this->frontViewDir . 'idcard');
+	}
 }
