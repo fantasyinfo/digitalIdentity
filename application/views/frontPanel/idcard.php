@@ -28,7 +28,7 @@ WHERE qr.status != 0
 AND st.class_id = '$classId'
 AND st.section_id = '$sectionId'
 AND st.schoolUniqueCode = '$schoolUniqueCode'
-ORDER BY qr.id DESC LIMIT 9")->result_array();
+ORDER BY qr.id DESC LIMIT 4")->result_array();
 
 
 
@@ -49,9 +49,8 @@ ORDER BY qr.id DESC LIMIT 9")->result_array();
     * { overflow-x: visible }
     
         #card {
-            width: 6.7cm  !important;
-            height: 10.2cm !important;
-            border: 1px solid #800000;
+            width: 10.5cm  !important;
+            height: 17cm !important;
             margin: 20px;
         }
 
@@ -86,9 +85,8 @@ ORDER BY qr.id DESC LIMIT 9")->result_array();
                 75%;
             }
     #card {
-            width: 6.7cm  !important;
-            height: 10.2cm !important;
-            border: 1px solid #800000;
+            width: 10.5cm  !important;
+            height: 17cm !important;
             margin: 20px;
         }
         
@@ -138,29 +136,33 @@ $i=1;
                         <div class="card-header text-white" style="background-color: #800000;">
                             <div class="row rrow">
                                 <div class="col-md-3 col3">
-                                    <img src="<?= $s['schoolImage']; ?>" alt="" height="50px" width="50px">
+                                    <img src="<?= $s['schoolImage']; ?>" alt="" height="100px" width="100px">
                                 </div>
-                                <div class="col-md-9 col9">
-                                    <p class="p1" style="font-size:14px; font-weight:bold; line-height:14px;margin:0;"><?= strtoupper($s['school_name']); ?></p>
-                                    <p  class="p2"style="font-size:8px; line-height:10px;margin:0;margin-top:3px;"><?= strtoupper($s['address']) . ' ' . $s['pincode']; ?></p>
-                                    <p  class="p2"style="font-size:8px; line-height:10px;margin:0;margin-top:3px;"><?= $s['mobile']; ?></p>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-8 col9">
+                                    <p class="p1" style="font-size:20px; font-weight:bold; line-height:22px;margin:0;"><?= strtoupper($s['school_name']); ?></p>
+                                    <p  class="p2"style="font-size:16px; line-height:11px;margin:0;margin-top:8px;"><?= strtoupper($s['address']) . ' ' . $s['pincode']; ?></p>
+                                     <p  class="p2"style="font-size:16px; line-height:11px;margin:0;margin-top:8px;"><?= $s['mobile']; ?></p> 
                                 </div>
                             </div>
                         </div>
 
                         <div class="card-body">
                             <div class="row rrow">
-                                <div class="col-md-5 col5">
-                                    <img src="<?= $s['studentImage']; ?>" alt="" height="120px" width="90px" style="border:1px solid #800000 !important;">
+                                <div class="col-md-6 col5">
+                                    <img src="<?= $s['studentImage']; ?>" alt="" height="220px" width="180px" style="border:1px solid #800000 !important;">
                                 </div>
 
 
-                                <div class="col-md-4 col4">
-                                    <img src="https://chart.googleapis.com/chart?chs=50x50&amp;cht=qr&amp;chl=<?= $s['qrcodeUrl']; ?>&amp;choe=UTF-8" alt="https://qverify.in?stuid=dvm-stu0000151" height="125px" width="110px">
+                                <div class="col-md-6 col4">
+                                <h6 style="padding:5px; border-bottom:1px solid #800000;font-weight:bold;" class="text-center"><?=$s['user_id']?></h6>
+                                    <img src="https://chart.googleapis.com/chart?chs=200x200&amp;cht=qr&amp;chl=<?= $s['qrcodeUrl']; ?>&amp;choe=UTF-8" alt="https://qverify.in?stuid=dvm-stu0000151" height="180px" width="180px">
+                                        
+                                 
                                 </div>
                             </div>
                             <!-- <hr> -->
-                            <table style="font-size:14px;">
+                            <table style="font-size:15px;" class="table mt-2">
                                 <tr>
                                     <td><b>Name</b></td>
                                     <td><?= $s['name']; ?></td>
@@ -180,7 +182,7 @@ $i=1;
                             </table>
 
                             <?php
-                            echo'<img class="mt-2" src="data:image/png;base64,' . base64_encode($generator->getBarcode($s['user_id'], $generator::TYPE_CODE_128)) . '">';
+                            echo'<img style="width:360px;" class="" src="data:image/png;base64,' . base64_encode($generator->getBarcode($s['user_id'], $generator::TYPE_CODE_128)) . '">';
                             ?>
                         </div>
                     </div>
