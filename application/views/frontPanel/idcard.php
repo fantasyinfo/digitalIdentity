@@ -1,13 +1,23 @@
 <?php
 
-$classId = '14';
-$sectionId = '13';
+require  HelperClass::barCodeFilePath;
+
+$generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+
+
+
+
+
+
+
+$classId = '20';
+$sectionId = '2';
 $schoolUniqueCode = '683611';
 
 $schoolLogo = base_url() . HelperClass::schoolLogoImagePath;
 $studentImage = base_url() . HelperClass::studentImagePath;
 
-$studentDetails = $this->db->query("SELECT qr.qrcodeUrl,qr.uniqueValue as qrName, CONCAT(cl.className, ' - ', se.sectionName) as classNames, st.roll_no, st.name,st.mobile as studentMobile,st.address as studentAddress, ct.cityName  as studentCity,st.pincode as studentPincode, sm.school_name, sm.address,sm.mobile,sm.pincode,CONCAT('$studentImage',st.image) as studentImage, CONCAT('$schoolLogo',sm.image) as schoolImage
+$studentDetails = $this->db->query("SELECT qr.qrcodeUrl,qr.uniqueValue as qrName, CONCAT(cl.className, ' - ', se.sectionName) as classNames, st.roll_no, st.name,st.mobile as studentMobile,st.address as studentAddress, ct.cityName  as studentCity,st.pincode as studentPincode, sm.school_name, sm.address,sm.mobile,sm.pincode,CONCAT('$studentImage',st.image) as studentImage, CONCAT('$schoolLogo',sm.image) as schoolImage, st.user_id
 FROM " . Table::qrcodeTable . " qr 
 JOIN " . Table::studentTable . " st ON st.user_id = qr.uniqueValue
 JOIN " . Table::classTable . " cl ON cl.id = st.class_id
@@ -141,15 +151,15 @@ $i=1;
                         <div class="card-body">
                             <div class="row rrow">
                                 <div class="col-md-5 col5">
-                                    <img src="<?= $s['studentImage']; ?>" alt="" height="130px" width="90px" style="border:1px solid #800000 !important;">
+                                    <img src="<?= $s['studentImage']; ?>" alt="" height="120px" width="90px" style="border:1px solid #800000 !important;">
                                 </div>
 
 
                                 <div class="col-md-4 col4">
-                                    <img src="https://chart.googleapis.com/chart?chs=50x50&amp;cht=qr&amp;chl=<?= $s['qrcodeUrl']; ?>&amp;choe=UTF-8" alt="https://qverify.in?stuid=dvm-stu0000151" height="140px" width="110px">
+                                    <img src="https://chart.googleapis.com/chart?chs=50x50&amp;cht=qr&amp;chl=<?= $s['qrcodeUrl']; ?>&amp;choe=UTF-8" alt="https://qverify.in?stuid=dvm-stu0000151" height="125px" width="110px">
                                 </div>
                             </div>
-                            <hr>
+                            <!-- <hr> -->
                             <table style="font-size:14px;">
                                 <tr>
                                     <td><b>Name</b></td>
@@ -169,6 +179,9 @@ $i=1;
                                 </tr>
                             </table>
 
+                            <?php
+                            echo'<img class="mt-2" src="data:image/png;base64,' . base64_encode($generator->getBarcode($s['user_id'], $generator::TYPE_CODE_128)) . '">';
+                            ?>
                         </div>
                     </div>
                 <!--</div>-->
