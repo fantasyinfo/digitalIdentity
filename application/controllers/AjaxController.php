@@ -211,6 +211,45 @@ class AjaxController extends CI_Controller {
 		}
 	}
 
+	public function showDesignationsViaDepartmentId()
+	{
+		if(isset($_POST))
+		{
+			$d = $this->db->query($sql = "SELECT * FROM ".Table::designationTable." WHERE departmentId = '{$_POST['departmentId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       		$html = '';
+
+			if(!empty($d))
+			{
+			foreach($d as $dd)
+			{
+			$html .= "<option value='{$dd['id']}'>{$dd['designationName']}</option>";
+			}
+			echo json_encode($html);
+			exit(0);
+			}
+			echo json_encode($sql);
+			exit(0);
+		}
+	}
+
+	public function showSalaryDetails()
+	{
+		if(isset($_POST))
+		{
+			$d = $this->db->query("SELECT s.*, dep.departmentName,des.designationName FROM " . Table::salaryTable . " s 
+			INNER JOIN ".Table::departmentTable." dep ON dep.id = s.departmentId
+			INNER JOIN ".Table::designationTable." des ON des.id = s.designationId
+			 WHERE s.status != '4'  AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id='{$_POST['salaryId']}'")->result_array()[0];
+       		$html = '';
+
+			if(!empty($d))
+			{
+				echo json_encode($d);
+				exit(0);
+			}
+		}
+	}
+
 
 	public function listQR()
 	{

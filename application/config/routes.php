@@ -139,6 +139,9 @@ $masterRoutesArr = [
     'notificationDefault',
     'feeDueNotification',
     'sessionMaster',
+    'department',
+    'designation',
+    'salaryMaster',
     'givePermissionMaster' // only for super Admin
     
 ];
@@ -260,7 +263,9 @@ $ajaxRoutesArr = [
     'dateSheetList',
     'showAllSemExamsWithStudents',
     'listStudentsPermote',
-    'showAllSemesterResultsList'
+    'showAllSemesterResultsList',
+    'showDesignationsViaDepartmentId',
+    'showSalaryDetails'
     
 ];
 

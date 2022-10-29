@@ -47,5 +47,9 @@ class Table{
     const schoolSessionTable = 'school_sessions';
     const studentHistoryTable = 'student_history';
     const studentTC = 'student_tc';
+    const departmentTable = 'department';
+    const designationTable = 'designation';
+    const bankDetailsTable = 'bankdetails';
+    const salaryTable = 'salary';
     
 }
