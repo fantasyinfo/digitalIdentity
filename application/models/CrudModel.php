@@ -1942,18 +1942,28 @@ class CrudModel extends CI_Model
 
 
 
-    public function showCityViaStateId($stateId)
+    public function showCityViaStateId($stateId, $alreadyCityId = '')
     {
         $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+
        $d = $this->db->query("SELECT id,cityName FROM " . Table::cityTable ." WHERE stateId = '$stateId' AND status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
        $html = '';
-
+        $select = '';
         if(!empty($d))
         {
           foreach($d as $dd)
           {
-           $html .= "<option value='".$dd['id']."'>".$dd['cityName']."</option>";
+            if(!empty($alreadyCityId))
+            {
+                if($dd['id'] == $alreadyCityId) {
+                    $select = 'selected';
+                }else
+                {
+                    $select = '';
+                }
+            }
+           $html .= "<option ".$select." value='".$dd['id']."'>".$dd['cityName']."</option>";
           }
           return json_encode($html);
         }

@@ -126,3 +126,27 @@
 ALTER TABLE `salary` ADD `ded_half_day` INT NULL AFTER `lwp`;
 ALTER TABLE `salary` ADD `session_table_id` INT NULL AFTER `totalDed`;
 INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Check Salary', 'master/checkSalary', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
+
+
+CREATE TABLE `staffattendance` (
+  `id` int(11) NOT NULL,
+  `schoolUniqueCode` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `employee_id` int(11) NOT NULL,
+  `employeeName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `departmentName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `login_user_id` int(11) NOT NULL,
+  `login_user_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `attendenceStatus` enum('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '1 => absent, 2=> present, 3 => halfday, 4 => leave',
+  `dateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `att_date` date DEFAULT NULL,
+  `status` enum('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  `session_table_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `staffattendance`
+  ADD PRIMARY KEY (`id`);
+
+  ALTER TABLE `staffattendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;

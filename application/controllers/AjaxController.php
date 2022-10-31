@@ -153,7 +153,7 @@ class AjaxController extends CI_Controller {
 
 
 
-	
+
 	public function addHolidayEvent()
 	{
 		if(isset($_POST))
@@ -193,7 +193,14 @@ class AjaxController extends CI_Controller {
 	{
 		if(isset($_POST['stateId']))
 		{
-			echo $this->CrudModel->showCityViaStateId($_POST['stateId']);
+			if(isset($_POST['alreadyCityId']) && $_POST['alreadyCityId'] != '')
+			{
+				$alreadyCityId = $_POST['alreadyCityId'];
+			}else
+			{
+				$alreadyCityId = '';
+			}
+			echo $this->CrudModel->showCityViaStateId($_POST['stateId'],$alreadyCityId);
 		}
 	}
 

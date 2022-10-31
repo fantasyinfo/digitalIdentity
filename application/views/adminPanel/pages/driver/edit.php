@@ -222,11 +222,12 @@
       var ajaxUrl = '<?= base_url() . 'ajax/showCityViaStateId' ?>';
 
 // load default city
-  showCity();
+let alreadyCityId = '<?=$sd['city_id'];?>';
+  showCity(alreadyCityId);
 
-  function showCity()
+  function showCity(alreadyCityId = '')
     {
-
+      console.log(alreadyCityId);
       $('#cityData option').remove();
       let stateId = $("#stateIdd").val();
       $.ajax({
@@ -235,6 +236,7 @@
           processData: 'false',
           data : {
             stateId : stateId,
+            alreadyCityId : alreadyCityId
           },
           success: function (response)
           {
