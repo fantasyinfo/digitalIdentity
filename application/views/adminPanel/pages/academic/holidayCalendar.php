@@ -73,7 +73,69 @@ h1#demo-title {
       <div class="container-fluid">
       <?php 
 
+function getDateForSpecificDayBetweenDates($startDate, $endDate, $weekdayNumber)
+{
+    $startDate = strtotime($startDate);
+    $endDate = strtotime($endDate);
 
+    $dateArr = array();
+
+    do
+    {
+        if(date("w", $startDate) != $weekdayNumber)
+        {
+            $startDate += (24 * 3600); // add 1 day
+        }
+    } while(date("w", $startDate) != $weekdayNumber);
+
+
+    while($startDate <= $endDate)
+    {
+        $dateArr[] = date('Y-m-d', $startDate);
+        $startDate += (7 * 24 * 3600); // add 7 days
+    }
+
+    return($dateArr);
+}
+
+
+
+
+
+function markAllSundayHoliday($db)
+{
+  $year   = date("Y");
+
+  $dateArr = getDateForSpecificDayBetweenDates($year.'-01-01', $year.'-12-31', 0);
+  
+  for($i=0; $total = count($dateArr), $i < $total; $i++)
+  {
+    // first check if already mark sunday then continue;
+    $already = $db->query("SELECT * FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND title = 'Sunday' AND event_date = '$dateArr[$i]' AND session_table_id = '{$_SESSION['currentSession']}'")->result_array();
+
+    if(!empty($already))
+    {
+      continue;
+    }
+    $db->query("INSERT INTO ".Table::holidayCalendarTable." (schoolUniqueCode,title,event_date,session_table_id) VALUES ('{$_SESSION['schoolUniqueCode']}','Sunday','$dateArr[$i]','{$_SESSION['currentSession']}')");
+  }
+}
+
+
+
+if(isset($_GET['markSunday']))
+{
+  markAllSundayHoliday($this->db);
+}
+
+// hide button 
+$alreadyMarkSunday = FALSE;
+$checkIsAlreadyMarkSunday = $this->db->query("SELECT count(1) as c FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND title = 'Sunday' AND session_table_id = '{$_SESSION['currentSession']}'")->result_array()[0]['c'];
+
+if($checkIsAlreadyMarkSunday > 51)
+{
+  $alreadyMarkSunday = TRUE;
+}
 
 $this->load->model('CrudModel');
 
@@ -104,6 +166,11 @@ $this->load->model('CrudModel');
      
         <div class="row">
        
+        <?php  if(!$alreadyMarkSunday) {
+          echo '<a href="?markSunday=true" class="btn btn-success">Mark All Sundays Holiday of Current Year</a>';
+          }
+          ?>
+      
         <div id="event-action-response"></div>
         <div id="calendar"></div>
 

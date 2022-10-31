@@ -51,5 +51,6 @@ class Table{
     const designationTable = 'designation';
     const bankDetailsTable = 'bankdetails';
     const salaryTable = 'salary';
+    const staffattendanceTable = 'staffattendance';
     
 }

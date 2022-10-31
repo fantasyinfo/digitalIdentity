@@ -2074,6 +2074,57 @@ class CrudModel extends CI_Model
     }
 
 
+
+
+
+    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth(){
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        $first_day = "01"; // first Days hardcoded
+        $last_day =  date('t',strtotime($currentYear.'-'.$currentMonth.'-'.$first_day));
+        $startDate = date($currentYear.'-'.$currentMonth.'-'.$first_day);
+        $endDate = date($currentYear.'-'.$currentMonth.'-'.$last_day);
+    
+        $totalHolidays = $this->db->query("SELECT count(1) as c FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND  event_date >= '$startDate' AND event_date <= '$endDate'")->result_array()[0]['c'];
+
+        $sendArr = [
+            'totalHolidaysIncludingSundays' => $totalHolidays,
+            'totalWorkingDays' => $last_day - $totalHolidays,
+            'query'=>$this->db->last_query(),
+        ];
+        return $sendArr;
+    }
+
+    public function getTotalAttendanceOfEmployeeCurrentMonth($employeeId)
+    {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        $first_day = "01"; // first Days hardcoded
+        $last_day =  date('t',strtotime($currentYear.'-'.$currentMonth.'-'.$first_day));
+        $startDate = date($currentYear.'-'.$currentMonth.'-'.$first_day);
+        $endDate = date($currentYear.'-'.$currentMonth.'-'.$last_day);
+
+        $totalPresents = $this->db->query("SELECT count(1) as c FROM ".Table::staffattendanceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '2' AND employee_id = '$employeeId' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+
+        $totalAbsents = $this->db->query("SELECT count(1) as c FROM ".Table::staffattendanceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '1' AND employee_id = '$employeeId' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+
+        $totalHalfDays = $this->db->query("SELECT count(1) as c FROM ".Table::staffattendanceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '3' AND employee_id = '$employeeId' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+
+        $totalHalfLeaves = $this->db->query("SELECT count(1) as c FROM ".Table::staffattendanceTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '4' AND employee_id = '$employeeId' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+
+
+
+
+        $sendArr = [
+            'present' => $totalPresents,
+            'absent' => $totalAbsents,
+            'helfDay' => $totalHalfDays,
+            'leaves' => $totalHalfLeaves,
+            'query'=>$this->db->last_query(),
+        ];
+        return $sendArr;
+    }
+
     public function extractQrCodeAndReturnUserType($qrCode)
     {
         // https://qverify.in?driid=dvm-dri00001

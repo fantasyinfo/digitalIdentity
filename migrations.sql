@@ -85,40 +85,44 @@
 -- ALTER TABLE schoolmaster  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
-ALTER TABLE `push_notification` ADD `image` TEXT NULL AFTER `for_what`;
+-- ALTER TABLE `push_notification` ADD `image` TEXT NULL AFTER `for_what`;
 
 
-CREATE TABLE `department` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `departmentName` VARCHAR(100) NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+-- CREATE TABLE `department` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `departmentName` VARCHAR(100) NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
-ALTER TABLE department CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- ALTER TABLE department CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-CREATE TABLE `designation` (
-  `id` int(11) NOT NULL,
-  `schoolUniqueCode` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `departmentId` int(100) NOT NULL,
-  `designationName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `status` enum('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- CREATE TABLE `designation` (
+--   `id` int(11) NOT NULL,
+--   `schoolUniqueCode` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+--   `departmentId` int(100) NOT NULL,
+--   `designationName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+--   `status` enum('1','2','3','4') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+--   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `designation`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `designation`
+--   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `designation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
+-- ALTER TABLE `designation`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+-- COMMIT;
 
 
-CREATE TABLE `bankdetails` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `empId` INT NOT NULL , `bankName` VARCHAR(100) NOT NULL , `accNo` VARCHAR(100) NOT NULL , `ifscNo` VARCHAR(100) NOT NULL , `swiftCode` VARCHAR(100) NOT NULL , `branch` VARCHAR(100) NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+-- CREATE TABLE `bankdetails` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `empId` INT NOT NULL , `bankName` VARCHAR(100) NOT NULL , `accNo` VARCHAR(100) NOT NULL , `ifscNo` VARCHAR(100) NOT NULL , `swiftCode` VARCHAR(100) NOT NULL , `branch` VARCHAR(100) NOT NULL , `status` ENUM('1','2','3','4') NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE `salary` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` INT NOT NULL , `empId` INT NOT NULL , `departmentId` INT NOT NULL , `designationId` INT NOT NULL , `bankId` INT NULL , `location` VARCHAR(100) NULL , `panNo` VARCHAR(20) NULL , `pfAccNo` VARCHAR(100) NULL , `doj` DATE NULL , `basicSalaryMonth` INT NOT NULL , `basicSalaryDay` INT NOT NULL , `dearnessAll` INT NULL , `hra` INT NULL , `conAll` INT NULL , `medicalAll` INT NULL , `specialAll` INT NULL , `leavesPerMonth` INT NULL , `lwp` INT NULL , `professionalTaxPerMonth` INT NULL , `pfPerMonth` INT NULL , `tdsPerMonth` INT NULL , `totalDed` INT NULL , `status` ENUM("1","2") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+-- CREATE TABLE `salary` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` INT NOT NULL , `empId` INT NOT NULL , `departmentId` INT NOT NULL , `designationId` INT NOT NULL , `bankId` INT NULL , `location` VARCHAR(100) NULL , `panNo` VARCHAR(20) NULL , `pfAccNo` VARCHAR(100) NULL , `doj` DATE NULL , `basicSalaryMonth` INT NOT NULL , `basicSalaryDay` INT NOT NULL , `dearnessAll` INT NULL , `hra` INT NULL , `conAll` INT NULL , `medicalAll` INT NULL , `specialAll` INT NULL , `leavesPerMonth` INT NULL , `lwp` INT NULL , `professionalTaxPerMonth` INT NULL , `pfPerMonth` INT NULL , `tdsPerMonth` INT NULL , `totalDed` INT NULL , `status` ENUM("1","2") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
 
-ALTER TABLE `salary` CHANGE `empId` `empId` INT(11) NULL, CHANGE `departmentId` `departmentId` INT(11) NULL, CHANGE `designationId` `designationId` INT(11) NULL;
-ALTER TABLE `salary` ADD `employeeName` VARCHAR(100) NOT NULL AFTER `empId`;
+-- ALTER TABLE `salary` CHANGE `empId` `empId` INT(11) NULL, CHANGE `departmentId` `departmentId` INT(11) NULL, CHANGE `designationId` `designationId` INT(11) NULL;
+-- ALTER TABLE `salary` ADD `employeeName` VARCHAR(100) NOT NULL AFTER `empId`;
 
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Payroll', '#', 'fa-solid fa-money-bills', '0', '1', '0', '1', '2022-09-10 10:40:10');
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Department', 'master/department', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Designation', 'master/designation', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Payroll', '#', 'fa-solid fa-money-bills', '0', '1', '0', '1', '2022-09-10 10:40:10');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Department', 'master/department', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Designation', 'master/designation', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
 
-ALTER TABLE `salary` CHANGE `empId` `empId` VARCHAR(100) NULL DEFAULT NULL;
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Salary Master', 'master/salaryMaster', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
+-- ALTER TABLE `salary` CHANGE `empId` `empId` VARCHAR(100) NULL DEFAULT NULL;
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Salary Master', 'master/salaryMaster', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');
+
+ALTER TABLE `salary` ADD `ded_half_day` INT NULL AFTER `lwp`;
+ALTER TABLE `salary` ADD `session_table_id` INT NULL AFTER `totalDed`;
+INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Check Salary', 'master/checkSalary', NULL, '69', '0', '1', '1', '2022-08-29 09:25:52');

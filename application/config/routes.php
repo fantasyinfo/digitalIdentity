@@ -142,6 +142,8 @@ $masterRoutesArr = [
     'department',
     'designation',
     'salaryMaster',
+    'staffAttendance',
+    'checkSalary',
     'givePermissionMaster' // only for super Admin
     
 ];
@@ -265,7 +267,9 @@ $ajaxRoutesArr = [
     'listStudentsPermote',
     'showAllSemesterResultsList',
     'showDesignationsViaDepartmentId',
-    'showSalaryDetails'
+    'showSalaryDetails',
+    'showEmployeesViaDepartmentId'
+   
     
 ];
 

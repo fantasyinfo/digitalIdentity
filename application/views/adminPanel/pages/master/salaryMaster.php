@@ -103,9 +103,11 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
         'specialAll' => $_POST['specialAll'],
         'leavesPerMonth' => $_POST['leavesPerMonth'],
         'lwp' => $_POST['lwp'],
+        'ded_half_day' => $_POST['ded_half_day'],
         'professionalTaxPerMonth' => $_POST['professionalTaxPerMonth'],
         'pfPerMonth' => $_POST['pfPerMonth'],
-        'tdsPerMonth' => $_POST['tdsPerMonth']
+        'tdsPerMonth' => $_POST['tdsPerMonth'],
+        'session_table_id' => $_SESSION['currentSession']
       ];
 
 
@@ -152,12 +154,14 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
         'specialAll' => $_POST['specialAll'],
         'leavesPerMonth' => $_POST['leavesPerMonth'],
         'lwp' => $_POST['lwp'],
+        'ded_half_day' => $_POST['ded_half_day'],
         'professionalTaxPerMonth' => $_POST['professionalTaxPerMonth'],
         'pfPerMonth' => $_POST['pfPerMonth'],
-        'tdsPerMonth' => $_POST['tdsPerMonth']
+        'tdsPerMonth' => $_POST['tdsPerMonth'],
+        'session_table_id' => $_SESSION['currentSession']
       ];
       
-      $updateSalary =  $this->CrudModel->insert(Table::salaryTable,$updateArr,$sectionEditId);
+      $updateSalary =  $this->CrudModel->update(Table::salaryTable,$updateArr,$sectionEditId);
 
       if ($updateSalary) {
         $msgArr = [
@@ -239,6 +243,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                 <!-- /.card-header -->
                 <!-- form start -->
 
+                <!-- <?php print_r($editsectionData[0]);?> -->
 
                 <div class="row">
                   <div class="card-body">
@@ -246,8 +251,12 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                       <?php
                       if (isset($_GET['action']) && $_GET['action'] == 'edit') { ?>
                         <input type="hidden" name="updatesectionId" value="<?= $editId ?>">
-                      <?php }
-
+                      <?php 
+                      
+                      $dess = $this->db->query("SELECT * FROM ".Table::designationTable." WHERE departmentId = '{$editsectionData[0]['departmentId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+                    
+                    }
+                      
                       ?>
                       <div class="row">
                         <div class="form-group col-md-3">
@@ -262,14 +271,14 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
 
                         <div class="form-group col-md-3">
                           <label>Select Department </label>
-                          <select name="departmentId" id="departmentId" class="form-control  select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showDesignation()">
+                          <select name="departmentId" id="departmentId" class="form-control  select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showDesignation()" required>
                             <option>Please Select Departments</option>
                             <?php
                             $selected = '';
                             if (isset($departmentData)) {
                               foreach ($departmentData as $department) {
                                 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-                                  if ($editCityData[0]['departmentId'] == $department['id']) {
+                                  if ($editsectionData[0]['departmentId'] == $department['id']) {
                                     $selected = 'selected';
                                   } else {
                                     $selected = '';
@@ -289,8 +298,25 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
 
                         <div class="form-group col-md-3">
                           <label>Select Designation </label>
-                          <select name="designationId" id="designationId" class="form-control  select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                          <select name="designationId" id="designationId" class="form-control  select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;" required>
                             <option>Please Select Designations</option>
+                            <?php
+                            $selectedA = '';
+                              if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                              foreach ($dess as $des) {
+                                  if ($editsectionData[0]['designationId'] == $des['id']) {
+                                    $selectedA = 'selected';
+                                  } else {
+                                    $selectedA = '';
+                                  }
+                                
+
+                            ?>
+                                <option <?= $selectedA; ?> value="<?= $des['id'] ?>"><?= $des['designationName'] ?></option>
+                            <?php } }
+                            
+
+                            ?>
                           </select>
                         </div>
 
@@ -315,7 +341,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                         </div>
                       </div>
                       <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6">
                           <label>Basic Pay <span style="color:red;">(Per Month)</span></label>
                           <div class="input-group-prepend">
                             <div class="input-group-text">₹</div>
@@ -323,20 +349,26 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                           </div>
 
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6">
                           <label>Basic Pay <span style="color:red;">(Per Day)</span></label>
                           <div class="input-group-prepend">
                             <div class="input-group-text">₹</div>
                             <input type="text" name="basicSalaryDay" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['basicSalaryDay'];} ?>" class="form-control" id="name" placeholder="Basic Salary Per Day" required>
                           </div>
                         </div>
-                        <div class="form-group col-md-3">
+                          </div>
+                          <div class="row">
+                        <div class="form-group col-md-4">
                           <label>Leaves Per Month <span style="color:green;">( Allowed )</span></label>
                           <input type="text" name="leavesPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo $editsectionData[0]['leavesPerMonth'];} ?>" class="form-control" id="name" placeholder="Enter Leaves Per Month">
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                           <label>Deducation Per Day <span style="color:red;">(If Absent)</span></label>
                           <input type="text" name="lwp" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo $editsectionData[0]['lwp'];} ?>" class="form-control" id="name" placeholder="Enter Absent Deducation Amt Per Day">
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>Deducation For Half Day <span style="color:red;">(If Present Half Day)</span></label>
+                          <input type="text" name="ded_half_day" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo $editsectionData[0]['ded_half_day'];} ?>" class="form-control" id="name" placeholder="Enter Half Day Deducation Amt">
                         </div>
                       </div>
                   
@@ -351,7 +383,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                             <div class="card-body">
                               <div class="row">
                               <div class="form-group col-md-2">
-                                <label>Dearness All.</label>
+                                <label>Dearness All. ( DA )</label>
                                 <input type="text" name="dearnessAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['dearnessAll'];} ?>" class="form-control" id="name" placeholder="Dearness Allowances" >
                               </div>
                               <div class="form-group col-md-2">
@@ -359,7 +391,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                                 <input type="text" name="hra" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['hra'];} ?>" class="form-control" id="name" placeholder="HRA Allowances">
                               </div>
                               <div class="form-group col-md-2">
-                                <label>Conveyence All.</label>
+                                <label>Conveyence All. ( CA )</label>
                                 <input type="text" name="conAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['conAll'];} ?>" class="form-control" id="name" placeholder="Conveyence Allowances">
                               </div>
                               <div class="form-group col-md-2">
@@ -528,6 +560,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
   <!-- ./wrapper -->
   <script>
     function showDesignation() {
+      $('#designationId').html("");
       var departmentId = $("#departmentId").val();
       if (departmentId != '') {
         console.log(departmentId);

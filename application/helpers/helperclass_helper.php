@@ -336,6 +336,22 @@ const setNotificationForWhat = [
 
 
 
+    public static function getAllSundays($y,$m)
+    {
+        $date = "$y-$m-01";
+        $first_day = date('N',strtotime($date));
+        $first_day = 7 - $first_day + 1;
+        $last_day =  date('t',strtotime($date));
+        $total = 0;
+        for($i=$first_day; $i<=$last_day; $i=$i+7 ){
+            $total += 1;
+        }
+        return  $total;
+    }
+
+
+
+
     public static function sendEmail($to, $subject, $msg)
     {
         include 'assets/smtp/PHPMailerAutoload.php';

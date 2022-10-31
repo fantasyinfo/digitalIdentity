@@ -28,7 +28,7 @@ WHERE qr.status != 0
 AND st.class_id = '$classId'
 AND st.section_id = '$sectionId'
 AND st.schoolUniqueCode = '$schoolUniqueCode'
-ORDER BY qr.id DESC LIMIT 4")->result_array();
+ORDER BY qr.id DESC")->result_array();
 
 
 
@@ -40,160 +40,201 @@ ORDER BY qr.id DESC LIMIT 4")->result_array();
 <html>
 
 <head>
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <script src="https://code.jquery.com/jquery-1.8.2.js"></script>
 
     <style>
-    * { overflow-x: visible }
-    
-        #card {
-            width: 10.5cm  !important;
-            height: 17cm !important;
-            margin: 20px;
+        * {
+            overflow-x: visible
         }
 
-        .card-header {
+        #card {
+            /* margin-top: 10px; */
+            /* margin-right: 10px;
+            margin-left: 10px; */
             background-color: #800000;
             -webkit-print-color-adjust: exact;
+            color: #fff;
+            padding:0.25cm;
+        }
+
+        #cardBody {
+            background-color: #f2f2f2;
+            /* margin-bottom: 10px; */
+            /* margin-right: 10px;
+            margin-left: 10px; */
+            /* border: .1 px solid #000; */
+            -webkit-print-color-adjust: exact;
+            padding:0.25cm;
+            border-bottom: 1px solid #800000;
+        }
+
+        .td{
+                width: 5.5cm !important;
+                height: 8.5cm !important;
+                border: 1px dotted #000;
+                padding:5px;
+            }
+
+        @media print {
+
+            @page {
+            size: A4,
+            margin:5px;
         }
         
-        @media print {
-       
-            .p1{
-                font-size:14px; font-weight:bold; line-height:14px;margin:0;
+
+        body{
+            font-family: sans-serif;
+        }
+
+            .p1 {
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 14px;
+                margin: 0;
             }
-            .p2{
-                font-size:8px; line-height:10px;margin:0;margin-top:3px;
+
+            .p2 {
+                font-size: 8px;
+                line-height: 10px;
+                margin: 0;
+                margin-top: 3px;
             }
-            
-            .rrow{
-                display:flex;
+
+            .td{
+                width: 5.5cm !important;
+                border: 1px dotted #000;
+                height: 8.5cm !important;
+                margin:auto;
+                padding:5px;
+            }
+
+            #card {
+                background-color: #800000;
+                -webkit-print-color-adjust: exact;
+                color: #fff;
+                /* margin-top: 10px; */
+                /* margin-right: 10px;
+                margin-left: 10px; */
+                padding-top:0.25cm;
+            }
+
+            #cardBody {
+                background-color: #f2f2f2;
+                /* margin-bottom: 10px; */
+                /* margin-right: 10px;
+                margin-left: 10px; */
+                 border-bottom: 1px solid #800000; 
+                -webkit-print-color-adjust: exact;
+                padding:0.25cm;
                 
             }
-            col5{
-                width:50%;
+
+
+            tr,
+            th,
+            td {
+                page-break-inside: avoid !important;
             }
-            col4{
-                width:40%;
+
+            #printbtn {
+                display: none;
             }
-            col3{
-                width: 25%;
-            }
-            col9{
-                75%;
-            }
-    #card {
-            width: 10.5cm  !important;
-            height: 17cm !important;
-            margin: 20px;
+
+
+            /*#pageBeak*/
+            /*{*/
+            /*  page-break-after: always;*/
+            /*  page-break-inside: avoid;*/
+            /*}*/
         }
-        
-        tr, th, td {
-        page-break-inside: avoid !important;
-    }
-
-    #printbtn {
-				display: none;
-			}
-
-
-      /*#pageBeak*/
-      /*{*/
-      /*  page-break-after: always;*/
-      /*  page-break-inside: avoid;*/
-      /*}*/
-}
-
-
     </style>
 
-    
-    
+
+
 </head>
 
 
 <body>
-<p align="right"><button id="printbtn" onclick="window.print();">Print</button></p>
-    <div class="container">
-        <div class="row" id="printAble">
-            <?php
+    <p align="right"><button id="printbtn" onclick="window.print();">Print</button></p>
 
-$i=1;
-            foreach ($studentDetails as $s) { 
-             
-                if($i % 9 == 0)
-                {
-                    echo '<div id="pageBeak"></div>';
-                }
+    <table>
+        <tr>
+
+   
+    <?php
+
+    $i = 0;
+    foreach ($studentDetails as $s) {
+
+        if ($i % 8 == 0) {
+            echo '<div id="pageBeak"></div>';
+        }
+
+        if ($i % 3 == 0) {
+            echo '</tr><tr>';
+        }
+
+    ?>
+    <td class="td" >
+    <div id="card">
+            <table>
+                <tr style="padding-left:5px;color:#fff;text-align:center;"> 
+                    <td>
+                    <img src="<?= $s['schoolImage']; ?>" alt="" height="50px" width="50px">
+                    </td>
+                    <td>
                 
-                
-                ?>
-    
-                <!--<div class="col-md-4 my-3">-->
-                    <div class="card border" id="card" style="border:1px solid #800000 !important;">
-                        <div class="card-header text-white" style="background-color: #800000;">
-                            <div class="row rrow">
-                                <div class="col-md-3 col3">
-                                    <img src="<?= $s['schoolImage']; ?>" alt="" height="100px" width="100px">
-                                </div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-8 col9">
-                                    <p class="p1" style="font-size:20px; font-weight:bold; line-height:22px;margin:0;"><?= strtoupper($s['school_name']); ?></p>
-                                    <p  class="p2"style="font-size:16px; line-height:11px;margin:0;margin-top:8px;"><?= strtoupper($s['address']) . ' ' . $s['pincode']; ?></p>
-                                     <p  class="p2"style="font-size:16px; line-height:11px;margin:0;margin-top:8px;"><?= $s['mobile']; ?></p> 
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="row rrow">
-                                <div class="col-md-6 col5">
-                                    <img src="<?= $s['studentImage']; ?>" alt="" height="220px" width="180px" style="border:1px solid #800000 !important;">
-                                </div>
-
-
-                                <div class="col-md-6 col4">
-                                <h6 style="padding:5px; border-bottom:1px solid #800000;font-weight:bold;" class="text-center"><?=$s['user_id']?></h6>
-                                    <img src="https://chart.googleapis.com/chart?chs=200x200&amp;cht=qr&amp;chl=<?= $s['qrcodeUrl']; ?>&amp;choe=UTF-8" alt="https://qverify.in?stuid=dvm-stu0000151" height="180px" width="180px">
-                                        
-                                 
-                                </div>
-                            </div>
-                            <!-- <hr> -->
-                            <table style="font-size:15px;" class="table mt-2">
-                                <tr>
-                                    <td><b>Name</b></td>
-                                    <td><?= $s['name']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Class</b></td>
-                                    <td><?= $s['classNames']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Phone</td>
-                                    <td><?= $s['studentMobile']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Address</b></td>
-                                    <td><?= $s['studentAddress'] . " " . $s['studentCity'] . " " . $s['studentPincode']; ?></td>
-                                </tr>
-                            </table>
-
-                            <?php
-                            echo'<img style="width:360px;" class="" src="data:image/png;base64,' . base64_encode($generator->getBarcode($s['user_id'], $generator::TYPE_CODE_128)) . '">';
-                            ?>
-                        </div>
-                    </div>
-                <!--</div>-->
-            <?php  $i++; }  ?>
-
+                        <p style="font-size:14px; font-weight:bold; line-height:18px;"><?= strtoupper($s['school_name']); ?></p>
+                    </td>
+                </tr>
+            </table>
         </div>
+        <div id="cardBody">
+            <table>
+                <tr>
+                    
+                    <td>
+                        <img src="<?= $s['studentImage']; ?>" alt="" height="90px" width="80px" style="border:1px solid #800000 !important;">
+                    </td>
+                    <td>
+                        <!-- <h6><?= $s['user_id'] ?></h6> -->
+                        <img src="https://chart.googleapis.com/chart?chs=200x200&amp;cht=qr&amp;chl=<?= $s['qrcodeUrl']; ?>&amp;choe=UTF-8" alt="https://qverify.in?stuid=dvm-stu0000151" height="90px" width="90px">
+                    </td>
+                </tr>
+            </table>
+            <table style="font-size:12px;">
+                <tr>
+                    <td><b>Name : </b></td>
+                    <td><?= $s['name']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Class : </b></td>
+                    <td><?= $s['classNames']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Phone : </b></td>
+                    <td><?= $s['studentMobile']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Address : </b></td>
+                    <td><?= $s['studentAddress'] . " " . $s['studentCity'] . " " . $s['studentPincode']; ?></td>
+                </tr>
+            </table>
+
+            <?php
+            echo '<img style="width:110px; padding:10px;" class="" src="data:image/png;base64,' . base64_encode($generator->getBarcode($s['user_id'], $generator::TYPE_CODE_128)) . '">';
+            ?>
+        </div>
+    </td>
+    
+    <?php $i++;
+    }  ?>
 
 
-    </div>
-    </div>
+</tr>
+    </table>
 
 </body>
 
@@ -206,7 +247,7 @@ $i=1;
 
 
 
-    <!-- <div class="card border" id="card" style="border:1px solid #800000 !important;">
+<!-- <div class="card border" id="card" style="border:1px solid #800000 !important;">
         <div class="card-header text-white" style="background-color: #800000;">
             <div class="row">
                 <div class="col-md-3">

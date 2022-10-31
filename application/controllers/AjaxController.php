@@ -147,6 +147,13 @@ class AjaxController extends CI_Controller {
 			return $this->CrudModel->dateSheetList(Table::secExamTable, $_POST);
 		}
 	}
+
+
+
+
+
+
+	
 	public function addHolidayEvent()
 	{
 		if(isset($_POST))
@@ -228,6 +235,26 @@ class AjaxController extends CI_Controller {
 			exit(0);
 			}
 			echo json_encode($sql);
+			exit(0);
+		}
+	}
+	public function showEmployeesViaDepartmentId()
+	{
+		if(isset($_POST))
+		{
+			$d = $this->db->query($sql = "SELECT s.empId,s.employeeName,dep.departmentName,des.designationName, '' as msg FROM ".Table::salaryTable." s
+			INNER JOIN ".Table::departmentTable." dep ON dep.id = s.departmentId
+    		INNER JOIN ".Table::designationTable." des ON des.id = s.designationId 
+			WHERE s.departmentId = '{$_POST['departmentId']}' AND s.status = '1' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+       		$html = '';
+
+			if(!empty($d))
+			{
+			
+			echo json_encode($d);
+			exit(0);
+			}
+			echo json_encode(array(0 => array('msg' => 'No Employess Found in this department.')));
 			exit(0);
 		}
 	}
