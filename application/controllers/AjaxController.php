@@ -147,116 +147,171 @@ class AjaxController extends CI_Controller
 	public function checkEmployeeSalaryById()
 	{
 		if (isset($_POST)) {
-			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth();
 
-			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($_POST['empId']);
+			$this->tableName = Table::salaryTable;
 
+			$sendArr = [];
+			
+			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($_POST['monthId'],$_POST['yearId']);
 
-			$totalPresentDays = $totalAttendanceArr['present'];
-			$totalAbsentDays = $totalAttendanceArr['absent'];
-			$totalHalfDays = $totalAttendanceArr['helfDay'];
-			$totalLeavesDays = $totalAttendanceArr['leaves'];
+			$sendArr['workingDays'] = $totalWorkingDays;
 
+			$condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id = '{$_POST['id']}' ";
 
 			$d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
             JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
             JOIN ".Table::designationTable." des ON des.id = s.designationId 
-            WHERE s.status != 4 AND s.id = '{$_POST['id']}'")->result_array();
-
-			// check how many leaves allow in one month for employee
-			$totalLeavesAllowPerMonth = $d['leavesPerMonth'];
-
-			// per day salary
-			$perDaySalary = $d['basicSalaryDay'];
-			// per month salary
-			$perMonthSalary = $d['basicSalaryMonth'];
-
-			// if absent How much deducat per day
-			$absentDeducation = $d['lwp'];
-
-			// half day deducation
-			$halfDayDeducation = $d['ded_half_day'];
-
-			// total allowances
-			$totalAll = $d['dearnessAll'] + $d['hra'] + $d['conAll'] + $d['medicalAll'] + $d['specialAll'];
-
-			// total deducations
-			$totalDed = $d['professionalTaxPerMonth'] + $d['pfPerMonth'] + $d['tdsPerMonth'];
+            WHERE s.status != 4 $condition ")->result_array();
 
 
+			$sendArr['employeeDetails'] = $d[0];
+
+			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($_POST['id'],$_POST['monthId'],$_POST['yearId']);
+
+
+			$totalPresentDays = $totalAttendanceArr['present'];
+            $totalAbsentDays = $totalAttendanceArr['absent'];
+            $totalHalfDays = $totalAttendanceArr['helfDay'];
+            $totalLeavesDays = $totalAttendanceArr['leaves'];
+
+
+			$sendArr['attendanceData'] = $totalAttendanceArr;
+
+            // check how many leaves allow in one month for employee
+            $totalLeavesAllowPerMonth = $d[0]['leavesPerMonth'];
+
+            // per day salary
+            $perDaySalary = $d[0]['basicSalaryDay'];
+            // per month salary
+            $perMonthSalary = $d[0]['basicSalaryMonth'];
+
+            // if absent How much deducat per day
+            $absentDeducation = $d[0]['lwp'];
+
+            // half day deducation
+            $halfDayDeducation = $d[0]['ded_half_day'];
+
+           
+
+            
+            
+            // absent / leave Deducations days
+            if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
+                $lwpDeducationsDays = $t;
+            } else {
+                $lwpDeducationsDays = 0;
+            }
+
+
+         
+            // leave deducation amount
+
+            if ($lwpDeducationsDays > 0) {
+                $leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
+            }else
+            {
+                $leaveDudutionAmt = 0;
+            }
+
+			$sendArr['leaves'] =  ['totalLeaves' => $lwpDeducationsDays, 'leaveAmountToDeducat' => $leaveDudutionAmt];
+
+            // half day deducations    
+
+            if ($totalHalfDays > 0) {
+                $halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
+            }else
+            {
+                $halfDayDeducationAmt = 0;
+            }
+
+			$sendArr['halfDays'] =  ['totalHalfDays' => $totalHalfDays, 'halfDaysAmountToDeducat' => $halfDayDeducationAmt];
+
+            // total working days present days
+            $t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth ;
+            if($t > 0)
+            {
+                $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
+            }else
+            {
+                $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
+            }
+            
+			$sendArr['totalWorkingDaysAspected'] =  $totalDaysExpectToPresentForMonthlySalary;
+
+            if($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary){
+                // salary per day
+                if($totalPresentDays > 0)
+                {
+                    $salary0 = $totalPresentDays * $perDaySalary; // full day salary
+                }else
+                {
+                    $salary0 = 0; // full day salary
+                }
+                
+                if($totalHalfDays > 0)
+                {
+                    $salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
+                }else
+                {
+                    $salary1 = 0;
+                }
+                
+                $ssalary = $salary0 + $salary1;
+            }else if($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary){
+                if($totalPresentDays > 0)
+                {
+                    // salary per month
+                    $salary0 = $perMonthSalary;
+                }else
+                {
+                    $salary0 = 0;
+                }
+               
+                $ssalary = $salary0;
+            }
+
+
+			$sendArr['basicPay'] = $ssalary;
+
+
+
+
+            $da0 = ($d[0]['dearnessAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['dearnessAll']) : 0;
+            $hra0 = ($d[0]['hra'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['hra'] ) : 0;
+            $ca0 = ($d[0]['conAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['conAll'] ) : 0;
+            $ma0 = ($d[0]['medicalAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['medicalAll'] ) : 0;
+            $sa0 = ($d[0]['specialAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['specialAll']) : 0;
+
+             // total allowances
+             $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
+
+			 $sendArr['allowances'] = ['da' => $da0, 'hra' => $hra0 , 'ca' => $ca0, 'ma' => $ma0, 'sa' => $sa0, 'total' => $totalAll];
+            
+            $ptpm0 = ($d[0]['professionalTaxPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['professionalTaxPerMonth']) : 0;
+            $pfm0 = ($d[0]['pfPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['pfPerMonth']) : 0;
+            $tds0 = ($d[0]['tdsPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['tdsPerMonth']) : 0;
+
+            // total deducations
+            $totalDed = $ptpm0 + $pfm0 + $tds0;
+          
+
+			$sendArr['deducations'] = ['ptpm' => $ptpm0, 'pfpm' => $pfm0 , 'tds' => $tds0, 'total' => $totalDed];
 
 			// totalSalaryAfterDeduation basicpay + allownaces - deducations
-			$totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
+            $totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
+			$sendArr['actualSalary'] =  $totalSalaryAfterDeducation;
+			
+            // totalSalaryToPay
+            $totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
+            $totalAllowMonth = @$totalAll;
 
+            // total salary now basicpay + allowance - deducation
+            $ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
 
-			// absent / leave Deducations days
-			if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
-				$lwpDeducationsDays = $t;
-			} else {
-				$lwpDeducationsDays = 0;
-			}
+			$sendArr['totalSalaryToPay'] =  $ssalaryAmount;
 
-
-			// leave deducation amount
-
-			if ($lwpDeducationsDays > 0) {
-				$leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
-			} else {
-				$leaveDudutionAmt = 0;
-			}
-
-
-			// half day deducations    
-
-			if ($totalHalfDays > 0) {
-				$halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
-			} else {
-				$halfDayDeducationAmt = 0;
-			}
-
-
-			// total working days present days
-			$t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth;
-			if ($t > 0) {
-				$totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
-			} else {
-				$totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
-			}
-
-
-			if ($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary) {
-				// salary per day
-				if ($totalPresentDays > 0) {
-					$salary0 = $totalPresentDays * $perDaySalary; // full day salary
-				} else {
-					$salary0 = 0; // full day salary
-				}
-
-				if ($totalHalfDays > 0) {
-					$salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
-				} else {
-					$salary1 = 0;
-				}
-
-				$ssalary = $salary0 + $salary1;
-			} else if ($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary) {
-				if ($totalPresentDays > 0) {
-					// salary per month
-					$salary0 = $perMonthSalary;
-				} else {
-					$salary0 = 0;
-				}
-
-				$ssalary = $salary0;
-			}
-
-
-			// totalSalaryToPay
-			$totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
-			$totalAllowMonth = @$totalAll;
-
-			// total salary now basicpay + allowance - deducation
-			$ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
+			echo json_encode($sendArr);
+			exit(0);
 		}
 	}
 
@@ -345,7 +400,7 @@ class AjaxController extends CI_Controller
 	public function showEmployeesViaDepartmentId()
 	{
 		if (isset($_POST)) {
-			$d = $this->db->query($sql = "SELECT s.empId,s.employeeName,dep.departmentName,des.designationName, '' as msg FROM " . Table::salaryTable . " s
+			$d = $this->db->query($sql = "SELECT s.id,s.empId,s.employeeName,dep.departmentName,des.designationName, '' as msg FROM " . Table::salaryTable . " s
 			INNER JOIN " . Table::departmentTable . " dep ON dep.id = s.departmentId
     		INNER JOIN " . Table::designationTable . " des ON des.id = s.designationId 
 			WHERE s.departmentId = '{$_POST['departmentId']}' AND s.status = '1' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();

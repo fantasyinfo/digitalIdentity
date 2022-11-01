@@ -270,6 +270,7 @@ $ajaxRoutesArr = [
     'showSalaryDetails',
     'showEmployeesViaDepartmentId',
    'showEmployeesViaDepartmentIdAndDesignationId',
+   'checkEmployeeSalaryById'
     
 ];
 

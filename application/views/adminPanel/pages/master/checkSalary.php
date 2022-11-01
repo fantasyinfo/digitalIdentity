@@ -41,6 +41,8 @@
 
                         $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' ORDER BY id DESC")->result_array();
 
+                        $monthData = $this->db->query("SELECT * FROM " . Table::monthTable . " WHERE status = '1' ")->result_array();
+
                         if (!empty($this->session->userdata('msg'))) { ?>
 
                             <div class="alert alert-<?= $this->session->userdata('class') ?> alert-dismissible fade show" role="alert">
@@ -73,7 +75,51 @@
 
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
+                                            <label>Select Month </label>
+                                            <select name="monthId" id="monthId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                <option>Please Select Month</option>
+                                                <?php
+                                                $selected = '';
+                                                if (isset($monthData)) {
+                                                    foreach ($monthData as $month) {
+                                                            if (date('m') == $month['id']) {
+                                                                $selected = 'selected';
+                                                            } else {
+                                                                $selected = '';
+                                                            }
+                                                        ?>
+                                                        <option <?= $selected; ?> value="<?= $month['id'] ?>"><?= $month['monthName'] ?></option>
+                                                <?php }
+                                                }
+
+                                                ?>
+                                            </select>
+                                        </div>
+                                    <div class="form-group col-md-3">
+                                            <label>Select Year </label>
+                                            <select name="yearId" id="yearId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                <option>Please Select Year</option>
+                                                <?php
+                                                $selected = '';
+                                                $yearArr = ['2021','2022','2023','2024','2025'];
+                                                
+                                                if (isset($yearArr)) {
+                                                    foreach ($yearArr as $year => $val) {
+                                                            if (date('Y') ==  $val) {
+                                                                $selectedY = 'selected';
+                                                            } else {
+                                                                $selectedY = '';
+                                                            }
+                                                        ?>
+                                                        <option <?= $selectedY; ?> value="<?= $val ?>"><?=  $val ?></option>
+                                                <?php }
+                                                }
+
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
                                             <label>Select Department </label>
                                             <select name="departmentId" id="departmentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showDesignation()">
                                                 <option>Please Select Department</option>
@@ -98,13 +144,13 @@
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-3">
                                             <label>Select Designation</label>
                                             <select id="designationId" name="designationId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
                                                 <option>Please Select Designation</option>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-4 pt-4">
+                                        <div class="form-group col-md-3 pt-4">
                                             <button type="submit" id="showEmployees" class="btn btn-primary btn-block ">Filter</button>
                                         </div>
                                     </div>
@@ -165,6 +211,39 @@
 
         <!-- /.control-sidebar -->
 
+
+        <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog border border-success modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title" id="exampleModalLabel">Employee Salary Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="employeeDetails">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-danger btn-lg btn-block" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
         <?php $this->load->view("adminPanel/pages/footer-copyright.php"); ?>
     </div>
     <?php $this->load->view("adminPanel/pages/footer.php"); ?>
@@ -172,6 +251,10 @@
     <script>
 
         var ajaxUrlForEmployeeList = '<?= base_url() . 'ajax/showEmployeesViaDepartmentIdAndDesignationId'?>';
+
+
+      let monthArr =    {1 : 'January', 2 : 'February', 3:'March', 4:'April', 5:'May', 6:'June', 7:'July', 8:'August', 9:'September', 10:'October', 11:'November', 12:'December'};
+
         function showDesignation() {
             $('#designationId').html("");
             var departmentId = $("#departmentId").val();
@@ -204,9 +287,12 @@
             e.preventDefault();
             let departmentId = $("#departmentId").val();
             let designationId = $("#designationId").val();
+            let monthId = $("#monthId").val();
+            let yearId = $("#yearId").val();
 
+            console.log(monthId);
 
-            if (departmentId != 'Please Select Department' && designationId != 'Please Select Designation' && departmentId != null && designationId != null) {
+            if (departmentId != 'Please Select Department' && designationId != 'Please Select Designation'  && monthId != 'Please Select Month' && yearId != 'Please Select Year' && departmentId != null && designationId != null && monthId != null && yearId != null) {
                 $("#showEmpTable").show();
                 $("#listDatatable").DataTable({
                     "responsive": true,
@@ -232,6 +318,8 @@
                         data: {
                             departmentId: departmentId,
                             designationId: designationId,
+                            monthId: monthId,
+                            yearId: yearId
                         },
                         error: function() {
                             console.log('something went wrong.');
@@ -239,5 +327,83 @@
                     }
                 });
             }
-        })
+        });
+
+
+
+        function checkDetails(x){
+            console.log(x);
+            let monthId = $("#monthId").val();
+            let yearId = $("#yearId").val();
+            $.ajax({
+                    url: '<?= base_url() . 'ajax/checkEmployeeSalaryById'; ?>',
+                    method: 'post',
+                    processData: 'false',
+                    data: {
+                        id: x,
+                        monthId : monthId,
+                        yearId : yearId
+                    },
+                    success: function(response) {
+                        // console.log(response);
+                        response = $.parseJSON(response);
+                        console.log(response);
+                        console.log(response.employeeDetails);
+                        let showDetailsHtml = `<table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                          <td colspan="2"><b>Salary Details on ${monthArr[monthId]} - ${yearId}</b> </td>
+                                          <td colspan="2"> ${response.employeeDetails.empId} - ${response.employeeDetails.employeeName}</td>
+                                        
+                                        </tr>
+                                       
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold"><b>Working Days</b></td>
+                                          <td>${response.workingDays.totalWorkingDays} Days</td>
+                                          <td scope="row font-bold" class="font-bold"><b>Total Holidays Including Sunday</b></td>
+                                          <td>${response.workingDays.totalHolidaysIncludingSundays} Days</td>
+                                        </tr>
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold"><b>Present Days</b></td>
+                                          <td>${response.attendanceData.present}</td>
+                                          <td scope="row font-bold" class="font-bold"><b>Absent Days</b></td>
+                                          <td>${response.attendanceData.absent}</td>
+                                        </tr>
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold"><b>Leaves Days</b></td>
+                                          <td>${response.attendanceData.leaves}</td>
+                                          <td scope="row font-bold" class="font-bold"><b>Half Days</b></td>
+                                          <td>${response.attendanceData.helfDay}</td>
+                                        </tr>
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold text-danger" ><b>Deducations</b></td>
+                                          <td colspan="3">Professinal Tax : ₹ ${response.deducations.ptpm} , P.F.: ₹ ${response.deducations.pfpm}  , TDS : ₹ ${response.deducations.tds} , <b>Total: ₹ ${response.deducations.total} </b></td>
+                                        </tr>
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold text-success"><b>Allowances</b></td>
+                                          <td colspan="3">DA : ₹ ${response.allowances.da}, HRA : ₹ ${response.allowances.hra}, CA : ₹ ${response.allowances.ca}, MA : ₹ ${response.allowances.ma}, SA : ₹ ${response.allowances.sa}, <b>Total: ₹ ${response.allowances.total}</b></td>
+                                        </tr>
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold text-success"><b>Basic Pay</b></td>
+                                          <td colspan="3"><b>₹ ${response.basicPay}</b></td>
+                                        </tr>
+                                        <tr>
+                                          <td scope="row font-bold" class="font-bold  text-success"><b>Total Salary</b></td>
+                                          <td colspan="3"> <h2>₹ ${response.totalSalaryToPay}</h2></td>
+                                        </tr>
+                                    </tbody>
+                                  </table>`;
+            $("#employeeDetails").html(showDetailsHtml);
+            $("#detailsModal").modal('show');
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+
+                });
+        }
+
+
+
+
     </script>

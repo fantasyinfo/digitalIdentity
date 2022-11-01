@@ -424,12 +424,12 @@ class CrudModel extends CI_Model
 
         $sendArr = [];
 
-        $totalWorkingDays =  $this->totalEmployeesWorkingDaysAndHolidaysCurrentMonth();
+        $totalWorkingDays =  $this->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($data['monthId'],$data['yearId']);
       
 
         for ($i = 0; $i < count($d); $i++) {
 
-            $totalAttendanceArr =  $this->getTotalAttendanceOfEmployeeCurrentMonth($d[$i]['id']);
+            $totalAttendanceArr =  $this->getTotalAttendanceOfEmployeeCurrentMonth($d[$i]['id'],$data['monthId'],$data['yearId']);
 
 
             $totalPresentDays = $totalAttendanceArr['present'];
@@ -454,26 +454,7 @@ class CrudModel extends CI_Model
             $halfDayDeducation = $d[$i]['ded_half_day'];
 
            
-            $da0 = ($d[$i]['dearnessAll'] > 0) ? $this->calculatePercentageAmount($perMonthSalary,$d[$i]['dearnessAll']) : 0;
-            $hra0 = ($d[$i]['hra'] > 0) ? $this->calculatePercentageAmount($perMonthSalary,$d[$i]['hra'] ) : 0;
-            $ca0 = ($d[$i]['conAll'] > 0) ?$this->calculatePercentageAmount($perMonthSalary,$d[$i]['conAll'] ) : 0;
-            $ma0 = ($d[$i]['medicalAll'] > 0) ?$this->calculatePercentageAmount($perMonthSalary,$d[$i]['medicalAll'] ) : 0;
-            $sa0 = ($d[$i]['specialAll'] > 0) ?$this->calculatePercentageAmount($perMonthSalary,$d[$i]['specialAll']) : 0;
-
-             // total allowances
-             $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
-
-            
-            $ptpm0 = ($d[$i]['professionalTaxPerMonth'] > 0) ?$this->calculatePercentageAmount($perMonthSalary,$d[$i]['professionalTaxPerMonth']) : 0;
-            $pfm0 = ($d[$i]['pfPerMonth'] > 0) ?$this->calculatePercentageAmount($perMonthSalary,$d[$i]['pfPerMonth']) : 0;
-            $tds0 = ($d[$i]['tdsPerMonth'] > 0) ?$this->calculatePercentageAmount($perMonthSalary,$d[$i]['tdsPerMonth']) : 0;
-
-            // total deducations
-            $totalDed = $ptpm0 + $pfm0 + $tds0;
-          
-
-            // totalSalaryAfterDeduation basicpay + allownaces - deducations
-            $totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
+           
 
             
             // absent / leave Deducations days
@@ -547,6 +528,27 @@ class CrudModel extends CI_Model
                 $ssalary = $salary0;
             }
 
+
+            $da0 = ($d[$i]['dearnessAll'] > 0) ? $this->calculatePercentageAmount($ssalary,$d[$i]['dearnessAll']) : 0;
+            $hra0 = ($d[$i]['hra'] > 0) ? $this->calculatePercentageAmount($ssalary,$d[$i]['hra'] ) : 0;
+            $ca0 = ($d[$i]['conAll'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['conAll'] ) : 0;
+            $ma0 = ($d[$i]['medicalAll'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['medicalAll'] ) : 0;
+            $sa0 = ($d[$i]['specialAll'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['specialAll']) : 0;
+
+             // total allowances
+             $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
+
+            
+            $ptpm0 = ($d[$i]['professionalTaxPerMonth'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['professionalTaxPerMonth']) : 0;
+            $pfm0 = ($d[$i]['pfPerMonth'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['pfPerMonth']) : 0;
+            $tds0 = ($d[$i]['tdsPerMonth'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['tdsPerMonth']) : 0;
+
+            // total deducations
+            $totalDed = $ptpm0 + $pfm0 + $tds0;
+          
+
+            // totalSalaryAfterDeduation basicpay + allownaces - deducations
+            $totalSalaryAfterDeducation = ($ssalary + $totalAll) - $totalDed;
 
             // totalSalaryToPay
             $totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
@@ -2072,10 +2074,25 @@ class CrudModel extends CI_Model
 
 
 
-    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth()
+    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth($monthId = '',$yearId = '')
     {
-        $currentYear = date('Y');
-        $currentMonth = date('m');
+       
+        if($yearId == '')
+        {
+            $currentYear = date('Y');
+        }else
+        {
+            $currentYear = $yearId;
+        }
+
+        if($monthId == '')
+        {
+            $currentMonth = date('m');
+        }else
+        {
+            $currentMonth = $monthId;
+        }
+        
         $first_day = "01"; // first Days hardcoded
         $last_day =  date('t', strtotime($currentYear . '-' . $currentMonth . '-' . $first_day));
         $startDate = date($currentYear . '-' . $currentMonth . '-' . $first_day);
@@ -2091,22 +2108,36 @@ class CrudModel extends CI_Model
         return $sendArr;
     }
 
-    public function getTotalAttendanceOfEmployeeCurrentMonth($id)
+    public function getTotalAttendanceOfEmployeeCurrentMonth($id,$monthId = '', $yearId = '')
     {
-        $currentYear = date('Y');
-        $currentMonth = date('m');
+       
+        if($yearId == '')
+        {
+            $currentYear = date('Y');
+        }else
+        {
+            $currentYear = $yearId;
+        }
+
+        if($monthId == '')
+        {
+            $currentMonth = date('m');
+        }else
+        {
+            $currentMonth = $monthId;
+        }
         $first_day = "01"; // first Days hardcoded
         $last_day =  date('t', strtotime($currentYear . '-' . $currentMonth . '-' . $first_day));
         $startDate = date($currentYear . '-' . $currentMonth . '-' . $first_day);
         $endDate = date($currentYear . '-' . $currentMonth . '-' . $last_day);
 
-        $totalPresents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '2' AND id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalPresents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '2' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
-        $totalAbsents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '1' AND id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalAbsents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '1' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
-        $totalHalfDays = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '3' AND id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalHalfDays = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '3' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
-        $totalHalfLeaves = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '4' AND id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalHalfLeaves = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '4' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
 
 

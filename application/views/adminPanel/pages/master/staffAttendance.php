@@ -229,7 +229,7 @@
                             
                         for (let i = 0; i < response.length; i++) {
                             
-                            html += `<input type="hidden" name="tId[]" value="${response[i].empId}">
+                            html += `<input type="hidden" name="tId[]" value="${response[i].id}">
                             <input type="hidden" name="empName[]" value="${response[i].employeeName}">
                             <input type="hidden" name="departmentName" value="${response[i].departmentName}">
                             <tr>
