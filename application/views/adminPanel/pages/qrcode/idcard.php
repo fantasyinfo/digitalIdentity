@@ -5,14 +5,20 @@ require  HelperClass::barCodeFilePath;
 $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
 
 
+if(isset($_GET['classId']) && isset($_GET['sectionId']) && isset($_GET['schoolUniqueCode']))
+{
+    $classId = $_GET['classId'];
+    $sectionId = $_GET['sectionId'];
+    $schoolUniqueCode = $_GET['schoolUniqueCode'];
+}else{
+    $classId = '20';
+    $sectionId = '2';
+    $schoolUniqueCode = '683611';
+}
 
 
 
 
-
-$classId = '20';
-$sectionId = '2';
-$schoolUniqueCode = '683611';
 
 $schoolLogo = base_url() . HelperClass::schoolLogoImagePath;
 $studentImage = base_url() . HelperClass::studentImagePath;

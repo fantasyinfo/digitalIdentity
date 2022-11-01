@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class AjaxController extends CI_Controller {
+class AjaxController extends CI_Controller
+{
 
 	public $viewDir = 'adminPanel/';
 	public $adminPanelURL = "assets/adminPanel/";
@@ -20,84 +21,73 @@ class AjaxController extends CI_Controller {
 
 	public function listStudentsAjax()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->StudentModel->listStudents($_POST);
 		}
 	}
 	public function listStudentsPermote()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->StudentModel->listStudentsPermote($_POST);
 		}
 	}
 	public function listTeachersAjax()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->TeacherModel->listTeacher($_POST);
 		}
 	}
 	public function listDriversAjax()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->DriverModel->listDriver($_POST);
 		}
 	}
 	public function allExamList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->ExamModel->allExamList($_POST);
 		}
 	}
 
 	public function allAttendanceList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->AcademicModel->allAttendanceList($_POST);
 		}
 	}
 
 	public function allTeachersAttendanceList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->AcademicModel->allTeachersAttendanceList($_POST);
 		}
 	}
 
 	public function allComplaintList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->AcademicModel->allComplaintList($_POST);
 		}
 	}
 
 	public function allResultList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->ExamModel->allResultList($_POST);
 		}
 	}
 
 	public function showAllSemesterResultsList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->ExamModel->showAllSemesterResultsList($_POST);
 		}
 	}
-	
+
 	public function teacherReviewsList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->TeacherModel->teacherReviewsList($_POST);
 		}
 	}
@@ -105,18 +95,24 @@ class AjaxController extends CI_Controller {
 
 	public function showStudentViaClassAndSectionId()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			//HelperClass::prePrintR($_POST);
 			echo $this->StudentModel->showStudentViaClassAndSectionId($_POST);
+		}
+	}
+
+	public function showEmployeesViaDepartmentIdAndDesignationId()
+	{
+		if (isset($_POST)) {
+			//HelperClass::prePrintR($_POST);
+			echo $this->CrudModel->showEmployeesViaDepartmentIdAndDesignationId($_POST);
 		}
 	}
 
 
 	public function showDriverListViaVechicleType()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			//HelperClass::prePrintR($_POST);
 			echo $this->DriverModel->showDriverListViaVechicleType($_POST);
 		}
@@ -124,8 +120,7 @@ class AjaxController extends CI_Controller {
 
 	public function totalFeesDue()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			//HelperClass::prePrintR($_POST);
 			echo $this->StudentModel->totalFeesDue($_POST);
 		}
@@ -134,16 +129,14 @@ class AjaxController extends CI_Controller {
 
 	public function listDigiCoinAjax()
 	{
-		if(isset($_POST))
-		{
-			return $this->CrudModel->listDigiCoin(Table::getDigiCoinTable,$_POST['user_type'], $_POST);
+		if (isset($_POST)) {
+			return $this->CrudModel->listDigiCoin(Table::getDigiCoinTable, $_POST['user_type'], $_POST);
 		}
 	}
 
 	public function dateSheetList()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->CrudModel->dateSheetList(Table::secExamTable, $_POST);
 		}
 	}
@@ -151,71 +144,178 @@ class AjaxController extends CI_Controller {
 
 
 
+	public function checkEmployeeSalaryById()
+	{
+		if (isset($_POST)) {
+			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth();
+
+			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($_POST['empId']);
+
+
+			$totalPresentDays = $totalAttendanceArr['present'];
+			$totalAbsentDays = $totalAttendanceArr['absent'];
+			$totalHalfDays = $totalAttendanceArr['helfDay'];
+			$totalLeavesDays = $totalAttendanceArr['leaves'];
+
+
+			$d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
+            JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
+            JOIN ".Table::designationTable." des ON des.id = s.designationId 
+            WHERE s.status != 4 AND s.id = '{$_POST['id']}'")->result_array();
+
+			// check how many leaves allow in one month for employee
+			$totalLeavesAllowPerMonth = $d['leavesPerMonth'];
+
+			// per day salary
+			$perDaySalary = $d['basicSalaryDay'];
+			// per month salary
+			$perMonthSalary = $d['basicSalaryMonth'];
+
+			// if absent How much deducat per day
+			$absentDeducation = $d['lwp'];
+
+			// half day deducation
+			$halfDayDeducation = $d['ded_half_day'];
+
+			// total allowances
+			$totalAll = $d['dearnessAll'] + $d['hra'] + $d['conAll'] + $d['medicalAll'] + $d['specialAll'];
+
+			// total deducations
+			$totalDed = $d['professionalTaxPerMonth'] + $d['pfPerMonth'] + $d['tdsPerMonth'];
+
+
+
+			// totalSalaryAfterDeduation basicpay + allownaces - deducations
+			$totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
+
+
+			// absent / leave Deducations days
+			if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
+				$lwpDeducationsDays = $t;
+			} else {
+				$lwpDeducationsDays = 0;
+			}
+
+
+			// leave deducation amount
+
+			if ($lwpDeducationsDays > 0) {
+				$leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
+			} else {
+				$leaveDudutionAmt = 0;
+			}
+
+
+			// half day deducations    
+
+			if ($totalHalfDays > 0) {
+				$halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
+			} else {
+				$halfDayDeducationAmt = 0;
+			}
+
+
+			// total working days present days
+			$t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth;
+			if ($t > 0) {
+				$totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
+			} else {
+				$totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
+			}
+
+
+			if ($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary) {
+				// salary per day
+				if ($totalPresentDays > 0) {
+					$salary0 = $totalPresentDays * $perDaySalary; // full day salary
+				} else {
+					$salary0 = 0; // full day salary
+				}
+
+				if ($totalHalfDays > 0) {
+					$salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
+				} else {
+					$salary1 = 0;
+				}
+
+				$ssalary = $salary0 + $salary1;
+			} else if ($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary) {
+				if ($totalPresentDays > 0) {
+					// salary per month
+					$salary0 = $perMonthSalary;
+				} else {
+					$salary0 = 0;
+				}
+
+				$ssalary = $salary0;
+			}
+
+
+			// totalSalaryToPay
+			$totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
+			$totalAllowMonth = @$totalAll;
+
+			// total salary now basicpay + allowance - deducation
+			$ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
+		}
+	}
 
 
 
 	public function addHolidayEvent()
 	{
-		if(isset($_POST))
-		{
-			$add = $this->db->query("INSERT INTO ".Table::holidayCalendarTable." (schoolUniqueCode,title,event_date,session_table_id) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['title']}','{$_POST['start']}','{$_SESSION['currentSession']}')");
+		if (isset($_POST)) {
+			$add = $this->db->query("INSERT INTO " . Table::holidayCalendarTable . " (schoolUniqueCode,title,event_date,session_table_id) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['title']}','{$_POST['start']}','{$_SESSION['currentSession']}')");
 		}
 	}
 	public function editHolidayEvent()
 	{
-		if(isset($_POST))
-		{
-			$update = $this->db->query("UPDATE ".Table::holidayCalendarTable." SET event_date = '{$_POST['start']}' WHERE id = '{$_POST['event_id']}'");
+		if (isset($_POST)) {
+			$update = $this->db->query("UPDATE " . Table::holidayCalendarTable . " SET event_date = '{$_POST['start']}' WHERE id = '{$_POST['event_id']}'");
 		}
 	}
 	public function getHolidayEvent()
 	{
-		
-			$result = $this->db->query("SELECT * FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  ORDER BY id DESC")->result_array();
 
-			$data = array();
-			if(!empty($result))
-			{
-				foreach ($result as $row) {
-					$data[] = array(
-						'id' => $row["id"],
-						'title' => $row["title"],
-						'start' => $row["event_date"]
-					);
-				}
-				// print_r($data);
-				echo json_encode($data);
+		$result = $this->db->query("SELECT * FROM " . Table::holidayCalendarTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  ORDER BY id DESC")->result_array();
+
+		$data = array();
+		if (!empty($result)) {
+			foreach ($result as $row) {
+				$data[] = array(
+					'id' => $row["id"],
+					'title' => $row["title"],
+					'start' => $row["event_date"]
+				);
 			}
-		
+			// print_r($data);
+			echo json_encode($data);
+		}
 	}
 
 	public function showCityViaStateId()
 	{
-		if(isset($_POST['stateId']))
-		{
-			if(isset($_POST['alreadyCityId']) && $_POST['alreadyCityId'] != '')
-			{
+		if (isset($_POST['stateId'])) {
+			if (isset($_POST['alreadyCityId']) && $_POST['alreadyCityId'] != '') {
 				$alreadyCityId = $_POST['alreadyCityId'];
-			}else
-			{
+			} else {
 				$alreadyCityId = '';
 			}
-			echo $this->CrudModel->showCityViaStateId($_POST['stateId'],$alreadyCityId);
+			echo $this->CrudModel->showCityViaStateId($_POST['stateId'], $alreadyCityId);
 		}
 	}
 
 	public function showAllSemExamsWithStudents()
 	{
-		if(isset($_POST))
-		{
-			$examDetails = $this->db->query("SELECT setT.*, sub.subjectName FROM ".Table::secExamTable." setT 
-			JOIN ".Table::semExamNameTable." se ON se.id = setT.sem_exam_id
-			JOIN ".Table::subjectTable." sub ON sub.id = setT.subject_id
+		if (isset($_POST)) {
+			$examDetails = $this->db->query("SELECT setT.*, sub.subjectName FROM " . Table::secExamTable . " setT 
+			JOIN " . Table::semExamNameTable . " se ON se.id = setT.sem_exam_id
+			JOIN " . Table::subjectTable . " sub ON sub.id = setT.subject_id
 			WHERE setT.class_id = '{$_POST['classId']}'
 			AND setT.section_id = '{$_POST['sectionId']}' 
 			AND se.id = '{$_POST['semExamId']}'")->result_array();
 
-			$studentsViaClass = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$_POST['classId']}' AND section_id = '{$_POST['sectionId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+			$studentsViaClass = $this->db->query($sql = "SELECT * FROM " . Table::studentTable . " WHERE class_id = '{$_POST['classId']}' AND section_id = '{$_POST['sectionId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 			$sendArr = [
 				'examDetails' => $examDetails,
@@ -227,19 +327,16 @@ class AjaxController extends CI_Controller {
 
 	public function showDesignationsViaDepartmentId()
 	{
-		if(isset($_POST))
-		{
-			$d = $this->db->query($sql = "SELECT * FROM ".Table::designationTable." WHERE departmentId = '{$_POST['departmentId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
-       		$html = '';
+		if (isset($_POST)) {
+			$d = $this->db->query($sql = "SELECT * FROM " . Table::designationTable . " WHERE departmentId = '{$_POST['departmentId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+			$html = '';
 
-			if(!empty($d))
-			{
-			foreach($d as $dd)
-			{
-			$html .= "<option value='{$dd['id']}'>{$dd['designationName']}</option>";
-			}
-			echo json_encode($html);
-			exit(0);
+			if (!empty($d)) {
+				foreach ($d as $dd) {
+					$html .= "<option value='{$dd['id']}'>{$dd['designationName']}</option>";
+				}
+				echo json_encode($html);
+				exit(0);
 			}
 			echo json_encode($sql);
 			exit(0);
@@ -247,19 +344,17 @@ class AjaxController extends CI_Controller {
 	}
 	public function showEmployeesViaDepartmentId()
 	{
-		if(isset($_POST))
-		{
-			$d = $this->db->query($sql = "SELECT s.empId,s.employeeName,dep.departmentName,des.designationName, '' as msg FROM ".Table::salaryTable." s
-			INNER JOIN ".Table::departmentTable." dep ON dep.id = s.departmentId
-    		INNER JOIN ".Table::designationTable." des ON des.id = s.designationId 
+		if (isset($_POST)) {
+			$d = $this->db->query($sql = "SELECT s.empId,s.employeeName,dep.departmentName,des.designationName, '' as msg FROM " . Table::salaryTable . " s
+			INNER JOIN " . Table::departmentTable . " dep ON dep.id = s.departmentId
+    		INNER JOIN " . Table::designationTable . " des ON des.id = s.designationId 
 			WHERE s.departmentId = '{$_POST['departmentId']}' AND s.status = '1' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
-       		$html = '';
+			$html = '';
 
-			if(!empty($d))
-			{
-			
-			echo json_encode($d);
-			exit(0);
+			if (!empty($d)) {
+
+				echo json_encode($d);
+				exit(0);
 			}
 			echo json_encode(array(0 => array('msg' => 'No Employess Found in this department.')));
 			exit(0);
@@ -268,16 +363,14 @@ class AjaxController extends CI_Controller {
 
 	public function showSalaryDetails()
 	{
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			$d = $this->db->query("SELECT s.*, dep.departmentName,des.designationName FROM " . Table::salaryTable . " s 
-			INNER JOIN ".Table::departmentTable." dep ON dep.id = s.departmentId
-			INNER JOIN ".Table::designationTable." des ON des.id = s.designationId
+			INNER JOIN " . Table::departmentTable . " dep ON dep.id = s.departmentId
+			INNER JOIN " . Table::designationTable . " des ON des.id = s.designationId
 			 WHERE s.status != '4'  AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id='{$_POST['salaryId']}'")->result_array()[0];
-       		$html = '';
+			$html = '';
 
-			if(!empty($d))
-			{
+			if (!empty($d)) {
 				echo json_encode($d);
 				exit(0);
 			}
@@ -299,8 +392,7 @@ class AjaxController extends CI_Controller {
 	public function listQRCodeAjax()
 	{
 
-		if(isset($_POST))
-		{
+		if (isset($_POST)) {
 			return $this->QRModel->listQR($_POST);
 		}
 	}
@@ -316,18 +408,36 @@ class AjaxController extends CI_Controller {
 		$this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
 		$this->load->view('adminPanel/pages/qrcode/download-qr');
 	}
-	public function downloadQR($classId,$sectionId)
+
+	public function showDownloadIDCard()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Download Student ID Cards',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
+		$this->load->view('adminPanel/pages/qrcode/download-id-card');
+	}
+
+	public function idcard()
+	{
+
+		$this->load->view('adminPanel/pages/qrcode/idcard');
+	}
+
+	public function downloadQR($classId, $sectionId)
 	{
 
 		$this->loginCheck();
 		$d = $this->db->query("SELECT qr.qrcodeUrl,qr.uniqueValue as qrName, CONCAT(cl.className, ' - ', se.sectionName) as classNames, st.roll_no
-                    FROM ".Table::qrcodeTable." qr 
-                    JOIN ".Table::studentTable." st ON st.user_id = qr.uniqueValue
-                    JOIN ".Table::classTable." cl ON cl.id = st.class_id
-                    JOIN ".Table::sectionTable." se ON se.id = st.section_id
+                    FROM " . Table::qrcodeTable . " qr 
+                    JOIN " . Table::studentTable . " st ON st.user_id = qr.uniqueValue
+                    JOIN " . Table::classTable . " cl ON cl.id = st.class_id
+                    JOIN " . Table::sectionTable . " se ON se.id = st.section_id
                     WHERE qr.status != 0 AND cl.id = '$classId' AND se.id = '$sectionId' ORDER BY qr.id DESC")->result_array();
 
-					HelperClass::prePrintR($d);
+		HelperClass::prePrintR($d);
 
 
 
@@ -343,24 +453,22 @@ class AjaxController extends CI_Controller {
 	public function getLatLng()
 	{
 		header('Access-Control-Allow-Origin: *');
-		$latLng = $this->db->query("SELECT * FROM ".Table::driverTable." WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND lat IS NOT NULL AND lng IS NOT NULL")->result_array();
-  
-		if(!empty($latLng))
-		{
+		$latLng = $this->db->query("SELECT * FROM " . Table::driverTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND lat IS NOT NULL AND lng IS NOT NULL")->result_array();
+
+		if (!empty($latLng)) {
 			$totalC = count($latLng);
 			$latLngArr = [];
-			for($i=0; $i < $totalC; $i++)
-			{
-			$subArr = [
-				'lat' => (float) $latLng[$i]['lat'],
-				'lng' => (float) $latLng[$i]['lng'],
-				'name' =>  $latLng[$i]['name'],
-				'mobile' =>  $latLng[$i]['mobile'],
-				'vechicle_type' =>  HelperClass::vehicleType[$latLng[$i]['vechicle_type']],
-				'vechicle_no' =>  $latLng[$i]['vechicle_no'],
-				'total_seats' =>  $latLng[$i]['total_seats'],
-			];
-			array_push($latLngArr,$subArr);
+			for ($i = 0; $i < $totalC; $i++) {
+				$subArr = [
+					'lat' => (float) $latLng[$i]['lat'],
+					'lng' => (float) $latLng[$i]['lng'],
+					'name' =>  $latLng[$i]['name'],
+					'mobile' =>  $latLng[$i]['mobile'],
+					'vechicle_type' =>  HelperClass::vehicleType[$latLng[$i]['vechicle_type']],
+					'vechicle_no' =>  $latLng[$i]['vechicle_no'],
+					'total_seats' =>  $latLng[$i]['total_seats'],
+				];
+				array_push($latLngArr, $subArr);
 			}
 			echo json_encode($latLngArr);
 			die();
@@ -370,17 +478,15 @@ class AjaxController extends CI_Controller {
 
 	public function loginCheck()
 	{
-		if(!$this->CrudModel->checkIsLogin())
-		{
-			header('Location: '.base_url());
+		if (!$this->CrudModel->checkIsLogin()) {
+			header('Location: ' . base_url());
 		}
 	}
 
 	public function checkPermission()
 	{
-		if(!$this->CrudModel->checkPermission())
-		{
-			header('Location: '.base_url());
+		if (!$this->CrudModel->checkPermission()) {
+			header('Location: ' . base_url());
 		}
 	}
 }

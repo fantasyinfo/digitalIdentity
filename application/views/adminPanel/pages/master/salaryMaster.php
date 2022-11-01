@@ -337,7 +337,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                         </div>
                         <div class="form-group col-md-3">
                           <label>Date of Joining</label>
-                          <input type="date" name="doj" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['doj'];} ?>" class="form-control" id="name" placeholder="Date of Joining">
+                          <input type="date" name="doj" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['doj'];} ?>" class="form-control" id="name" placeholder="Date of Joining" required>
                         </div>
                       </div>
                       <div class="row">
@@ -383,24 +383,24 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                             <div class="card-body">
                               <div class="row">
                               <div class="form-group col-md-2">
-                                <label>Dearness All. ( DA )</label>
-                                <input type="text" name="dearnessAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['dearnessAll'];} ?>" class="form-control" id="name" placeholder="Dearness Allowances" >
+                                <label>Dearness All. ( DA ) % </label>
+                                <input type="number" name="dearnessAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['dearnessAll'];} ?>" class="form-control" id="name" step="0.1" lang="nb" placeholder="Dearness Allowances %" >
                               </div>
                               <div class="form-group col-md-2">
-                                <label>House Rent All.(HRA)</label>
-                                <input type="text" name="hra" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['hra'];} ?>" class="form-control" id="name" placeholder="HRA Allowances">
+                                <label>House Rent All.(HRA) % </label>
+                                <input type="number" name="hra" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['hra'];} ?>" class="form-control" id="name" step="0.1" lang="nb" placeholder="HRA Allowances %">
                               </div>
                               <div class="form-group col-md-2">
-                                <label>Conveyence All. ( CA )</label>
-                                <input type="text" name="conAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['conAll'];} ?>" class="form-control" id="name" placeholder="Conveyence Allowances">
+                                <label>Conveyence All. ( CA ) % </label>
+                                <input type="number" name="conAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['conAll'];} ?>" class="form-control" id="name"  step="0.1" lang="nb" placeholder="Conveyence Allowances %">
                               </div>
                               <div class="form-group col-md-2">
-                                <label>Medical All.</label>
-                                <input type="text" name="medicalAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['medicalAll'];} ?>" class="form-control" id="name" placeholder="Medical Allowances">
+                                <label>Medical All. % </label>
+                                <input type="number" name="medicalAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['medicalAll'];} ?>" class="form-control" id="name" step="0.1" lang="nb" placeholder="Medical Allowances %">
                               </div>
                               <div class="form-group col-md-2">
-                                <label>Special All.</label>
-                                <input type="text" name="specialAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['specialAll'];} ?>" class="form-control" id="name" placeholder="Special Allowances">
+                                <label>Special All. % </label>
+                                <input type="number" name="specialAll" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['specialAll'];} ?>" class="form-control" id="name" step="0.1" lang="nb" placeholder="Special Allowances %">
                               </div>
                               </div>
                             </div>
@@ -419,16 +419,16 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                             <div class="card-body">
                               <div class="row">
                               <div class="form-group col-md-4">
-                                <label>Professinal Tax Deducations</label>
-                                <input type="text" name="professionalTaxPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['professionalTaxPerMonth'];} ?>" class="form-control" id="name" placeholder="Professinal Tax Deducations" >
+                                <label>Professinal Tax % </label>
+                                <input type="number" name="professionalTaxPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['professionalTaxPerMonth'];} ?>" class="form-control" id="name" placeholder="Professinal Tax Deducations % " step="0.1" lang="nb" >
                               </div>
                               <div class="form-group col-md-4">
-                                <label>Employee Provident Funds Deducations</label>
-                                <input type="text" name="pfPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['pfPerMonth'];} ?>" class="form-control" id="name" placeholder="PF Deducations">
+                                <label>Provident Funds  % </label>
+                                <input type="number" name="pfPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['pfPerMonth'];} ?>" class="form-control" id="name" placeholder="PF Deducations  % " step="0.1" lang="nb">
                               </div>
                               <div class="form-group col-md-4">
-                                <label>TDS Deducations</label>
-                                <input type="text" name="tdsPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['tdsPerMonth'];} ?>" class="form-control" id="name" placeholder="TDS Deducations">
+                                <label>TDS % </label>
+                                <input type="number" name="tdsPerMonth" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editsectionData[0]['tdsPerMonth'];} ?>" class="form-control" id="name" placeholder="TDS Deducations  % " step="0.1" lang="nb">
                               </div>
                               </div>
                             </div>
@@ -636,28 +636,28 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                                           <td>₹ ${response.basicSalaryDay}</td>
                                         </tr>
                                         <tr>
-                                          <td scope="row font-bold" class="font-bold"><b>DA Allowances</b></td>
-                                          <td>₹ ${response.dearnessAll}</td>
-                                          <td scope="row font-bold" class="font-bold"><b>HRA Allowances</b></td>
-                                          <td>₹ ${response.hra}</td>
+                                          <td scope="row font-bold" class="font-bold  text-success"><b>DA Allowances</b></td>
+                                          <td>${response.dearnessAll} %</td>
+                                          <td scope="row font-bold" class="font-bold  text-success"><b>HRA Allowances</b></td>
+                                          <td>${response.hra} %</td>
                                         </tr>
                                         <tr>
-                                          <td scope="row font-bold" class="font-bold"><b>Conveyence Allowances</b></td>
-                                          <td>₹ ${response.conAll}</td>
-                                          <td scope="row font-bold" class="font-bold"><b>Medial Allowances</b></td>
-                                          <td>₹ ${response.medicalAll}</td>
+                                          <td scope="row font-bold" class="font-bold  text-success"><b>Conveyence Allowances</b></td>
+                                          <td>${response.conAll} %</td>
+                                          <td scope="row font-bold" class="font-bold  text-success"><b>Medial Allowances</b></td>
+                                          <td>${response.medicalAll} %</td>
                                         </tr>
                                         <tr>
-                                          <td scope="row font-bold" class="font-bold"><b>Special Allowances</b></td>
-                                          <td>₹ ${response.specialAll}</td>
-                                          <td scope="row font-bold" class="font-bold"><b>TDS Deducation</b></td>
-                                          <td>₹ ${response.tdsPerMonth}</td>
+                                          <td scope="row font-bold" class="font-bold  text-success"><b>Special Allowances</b></td>
+                                          <td>${response.specialAll} %</td>
+                                          <td scope="row font-bold" class="font-bold text-danger"><b>TDS Deducation</b></td>
+                                          <td>${response.tdsPerMonth} %</td>
                                         </tr>
                                         <tr>
-                                          <td scope="row font-bold" class="font-bold"><b>Professional Tax Deducation</b></td>
-                                          <td>₹ ${response.professionalTaxPerMonth}</td>
-                                          <td scope="row font-bold" class="font-bold"><b>Provident Funds (PF) Deducation</b></td>
-                                          <td>₹ ${response.pfPerMonth}</td>
+                                          <td scope="row font-bold" class="font-bold  text-danger"><b>Professional Tax Deducation</b></td>
+                                          <td>${response.professionalTaxPerMonth} %</td>
+                                          <td scope="row font-bold" class="font-bold  text-danger"><b>Provident Funds (PF) Deducation</b></td>
+                                          <td>${response.pfPerMonth} %</td>
                                         </tr>
                                     </tbody>
                                   </table>`;

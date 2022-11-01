@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['tc'] = 'FrontController/tc'; // tc verify
  $route['semResult'] = 'FrontController/semResult'; // semResult
  $route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
- $route['idcard'] = 'FrontController/idcard'; // idcard
+ 
  // front-end routes
 
 
@@ -268,8 +268,8 @@ $ajaxRoutesArr = [
     'showAllSemesterResultsList',
     'showDesignationsViaDepartmentId',
     'showSalaryDetails',
-    'showEmployeesViaDepartmentId'
-   
+    'showEmployeesViaDepartmentId',
+   'showEmployeesViaDepartmentIdAndDesignationId',
     
 ];
 
@@ -284,6 +284,8 @@ foreach($ajaxRoutesArr as $ajRoute)
 $route['listQR'] = 'AjaxController/listQR';
 $route['listQRCodeAjax'] = 'AjaxController/listQRCodeAjax';
 $route['showDownloadQR'] = 'AjaxController/showDownloadQR';
+$route['showDownloadIDCard'] = 'AjaxController/showDownloadIDCard';
+$route['idcard'] = 'AjaxController/idcard';
 $route["downloadQR/(:any)/(:any)/(:any)"] = "AjaxController/downloadQR/$1/$2/$3"; // user_id / 
 
 // api routes

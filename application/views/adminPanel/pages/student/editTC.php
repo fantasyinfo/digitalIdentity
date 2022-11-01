@@ -2,7 +2,7 @@
 $this->load->library('session');
 $this->load->model('CrudModel');
 
-if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['studentId'])) {
+if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['studentId']) && $_POST['class_id'] != '' && $_POST['section_id'] != '' && $_POST['studentId'] != '') {
 
     // first check if already tc generated for this student
     $tcDetails = $this->db->query("SELECT * FROM ".Table::studentTC." WHERE student_id = '{$_POST['studentId']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
@@ -17,7 +17,7 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
         if (empty($student)) {
             $msgArr = [
 				'class' => 'danger',
-				'msg' => 'Student Details Not Found.' . $this->db->last_query(),
+				'msg' => 'Student Details Not Found. Please Select Class, Section & Student Correct Detials'
 			  ];
 			 $this->session->set_userdata($msgArr);
 			redirect(base_url('student/generateTC'));

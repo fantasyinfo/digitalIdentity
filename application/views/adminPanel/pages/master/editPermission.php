@@ -125,8 +125,8 @@
                         foreach($parentMenu as $pM)
                         { ?>
 
-                          <div class="col-md-4">
-                            <div class="my-1 h4"><?=$pM['name'];?></div>
+                          <div class="col-md-3">
+                            <div class="my-1 h4"><b><?=$pM['name'];?></b></div>
                         </br>
                           <?php 
                             if(isset($childMenu))

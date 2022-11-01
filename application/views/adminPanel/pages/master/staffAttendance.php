@@ -174,8 +174,8 @@
                             <div class="row mt-3">
                                 <div class="col-md-8 mx-auto text-align-jusify">
                                     <?php 
-                                    print_r($this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth()); 
-                                    print_r($this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth(1)); 
+                                    // print_r($this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth()); 
+                                    // print_r($this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth(1)); 
                                     ?>
                                 </div>
                             </div>

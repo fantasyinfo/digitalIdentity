@@ -282,6 +282,19 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->masterDir . 'staffAttendance');
 	}
 
+	public function checkSalary()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Check Salary',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'checkSalary');
+	}
+
 	public function bannerMaster()
 	{
 		$this->loginCheck();
