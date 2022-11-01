@@ -1,7 +1,7 @@
 <style>
-    #showEmpTable {
-        display: none;
-    }
+#showEmpTable {
+    display: none;
+}
 </style>
 
 <body class="hold-transition sidebar-mini">
@@ -45,18 +45,19 @@
 
                         if (!empty($this->session->userdata('msg'))) { ?>
 
-                            <div class="alert alert-<?= $this->session->userdata('class') ?> alert-dismissible fade show" role="alert">
-                                <?= $this->session->userdata('msg');
+                        <div class="alert alert-<?= $this->session->userdata('class') ?> alert-dismissible fade show"
+                            role="alert">
+                            <?= $this->session->userdata('msg');
                                 if ($this->session->userdata('class') == 'success') {
                                     HelperClass::swalSuccess($this->session->userdata('msg'));
                                 } else if ($this->session->userdata('class') == 'danger') {
                                     HelperClass::swalError($this->session->userdata('msg'));
                                 }
                                 ?>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <?php
                             $this->session->unset_userdata('class');
                             $this->session->unset_userdata('msg');
@@ -75,9 +76,11 @@
 
                                 <div class="card-body">
                                     <div class="row">
-                                    <div class="form-group col-md-3">
+                                        <div class="form-group col-md-3">
                                             <label>Select Month </label>
-                                            <select name="monthId" id="monthId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <select name="monthId" id="monthId"
+                                                class="form-control  select2 select2-danger" required
+                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
                                                 <option>Please Select Month</option>
                                                 <?php
                                                 $selected = '';
@@ -89,16 +92,19 @@
                                                                 $selected = '';
                                                             }
                                                         ?>
-                                                        <option <?= $selected; ?> value="<?= $month['id'] ?>"><?= $month['monthName'] ?></option>
+                                                <option <?= $selected; ?> value="<?= $month['id'] ?>">
+                                                    <?= $month['monthName'] ?></option>
                                                 <?php }
                                                 }
 
                                                 ?>
                                             </select>
                                         </div>
-                                    <div class="form-group col-md-3">
+                                        <div class="form-group col-md-3">
                                             <label>Select Year </label>
-                                            <select name="yearId" id="yearId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <select name="yearId" id="yearId"
+                                                class="form-control  select2 select2-danger" required
+                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
                                                 <option>Please Select Year</option>
                                                 <?php
                                                 $selected = '';
@@ -112,7 +118,7 @@
                                                                 $selectedY = '';
                                                             }
                                                         ?>
-                                                        <option <?= $selectedY; ?> value="<?= $val ?>"><?=  $val ?></option>
+                                                <option <?= $selectedY; ?> value="<?= $val ?>"><?=  $val ?></option>
                                                 <?php }
                                                 }
 
@@ -121,7 +127,10 @@
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label>Select Department </label>
-                                            <select name="departmentId" id="departmentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showDesignation()">
+                                            <select name="departmentId" id="departmentId"
+                                                class="form-control  select2 select2-danger" required
+                                                data-dropdown-css-class="select2-danger" style="width: 100%;"
+                                                onchange="showDesignation()">
                                                 <option>Please Select Department</option>
                                                 <?php
                                                 $selected = '';
@@ -137,7 +146,8 @@
 
 
                                                 ?>
-                                                        <option <?= $selected; ?> value="<?= $department['id'] ?>"><?= $department['departmentName'] ?></option>
+                                                <option <?= $selected; ?> value="<?= $department['id'] ?>">
+                                                    <?= $department['departmentName'] ?></option>
                                                 <?php }
                                                 }
 
@@ -146,12 +156,15 @@
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label>Select Designation</label>
-                                            <select id="designationId" name="designationId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <select id="designationId" name="designationId"
+                                                class="form-control  select2 select2-danger" required
+                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
                                                 <option>Please Select Designation</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-3 pt-4">
-                                            <button type="submit" id="showEmployees" class="btn btn-primary btn-block ">Filter</button>
+                                            <button type="submit" id="showEmployees"
+                                                class="btn btn-primary btn-block ">Filter</button>
                                         </div>
                                     </div>
 
@@ -212,25 +225,27 @@
         <!-- /.control-sidebar -->
 
 
-        <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog border border-success modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-primary">
-        <h5 class="modal-title" id="exampleModalLabel">Employee Salary Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="employeeDetails">
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-danger btn-lg btn-block" data-dismiss="modal">Close</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog border border-success modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Employee Salary Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="employeeDetails">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-danger btn-lg btn-block"
+                            data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -249,107 +264,121 @@
     <?php $this->load->view("adminPanel/pages/footer.php"); ?>
     <!-- ./wrapper -->
     <script>
-
-        var ajaxUrlForEmployeeList = '<?= base_url() . 'ajax/showEmployeesViaDepartmentIdAndDesignationId'?>';
-
-
-      let monthArr =    {1 : 'January', 2 : 'February', 3:'March', 4:'April', 5:'May', 6:'June', 7:'July', 8:'August', 9:'September', 10:'October', 11:'November', 12:'December'};
-
-        function showDesignation() {
-            $('#designationId').html("");
-            var departmentId = $("#departmentId").val();
-            if (departmentId != '') {
-                console.log(departmentId);
-                $.ajax({
-                    url: '<?= base_url() . 'ajax/showDesignationsViaDepartmentId'; ?>',
-                    method: 'post',
-                    processData: 'false',
-                    data: {
-                        departmentId: departmentId
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        response = $.parseJSON(response);
-                        $('#designationId').append(response);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-
-                });
-            }
-        }
+    var ajaxUrlForEmployeeList = '<?= base_url() . 'ajax/showEmployeesViaDepartmentIdAndDesignationId'?>';
 
 
+    let monthArr = {
+        1: 'January',
+        2: 'February',
+        3: 'March',
+        4: 'April',
+        5: 'May',
+        6: 'June',
+        7: 'July',
+        8: 'August',
+        9: 'September',
+        10: 'October',
+        11: 'November',
+        12: 'December'
+    };
 
-        $("#showEmployees").click(function(e) {
-            $("#listDatatable").DataTable().destroy();
-            e.preventDefault();
-            let departmentId = $("#departmentId").val();
-            let designationId = $("#designationId").val();
-            let monthId = $("#monthId").val();
-            let yearId = $("#yearId").val();
-
-            console.log(monthId);
-
-            if (departmentId != 'Please Select Department' && designationId != 'Please Select Designation'  && monthId != 'Please Select Month' && yearId != 'Please Select Year' && departmentId != null && designationId != null && monthId != null && yearId != null) {
-                $("#showEmpTable").show();
-                $("#listDatatable").DataTable({
-                    "responsive": true,
-                    "lengthChange": true,
-                    "autoWidth": true,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                    dom: 'lBfrtip',
-                    buttons: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5'
-                    ],
-                    lengthMenu: [10, 50, 100, 500, 1000, 2000, 5000, 10000, 50000, 100000],
-                    pageLength: 10,
-                    processing: true,
-                    serverSide: true,
-                    searching: false,
-                    paging: true,
-                    ajax: {
-                        method: 'post',
-                        url: ajaxUrlForEmployeeList,
-                        data: {
-                            departmentId: departmentId,
-                            designationId: designationId,
-                            monthId: monthId,
-                            yearId: yearId
-                        },
-                        error: function() {
-                            console.log('something went wrong.');
-                        }
-                    }
-                });
-            }
-        });
-
-
-
-        function checkDetails(x){
-            console.log(x);
-            let monthId = $("#monthId").val();
-            let yearId = $("#yearId").val();
+    function showDesignation() {
+        $('#designationId').html("");
+        var departmentId = $("#departmentId").val();
+        if (departmentId != '') {
+            console.log(departmentId);
             $.ajax({
-                    url: '<?= base_url() . 'ajax/checkEmployeeSalaryById'; ?>',
+                url: '<?= base_url() . 'ajax/showDesignationsViaDepartmentId'; ?>',
+                method: 'post',
+                processData: 'false',
+                data: {
+                    departmentId: departmentId
+                },
+                success: function(response) {
+                    console.log(response);
+                    response = $.parseJSON(response);
+                    $('#designationId').append(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+
+            });
+        }
+    }
+
+
+
+    $("#showEmployees").click(function(e) {
+        $("#listDatatable").DataTable().destroy();
+        e.preventDefault();
+        let departmentId = $("#departmentId").val();
+        let designationId = $("#designationId").val();
+        let monthId = $("#monthId").val();
+        let yearId = $("#yearId").val();
+
+        console.log(monthId);
+
+        if (departmentId != 'Please Select Department' && designationId != 'Please Select Designation' &&
+            monthId != 'Please Select Month' && yearId != 'Please Select Year' && departmentId != null &&
+            designationId != null && monthId != null && yearId != null) {
+            $("#showEmpTable").show();
+            $("#listDatatable").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                dom: 'lBfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
+                lengthMenu: [10, 50, 100, 500, 1000, 2000, 5000, 10000, 50000, 100000],
+                pageLength: 10,
+                processing: true,
+                serverSide: true,
+                searching: false,
+                paging: true,
+                ajax: {
                     method: 'post',
-                    processData: 'false',
+                    url: ajaxUrlForEmployeeList,
                     data: {
-                        id: x,
-                        monthId : monthId,
-                        yearId : yearId
+                        departmentId: departmentId,
+                        designationId: designationId,
+                        monthId: monthId,
+                        yearId: yearId
                     },
-                    success: function(response) {
-                        // console.log(response);
-                        response = $.parseJSON(response);
-                        console.log(response);
-                        console.log(response.employeeDetails);
-                        let showDetailsHtml = `<table class="table table-striped">
+                    error: function() {
+                        console.log('something went wrong.');
+                    }
+                }
+            });
+        }
+    });
+
+
+
+    function checkDetails(x) {
+        console.log(x);
+        let monthId = $("#monthId").val();
+        let yearId = $("#yearId").val();
+        $.ajax({
+            url: '<?= base_url() . 'ajax/checkEmployeeSalaryById'; ?>',
+            method: 'post',
+            processData: 'false',
+            data: {
+                id: x,
+                monthId: monthId,
+                yearId: yearId
+            },
+            success: function(response) {
+                // console.log(response);
+                response = $.parseJSON(response);
+                console.log(response);
+                console.log(response.employeeDetails);
+                let showDetailsHtml = `<table class="table table-striped">
                                     <tbody>
                                         <tr>
                                           <td colspan="2"><b>Salary Details on ${monthArr[monthId]} - ${yearId}</b> </td>
@@ -392,18 +421,16 @@
                                           <td colspan="3"> <h2>₹ ${response.totalSalaryToPay}</h2></td>
                                         </tr>
                                     </tbody>
-                                  </table>`;
-            $("#employeeDetails").html(showDetailsHtml);
-            $("#detailsModal").modal('show');
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
+                                  </table>
+                                  <a href="<?=base_url('salarySlip?tec_id=') . rand(1111,9999) . '-' . rand(1111,9999) . '-' ; ?>${response.id}<?= '-random_token-' . rand(111111111,999999999) ;?>-${monthId}-${yearId}-salarySlip-98754-empICan-445" class="btn btn-block btn-lg btn-succs">Download Salary Slip</a>
+                                  `;
+                $("#employeeDetails").html(showDetailsHtml);
+                $("#detailsModal").modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
 
-                });
-        }
-
-
-
-
+        });
+    }
     </script>

@@ -151,7 +151,7 @@ class AjaxController extends CI_Controller
 			$this->tableName = Table::salaryTable;
 
 			$sendArr = [];
-			
+			$sendArr['id'] = $_POST['id'];
 			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($_POST['monthId'],$_POST['yearId']);
 
 			$sendArr['workingDays'] = $totalWorkingDays;

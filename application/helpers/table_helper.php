@@ -52,5 +52,6 @@ class Table{
     const bankDetailsTable = 'bankdetails';
     const salaryTable = 'salary';
     const staffattendanceTable = 'staffattendance';
+    const checkSalarySlipTable = 'check_salary_slip';
     
 }

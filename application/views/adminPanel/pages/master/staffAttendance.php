@@ -15,16 +15,16 @@
         $c = 0;
         if (isset($_POST['submit'])) {
 
-            // if (date('D') == 'Sun') {
-            //     $msgArr = [
-            //         'class' => 'danger',
-            //         'msg' => 'Today is Sunday. Please Mark Attendance in Between Monday to Saturday.',
-            //     ];
-            //     $this->session->set_userdata($msgArr);
+            if (date('D') == 'Sun') {
+                $msgArr = [
+                    'class' => 'danger',
+                    'msg' => 'Today is Sunday. Please Mark Attendance in Between Monday to Saturday.',
+                ];
+                $this->session->set_userdata($msgArr);
 
-            //     header("Refresh:1 " . base_url() . "teacher/attendance");
-            //     exit();
-            // }
+                header("Refresh:1 " . base_url() . "master/staffAttendance");
+                exit();
+            }
 
              $today = date_create()->format('Y-m-d');
 
@@ -80,7 +80,9 @@
                 ];
                 $insertId = $this->CrudModel->insert(Table::staffattendanceTable, $insertArr);
                 $c++;
+                
             }
+            
 
             if ($c == $totalT) {
 
