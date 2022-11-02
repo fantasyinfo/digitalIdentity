@@ -53,5 +53,6 @@ class Table{
     const salaryTable = 'salary';
     const staffattendanceTable = 'staffattendance';
     const checkSalarySlipTable = 'check_salary_slip';
+    const tokenFilterTable = 'token_filter';
     
 }

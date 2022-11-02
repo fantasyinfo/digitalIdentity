@@ -3,25 +3,36 @@
 error_reporting(0);
 $schoolLogo = base_url() . HelperClass::schoolLogoImagePath;
 
+$filterToken = "token=".$randomToken."-m-".$monthId."-y-".$yearId."-i-".$salaryEmpId ."-iId-".$c;
+
 if (isset($_GET['tec_id'])) {
 	$this->load->model('CrudModel');
-	$userId = explode('-', $_GET['tec_id']);
+	$tokenFiter = $this->db->query("SELECT * FROM ".Table::tokenFilterTable." WHERE token = '{$_GET['tec_id']}' AND status = '1' LIMIT 1")->result_array()[0];
 
-	$employeeSalaryTableId = $userId[2];
-	$monthId = $userId[5];
-	$yearId = $userId[6];
+	if(!empty($tokenFiter))
+	{
+		$salarySlipData = $this->db->query("SELECT * FROM ".Table::checkSalarySlipTable." WHERE id = '{$tokenFiter['id']}' AND status = '1' AND schoolUniqueCode = '{$tokenFiter['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
 
-	$salaryDetails = $this->CrudModel->checkEmployeeSalaryById($employeeSalaryTableId, $monthId, $yearId);
+		if(empty($salarySlipData))
+		{
+			header("Location: " . HelperClass::brandUrl);
+		}
+	}
+
+	// print_r($salarySlipData);die();
+
+	// $userId = explode('-', $_GET['tec_id']);
+
+	// $employeeSalaryTableId = $userId[2];
+	// $monthId = $userId[5];
+	// $yearId = $userId[6];
+
+	 $salaryDetails = $this->CrudModel->checkEmployeeSalaryById($salarySlipData['empId'], $salarySlipData['month'], $salarySlipData['year'],$tokenFiter['schoolUniqueCode']);
 
 
-
-
-
-
-
-
+// print_r($salaryDetails);die();
 	$schoolDetails = $this->db->query("SELECT sm.school_name, sm.mobile,sm.email,sm.address,CONCAT('$schoolLogo',sm.image) as logo,sm.pincode FROM " .
-		Table::schoolMasterTable . " sm WHERE sm.unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
+		Table::schoolMasterTable . " sm WHERE sm.unique_id = '{$salarySlipData['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
 
 
 	if (empty($salaryDetails)) {
@@ -198,28 +209,28 @@ if (isset($_GET['tec_id'])) {
 
 		<table>
 			<tr>
-				<td><img src="<?= $schoolDetails['logo'] ?>" width="180px" height="auto" /></td>
+				<td><img src="<?= $schoolDetails['logo'] ?>" width="100px" height="auto" /></td>
 				<td class="text-center">
-					<h2 style="font-size:26px;font-weight:bold"><?= strtoupper($schoolDetails['school_name']) ?></h2>
+					<h2 style="font-size:20px;font-weight:bold"><?= strtoupper($schoolDetails['school_name']) ?></h2>
 
-					<p style="font-size:20px;font-weight:bold">
+					<p style="font-size:16px;font-weight:bold">
 						<?= strtoupper($schoolDetails['address'] . " " . $schoolDetails['pincode']) ?></p>
-					<p style="font-size:20px">Mobile: <?= $schoolDetails['mobile'] ?> Email:
+					<p style="font-size:16px">Mobile: <?= $schoolDetails['mobile'] ?> Email:
 						<?= $schoolDetails['email'] ?></p>
 				</td>
-				<!-- <td>
+				<td>
 
-					<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?= base_url('salarySlip?tec_id=') . rand(1111, 9999) . '-' . rand(1111, 9999) . '-' . $employeeSalaryTableId . '-random_token-' . rand(111111111, 999999999) . '-' . $monthId . '-' . $yearId . '-salarySlip-98754-empICan-445'; ?>&amp;choe=UTF-8" alt="QR code" /> </br>
+					<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?= base_url('salarySlip?tec_id=') . $_GET['tec_id'] ?>&amp;choe=UTF-8" alt="QR code" width="100px" /> </br>
 					<p>
 						<center>Scan To Verify</center>
 					</p>
-				</td> -->
+				</td>
 			</tr>
 		</table>
 
 
-		<h4 style="font-size: 32px; font-weight:bold; margin-bottom:20px;">
-			<center><i>Salary Slip For <?= HelperClass::monthsForSchoolR[$monthId] . ' - ' . $yearId; ?></i></center>
+		<h4 style="font-size: 24px; font-weight:bold; margin-bottom:20px;">
+			<center><i>Salary Slip For <?= HelperClass::monthsForSchoolR[$salarySlipData['month']] . ' - ' . $salarySlipData['year']; ?></i></center>
 		</h4>
 
 		<!-- <table class="table table-borderless">

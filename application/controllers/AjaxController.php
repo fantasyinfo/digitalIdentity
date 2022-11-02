@@ -144,7 +144,7 @@ class AjaxController extends CI_Controller
 
 
 
-	public function checkEmployeeSalaryById()
+	public function checkEmployeeSalaryById($sessionId = '')
 	{
 		if (isset($_POST)) {
 
@@ -156,8 +156,15 @@ class AjaxController extends CI_Controller
 
 			$sendArr['workingDays'] = $totalWorkingDays;
 
-			$condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id = '{$_POST['id']}' ";
-
+			$condition = " AND s.id = '{$_POST['id']}' ";
+			if($sessionId != '')
+			{
+				$condition .= " AND s.schoolUniqueCode = '$sessionId' ";
+			}else
+			{
+				$condition .= " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+			}
+			
 			$d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
             JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
             JOIN ".Table::designationTable." des ON des.id = s.designationId 

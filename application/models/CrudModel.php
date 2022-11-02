@@ -2079,7 +2079,7 @@ class CrudModel extends CI_Model
 
 
 
-    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth($monthId = '',$yearId = '')
+    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth($monthId = '',$yearId = '',$sessionId = '')
     {
        
         if($yearId == '')
@@ -2103,7 +2103,16 @@ class CrudModel extends CI_Model
         $startDate = date($currentYear . '-' . $currentMonth . '-' . $first_day);
         $endDate = date($currentYear . '-' . $currentMonth . '-' . $last_day);
 
-        $totalHolidays = $this->db->query("SELECT count(1) as c FROM " . Table::holidayCalendarTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND  event_date >= '$startDate' AND event_date <= '$endDate'")->result_array()[0]['c'];
+
+        $condition = "";
+        if($sessionId != '')
+			{
+				$condition .= " AND schoolUniqueCode = '$sessionId' ";
+			}else
+			{
+				$condition .= " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+			}
+        $totalHolidays = $this->db->query("SELECT count(1) as c FROM " . Table::holidayCalendarTable . " WHERE status = '1' AND  event_date >= '$startDate' AND event_date <= '$endDate' $condition")->result_array()[0]['c'];
 
         $sendArr = [
             'totalHolidaysIncludingSundays' => $totalHolidays,
@@ -2116,19 +2125,34 @@ class CrudModel extends CI_Model
 
 
 
-	public function checkEmployeeSalaryById($id,$month,$year)
+	public function checkEmployeeSalaryById($id,$month,$year,$sessionId = "")
 	{
 
 
 			$this->tableName = Table::salaryTable;
 
+            $condition = " AND s.id = '$id' ";
+
+            if($sessionId != '')
+			{
+				$condition .= " AND s.schoolUniqueCode = '$sessionId' ";
+			}else
+			{
+                $sessionId = '';
+				$condition .= " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+			}
+
+
 			$sendArr = [];
 			$sendArr['id'] = $id;
-			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($month,$year);
+			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($month,$year,$sessionId);
 
 			$sendArr['workingDays'] = $totalWorkingDays;
 
-			$condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id = '$id' ";
+			
+
+            
+
 
 			$d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
             JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
@@ -2138,7 +2162,7 @@ class CrudModel extends CI_Model
 
 			$sendArr['employeeDetails'] = $d[0];
 
-			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($id,$month,$year);
+			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($id,$month,$year,$sessionId);
 
 
 			$totalPresentDays = $totalAttendanceArr['present'];
@@ -2325,7 +2349,7 @@ public function numberToWordsCurrency(float $number)
 }
 
 
-    public function getTotalAttendanceOfEmployeeCurrentMonth($id,$monthId = '', $yearId = '')
+    public function getTotalAttendanceOfEmployeeCurrentMonth($id,$monthId = '', $yearId = '',$sessionId = '')
     {
        
         if($yearId == '')
@@ -2348,13 +2372,21 @@ public function numberToWordsCurrency(float $number)
         $startDate = date($currentYear . '-' . $currentMonth . '-' . $first_day);
         $endDate = date($currentYear . '-' . $currentMonth . '-' . $last_day);
 
-        $totalPresents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '2' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $condition = "";
+        if($sessionId != '')
+			{
+				$condition .= " AND schoolUniqueCode = '$sessionId' ";
+			}else
+			{
+				$condition .= " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+			}
+        $totalPresents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE  status = '1' $condition  AND attendenceStatus = '2' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
-        $totalAbsents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '1' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalAbsents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE status = '1' $condition AND  attendenceStatus = '1' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
-        $totalHalfDays = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '3' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalHalfDays = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE  status = '1' $condition  AND attendenceStatus = '3' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
-        $totalHalfLeaves = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' AND attendenceStatus = '4' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
+        $totalHalfLeaves = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE  status = '1' $condition  AND attendenceStatus = '4' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
 
 

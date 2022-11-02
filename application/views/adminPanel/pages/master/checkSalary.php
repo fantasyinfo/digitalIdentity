@@ -422,7 +422,31 @@
                                         </tr>
                                     </tbody>
                                   </table>
-                                  <a href="<?=base_url('salarySlip?tec_id=') . rand(1111,9999) . '-' . rand(1111,9999) . '-' ; ?>${response.id}<?= '-random_token-' . rand(111111111,999999999) ;?>-${monthId}-${yearId}-salarySlip-98754-empICan-445" class="btn btn-block btn-lg btn-succs">Download Salary Slip</a>
+                                  
+                                  <form method="POST">
+                                  <input type="hidden" name="bSalary" value="${response.employeeDetails.basicSalaryMonth}">
+                                  <input type="hidden" name="da" value="${response.allowances.da}">
+                                  <input type="hidden" name="ca" value="${response.allowances.ca}">
+                                  <input type="hidden" name="hra" value="${response.allowances.hra}">
+                                  <input type="hidden" name="ma" value="${response.allowances.ma}">
+                                  <input type="hidden" name="sa" value="${response.allowances.sa}">
+                                  <input type="hidden" name="tld" value="${response.leaves.leaveAmountToDeducat}">
+                                  <input type="hidden" name="pt" value="${response.deducations.ptpm}">
+                                  <input type="hidden" name="pf" value="${response.deducations.pfpm}">
+                                  <input type="hidden" name="tds" value="${response.deducations.tds}">
+                                  <input type="hidden" name="employeeName" value="${response.employeeDetails.employeeName}">
+                                  <input type="hidden" name="doj" value="${response.employeeDetails.doj}">
+                                  <input type="hidden" name="totalD" value="${response.deducations.total}">
+                                  <input type="hidden" name="totalA" value="${response.allowances.total}">
+                                  <input type="hidden" name="tToPay" value="${response.totalSalaryToPay}">
+                                  <input type="hidden" name="tInWords" value="${response.totalSalaryToPay}">
+                                  <input type="hidden" name="tSalary" value="${response.basicPay}">
+                                  <input type="hidden" name="monthId" value="${monthId}">
+                                  <input type="hidden" name="yearId" value="${yearId}">
+                                  <input type="hidden" name="salaryId" value="${response.id}">
+                                  <input type="submit" class="btn btn-success" name="submit" value="Generate Salary Slip">
+                           
+                                  </form>
                                   `;
                 $("#employeeDetails").html(showDetailsHtml);
                 $("#detailsModal").modal('show');
@@ -434,3 +458,81 @@
         });
     }
     </script>
+
+<?php 
+
+if(isset($_POST['submit']))
+{
+    $monthId = $_POST['monthId'];
+    $yearId = $_POST['yearId'];
+    $salaryEmpId = $_POST['salaryId'];
+    $randomToken = HelperClass::generateRandomToken();
+    $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+    $todayDate = date('Y-m-d');
+   
+    // first check if salary slip is already generated for this month
+
+    $already = $this->db->query("SELECT empId FROM ".Table::checkSalarySlipTable." WHERE empId = '$salaryEmpId' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' AND generateDate = '$todayDate'")->result_array();
+
+    if(!empty($already))
+    {
+        $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Salary Slip is Already Generated For This Employee Today, Please Try After Today.',
+        ];
+        $this->session->set_userdata($msgArr);
+
+        header("Refresh:1 " . base_url() . "master/checkSalary");
+        die();
+    }
+
+    $insertSalaryArr = [
+        'schoolUniqueCode' => $schoolUniqueCode,
+        'empId' => $salaryEmpId,
+        'month' => $monthId,
+        'year' => $yearId,
+        'bSalary' => $_POST['bSalary'],
+        'da' => $_POST['da'],
+        'ca' => $_POST['ca'],
+        'hra' => $_POST['hra'],
+        'ma' => $_POST['ma'],
+        'sa' => $_POST['sa'],
+        'totalLeaveDeducation' => $_POST['tld'],
+        'pt' =>$_POST['pt'],
+        'pf' => $_POST['pf'],
+        'tds' =>$_POST['tds'],
+        'empName' => $_POST['employeeName'],
+        'doj' => $_POST['doj'],
+        'totalSalary' => $_POST['tSalary'],
+        'totalDeducation' => $_POST['totalD'],
+        'totalAllowances' => $_POST['totalA'],
+        'totalPaidSalary' => $_POST['tToPay'],
+        'tpsInWords' => $this->CrudModel->numberToWordsCurrency($_POST['tInWords']),
+        'generateDate' => $todayDate,
+        'session_table_id' => $_SESSION['currentSession']
+
+    ];
+
+
+    $c = $this->CrudModel->insert(Table::checkSalarySlipTable,$insertSalaryArr);
+
+
+    $filterToken = "token=".$randomToken."-m-".$monthId."-y-".$yearId."-i-".$salaryEmpId ."-iId-".$c;
+
+    $insertArr = [
+    'schoolUniqueCode' => $schoolUniqueCode,
+    'token' => $filterToken,
+    'for_what' => 'Salary Slip',
+    'insertId' => $c
+    ];
+
+    $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
+
+    if($d){
+        header("Location: " . base_url('salarySlip?tec_id=') . $filterToken);
+    }
+
+}
+
+?>
+<!-- <a href="<?=base_url('salarySlip?tec_id=') . rand(1111,9999) . '-' . rand(1111,9999) . '-' ; ?>${response.id}<?= '-random_token-' . rand(111111111,999999999) ;?>-${monthId}-${yearId}-salarySlip-98754-empICan-445" class="btn btn-block btn-lg btn-succs">Download Salary Slip</a> -->
