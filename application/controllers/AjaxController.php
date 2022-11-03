@@ -440,6 +440,32 @@ class AjaxController extends CI_Controller
 		}
 	}
 
+	public function showEmployeesDetailsViaDepAndDesId()
+	{
+		if (isset($_POST)) {
+			$d = $this->db->query($sql = "SELECT s.*, DATE_FORMAT(s.doj, '%d %M %Y') as doj,dep.departmentName,des.designationName, sch.school_name FROM " . Table::salaryTable . " s
+			INNER JOIN " . Table::departmentTable . " dep ON dep.id = s.departmentId
+    		INNER JOIN " . Table::designationTable . " des ON des.id = s.designationId
+			INNER JOIN " . Table::schoolMasterTable . " sch ON sch.unique_id = s.schoolUniqueCode
+			WHERE 
+			s.departmentId = '{$_POST['departmentId']}' 
+			AND s.designationId = '{$_POST['designationId']}' 
+			AND s.id = '{$_POST['employeeId']}' 
+			AND s.status = '1' 
+			AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array()[0];
+			$html = '';
+			$d['todayDate'] = date('d F Y');
+
+			if (!empty($d)) {
+
+				echo json_encode($d);
+				exit(0);
+			}
+			echo json_encode(array(0 => array('msg' => 'Employee Details Not Found in this department.')));
+			exit(0);
+		}
+	}
+
 	public function showSalaryDetails()
 	{
 		if (isset($_POST)) {

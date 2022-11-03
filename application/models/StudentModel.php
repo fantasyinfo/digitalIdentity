@@ -250,7 +250,7 @@ class StudentModel extends CI_Model
     {
       if(!empty($p))
       {
-        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status NOT IN ('3','4') AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
         $html = '';
 
         if(!empty($d))

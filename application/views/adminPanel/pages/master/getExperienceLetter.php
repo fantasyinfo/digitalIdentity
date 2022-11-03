@@ -1,8 +1,97 @@
+<?php
+if(isset($_POST['submit']))
+{
+    $empId = $_POST['empId'];
+    $employeeName = $_POST['employeeName'];
+    $departmentId = $_POST['departmentId'];
+    $designationId = $_POST['designationId'];
+    $content = trim($_POST['content']);
+    $session_table_id = $_SESSION['currentSession'];
+    $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+    $issueDate = date('Y-m-d');
+   
+    // first check if salary slip is already generated for this month
+
+    $already = $this->db->query("SELECT empId FROM ".Table::experienceLetterTable." WHERE empId = '$empId' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+
+    if(!empty($already))
+    {
+        $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Experience Letter is Already Generated For This Employee.',
+        ];
+        $this->session->set_userdata($msgArr);
+
+        header("Refresh:0 " . base_url() . "master/getExperienceLetter");
+        die();
+    }
+
+    $insertSalaryArr = [
+        'schoolUniqueCode' => $schoolUniqueCode,
+        'empId' => $empId,
+        'employeeName' => $employeeName,
+        'issueDate' => $issueDate,
+        'content' =>$content,
+        'departmentId' => $departmentId,
+        'designationId' => $designationId,
+        'session_table_id' => $_SESSION['currentSession']
+
+    ];
+
+
+    $c = $this->CrudModel->insert(Table::experienceLetterTable,$insertSalaryArr);
+
+
+    $filterToken = "token=".HelperClass::generateRandomToken()."-m-".rand(1111,4444)."-y-".rand(1111,4444)."-i-".$empId ."-iId-".$c;
+
+    $insertArr = [
+    'schoolUniqueCode' => $schoolUniqueCode,
+    'token' => $filterToken,
+    'for_what' => 'Experience Letter',
+    'insertId' => $c
+    ];
+
+    $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
+
+    if(!empty($d))
+    {
+        // change status of employee to getAway
+        $u = $this->db->query("UPDATE ".Table::salaryTable." SET status = '3' WHERE id = '$empId' AND schoolUniqueCode = '$schoolUniqueCode' ");
+
+        if($u)
+        {
+            header("Location: " . base_url('experienceLetter?tec_id=') . $filterToken);
+        }
+    }
+
+
+}
+
+
+?>
+
+
+
 <style>
 #showEmpTable {
     display: none;
 }
+
+#detailsShow{
+    display: none;
+}
+
+.ck-editor__editable[role="textbox"] {
+                /* editing area */
+                min-height: 200px;
+            }
+            .ck-content .image {
+                /* block images */
+                max-width: 80%;
+                margin: 20px auto;
+            }
 </style>
+
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -134,21 +223,24 @@
                             </div>
                         </div>
 
-                     <div class="container">
-                        <div class="row">
-                            <div class="col-md-12 card card-body">
-                                <form method="POST">
-                         <textarea name="bodyC" class="form-control" rows="20">This letter certifies that Mr. Ms. ABC was an employee in the role of engineer with LearningContainer from 1 Apr 2012 up to 1 June 2020.Mr. Ms. ABC was a great employee in our company. We were very proud of him/her. For further inquiry and verification, feel free to contact our office. I have given all of our contact numbers and email ids so you can contact us in any way you are comfortable with.</textarea>
-                         <input type="submit" class="mt-2 btn btn-primary btn-block" name="submit" value="Generate Experience Letter">
-                        </form>
-                        </div>
-                        </div>
-                     </div>
+                   
+                       
+                     
                         <!-- /.card -->
                     </div>
                     <!--/.col (left) -->
                     <!-- right column -->
+                    <div class="row" id="detailsShow">
+                            <div class="col-md-12 card card-body">
+                                <div class="row" id="formBox">
+                                   
+                                   
+                                </div>
+                         
+                        </div>
+                        </div>
                 </div>
+                
                 <!--/.col (right) -->
             </div>
 
@@ -180,6 +272,7 @@
     </div>
     <?php $this->load->view("adminPanel/pages/footer.php"); ?>
     <!-- ./wrapper -->
+    <script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
     <script>
     var ajaxUrlForEmployeeList = '<?= base_url() . 'ajax/showEmployeesViaDepartmentIdAndDesignationId'?>';
 
@@ -244,8 +337,183 @@
         let designationId = $("#designationId").val();
         let employeeId = $("#employeeId").val();
      
+        $.ajax({
+                url: '<?= base_url() . 'ajax/showEmployeesDetailsViaDepAndDesId'; ?>',
+                method: 'post',
+                processData: 'false',
+                data: {
+                    departmentId: departmentId,
+                    designationId:designationId,
+                    employeeId: employeeId
+                },
+                success: function(response) {
+                    response = $.parseJSON(response);
+                    console.log(response);
+                    let html = ` <div class="col-md-12"><form method="POST">
+                                    <input type="hidden" name="empId" value="${response.id}">
+                                    <input type="hidden" name="employeeName" value="${response.employeeName}">
+                                    <input type="hidden" name="departmentId" value="${response.departmentId}">
+                                    <input type="hidden" name="designationId" value="${response.designationId}">
+                                    <textarea id="editor" name="content" class="form-control" rows="20"><p style="text-align:justify;font-size:26px;margin-top:20px;margin-bottom:20px;line-height:40px;">This letter certifies that <b>${response.employeeName}</b> was an employee in the role of <b>${response.designationName}</b> from <b>${response.departmentName}</b> Department with <b>${response.school_name}</b> from <b>${response.doj}</b> up to <b>${response.todayDate}</b> was a great employee in our school. We were very proud of him/her. For further inquiry and verification, feel free to contact our school. We are sure that their passion and dedication will help them excel in whatever they choose to do next in their life. They have shown a high level of commitment throughout their time with our company.We wish {response.employeeName} all the best for their future.</p></textarea>
+                                    <input type="submit" class="mt-2 btn btn-primary btn-block" name="submit" value="Generate Experience Letter">
+                                    </form></div>`;
+                        $("#formBox").html(html);
+                        $("#detailsShow").show();
+                        CKEDITOR.replace( 'editor' );
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+
+            });
+
+        
 
         
     });
 
+   
+
+    CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+                // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
+                toolbar: {
+                    items: [
+                        'exportPDF','exportWord', '|',
+                        'findAndReplace', 'selectAll', '|',
+                        'heading', '|',
+                        'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+                        'bulletedList', 'numberedList', 'todoList', '|',
+                        'outdent', 'indent', '|',
+                        'undo', 'redo',
+                        '-',
+                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                        'alignment', '|',
+                        'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+                        'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+                        'textPartLanguage', '|',
+                        'sourceEditing'
+                    ],
+                    shouldNotGroupWhenFull: true
+                },
+                // Changing the language of the interface requires loading the language file using the <script> tag.
+                // language: 'es',
+                list: {
+                    properties: {
+                        styles: true,
+                        startIndex: true,
+                        reversed: true
+                    }
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+                    ]
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
+                placeholder: 'Welcome to CKEditor 5!',
+                // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
+                fontFamily: {
+                    options: [
+                        'default',
+                        'Arial, Helvetica, sans-serif',
+                        'Courier New, Courier, monospace',
+                        'Georgia, serif',
+                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                        'Tahoma, Geneva, sans-serif',
+                        'Times New Roman, Times, serif',
+                        'Trebuchet MS, Helvetica, sans-serif',
+                        'Verdana, Geneva, sans-serif'
+                    ],
+                    supportAllValues: true
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
+                fontSize: {
+                    options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+                    supportAllValues: true
+                },
+                // Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
+                // https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
+                htmlSupport: {
+                    allow: [
+                        {
+                            name: /.*/,
+                            attributes: true,
+                            classes: true,
+                            styles: true
+                        }
+                    ]
+                },
+                // Be careful with enabling previews
+                // https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html#content-previews
+                htmlEmbed: {
+                    showPreviews: true
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
+                link: {
+                    decorators: {
+                        addTargetToExternalLinks: true,
+                        defaultProtocol: 'https://',
+                        toggleDownloadable: {
+                            mode: 'manual',
+                            label: 'Downloadable',
+                            attributes: {
+                                download: 'file'
+                            }
+                        }
+                    }
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
+                mention: {
+                    feeds: [
+                        {
+                            marker: '@',
+                            feed: [
+                                '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+                                '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+                                '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+                                '@sugar', '@sweet', '@topping', '@wafer'
+                            ],
+                            minimumCharacters: 1
+                        }
+                    ]
+                },
+                // The "super-build" contains more premium features that require additional configuration, disable them below.
+                // Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
+                removePlugins: [
+                    // These two are commercial, but you can try them out without registering to a trial.
+                    // 'ExportPdf',
+                    // 'ExportWord',
+                    'CKBox',
+                    'CKFinder',
+                    'EasyImage',
+                    // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
+                    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
+                    // Storing images as Base64 is usually a very bad idea.
+                    // Replace it on production website with other solutions:
+                    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
+                    // 'Base64UploadAdapter',
+                    'RealTimeCollaborativeComments',
+                    'RealTimeCollaborativeTrackChanges',
+                    'RealTimeCollaborativeRevisionHistory',
+                    'PresenceList',
+                    'Comments',
+                    'TrackChanges',
+                    'TrackChangesData',
+                    'RevisionHistory',
+                    'Pagination',
+                    'WProofreader',
+                    // Careful, with the Mathtype plugin CKEditor will not load when loading this sample
+                    // from a local file system (file://) - load this site via HTTP server if you enable MathType
+                    'MathType'
+                ]
+            });
     </script>
+
+

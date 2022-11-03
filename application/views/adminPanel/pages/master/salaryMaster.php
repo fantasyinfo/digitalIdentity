@@ -16,7 +16,7 @@
     $salaryData = $this->db->query("SELECT s.*, dep.departmentName,des.designationName FROM " . Table::salaryTable . " s 
     INNER JOIN ".Table::departmentTable." dep ON dep.id = s.departmentId
     INNER JOIN ".Table::designationTable." des ON des.id = s.designationId
-     WHERE s.status != '4'  AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+     WHERE s.status NOT IN ('3','4')  AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 // die($this->db->last_query());
 
@@ -26,7 +26,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
 
 
     // fetching section data
-    $sectionData = $this->db->query("SELECT * FROM " . Table::salaryTable . " WHERE status != '4'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+    $sectionData = $this->db->query("SELECT * FROM " . Table::salaryTable . " WHERE status NOT IN ('3','4')  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 
     // edit and delete action

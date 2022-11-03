@@ -83,7 +83,25 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
             'msg' => 'Student Transfer Certificate Generated Successfully. Please Click on Download Button for Download.',
         ];
         $this->session->set_userdata($msgArr);
-        header("Location: " . base_url() . "tc?tc_id=" . $insert . "-" . $_POST['user_id']);
+
+
+        if(!empty($insert))
+        {
+            // change status of employee to getAway
+            $u = $this->db->query("UPDATE ".Table::studentTable." SET status = '3' WHERE id = '{$_POST['student_id']}' AND schoolUniqueCode = '{$_POST['schoolUniqueCode']}' ");
+
+        
+    
+            if($u)
+            {
+                header("Location: " . base_url() . "tc?tc_id=" . $insert . "-" . $_POST['user_id']);
+            }
+        }
+
+
+
+
+        
         ?>
         <style>#form_w {display:none;}</style>
         <?php

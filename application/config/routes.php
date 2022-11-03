@@ -10,6 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['semResult'] = 'FrontController/semResult'; // semResult
  $route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
  $route['salarySlip'] = 'FrontController/salarySlip'; // feesInvoice
+ $route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
  
  // front-end routes
 
@@ -273,7 +274,8 @@ $ajaxRoutesArr = [
     'showEmployeesViaDepartmentId',
    'showEmployeesViaDepartmentIdAndDesignationId',
    'checkEmployeeSalaryById',
-   'showEmployeesViaDepAndDesId'
+   'showEmployeesViaDepAndDesId',
+   'showEmployeesDetailsViaDepAndDesId'
     
 ];
 

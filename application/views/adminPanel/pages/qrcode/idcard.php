@@ -32,7 +32,7 @@ LEFT JOIN " . Table::cityTable . " ct ON ct.id = st.city_id
 JOIN " . Table::schoolMasterTable . " sm ON sm.unique_id = st.schoolUniqueCode
 WHERE qr.status != 0 
 AND st.class_id = '$classId'
-AND st.section_id = '$sectionId'
+AND st.section_id = '$sectionId' AND st.status NOT IN ('3','4')
 AND st.schoolUniqueCode = '$schoolUniqueCode'
 ORDER BY qr.id DESC")->result_array();
 

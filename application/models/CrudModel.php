@@ -346,14 +346,14 @@ class CrudModel extends CI_Model
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
                 LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
-                WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status NOT IN ('3','4') $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
             $countSql = "SELECT count(s.id) as count  FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
                 LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
-                WHERE s.status != 4 $condition ORDER BY s.id DESC";
+                WHERE s.status NOT IN ('3','4') $condition ORDER BY s.id DESC";
         } else {
             $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
                 s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName FROM " . $this->tableName . " s
@@ -361,14 +361,14 @@ class CrudModel extends CI_Model
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
                 LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
-                WHERE s.status != 4 ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status NOT IN ('3','4') ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
             $countSql = "SELECT count(s.id) as count FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
                 LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
-                WHERE s.status != 4 ORDER BY s.id DESC";
+                WHERE s.status NOT IN ('3','4') ORDER BY s.id DESC";
         }
 
 
