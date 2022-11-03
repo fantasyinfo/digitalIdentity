@@ -209,18 +209,18 @@ if (isset($_GET['tec_id'])) {
 
 		<table>
 			<tr>
-				<td><img src="<?= $schoolDetails['logo'] ?>" width="100px" height="auto" /></td>
+				<td><img src="<?= $schoolDetails['logo'] ?>" width="130px" height="auto" /></td>
 				<td class="text-center">
-					<h2 style="font-size:20px;font-weight:bold"><?= strtoupper($schoolDetails['school_name']) ?></h2>
+					<h2 style="font-size:30px;font-weight:bold"><?= strtoupper($schoolDetails['school_name']) ?></h2>
 
-					<p style="font-size:16px;font-weight:bold">
+					<p style="font-size:20px;font-weight:bold">
 						<?= strtoupper($schoolDetails['address'] . " " . $schoolDetails['pincode']) ?></p>
-					<p style="font-size:16px">Mobile: <?= $schoolDetails['mobile'] ?> Email:
+					<p style="font-size:20px">Mobile: <?= $schoolDetails['mobile'] ?> Email:
 						<?= $schoolDetails['email'] ?></p>
 				</td>
 				<td>
 
-					<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?= base_url('salarySlip?tec_id=') . $_GET['tec_id'] ?>&amp;choe=UTF-8" alt="QR code" width="100px" /> </br>
+					<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?= base_url('salarySlip?tec_id=') . $_GET['tec_id'] ?>&amp;choe=UTF-8" alt="QR code" width="130px" style="padding-left:20px;"/> </br>
 					<p>
 						<center>Scan To Verify</center>
 					</p>
@@ -339,17 +339,7 @@ if (isset($_GET['tec_id'])) {
 			</tr>
 
 		</table>
-		<br><br>
-		<table class="table table-borderless mt-2">
-			<tr>
-				<td>
-					<center>Employer Signature</center>
-				</td>
-				<td>
-					<center>Employee Signature</center>
-				</td>
-			</tr>
-		</table>
+	<center><h4>This is computer generated salary slip from Digitalfied.com. It does't required signature.</h4></center>
 	</div>
 	</div>
 

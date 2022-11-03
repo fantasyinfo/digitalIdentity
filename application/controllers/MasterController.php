@@ -295,6 +295,19 @@ class MasterController extends CI_Controller
 		$this->load->view($this->viewDir . $this->masterDir . 'checkSalary');
 	}
 
+	public function getExperienceLetter()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Experience Letter',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'getExperienceLetter');
+	}
+
 	public function bannerMaster()
 	{
 		$this->loginCheck();

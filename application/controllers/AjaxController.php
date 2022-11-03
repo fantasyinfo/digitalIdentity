@@ -404,6 +404,23 @@ class AjaxController extends CI_Controller
 			exit(0);
 		}
 	}
+	public function showEmployeesViaDepAndDesId()
+	{
+		if (isset($_POST)) {
+			$d = $this->db->query($sql = "SELECT * FROM " . Table::salaryTable . " WHERE departmentId = '{$_POST['departmentId']}' AND designationId =  '{$_POST['designationId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+			$html = '';
+
+			if (!empty($d)) {
+				foreach ($d as $dd) {
+					$html .= "<option value='{$dd['id']}'>{$dd['empId']}  {$dd['employeeName']} </option>";
+				}
+				echo json_encode($html);
+				exit(0);
+			}
+			echo json_encode($sql);
+			exit(0);
+		}
+	}
 	public function showEmployeesViaDepartmentId()
 	{
 		if (isset($_POST)) {

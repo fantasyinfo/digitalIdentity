@@ -92,6 +92,7 @@ $schoolData = $this->db->query($sql)->result_array()[0];
             <!-- title row -->
             <div class="row">
                 <div class="col-12">
+                    <center><h2 style="font-size: 24px; font-weight:bold; margin-bottom:20px;"><i>Fees Deposit Receipt</i></h2></center>
                     <h6>
                         <small class="float-right">Date: <?= date('d-m-y',strtotime($schoolData['fee_deposit_date'])); ?></small>
                     </h6>

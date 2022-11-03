@@ -226,8 +226,11 @@
                             <div class="row">
                                 <div class="card-body">
                                     <div class="col-md-12">
+                                    
                                         <table class="table">
-                                            <tbody>`;
+                                            <tbody>
+                                            <tr><td colspan="2"><h6 class="alert alert-secondary text-white">A = Absent || P = Present || H = Half Day || L = Leave</h6></td></tr>
+                                            `;
                             
                         for (let i = 0; i < response.length; i++) {
                             
@@ -240,19 +243,19 @@
                                 </td>
                                 <td><input id="a${i}" value="1" type="radio" class="btn-check ml-5 " name="attendance[${i}]" required autocomplete="off">
                                         <label class="ml-5 " for="a${i}">
-                                            Absent
+                                            A
                                         </label>
                                         <input id="p${i}" value="2" type="radio" class="btn-check ml-5 " name="attendance[${i}]" required autocomplete="off">
                                         <label class="ml-5 " for="p${i}">
-                                            Present
+                                            P
                                         </label>
                                         <input id="h${i}" value="3" type="radio" class="btn-check ml-5 " name="attendance[${i}]" required autocomplete="off">
                                         <label class="ml-5" for="h${i}">
-                                            Half Day
+                                            H
                                         </label>
                                         <input id="l${i}" value="4" type="radio" class="btn-check ml-5 " name="attendance[${i}]" required autocomplete="off">
                                         <label class="ml-5 " for="l${i}">
-                                            Leave
+                                            L
                                         </label> </td>
                             </tr>`;
 

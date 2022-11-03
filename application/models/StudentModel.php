@@ -352,10 +352,26 @@ class StudentModel extends CI_Model
           $totalDepositAmtAfterOfferAddedAndDueSubtracted = (intval(@$totalDepsitAmt) + intval(@$totalOfferAmt)) - intval(@$totalDueAmt);
           // check totalDepositFees
 
+          // total deposit amount substracct fees till this session now
+
+          $totalFeesBalanceAfterDeposit = (intval(@$totalDepsitAmt) + intval(@$totalOfferAmt)) - $totalDueFeesTillThisMonth;
+
+          if($totalFeesBalanceAfterDeposit >= 0){
+            // now substract from old due 
+            @$nowTotalDueLeft = @$totalDueAmt - @$totalFeesBalanceAfterDeposit;
+            $totalMonthFeesDue =  0;
+          }else
+          {
+            @$nowTotalDueLeft = @$totalDueAmt;
+            $totalMonthFeesDue =  (intval($totalDueFeesTillThisMonth) / intval($d[0]['fees_amt']));
+          }
+
          $totalBalance =  (intval($totalDueFeesTillThisMonth) - intval($totalDepositAmtAfterOfferAddedAndDueSubtracted));
 
          // calcualte total months fees deposit
-        $totalMonthFeesDue =  (intval($totalBalance) / intval($d[0]['fees_amt']));
+        // $totalMonthFeesDue =  (intval($totalBalance) / intval($d[0]['fees_amt']));
+        
+        $totalOldBalanceDue = (intval(@$totalDueAmt) > 0) ? $totalDueAmt : 0;
         $totalMonthFeesDeposit =  (intval($totalBalance) % intval($d[0]['fees_amt']));
 
         $sendArr = [
@@ -371,8 +387,8 @@ class StudentModel extends CI_Model
           'totalDueAmountAfterOfferApplyAndDueSubstract' => @$totalDepositAmtAfterOfferAddedAndDueSubtracted,
           'totalBalanceForDeposit' => $totalBalance,
           'totalMonthFeesDue' => floor($totalMonthFeesDue),
-          'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
-          'totalFeesDueMontyPlusTutionPlusTransport' => $totalBalance + $d[0]['tution_fees_amt']+ $d[0]['transport_fees']
+          'totalFeesDueMontyPlusTutionPlusTransport' => $totalBalance + $d[0]['tution_fees_amt']+ $d[0]['transport_fees'],
+          'totalOldBalanceDue' => @$nowTotalDueLeft
 
         ];
 
@@ -451,17 +467,32 @@ class StudentModel extends CI_Model
           $totalDepositAmtAfterOfferAddedAndDueSubtracted = (intval(@$totalDepsitAmt) + intval(@$totalOfferAmt)) - intval(@$totalDueAmt);
           // check totalDepositFees
 
-         $totalBalance =  (intval(@$totalDueFeesTillThisMonth) - intval(@$totalDepositAmtAfterOfferAddedAndDueSubtracted));
+          // total deposit amount substracct fees till this session now
+
+          $totalFeesBalanceAfterDeposit = (intval(@$totalDepsitAmt) + intval(@$totalOfferAmt)) - $totalDueFeesTillThisMonth;
+
+          if($totalFeesBalanceAfterDeposit >= 0){
+            // now substract from old due 
+            @$nowTotalDueLeft = @$totalDueAmt - @$totalFeesBalanceAfterDeposit;
+            $totalMonthFeesDue =  0;
+          }else
+          {
+            @$nowTotalDueLeft = @$totalDueAmt;
+            $totalMonthFeesDue =  (intval($totalDueFeesTillThisMonth) / intval($d[0]['fees_amt']));
+          }
+
+         $totalBalance =  (intval($totalDueFeesTillThisMonth) - intval($totalDepositAmtAfterOfferAddedAndDueSubtracted));
+
 
          // calcualte total months fees deposit
 
-         if(@$d[0]['fees_amt'] != '0' || $totalBalance != '0')
-         {
-          $totalMonthFeesDue =  (intval($totalBalance) / intval(@$d[0]['fees_amt']));
-         }else
-         {
-          $totalMonthFeesDue =  intval($totalBalance);
-         }
+        //  if(@$d[0]['fees_amt'] != '0' || $totalBalance != '0')
+        //  {
+        //   $totalMonthFeesDue =  (intval($totalBalance) / intval(@$d[0]['fees_amt']));
+        //  }else
+        //  {
+        //   $totalMonthFeesDue =  intval($totalBalance);
+        //  }
         
         // $totalMonthFeesDeposit =  (intval($totalBalance) % intval(@$d[0]['fees_amt']));
 
@@ -478,6 +509,7 @@ class StudentModel extends CI_Model
           'totalBalanceForDeposit' => (@$totalBalance) ? " ₹ " . number_format(@$totalBalance,2) : " ₹ " . number_format(0,2),
           'totalBalanceForDepositToday' => @$totalBalance ,
           'totalMonthFeesDue' => (@$totalMonthFeesDue) ? floor(@$totalMonthFeesDue) . " Months" : "0" . " Months",
+          'totalOldeDueLeftToday' => (@$nowTotalDueLeft) ? " ₹ " . number_format(@$nowTotalDueLeft,2) : "0" ,
           // 'totalmonthFeesDeposit' => floor($totalMonthFeesDeposit),
         ];
     }

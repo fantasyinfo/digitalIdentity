@@ -145,6 +145,7 @@ $masterRoutesArr = [
     'salaryMaster',
     'staffAttendance',
     'checkSalary',
+    'getExperienceLetter',
     'givePermissionMaster' // only for super Admin
     
 ];
@@ -271,7 +272,8 @@ $ajaxRoutesArr = [
     'showSalaryDetails',
     'showEmployeesViaDepartmentId',
    'showEmployeesViaDepartmentIdAndDesignationId',
-   'checkEmployeeSalaryById'
+   'checkEmployeeSalaryById',
+   'showEmployeesViaDepAndDesId'
     
 ];
 

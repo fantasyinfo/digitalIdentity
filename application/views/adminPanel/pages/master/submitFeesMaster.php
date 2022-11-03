@@ -204,35 +204,35 @@
                     </div>
                     <div class="form-group col-md-12">
                       <div class="row">
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                           <label>Fees Per Month</label>
-                          <input type="text" class="form-control bg-warning"  id="fees_per_month" readonly>
+                          <input type="text" class="form-control"  id="fees_per_month" readonly>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                           <label>Total Fees Till This Month</label>
                           <input type="text" class="form-control"  id="total_fees_till_this_month" readonly>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                           <label>Total Old Due Amount</label>
                           <input type="text" class="form-control"  id="total_old_due" readonly>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                           <label>Total Deposit Fees This Year</label>
                           <input type="text" class="form-control bg-success"  id="total_deposit_till_this_session" readonly>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                           <label>Total Offer Get On Fees</label>
-                          <input type="text" class="form-control"  id="total_offer_get" readonly>
+                          <input type="text" class="form-control bg-warning"  id="total_offer_get" readonly>
                         </div>
-                        <div class="col-md-3">
-                          <label>Total Old Deposit / Dues / Offer</label>
-                          <input type="text" class="form-control"  id="total_old_deposit_dues_offers" readonly>
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                           <label>Total Months Fees Due</label>
                           <input type="text" class="form-control"  id="total_month_fees_due" readonly>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
+                          <label>Total Old Balance Due Today</label>
+                          <input type="text" class="form-control"  id="totalOldBalanceDue" readonly>
+                        </div>
+                        <div class="col-md-4">
                           <label>Total Due Today</label>
                           <input type="text" class="form-control bg-danger"  id="total_due_today" readonly>
                         </div>
@@ -350,9 +350,10 @@
             let total_old_due = $("#total_old_due").val(response['data']['totalDueAmt']);
             let total_deposit_till_this_session = $("#total_deposit_till_this_session").val(response['data']['totalDepositAmount']);
             let total_offer_get = $("#total_offer_get").val(response['data']['totalOfferAmt']);
-            let total_old_deposit_dues_offers = $("#total_old_deposit_dues_offers").val(response['data']['totalDueAmountAfterOfferApplyAndDueSubstract']);
+            // let total_old_deposit_dues_offers = $("#total_old_deposit_dues_offers").val(response['data']['totalDueAmountAfterOfferApplyAndDueSubstract']);
             let total_month_fees_due = $("#total_month_fees_due").val(response['data']['totalMonthFeesDue']);
             let total_due_today = $("#total_due_today").val(response['data']['totalBalanceForDeposit']);
+            let totalOldBalanceDue = $("#totalOldBalanceDue").val(response['data']['totalOldBalanceDue']);
           },
           error: function (error)
           {
