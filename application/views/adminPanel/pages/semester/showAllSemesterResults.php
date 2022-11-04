@@ -158,7 +158,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Showing All Exams Data</h3>
-                  <button onclick="dwnResult()" id="dwnResult" class="btn btn-primary">Download DateSheet</button>
+                  <button onclick="dwnResult()" id="dwnResult" class="btn btn-primary">Download Result</button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

@@ -356,7 +356,7 @@
 
       if(classId != '' && sectionId!= '' && semExamId != '')
       {
-        window.location.href = baseUrl + 'semester/downloadDateSheet?classId=' + classId + '&sectionId=' + sectionId + '&secExamNameId=' + semExamId;
+        window.location.href = baseUrl + 'downloadDateSheet?data=' + classId + '-' + sectionId + '-' + semExamId;
       }else
       {
         alert('Please Select Exam Name And Class With Section On Filters');

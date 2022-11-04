@@ -114,6 +114,11 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'semResult');
 	}
+	public function downloadDateSheet()
+	{
+
+		$this->load->view($this->frontViewDir . 'downloadDateSheet');
+	}
 	public function feesInvoice()
 	{
 
