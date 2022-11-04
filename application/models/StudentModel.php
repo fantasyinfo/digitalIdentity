@@ -264,6 +264,25 @@ class StudentModel extends CI_Model
         return json_encode($sql);
       }
     }
+
+    public function showStudentViaClassAndSectionIdForCharacterCertificate(array $p)
+    {
+      if(!empty($p))
+      {
+        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status = '3' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+        $html = '';
+
+        if(!empty($d))
+        {
+          foreach($d as $dd)
+          {
+           $html .= "<option value='{$dd['id']}'>{$dd['name']}</option>";
+          }
+          return json_encode($html);
+        }
+        return json_encode($sql);
+      }
+    }
     // for panel
     public function totalFeesDue(array $p)
     {

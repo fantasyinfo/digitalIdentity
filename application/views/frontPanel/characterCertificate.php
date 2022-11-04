@@ -12,10 +12,10 @@ if (isset($_GET['tec_id'])) {
 	
 	if(!empty($tokenFiter))
 	{
-		$experienceLetter = $this->db->query("SELECT * FROM ".Table::experienceLetterTable." WHERE id = '{$tokenFiter['insertId']}' AND status = '1' AND schoolUniqueCode = '{$tokenFiter['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
+		$characterCertificateData = $this->db->query("SELECT * FROM ".Table::studentCharacterCertificateTable." WHERE id = '{$tokenFiter['insertId']}' AND status = '1' AND schoolUniqueCode = '{$tokenFiter['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
 
 
-		if(empty($experienceLetter))
+		if(empty($characterCertificateData))
 		{
 			//header("Location: " . HelperClass::brandUrl);
 		}
@@ -23,13 +23,13 @@ if (isset($_GET['tec_id'])) {
 
 
 	$schoolDetails = $this->db->query("SELECT sm.school_name, sm.mobile,sm.email,sm.address,CONCAT('$schoolLogo',sm.image) as logo,sm.pincode FROM " .
-		Table::schoolMasterTable . " sm WHERE sm.unique_id = '{$experienceLetter['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
+		Table::schoolMasterTable . " sm WHERE sm.unique_id = '{$characterCertificateData['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
 
 
 	if (empty($salaryDetails)) {
 		$msgArr = [
 			'class' => 'danger',
-			'msg' => 'Experience Letter Details Not Found.',
+			'msg' => 'Character Certificate Details Not Found.',
 		];
 		$this->session->set_userdata($msgArr);
 
@@ -38,7 +38,7 @@ if (isset($_GET['tec_id'])) {
 } else {
 	$msgArr = [
 		'class' => 'danger',
-		'msg' => 'Experience Letter Not Found.',
+		'msg' => 'Character Certificate Not Found.',
 	];
 	$this->session->set_userdata($msgArr);
 
@@ -190,7 +190,7 @@ if (isset($_GET['tec_id'])) {
 
 
 	<!--Generating Custom Title For Page-->
-	<title>Digital Experience Letter - digitalfied.com</title>
+	<title>Digital Character Certificate - digitalfied.com</title>
 	<!--Generating Custom Title For Page-->
 
 	<div class="container border" >
@@ -208,7 +208,7 @@ if (isset($_GET['tec_id'])) {
 				</td>
 				<td>
 
-					<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?= base_url('experienceLetter?tec_id=') . $_GET['tec_id'] ?>&amp;choe=UTF-8" alt="QR code" width="130px" style="padding-left:20px;"/> </br>
+					<img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?= base_url('characterCertificate?tec_id=') . $_GET['tec_id'] ?>&amp;choe=UTF-8" alt="QR code" width="130px" style="padding-left:20px;"/> </br>
 					<h4>
 						<center>Scan To Verify</center>
 					</h4>
@@ -218,15 +218,15 @@ if (isset($_GET['tec_id'])) {
 
 
 		<h4 style="font-size: 36px; font-weight:bold; margin-bottom:20px;">
-			<center><i>Experience Letter</i></center>
+			<center><i>Character Certificate</i></center>
 		</h4>
 
 
-	<div id="contentData"><?= $experienceLetter['content'];?></div>
+	<div id="contentData"><?= $characterCertificateData['content'];?></div>
 	<div id="moreCT">
 	<p>Sincerely,</p>
 
-	<p>Issue Date: <u><?= date('d-F-Y', strtotime($experienceLetter['issueDate']));?></u></p>
+	<p>Issue Date: <u><?= date('d-F-Y', strtotime($characterCertificateData['issueDate']));?></u></p>
 	<p>Name : __________________________</p>
 	<p>Designation : __________________________</p>
 	</div>

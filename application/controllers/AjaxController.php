@@ -101,6 +101,14 @@ class AjaxController extends CI_Controller
 		}
 	}
 
+	public function showStudentViaClassAndSectionIdForCharacterCertificate()
+	{
+		if (isset($_POST)) {
+			//HelperClass::prePrintR($_POST);
+			echo $this->StudentModel->showStudentViaClassAndSectionIdForCharacterCertificate($_POST);
+		}
+	}
+
 	public function showEmployeesViaDepartmentIdAndDesignationId()
 	{
 		if (isset($_POST)) {
@@ -462,6 +470,33 @@ class AjaxController extends CI_Controller
 				exit(0);
 			}
 			echo json_encode(array(0 => array('msg' => 'Employee Details Not Found in this department.')));
+			exit(0);
+		}
+	}
+	public function showStudentViaClassAndSectionAndStudentIdForCharacter()
+	{
+		if (isset($_POST)) {
+			$d = $this->db->query($sql = "SELECT s.*, DATE_FORMAT(s.date_of_admission, '%d %M %Y') as doa,cl.className,sc.sectionName, sch.school_name,sst.session_start_year , sst.session_end_year, stt.id as tc_id FROM " . Table::studentTable . " s
+			INNER JOIN " . Table::classTable . " cl ON cl.id = s.class_id
+    		INNER JOIN " . Table::sectionTable . " sc ON sc.id = s.section_id
+			INNER JOIN " . Table::schoolMasterTable . " sch ON sch.unique_id = s.schoolUniqueCode
+			INNER JOIN " . Table::studentTC . " stt ON stt.student_id = s.id AND stt.schoolUniqueCode = s.schoolUniqueCode
+			INNER JOIN " . Table::schoolSessionTable . " sst ON sst.id = stt.session_table_id AND stt.schoolUniqueCode = s.schoolUniqueCode
+			WHERE 
+			s.class_id = '{$_POST['classId']}' 
+			AND s.section_id = '{$_POST['sectionId']}' 
+			AND s.id = '{$_POST['studentId']}' 
+			AND s.status = '3' 
+			AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array()[0];
+			$html = '';
+			$d['todayDate'] = date('d F Y');
+
+			if (!empty($d)) {
+
+				echo json_encode($d);
+				exit(0);
+			}
+			echo json_encode(array(0 => array('msg' => 'Student Details Not Found.')));
 			exit(0);
 		}
 	}

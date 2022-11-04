@@ -9,8 +9,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['tc'] = 'FrontController/tc'; // tc verify
  $route['semResult'] = 'FrontController/semResult'; // semResult
  $route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
- $route['salarySlip'] = 'FrontController/salarySlip'; // feesInvoice
+ $route['salarySlip'] = 'FrontController/salarySlip'; // salarySlip
  $route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
+ $route['characterCertificate'] = 'FrontController/characterCertificate'; // characterCertificate
  
  // front-end routes
 
@@ -32,7 +33,8 @@ $studentRoutesArr = [
     'updateStudent',
     'permoteStudent',
     'generateTC',
-    'editTC'
+    'editTC',
+    'getCharacterCertificate'
 ];
 
 foreach($studentRoutesArr as $stRoute)
@@ -275,7 +277,9 @@ $ajaxRoutesArr = [
    'showEmployeesViaDepartmentIdAndDesignationId',
    'checkEmployeeSalaryById',
    'showEmployeesViaDepAndDesId',
-   'showEmployeesDetailsViaDepAndDesId'
+   'showEmployeesDetailsViaDepAndDesId',
+   'showStudentViaClassAndSectionIdForCharacterCertificate',
+   'showStudentViaClassAndSectionAndStudentIdForCharacter'
     
 ];
 

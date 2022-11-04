@@ -179,7 +179,7 @@ class StudentController extends CI_Controller
 	public function editTC()
 	{
 		$this->loginCheck();
-		// $this->checkPermission();
+		$this->checkPermission();
 	
 		$dataArr = [
 			'pageTitle' => 'Edit TC',
@@ -187,6 +187,18 @@ class StudentController extends CI_Controller
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'editTC');
+	}
+	public function getCharacterCertificate()
+	{
+		$this->loginCheck();
+		$this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'Character Certificate',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'getCharacterCertificate');
 	}
 
 	public function deleteStudent($id)
