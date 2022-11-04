@@ -188,7 +188,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:30 " . base_url() . "master/givePermissionMaster");
+        //header("Refresh:30 " . base_url() . "master/givePermissionMaster");
       }
     }
 

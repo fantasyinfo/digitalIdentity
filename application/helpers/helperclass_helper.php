@@ -1,5 +1,13 @@
 <?php
 
+include 'assets/smtp/src/Exception.php';
+include 'assets/smtp/src/PHPMailer.php';
+include 'assets/smtp/src/SMTP.php';
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class HelperClass
 {
     const brandName = 'Digitalfied';
@@ -365,10 +373,9 @@ const setNotificationForWhat = [
 
 
 
-
     public static function sendEmail($to, $subject, $msg)
     {
-        include 'assets/smtp/PHPMailerAutoload.php';
+        
         $mail = new PHPMailer();
         $mail->SMTPDebug = 3;
         $mail->IsSMTP();
@@ -380,8 +387,8 @@ const setNotificationForWhat = [
         //$mail->addAttachment('sample.pdf');
         $mail->CharSet = 'UTF-8';
         $mail->Username = "digitalfied@gmail.com";
-        $mail->Password = 'fmyvsyeieegzroqc';
-        $mail->SetFrom("EMAIL");
+        $mail->Password = 'jovkhbrckpqcvjwg';
+        $mail->SetFrom("digitalfied@gmail.com");
         $mail->Subject = $subject;
         $mail->Body = $msg;
         $mail->AddAddress($to);
