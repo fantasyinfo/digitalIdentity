@@ -2531,6 +2531,20 @@ public function numberToWordsCurrency(float $number)
 
 
 
+    // query with sql
+    public function dbSqlQuery($sql)
+    {
+        return $this->db->query($sql)->result_array();
+    }
+
+
+    // run query insert or update or delete
+    public function runQueryIUD($sql){
+        return $this->db->query($sql);
+    }
+
+
+
     // replace notifications words
 
     public function replaceNotificationsWords($str, $data = [])

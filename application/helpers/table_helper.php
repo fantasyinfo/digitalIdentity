@@ -56,5 +56,11 @@ class Table{
     const tokenFilterTable = 'token_filter';
     const experienceLetterTable = 'experience_letter';
     const studentCharacterCertificateTable = 'studentcharatercertificate';
+    const newfeestypesTable = 'newfeestypes';
+    const newfeesgroupsTable = 'newfeesgroups';
+    const newfeesdiscountsTable = 'newfeesdiscounts';
+    const newfeemasterTable = 'newfeemaster';
+    const newfeeclasswiseTable = 'newfeeclasswise';
+    const newfeessubmitmasterTable = 'newfeessubmitmaster';
     
 }

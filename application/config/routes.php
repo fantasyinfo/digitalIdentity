@@ -222,6 +222,24 @@ foreach($academicRoutesArr as $aRoute)
     $route[$baseAcademic.$aRoute] = "AcademicController"."/".$aRoute;
 }
 
+// newfee System
+
+
+$baseFeesManagement = "feesManagement/";
+$feeRoutes = [
+    'feeTypeMaster',
+    'feeGroupMaster',
+    'feeDisctountMaster',
+    'feeHeadMaster',
+    'collectFee',
+    'collectStudentFee'
+];
+
+foreach($feeRoutes as $aRoute)
+{
+    $route[$baseFeesManagement.$aRoute] = "FeesManagementController"."/".$aRoute;
+}
+
 
 
 

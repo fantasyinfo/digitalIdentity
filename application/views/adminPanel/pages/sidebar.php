@@ -122,7 +122,7 @@ $dir = base_url() . HelperClass::schoolLogoImagePath;
                     <ul class="nav nav-treeview">
                       <li class="nav-item" style="display:<?= $display ?>">
                         <a href="<?= base_url($cM['link']) ?>" class="nav-link <?= $active; ?>">
-                          <i class="<?= $cM['icon']; ?> nav-icon"></i>
+                        <i class="fa-regular fa-circle"></i>
                           <p><?= $cM['name']; ?></p>
                         </a>
                       </li>
