@@ -66,7 +66,7 @@
       $randomToken = HelperClass::generateRandomToken();
       $filterToken = "token=".$randomToken;
 
-      $inserArr['schoolUniqueCode	'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
+      $inserArr['schoolUniqueCode'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
       $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId']);
       $inserArr['classId'] = $this->CrudModel->sanitizeInput($_POST['classId']);
       $inserArr['sectionId'] = $this->CrudModel->sanitizeInput($_POST['sectionId']);
@@ -139,13 +139,78 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      //  header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
+        header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
 
     }
 
 
 
 
+
+    if(isset($_POST['depostFeesArr']))
+    {
+     //HelperClass::prePrintR($_POST);
+      $totalFeesSubmited = count($_POST['fmtId']);
+      for($i=0; $i < $totalFeesSubmited; $i++)
+      {
+        $randomToken = HelperClass::generateRandomToken();
+        $filterToken = "token=".$randomToken;
+
+        $inserArr['schoolUniqueCode'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
+        $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId'][$i]);
+        $inserArr['classId'] = $this->CrudModel->sanitizeInput($_POST['classId'][$i]);
+        $inserArr['sectionId'] = $this->CrudModel->sanitizeInput($_POST['sectionId'][$i]);
+        $inserArr['fmtId'] = $this->CrudModel->sanitizeInput($_POST['fmtId'][$i]);
+        $inserArr['nftId'] = $this->CrudModel->sanitizeInput($_POST['nftId'][$i]);
+        $inserArr['nfgId'] = $this->CrudModel->sanitizeInput($_POST['nfgId'][$i]);
+        $inserArr['depositDate'] = $this->CrudModel->sanitizeInput($_POST['depositDate']);
+        $inserArr['depositAmount'] = $this->CrudModel->sanitizeInput($_POST['depositAmount'][$i]);
+
+        $inserArr['invoiceId'] = ($invoiceID = $this->db->query("SELECT invoiceId FROM " . Table::newfeessubmitmasterTable . " WHERE invoiceId IS NOT NULL ORDER BY id DESC")->result_array()) ? $invoiceID[0]['invoiceId'] + 1 : '0';
+
+        $inserArr['discount'] = $this->CrudModel->sanitizeInput(@$_POST['discount']);
+        $inserArr['fine'] = $this->CrudModel->sanitizeInput(@$_POST['fine']);
+        $inserArr['paid'] = $this->CrudModel->sanitizeInput(@$_POST['totalDepositAmount']); // total payment after discount and fine
+        $inserArr['paymentMode'] = $this->CrudModel->sanitizeInput($_POST['paymentMode']);
+        $inserArr['depositerName'] = $this->CrudModel->sanitizeInput(@$_POST['depositerName']);
+        $inserArr['depositerAddress'] = $this->CrudModel->sanitizeInput(@$_POST['depositerAddress']);
+        $inserArr['depositerMobileNo'] = $this->CrudModel->sanitizeInput(@$_POST['depositerMobileNo']);
+        $inserArr['note'] = $this->CrudModel->sanitizeInput(@$_POST['note']);
+        $inserArr['randomToken'] = $filterToken;
+        $inserArr['session_table_id'] = $this->CrudModel->sanitizeInput($_SESSION['currentSession']);
+
+        $insertId = $this->CrudModel->insert(Table::newfeessubmitmasterTable, $inserArr);
+
+        if ($insertId) {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Fees Submited Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+
+          
+
+          $insertArr = [
+          'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+          'token' => $filterToken,
+          'for_what' => 'Fees Invoice',
+          'insertId' => $insertId
+          ];
+
+          $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
+
+        
+        } else {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Fees Not Submited',
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+      }
+      header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
+
+    }
 
 
 
@@ -254,10 +319,10 @@
                 <div class="card-header">
                   Fees Details
                 </div>
-                <div class="row p-5">
+                <div class="row px-5 py-2">
                   <div class="col-md-12">
-                    <button class="btn btn-warning"><i class="fa-solid fa-indian-rupee-sign"></i> Collect All</button>
-                    <button class="btn btn-dark"> Print All</button>
+                    <button class="btn btn-warning" id="collectAllPayment"><i class="fa-solid fa-indian-rupee-sign"></i> Collect All</button>
+                    <!-- <button class="btn btn-dark"> Print All</button> -->
                   </div>
                 </div>
                 <div class="card-body">
@@ -369,19 +434,20 @@
                             $amountNow = $gwf['amount'] - $depositAmt;
                           ?>
                             <tr>
-                              <td><input type="checkbox" class="feeTypeCheckbox" id="<?=$j?>"></td>
+                              <td><input type="checkbox" class="feeTypeCheckbox" id="fees_id_<?=$j?>" value="<?=$j?>"></td>
                               <td><?= $fGN; ?></td>
                               <td><?= $gwf['shortCode']; ?></td>
                               <td><?= date('d-m-Y', strtotime($gwf['dueDate'])); ?></td>
                               <td><?php
 
-                                  if ($amountNow > 0 && $amountNow < $gwf['amount']) {
+                                  $bstatusBalance =  ($gwf['amount'] - $depositAmt) - $discountAmt;
+                                  if ($bstatusBalance > 0 && $bstatusBalance < $gwf['amount']) {
                                     // partail
                                     echo "<span class='badge badge-warning'>Partial</span>";
                                   } else if ($amountNow == $gwf['amount']) {
                                     // due
                                     echo "<span class='badge badge-danger'>UnPaid</span>";
-                                  } else {
+                                  } else if($bstatusBalance == 0) {
                                     // paid
                                     echo "<span class='badge badge-success'>Paid</span>";
                                   }
@@ -441,6 +507,7 @@
                                     }
                                   
                                   }
+                                  
                                   ?></td>
                               <td>
 
@@ -460,7 +527,7 @@
                                 <?php
 
                                 if ($bblance > 0) {
-                                  echo ' <input type="button" class="btn btn-dark" onclick="submitFees(' . $j . ')" value="Collect Fees">';
+                                  echo ' <button type="button" class="btn btn-dark" onclick="submitFees(' . $j . ')"><i class="fa-solid fa-plus"></i></button>';
                                 } else {
                                   echo "<a disabled class='badge badge-success'>Paid</a>";
                                 } ?>
@@ -520,12 +587,15 @@
                         <?php $j++;
                           }
                         }
-
+                      
                         ?>
 
+
                         <tr>
+                        <input type="hidden" value="<?=$j?>" id="jNO">
                           <td colspan="4"><h4 class="text-center">Grand Total</h3></td>
                           <td><?php echo number_format($gAmount,2) . " + " .  " " .   number_format($gFine,2) . "</span>" ?> </td>
+                          <td></td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -578,6 +648,26 @@
 
 
 
+  <!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Collect All Fees</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer"  style=" border-bottom:2px solid red;">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -744,12 +834,203 @@
     if($(this).prop('checked')) {
         console.log("Checked Box Selected");
         $(".feeTypeCheckbox").attr('checked', 'checked');
-        console.log(document.querySelector('.feeTypeCheckbox').id);
+        
+        let totalRows = parseInt($("#jNO").val());
+        //console.log(totalRows);
+        let abc;
+       
+        for(abc = 1; abc < totalRows; abc++)
+        {
+          //console.log($("#fees_id_"+abc).val());
+        }
     } else {
       console.log("Checked Box deselect");
       $(".feeTypeCheckbox").attr('checked', false);
     }
 });
+
+
+
+
+  $("#collectAllPayment").click(function(e){
+    e.preventDefault();
+    let totalRows = parseInt($("#jNO").val());
+    console.log(totalRows);
+    let abc;
+    
+
+
+    let fgName;
+    let todayDate;
+    let amount;
+    let fine;
+    let fmtId;
+    let nftId;
+    let nfgId;
+    let stuId;
+    let classId;
+    let sectionId;
+    let discountD;
+    let fineD;
+    let depositD;
+    let amountNow;
+    let fineNow;
+    let html;
+
+    let totalAmount = 0;
+    let totalFine = 0;
+    
+
+    html += `<form method="POST">
+                
+                <table class="table"> 
+                  <tbody>
+                  
+                  <tr>
+                     <td><label>Date <span style="color:red;">*</span></label></td>
+                     <td><input class="form-control" type="date" name="depositDate" required></td>
+                    </tr>
+                    <td><label>Payment Mode <span style="color:red;">*</span></label></td>
+                     <td>
+                     <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="1" required> Offline &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                     <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="2" required> Online
+                     </td>
+                    </tr>
+                    <tr>
+                     <td><label>Note</label></td>
+                     <td>
+                     <textarea class="form-control" id="exampleFormControlTextarea1" name="note" rows="3"></textarea>
+                     </td>
+                    </tr>
+                    <tr>
+                     <td><label>Depositer Name <span style="color:red;">*</span></label></td>
+                     <td><input class="form-control" type="text" name="depositerName" required></td>
+                    </tr>
+                    <tr>
+                     <td><label>Depositer Address <span style="color:red;">*</span></label></td>
+                     <td><input class="form-control" type="text" name="depositerAddress" required></td>
+                    </tr>
+                    <tr>
+                     <td><label>Depositer Mobile </label></td>
+                     <td><input class="form-control" type="number" name="depositerMobileNo" ></td>
+                    </tr>
+                  `;
+
+    for(abc = 1; abc < totalRows; abc++)
+    {
+      if($("#fees_id_"+abc)[0].checked == true)
+      {
+        //console.log("yeh payment le lo ji..." + $("#fees_id_"+abc).val());
+        let x = $("#fees_id_"+abc).val();
+        //console.log(x);
+        fgName = $("#fgName_" + x).val();
+        todayDate = $("#todayDate_" + x).val();
+        amount = $("#amount_" + x).val();
+        fine = $("#fine_" + x).val();
+        fmtId = $("#fmtId_" + x).val();
+        nftId = $("#nftId_" + x).val();
+        nfgId = $("#nfgId_" + x).val();
+        stuId = $("#stuId_" + x).val();
+        classId = $("#classId_" + x).val();
+        sectionId = $("#sectionId_" + x).val();
+
+
+        discountD = $("#discount_" + x).val();
+        fineD = $("#fineD_" + x).val();
+        depositD = $("#deposit_" + x).val();
+
+        
+        if (amount > 0) {
+          amountNow = amount;
+          if (depositD != null || depositD != 0) {
+            amountNow = amount - depositD;
+            if(discountD != null || discountD != 0)
+            {
+              amountNow = amount - depositD - discountD ;
+            }
+          }
+        } else {
+          amountNow = 0;
+        }
+
+       
+        if (fine > 0) {
+          fineNow = fine;
+          if (fineD != null || fineD != 0) {
+            fineNow = fine - fineD;
+          }
+        } else {
+          fineNow = 0.00;
+        }
+
+        if(amountNow <=0)
+        {
+          continue;
+        }
+        let showFine = true;
+        if(fineNow <= 0)
+        {
+          showFine = false;
+        }
+
+        html += `<input type="hidden" name="stuId[]" value="${stuId}">
+                <input type="hidden" name="classId[]" value="${classId}">
+                <input type="hidden" name="sectionId[]" value="${sectionId}">
+                <input type="hidden" name="fmtId[]" value="${fmtId}">
+                <input type="hidden" name="nftId[]" value="${nftId}">
+                
+                <input type="hidden" name="nfgId[]" value="${nfgId}">`;
+
+                html += `
+                <tr>
+                  <td><b>${fgName}</b></td>`;
+                if(showFine)
+                {
+                  totalAmount = totalAmount + amountNow + fineNow;
+                  totalFine = totalFine + fineNow;
+                  html += `
+                  <input type="hidden" name="depositAmount[]" value="${amountNow}">
+                  <td><i class="fa-solid fa-indian-rupee-sign"></i> ${amountNow} + <span style="color:red;"><i class="fa-solid fa-indian-rupee-sign"></i> ${fineNow}</span></td>
+                  </tr>`;
+                
+                }else{
+                  totalAmount = totalAmount + amountNow;
+                  html += `
+                  <input type="hidden" name="depositAmount[]" value="${amountNow}">
+                  <td><i class="fa-solid fa-indian-rupee-sign"></i> ${amountNow}</td>
+                  </tr>`;
+                }
+      }else{
+        //console.log(abc + " Ishki Pyament rehnge do../.");
+      }
+    }
+
+    console.log(totalAmount);
+    html += `<tr><td><b>Total Amount </b></td>`;
+
+    if(totalFine > 0)
+    {
+      html +=`<td><h4>Amount: <i class="fa-solid fa-indian-rupee-sign"></i>  ${totalAmount} +  Fine: <i class="fa-solid fa-indian-rupee-sign"></i> ${totalFine}</h4></td>`;
+    }else{
+      html +=`<td><h4></i> Amount: <i class="fa-solid fa-indian-rupee-sign"></i>  ${totalAmount}</h4></td>`;
+    }
+    
+    let totalToPay = parseInt(totalAmount)+ parseInt(totalFine);
+   html += `<tr>
+   <input type="hidden" name="totalDepositAmount" value="${totalToPay}">
+   <td><h4>Total Amount To Collect: </td><td><h4><i class="fa-solid fa-indian-rupee-sign"></i> ${totalToPay}</td></h4></tr>
+    
+    <tr><td colspan="2"><button type="submit" name="depostFeesArr" class="btn btn-warning btn-lg btn-block">Collect Fees</button>
+                    </tr>
+                   </tbody>
+                </table>
+                   </form>`;
+                   $("#modalTitle").html("Collect All Fees");
+    $("#feesDetails").html(html);
+
+       $("#detailsModal").modal('show');
+    
+  })
 
 
 
