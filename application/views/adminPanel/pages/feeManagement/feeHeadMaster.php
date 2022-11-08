@@ -24,6 +24,33 @@
     // edit and delete action
     if (isset($_GET['action'])) {
 
+      if ($_GET['action'] == 'delete' && $_GET['assingClass'] == '1') {
+
+        $deleteId = $this->CrudModel->sanitizeInput($_GET['delete_assign_class_id']);
+        $ids = explode('-',$deleteId);
+
+
+        $deleteDiscountTypeData = $this->CrudModel->runQueryIUD("DELETE FROM " . Table::newfeeclasswiseTable . " WHERE class_id='{$ids[1]}' AND section_id = '{$ids[2]}' AND fee_group_id = '{$ids[0]}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+
+        if ($deleteDiscountTypeData) {
+          $msgArr = [
+            'class' => 'success',
+            'msg' => 'Assign Fees Deleted Successfully',
+          ];
+          $this->session->set_userdata($msgArr);
+        } else {
+          $msgArr = [
+            'class' => 'danger',
+            'msg' => 'Assign Fees Not Deleted Try Again.'
+          ];
+          $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:0 " . base_url() . "feesManagement/feeHeadMaster");
+       
+      }
+
+
+
       if ($_GET['action'] == 'edit') {
         $editId = $this->CrudModel->sanitizeInput($_GET['edit_id']);
 
@@ -31,7 +58,7 @@
       }
 
 
-      if ($_GET['action'] == 'delete') {
+      if ($_GET['action'] == 'delete' && $_GET['assingClass'] == '2') {
 
         $deleteId = $this->CrudModel->sanitizeInput($_GET['delete_id']);
 
@@ -53,6 +80,7 @@
         header("Refresh:1 " . base_url() . "feesManagement/feeHeadMaster");
       }
 
+     
       if ($_GET['action'] == 'status') {
 
         $status = $this->CrudModel->sanitizeInput($_GET['status']);
@@ -408,7 +436,7 @@
                         <th>Fee Group</th>
                         <th>Fee Type</th>
                         <!-- <th>Amount</th> -->
-                        <!-- <th>Status</th> -->
+                        <th>Already Assign Classes</th>
                        <th>Action</th>
                       </tr>
                     </thead>
@@ -429,7 +457,7 @@
                             <td><?php
                             foreach($feeGroupData as $fg)
                             {?>
-                              <i class="fa-solid fa-money-bill"></i> <?=$fg['feeTypeName'] . ' - ₹ ' . $fg['amount'] ?> <a class="px-2" href="?action=edit&edit_id=<?= $fg['id']; ?>"><i class="fa-solid fa-pencil"></i></a>  <a class="py-2" href="?action=delete&delete_id=<?= $fg['id']; ?>" onclick="return confirm('Are you sure want to delete this?');"><i class="fa-sharp fa-solid fa-trash"></i></a><br>
+                              <i class="fa-solid fa-money-bill"></i> <?=$fg['feeTypeName'] . ' - ₹ ' . $fg['amount'] ?> <a class="px-2" href="?action=edit&edit_id=<?= $fg['id']; ?>"><i class="fa-solid fa-pencil"></i></a>  <a class="py-2" href="?action=delete&assingClass=2&delete_id=<?= $fg['id']; ?>" onclick="return confirm('Are you sure want to delete this?');"><i class="fa-sharp fa-solid fa-trash"></i></a><br>
 
                            <?php }?>
                             </td>
@@ -440,6 +468,25 @@
                               <a href="?action=status&edit_id=<?= $cn['id']; ?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1'; ?>" class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger'; ?>">
                                 <?php echo ($cn['status'] == '1') ? 'Active' : 'Inactive'; ?>
                             </td> -->
+                            <td>
+                              <?php
+                           $assignClasses =  $this->CrudModel->dbSqlQuery("SELECT DISTINCT(fcwt.fee_group_id), c.id as classId, c.className,s.sectionName, s.id as sectionId FROM ".Table::newfeeclasswiseTable." fcwt
+                          JOIN ".Table::classTable." c ON c.id = fcwt.class_id
+                          JOIN ".Table::sectionTable." s ON s.id = fcwt.section_id 
+                          WHERE fcwt.fee_group_id = '{$cn['newFeeGroupId']}' AND fcwt.status = '1'");
+                          // echo $this->db->last_query();
+                          foreach($assignClasses as $aC)
+                          {
+                            $ids = $aC['fee_group_id'] . '-' .$aC['classId'] . '-' .  $aC['sectionId'];
+                            echo $aC['className'] . ' ( ' . $aC['sectionName'] .' ) ';
+                            echo '<a class="py-2" href="?action=delete&assingClass=1&delete_assign_class_id='.$ids. '" onclick="return confirm(\'Are you sure want to delete this?\');"> &nbsp;&nbsp; <i class="fa-solid fa-circle-xmark"></i></a>';
+                            echo "</br>";
+                          }
+                          
+                          
+                          ?>
+
+                            </td>
                             <td>
                               <button onclick="showPopUp('<?= $cn['newFeeGroupId']; ?>','<?= $feeGroupData[0]['feeGroupName']; ?>')" class="btn btn-dark" >Assign to class</button>   
                             </td>

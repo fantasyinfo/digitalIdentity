@@ -378,7 +378,7 @@
                      nft.id as nftId, nft.feeTypeName, nft.shortCode, nfg.id as nfgId, nfg.feeGroupName FROM " . Table::newfeemasterTable . " nfm 
                     JOIN " . Table::newfeestypesTable . " nft ON nft.id = nfm.newFeeType
                     JOIN " . Table::newfeesgroupsTable . " nfg ON nfg.id = nfm.newFeeGroupId
-                    WHERE nfm.newFeeGroupId = '{$f['fee_group_id']}' AND nfm.session_table_id = '{$_SESSION['currentSession']}'";
+                    WHERE nfm.newFeeGroupId = '{$f['fee_group_id']}' ";
 
                           $groupWiseFeeDetails = $this->db->query($sqln)->result_array();
                           $fGN = @$groupWiseFeeDetails[0]['feeGroupName'];
@@ -414,7 +414,7 @@
 
 
 
-                            $feesDeposits =  $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$_GET['stu_id']}' AND classId = '{$studentData['class_id']}' AND sectionId = '{$studentData['section_id']}' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1'");
+                            $feesDeposits =  $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$_GET['stu_id']}' AND classId = '{$studentData['class_id']}' AND sectionId = '{$studentData['section_id']}' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1' AND session_table_id = '{$_SESSION['currentSession']}'");
 
 
                             $depositAmt = 0.00;
