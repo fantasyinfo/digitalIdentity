@@ -254,11 +254,18 @@
                 <div class="card-header">
                   Fees Details
                 </div>
+                <div class="row p-5">
+                  <div class="col-md-12">
+                    <button class="btn btn-warning"><i class="fa-solid fa-indian-rupee-sign"></i> Collect All</button>
+                    <button class="btn btn-dark"> Print All</button>
+                  </div>
+                </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table align-middle mb-0 bg-white ">
                       <thead class="bg-light">
                         <tr>
+                          <th><input type="checkbox" id="checkAll"></th>
                           <th>Group</th>
                           <th>Fees Code</th>
                           <th>Due Date</th>
@@ -362,6 +369,7 @@
                             $amountNow = $gwf['amount'] - $depositAmt;
                           ?>
                             <tr>
+                              <td><input type="checkbox" class="feeTypeCheckbox" id="<?=$j?>"></td>
                               <td><?= $fGN; ?></td>
                               <td><?= $gwf['shortCode']; ?></td>
                               <td><?= date('d-m-Y', strtotime($gwf['dueDate'])); ?></td>
@@ -451,7 +459,7 @@
                                 <input type="hidden" id="sectionId_<?= $j ?>" value="<?= $studentData['section_id']; ?>">
                                 <?php
 
-                                if ($amountNow > 0) {
+                                if ($bblance > 0) {
                                   echo ' <input type="button" class="btn btn-dark" onclick="submitFees(' . $j . ')" value="Collect Fees">';
                                 } else {
                                   echo "<a disabled class='badge badge-success'>Paid</a>";
@@ -479,6 +487,7 @@
                             ?>
 
                                 <tr class="bg-light-dark">
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -728,4 +737,26 @@
       }
 
     }
+
+
+
+    $("#checkAll").change(function() {
+    if($(this).prop('checked')) {
+        console.log("Checked Box Selected");
+        $(".feeTypeCheckbox").attr('checked', 'checked');
+        console.log(document.querySelector('.feeTypeCheckbox').id);
+    } else {
+      console.log("Checked Box deselect");
+      $(".feeTypeCheckbox").attr('checked', false);
+    }
+});
+
+
+
+
+
+
+
+
+
   </script>

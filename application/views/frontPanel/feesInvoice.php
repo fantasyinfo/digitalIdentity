@@ -148,7 +148,7 @@ $studentData = $this->db->query($sql)->result_array()[0];
                             <tr>
                                 <th>Fees Group</th>
                                 <th>Fees Type</th>
-                                <th>Fees Amount</th>
+                                <!-- <th>Fees Amount</th> -->
                                 <th>Deposit Amount</th>
                                 <th>Discounts Amount</th>
                                 <th>Fine Amount</th>
@@ -162,7 +162,7 @@ $studentData = $this->db->query($sql)->result_array()[0];
                             <tr>
                                 <td><?= $feesInvoiceData['feeGroupName']; ?></td>
                                 <td><?= $feesInvoiceData['feeTypeName'] ;?></td>
-                                <td>₹ <?= number_format($feesInvoiceData['amount'],2); ?></td>
+                                <!-- <td>₹ <?= number_format($feesInvoiceData['amount'],2); ?></td> -->
                                 <td>₹ <?= number_format($feesInvoiceData['depositAmount'],2); ?></td>
                                 <td>₹ <?= number_format($feesInvoiceData['discount'],2); ?></td>
                                 <td>₹ <?= number_format($feesInvoiceData['fine'],2); ?></td>
