@@ -51,3 +51,6 @@ CREATE TABLE `feetype` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT
 
 -- CREATE TABLE `newfeessubmitmaster` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `stuId` INT NOT NULL , `fmtId` INT NOT NULL , `nftId` INT NOT NULL , `nfgId` INT NOT NULL , `depositAmount` FLOAT NOT NULL , `invoiceId` VARCHAR(100) NOT NULL , `depositDate` DATE NOT NULL , `paymentMode` ENUM("1","2") NOT NULL , `discount` FLOAT NOT NULL , `fine` FLOAT NOT NULL , `paid` FLOAT NOT NULL , `depositerName` VARCHAR(100) NOT NULL , `depositerAddress` VARCHAR(100) NOT NULL , `depositerMobileNo` VARCHAR(100) NULL , `session_table_id` INT NOT NULL , `status` ENUM("1","2","3","4") NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `note` TEXT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
 -- ALTER TABLE `newfeessubmitmaster` ADD `classId` INT NOT NULL AFTER `stuId`, ADD `sectionId` INT NOT NULL AFTER `classId`;
+
+
+ALTER TABLE `newfeessubmitmaster` ADD `randomToken` TEXT NULL AFTER `note`;

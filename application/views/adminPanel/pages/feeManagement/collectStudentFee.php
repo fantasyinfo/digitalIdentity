@@ -63,6 +63,9 @@
 
     if (isset($_POST['depostFees'])) {
 
+      $randomToken = HelperClass::generateRandomToken();
+      $filterToken = "token=".$randomToken;
+
       $inserArr['schoolUniqueCode	'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
       $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId']);
       $inserArr['classId'] = $this->CrudModel->sanitizeInput($_POST['classId']);
@@ -83,6 +86,7 @@
       $inserArr['depositerAddress'] = $this->CrudModel->sanitizeInput($_POST['depositerAddress']);
       $inserArr['depositerMobileNo'] = $this->CrudModel->sanitizeInput(@$_POST['depositerMobileNo']);
       $inserArr['note'] = $this->CrudModel->sanitizeInput(@$_POST['note']);
+      $inserArr['randomToken'] = $filterToken;
       $inserArr['session_table_id'] = $this->CrudModel->sanitizeInput($_SESSION['currentSession']);
 
       $insertId = $this->CrudModel->insert(Table::newfeessubmitmasterTable, $inserArr);
@@ -93,6 +97,19 @@
           'msg' => 'Fees Submited Successfully',
         ];
         $this->session->set_userdata($msgArr);
+
+        
+
+        $insertArr = [
+        'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+        'token' => $filterToken,
+        'for_what' => 'Fees Invoice',
+        'insertId' => $insertId
+        ];
+
+        $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
+
+       
       } else {
         $msgArr = [
           'class' => 'danger',
@@ -122,7 +139,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      //  header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stuId']);
+      //  header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
 
     }
 
@@ -260,13 +277,13 @@
                       <tbody>
                         <?php
 
-                        $gAmount = 0;
-                        $gFine = 0;
-                        $gdiscount = 0;
-                        $gFine = 0;
-                        $gFineD = 0;
-                        $gPaid = 0;
-                        $gBalance = 0;
+                        $gAmount = 0.00;
+                        $gFine = 0.00;
+                        $gdiscount = 0.00;
+                        $gFine = 0.00;
+                        $gFineD = 0.00;
+                        $gPaid = 0.00;
+                        $gBalance = 0.00;
 
 
 
@@ -302,10 +319,10 @@
 
                           foreach ($groupWiseFeeDetails as $gwf) {
                             // search student all depoists
-                            $fineAmount = 0;
+                            $fineAmount = 0.00;
                             if ($todayDate > $gwf['dueDate']) {
                               if ($gwf['fineType'] == '1') {
-                                $fineAmount = 0;
+                                $fineAmount = 0.00;
                               } else if ($gwf['fineType'] == '2') {
                                 // percenrtage
                                 $fineAmount =  ceil($gwf['amount'] * @$gwf['finePercentage'] / 100);
@@ -314,7 +331,7 @@
                                 $fineAmount =  @$gwf['fineFixAmount'];
                               }
                             } else {
-                              $fineAmount = 0;
+                              $fineAmount = 0.00;
                             }
 
                             if ($fineAmount == 0) {
@@ -328,9 +345,9 @@
                             $feesDeposits =  $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$_GET['stu_id']}' AND classId = '{$studentData['class_id']}' AND sectionId = '{$studentData['section_id']}' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1'");
 
 
-                            $depositAmt = 0;
-                            $fineAmt = 0;
-                            $discountAmt = 0;
+                            $depositAmt = 0.00;
+                            $fineAmt = 0.00;
+                            $discountAmt = 0.00;
                             if (!empty($feesDeposits)) {
 
 
@@ -390,11 +407,31 @@
                               ?></td>
                               <td><?php
                                   if ($amountNow > 0) {
-                                    echo number_format($amountNow,2);
-                                    $gBalance = $gBalance + $amountNow;
+                                   
+                                    $bblance = $amountNow - $discountAmt;
+                                    if($bblance > 0)
+                                    {
+                                      echo number_format($bblance,2);
+                                      $gBalance = $gBalance + $bblance;
+                                    }else{
+                                      echo 0.00;
+                                      $gBalance = $gBalance;
+                                    }
+                                    
+                                    
                                   } else {
-                                    echo number_format($gwf['amount'],2);
-                                    $gBalance = $gBalance + $gwf['amount'];
+                                  
+                                    $bblance =  ($gwf['amount'] - $depositAmt) - $discountAmt;
+                                  
+                                    if($bblance > 0)
+                                    {
+                                      echo number_format($bblance,2);
+                                      $gBalance = $gBalance + $bblance;
+                                    }else{
+                                      echo 0.00;
+                                      $gBalance = $gBalance;
+                                    }
+                                  
                                   }
                                   ?></td>
                               <td>
@@ -426,9 +463,9 @@
                             <?php
 
                             $a = 1;
-                            $depositAmt = 0;
-                            $fineAmt = 0;
-                            $discountAmt = 0;
+                            $depositAmt = 0.00;
+                            $fineAmt = 0.00;
+                            $discountAmt = 0.00;
                             if (!empty($feesDeposits)) {
 
                               foreach ($feesDeposits as $fd) {
@@ -455,8 +492,8 @@
                                   <td><?= number_format($fd['depositAmount'],2); ?></td>
                                   <td></td>
                                   <td>
-                                    <a href="<?=base_url('feesInvoice?id=') . $fd['id']?>" class="btn btn-info"> <i class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
-                                    <a href="?action=deleteInvoice&delete_id=<?= $fd['id'] ?>&stuId=<?= $_GET['stu_id'] ?>" onclick="return confirm('Are you sure want to delete this?');"><i class="fa-sharp fa-solid fa-trash"></i></a>
+                                    <a target="_blank" href="<?=base_url('feesInvoice?fees_id=') . $fd['randomToken']?>" class="btn btn-info"> <i class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
+                                    <a href="?action=deleteInvoice&delete_id=<?= $fd['id'] ?>&stu_id=<?= $_GET['stu_id'] ?>" onclick="return confirm('Are you sure want to delete this?');"><i class="fa-sharp fa-solid fa-trash"></i></a>
                                   </td>
 
                                 </tr>
@@ -560,6 +597,10 @@
         amountNow = amount;
         if (depositD != null || depositD != 0) {
           amountNow = amount - depositD;
+          if(discountD != null || discountD != 0)
+          {
+            amountNow = amount - depositD - discountD ;
+          }
         }
       } else {
         amountNow = 0;
@@ -572,7 +613,7 @@
           fineNow = fine - fineD;
         }
       } else {
-        fineNow = 0;
+        fineNow = 0.00;
       }
 
 
@@ -599,7 +640,10 @@
                     </tr>
                     <tr>
                      <td><label>Amount <span style="color:red;">*</span></label></td>
-                     <td><input class="form-control" type="number" id="depositAmount" name="depositAmount" value="${amountNow}" required></td>
+                     <td>
+                     <input class="form-control" type="hidden" id="depositAmountFixValue" name="depositAmount" value="${amountNow}" required>
+                     <input class="form-control" type="number" id="depositAmount" name="depositAmount" value="${amountNow}" required>
+                     </td>
                     </tr>
                     <tr>
                      <td> <label>Discounts</label></td>
@@ -662,16 +706,25 @@
     function showDiscount() {
       $("#showDis").val("");
       let dis = $("#dis").val();
-      let damount = $("#depositAmount");
+      let damount = $("#depositAmount").val();
+      let damountFixValue = $("#depositAmountFixValue").val();
       if (dis != 'Select Discounts') {
         $("#showDis").val(dis);
 
-        let newVal = damount.val() + damount;
-        damount.val(newVal);
+        let newVal = parseFloat(damount) - parseFloat(dis);
+        if(newVal > 0)
+        {
+          $("#depositAmount").val(newVal);
+        }else{
+          $("#depositAmount").val(0);
+        }
+        
+        //damount.val(newVal);
       } else {
         $("#showDis").val(0);
-        damount = $("#depositAmount").val();
-        damount.val(damount);
+        // damount = $("#depositAmount").val();
+        console.log(damount);
+        $("#depositAmount").val(damountFixValue);
       }
 
     }

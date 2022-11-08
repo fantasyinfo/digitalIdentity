@@ -1,27 +1,5 @@
 <?php
 
-// id=9638521478-12326325-098Bn77OP-10-10-12-12-14
-
-if(isset($_GET['id']))
-{
-    $e = explode("-",$_GET['id']);
-    if($e[2] !== '098Bn77OP' || strlen($e[0]) != 4)
-    {
-         // redirect to homepage
-    }
-    $feesId = $e[3];
-}else
-{
-    // redirect to homepage
-}
-
-
-
-
-				
-	
-
-
 
 $this->load->library('session');
 $this->load->model('CrudModel');
@@ -30,22 +8,52 @@ $dir = base_url().HelperClass::uploadImgDir;
 $schoolLogo = base_url().HelperClass::schoolLogoImagePath;
 $studentImage = base_url().HelperClass::studentImagePath;
 
-$sql = "SELECT ffst.invoice_id, ffst.offer_amt,ffst.deposit_amt,ffst.fee_deposit_date,IF(ffst.payment_mode = '2','Offline','Online') as payment_mode,ffst.depositer_name,ffst.depositer_mobile,ffst.depositer_address,
-s.school_name,s.mobile as schoolMobile,s.email as schoolEmail,s.address as schoolAddress,s.pincode as schoolPincode,
-CONCAT('$schoolLogo',s.image) as logo, st.name as studentName,st.email as studentEmail, st.mobile as studentMobile, st.address as studentAddress, st.pincode as studentPincode, state.stateName as studentState,city.cityName studentCity,CONCAT('$studentImage',st.image) as studentImage,ct.className as studentClass, sect.sectionName as studentSection
-FROM ".Table::schoolMasterTable." s 
-LEFT JOIN ".Table::feesForStudentTable." ffst ON ffst.schoolUniqueCode = s.unique_id
-LEFT JOIN ".Table::studentTable." st ON st.id = ffst.student_id
-LEFT JOIN ".Table::classTable." ct ON ct.id = ffst.class_id
-LEFT JOIN ".Table::sectionTable." sect ON sect.id = ffst.section_id
+if(isset($_GET['fees_id']))
+{
+    $this->load->model('CrudModel');
+	$tokenFiter = $this->db->query("SELECT * FROM ".Table::tokenFilterTable." WHERE token = '{$_GET['fees_id']}' AND status = '1' LIMIT 1")->result_array()[0];
+
+	if(!empty($tokenFiter))
+	{
+		$feesInvoiceData = $this->db->query("SELECT nfsm.*, nftt.feeTypeName, nfgt.feeGroupName,nfmt.amount FROM ".Table::newfeessubmitmasterTable." nfsm
+        INNER JOIN ".Table::newfeesgroupsTable." nfgt ON nfgt.id = nfsm.nfgId
+        INNER JOIN ".Table::newfeestypesTable." nftt ON nftt.id = nfsm.nftId
+        INNER JOIN ".Table::newfeemasterTable." nfmt ON nfmt.id = nfsm.fmtId
+        WHERE nfsm.randomToken = '{$tokenFiter['token']}' AND nfsm.status = '1' AND nfsm.schoolUniqueCode = '{$tokenFiter['schoolUniqueCode']}' AND nfsm.id ='{$tokenFiter['insertId']}' LIMIT 1")->result_array()[0];
+
+        // print_r($feesInvoiceData);die();
+		if(empty($feesInvoiceData))
+		{
+			header("Location: " . HelperClass::brandUrl);
+		}
+	}
+}else
+{
+    // redirect to homepage
+}
+
+
+$schoolDetails = $this->db->query("SELECT sm.school_name, sm.mobile,sm.email,sm.address,CONCAT('$schoolLogo',sm.image) as logo,sm.pincode FROM " . Table::schoolMasterTable . " sm WHERE sm.unique_id = '{$feesInvoiceData['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
+
+				
+	
+
+
+
+
+$sql = "SELECT st.*,CONCAT('$studentImage',st.image) as studentImage,ct.className as studentClass, sect.sectionName as studentSection,state.stateName,city.cityName
+FROM ".Table::studentTable." st 
+LEFT JOIN ".Table::classTable." ct ON ct.id = st.class_id
+LEFT JOIN ".Table::sectionTable." sect ON sect.id = st.section_id
 LEFT JOIN ".Table::stateTable." state ON state.id = st.state_id
 LEFT JOIN ".Table::cityTable." city ON city.id = st.city_id
-WHERE ffst.id = '$feesId'
+WHERE st.id = '{$feesInvoiceData['stuId']}' AND st.schoolUniqueCode = '{$feesInvoiceData['schoolUniqueCode']}'
 LIMIT 1";
 
 
 
-$schoolData = $this->db->query($sql)->result_array()[0];
+$studentData = $this->db->query($sql)->result_array()[0];
+// print_r($studentData);
 
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -94,7 +102,7 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                 <div class="col-12">
                     <center><h2 style="font-size: 24px; font-weight:bold; margin-bottom:20px;"><i>Fees Deposit Receipt</i></h2></center>
                     <h6>
-                        <small class="float-right">Date: <?= date('d-m-y',strtotime($schoolData['fee_deposit_date'])); ?></small>
+                        <small class="float-right">Date: <?= date('d-m-y',strtotime($feesInvoiceData['depositDate'])); ?></small>
                     </h6>
                 </div>
                 <!-- /.col -->
@@ -104,28 +112,28 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                 <div class="col-sm-4 invoice-col">
                     From
                     <address>
-                        <strong><?= $schoolData['school_name']; ?></strong><br>
-                        <?= $schoolData['schoolAddress'] ?><br>
-                        Pincode <?= $schoolData['schoolPincode']; ?><br>
-                        Phone: <?= $schoolData['schoolMobile']; ?><br>
-                        Email: <?= $schoolData['schoolEmail']; ?>
+                        <strong><?= $schoolDetails['school_name']; ?></strong><br>
+                        <?= $schoolDetails['address'] ?><br>
+                        Pincode <?= $schoolDetails['pincode']; ?><br>
+                        Phone: <?= $schoolDetails['mobile']; ?><br>
+                        Email: <?= $schoolDetails['email']; ?>
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                     To
                     <address>
-                        <strong><?= $schoolData['studentName']; ?></strong><br>
-                        <?= $schoolData['studentAddress']; ?><br>
-                        <?= $schoolData['studentCity']  . ' '. $schoolData['studentState'] . ' '. $schoolData['studentPincode'];?><br>
-                        Phone: <?= $schoolData['studentMobile']; ?><br>
-                        Email: <?= $schoolData['studentEmail']; ?>
+                        <strong><?= $studentData['name']; ?></strong><br>
+                        <?= $studentData['address']; ?><br>
+                        <?= $studentData['cityName']  . ' '. $studentData['stateName'] . ' '. $studentData['pincode'];?><br>
+                        Phone: <?= $studentData['mobile']; ?><br>
+                        Email: <?= $studentData['email']; ?>
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b># <?= $schoolData['invoice_id']; ?></b><br>
-                    <img src="<?=$schoolData['logo']?>" alt="school_img" height="100px" width="100px">
+                    <b># <?= $feesInvoiceData['invoiceId']; ?></b><br>
+                    <img src="<?=$schoolDetails['logo']?>" alt="school_img" height="100px" width="100px">
                 </div>
            
                 <!-- /.col -->
@@ -138,22 +146,27 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Student Name</th>
-                                <th>Class - Section</th>
-                                <th>Depositor Name</th>
-                                <th>Depositor Mobile</th>
+                                <th>Fees Group</th>
+                                <th>Fees Type</th>
+                                <th>Fees Amount</th>
+                                <th>Deposit Amount</th>
+                                <th>Discounts Amount</th>
+                                <th>Fine Amount</th>
+                                <!-- <th>Total</th> -->
+                                <!-- <th>Depositor Mobile</th>
                                 <th>Deposit Amount </th>
-                                <th>Offer Amount </th>
+                                <th>Offer Amount </th> -->
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><?= $schoolData['studentName']; ?></td>
-                                <td><?= $schoolData['studentClass'] . " - " . $schoolData['studentSection']?></td>
-                                <td><?= $schoolData['depositer_name']; ?></td>
-                                <td><?= $schoolData['depositer_mobile']; ?></td>
-                                <td>₹ <?= number_format($schoolData['deposit_amt'],2);?>/-</td>
-                                <td>₹ <?= number_format($schoolData['offer_amt'],2);?>/-</td>
+                                <td><?= $feesInvoiceData['feeGroupName']; ?></td>
+                                <td><?= $feesInvoiceData['feeTypeName'] ;?></td>
+                                <td>₹ <?= number_format($feesInvoiceData['amount'],2); ?></td>
+                                <td>₹ <?= number_format($feesInvoiceData['depositAmount'],2); ?></td>
+                                <td>₹ <?= number_format($feesInvoiceData['discount'],2); ?></td>
+                                <td>₹ <?= number_format($feesInvoiceData['fine'],2); ?></td>
+                               
                             </tr>
                         </tbody>
                     </table>
@@ -166,7 +179,7 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                 <!-- accepted payments column -->
                 <div class="col-6">
                
-                <img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('feesInvoice') . "?id=" . $_GET['id'];?>&amp;choe=UTF-8" alt="QR code"><br> <b>Scan To Verify</b>
+                <img class="qrcode" src="https://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=<?=base_url('feesInvoice') . "?fees_id=" . $_GET['fees_id'];?>&amp;choe=UTF-8" alt="QR code"><br> <b>Scan To Verify</b>
                     <!-- <p class="lead">Payment Methods:</p>
                     <img src="../../dist/img/credit/visa.png" alt="Visa">
                     <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
@@ -185,8 +198,8 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th style="width:50%">Total Deposit Amt: </th>
-                                    <td>₹ <?= number_format($schoolData['deposit_amt'],2);?>/-</td>
+                                    <th style="width:50%">Total Deposit Amt </th>
+                                    <td>₹ <?= number_format($feesInvoiceData['depositAmount'],2);?>/-</td>
                                 </tr>
                                 <!-- <tr>
                                     <th>Tax </th>
@@ -197,9 +210,10 @@ $schoolData = $this->db->query($sql)->result_array()[0];
                                    <td>₹ 00</td>
                                 </tr> -->
                                 <tr>
-                                    <th>Total Deposit & Offer:</th>
-                                    <?php $totalAmt =  intval($schoolData['deposit_amt']) +  intval($schoolData['offer_amt']);  ?>
-                                    <td>₹ <?= number_format($totalAmt,2) ;?>/-</td>
+                                    <th>Total Amount ( Deposit + Fine )</th>
+                                    <td>₹ <?php
+                                    $tTotal = $feesInvoiceData['depositAmount'] + $feesInvoiceData['fine'];
+                                    echo number_format($tTotal,2)  ;?>/-</td>
                                 </tr>
                               
                                    
