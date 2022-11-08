@@ -68,7 +68,7 @@
                         ?>
                         <div class="col-md-12 mx-auto">
                             <!-- jquery validation -->
-                            <div class="card card-primary">
+                            <div class="card border-top-3">
                                 <div class="card-header">
                                     <h3 class="card-title">Select Employee Details</h3>
 
@@ -76,11 +76,11 @@
 
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-2">
                                             <label>Select Month </label>
                                             <select name="monthId" id="monthId"
-                                                class="form-control  select2 select2-danger" required
-                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                class="form-control  select2 select2-dark" required
+                                                data-dropdown-css-class="select2-dark" style="width: 100%;">
                                                 <option>Please Select Month</option>
                                                 <?php
                                                 $selected = '';
@@ -100,11 +100,11 @@
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-2">
                                             <label>Select Year </label>
                                             <select name="yearId" id="yearId"
-                                                class="form-control  select2 select2-danger" required
-                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                class="form-control  select2 select2-dark" required
+                                                data-dropdown-css-class="select2-dark" style="width: 100%;">
                                                 <option>Please Select Year</option>
                                                 <?php
                                                 $selected = '';
@@ -125,11 +125,11 @@
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-2">
                                             <label>Select Department </label>
                                             <select name="departmentId" id="departmentId"
-                                                class="form-control  select2 select2-danger" required
-                                                data-dropdown-css-class="select2-danger" style="width: 100%;"
+                                                class="form-control  select2 select2-dark" required
+                                                data-dropdown-css-class="select2-dark" style="width: 100%;"
                                                 onchange="showDesignation()">
                                                 <option>Please Select Department</option>
                                                 <?php
@@ -154,17 +154,17 @@
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-2">
                                             <label>Select Designation</label>
                                             <select id="designationId" name="designationId"
-                                                class="form-control  select2 select2-danger" required
-                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                class="form-control  select2 select2-dark" required
+                                                data-dropdown-css-class="select2-dark" style="width: 100%;">
                                                 <option>Please Select Designation</option>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-3 pt-4">
+                                        <div class="form-group col-md-4 margin-top-30">
                                             <button type="submit" id="showEmployees"
-                                                class="btn btn-primary btn-block ">Filter</button>
+                                                class="btn btn-block mybtnColor">Filter</button>
                                         </div>
                                     </div>
 
@@ -177,14 +177,17 @@
                         </div>
 
                         <div class="col-md-12" id="showEmpTable">
-                            <div class="card">
+                            <div class="card border-top-3">
                                 <div class="card-header">
                                     <h3 class="card-title">Showing All Employees Salary Data</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="listDatatable" class="table table-bordered table-striped">
-                                        <thead>
+                                    <div class="table-responsive">
+
+                                  
+                                    <table id="listDatatable" class="table align-middle mb-0 bg-white">
+                                        <thead class="bg-light">
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Employee Id</th>
@@ -201,6 +204,7 @@
                                         </tbody>
 
                                     </table>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>

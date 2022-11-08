@@ -271,7 +271,7 @@
           ?>
           <div class="row">
             <div class="col-md-12">
-              <div class="card">
+              <div class="card border-top-3">
                 <div class="card-header">
 
                 </div>
@@ -315,7 +315,7 @@
                
                 </div>
               </div>
-              <div class="card">
+              <div class="card border-top-3">
                 <div class="card-header">
                   Fees Details
                 </div>

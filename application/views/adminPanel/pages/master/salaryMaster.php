@@ -236,7 +236,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
             ?>
             <div class="col-md-12 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card  border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit Salary</h3>
                 </div>
@@ -376,8 +376,8 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                       <!-- // allownes -->
                       <div class="row">
                         <div class="col-md-12">
-                          <div class="card">
-                            <div class="card-header bg-light border border-success">
+                          <div class="card border-top-3">
+                            <div class="card-header ">
                              <h4 class="font-bold">Allowances <span style="color:green;">(Per Month)</span></h4> 
                             </div>
                             <div class="card-body">
@@ -412,8 +412,8 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                       <!-- // deducations -->
                       <div class="row">
                         <div class="col-md-12">
-                          <div class="card">
-                            <div class="card-header bg-light border border-danger">
+                          <div class="card border-top-3">
+                            <div class="card-header ">
                              <h4 class="font-bold">Deducations <span style="color:red;">(Per Month)</span></h4> 
                             </div>
                             <div class="card-body">
@@ -438,7 +438,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12">
-                          <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo 'update';} else {echo 'submit';} ?>" class="btn btn-primary btn-lg btn-block">Submit</button>
+                          <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo 'update';} else {echo 'submit';} ?>" class="btn btn-lg btn-block mybtnColor">Save</button>
                         </div>
                       </div>
                     </form>
@@ -452,14 +452,17 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
               <div class="row">
 
                 <div class="col-md-12">
-                  <div class="card">
+                  <div class="card border-top-3">
                     <div class="card-header">
                       <h3 class="card-title">Showing All Employees Salary Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="sectionDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+
+                      
+                      <table id="sectionDataTable" class="table mb-0 text-white align-middle">
+                        <thead class="bg-light">
                           <tr>
                             <th>Id</th>
                             <th>Employee Id</th>
@@ -498,6 +501,7 @@ $departmentData = $this->db->query("SELECT * FROM " . Table::departmentTable . "
                         </tbody>
 
                       </table>
+                      </div>
                     </div>
                     <!-- /.card-body -->
                   </div>

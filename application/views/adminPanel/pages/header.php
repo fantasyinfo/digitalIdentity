@@ -57,6 +57,9 @@
         background-color: #f2f2f2;
         color:#000;
       }
+      .margin-top-30{
+        margin-top:30px;
+      }
 
 
    </style>

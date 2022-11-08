@@ -193,9 +193,9 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-4 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card  border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit Department</h3>
                 </div>
@@ -214,11 +214,11 @@
                     
                     ?>
                       <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-12">
                           <input type="text" name="departmentName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editsectionData[0]['departmentName'];}?>" class="form-control" id="name" placeholder="Enter department name" required>
                         </div>
-                        <div class="form-group col-md-3">
-                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
+                        <div class="form-group col-md-12">
+                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-lg float-right mybtnColor">Save</button>
                         </div>
                       </div>
                     </form>
@@ -228,21 +228,25 @@
                 <!--/.col (left) -->
                 <!-- right column -->
               </div>
-
+                    </div>
+                    <div class="col-md-8 mx-auto"> 
               <div class="row">
 
                 <div class="col-md-12">
-                  <div class="card">
+                  <div class="card  border-top-3">
                     <div class="card-header">
                       <h3 class="card-title">Showing All Department Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="sectionDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+
+                      
+                      <table id="sectionDataTable" class="table align-middle mb-0 bg-white">
+                        <thead class="bg-light">
                           <tr>
-                            <th>Id</th>
-                            <th>Department Id</th>
+                            <!-- <th>Id</th>
+                            <th>Department Id</th> -->
                             <th>Department Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -253,8 +257,8 @@
                             $i = 0;
                             foreach ($sectionData as $cn) { ?>
                               <tr>
-                                <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= ++$i;?></td>
+                                <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['departmentName'];?></td>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
@@ -272,6 +276,7 @@
                         </tbody>
 
                       </table>
+                      </div>
                     </div>
                     <!-- /.card-body -->
                   </div>

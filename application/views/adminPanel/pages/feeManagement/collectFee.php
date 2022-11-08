@@ -84,13 +84,13 @@
           <form method="post" action="">
             <div class="row">
               <div class="col-md-12"> 
-              <div class="card">
+              <div class="card border-top-3">
                   <div class="card-header">Please Select Correct Details</div>
                   <div class="card-body">
                     <div class="row">
                     <div class="form-group col-md-3">
                       <label>Select Class </label>
-                      <select name="classId" id="classId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="classId" id="classId" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Class</option>
                         <?php
                         if (isset($classData)) {
@@ -106,7 +106,7 @@
                     </div>
                     <div class="form-group col-md-3">
                       <label>Select Section </label>
-                      <select name="sectionId" id="sectionId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="sectionId" id="sectionId" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Section</option>
                         <?php
                         if (isset($sectionData)) {
@@ -119,8 +119,8 @@
                         ?>
                       </select>
                     </div>
-                    <div class="col-md-4">
-                    <input type="submit" name="submit" class="btn btn-primary mt-4">
+                    <div class="col-md-4 margin-top-30">
+                    <input type="submit" name="submit" class="btn btn-block mybtnColor" value="Filter">
                     </div>
                     </div>
                     
@@ -137,7 +137,7 @@
 
           <div class="row">
           <div class="col-md-12">
-                  <div class="card">
+                  <div class="card border-top-3">
                     <div class="card-header">
                       <h3 class="card-title">Showing All Students Data</h3>
                    
@@ -145,8 +145,11 @@
                     <!-- /.card-header -->
                   
                     <div class="card-body">
-                      <table id="MonthDataTable" class="table table-bordered table-striped ">
-                        <thead>
+                      <div class="table-responsive">
+
+                     
+                      <table id="MonthDataTable" class="table align-middle mb-0 bg-white ">
+                        <thead class="bg-light">
                           <tr>
                             <th>User Id</th>
                             <th>Student Name</th>
@@ -174,6 +177,7 @@
                         </tbody>
 
                       </table>
+                      </div>
                       <hr>
                      
                     </div>
