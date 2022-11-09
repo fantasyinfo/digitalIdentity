@@ -53,4 +53,6 @@ CREATE TABLE `feetype` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT
 -- ALTER TABLE `newfeessubmitmaster` ADD `classId` INT NOT NULL AFTER `stuId`, ADD `sectionId` INT NOT NULL AFTER `classId`;
 
 
-ALTER TABLE `newfeessubmitmaster` ADD `randomToken` TEXT NULL AFTER `note`;
+-- ALTER TABLE `newfeessubmitmaster` ADD `randomToken` TEXT NULL AFTER `note`;
+-- ALTER TABLE `newfeeclasswise` ADD `student_id` INT NULL AFTER `schoolUniqueCode`;
+-- ALTER TABLE `newfeeclasswise` CHANGE `fee_type_id` `fee_type_id` INT(11) NULL;

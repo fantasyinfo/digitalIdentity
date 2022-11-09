@@ -42,7 +42,7 @@
 
       .border-top-3
       {
-        border-top:3px solid #007bff;
+        border-top:3px solid #343a40;
       }
 
       .mybtnColor{

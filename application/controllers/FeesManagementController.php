@@ -104,6 +104,18 @@ class FeesManagementController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->digiDir . 'collectStudentFee');
 	}
+	public function showStudentsForFees()
+	{
+		$this->loginCheck();
+		// check permission
+		//$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Students  Lists For Fees',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'showStudentsForFees');
+	}
 
 
 

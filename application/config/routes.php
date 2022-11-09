@@ -232,7 +232,8 @@ $feeRoutes = [
     'feeDisctountMaster',
     'feeHeadMaster',
     'collectFee',
-    'collectStudentFee'
+    'collectStudentFee',
+    'showStudentsForFees'
 ];
 
 foreach($feeRoutes as $aRoute)
