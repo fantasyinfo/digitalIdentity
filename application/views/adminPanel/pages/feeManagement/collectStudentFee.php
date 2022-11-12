@@ -16,6 +16,16 @@
   JOIN " . Table::sectionTable . " se ON se.id = s.section_id
   WHERE s.status = '1' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id = '{$_GET['stu_id']}'")->result_array()[0];
 
+  $oldSessionData = $this->db->query("SELECT sh.id as historyId, sh.student_id, sh.fees_due, ss.session_start_year, ss.session_end_year FROM ".Table::studentHistoryTable." sh 
+  JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id
+  WHERE sh.student_id = '{$studentData['id']}'")->result_array();
+
+  if(empty($oldSessionData))
+  {
+      //echo $this->db->last_query();
+  }
+
+
     $discountData = $this->db->query("SELECT * FROM " . Table::newfeesdiscountsTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
     $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
@@ -58,6 +68,81 @@
       $inserArr['depositerAddress'] = $this->CrudModel->sanitizeInput($_POST['depositerAddress']);
       $inserArr['depositerMobileNo'] = $this->CrudModel->sanitizeInput(@$_POST['depositerMobileNo']);
       $inserArr['note'] = $this->CrudModel->sanitizeInput(@$_POST['note']);
+      $inserArr['randomToken'] = $filterToken;
+      $inserArr['session_table_id'] = $this->CrudModel->sanitizeInput($_SESSION['currentSession']);
+
+      $insertId = $this->CrudModel->insert(Table::newfeessubmitmasterTable, $inserArr);
+
+      if ($insertId) {
+        $msgArr = [
+          'class' => 'success',
+          'msg' => 'Fees Submited Successfully',
+        ];
+        $this->session->set_userdata($msgArr);
+
+        
+
+        $insertArr = [
+        'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+        'token' => $filterToken,
+        'for_what' => 'Fees Invoice',
+        'insertId' => $insertId
+        ];
+
+        $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
+
+       
+      } else {
+        $msgArr = [
+          'class' => 'danger',
+          'msg' => 'Fees Not Submited',
+        ];
+        $this->session->set_userdata($msgArr);
+      }
+      header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $inserArr['stuId']);
+    }
+
+
+    if (isset($_POST['depositsOldDue'])) {
+
+      $randomToken = HelperClass::generateRandomToken();
+      $filterToken = "token=".$randomToken;
+
+
+      $details =   $this->db->query("SELECT sh.fees_due FROM ".Table::studentHistoryTable." sh 
+      WHERE sh.student_id = '{$_POST['stuId']}' AND id = '{$_POST['historyId']}' LIMIT 1")->result_array()[0];
+
+     $oldDueAmout =  $details['fees_due'];
+      $depositAmt = $_POST['depositAmount'];
+      $nowBalance = $oldDueAmout - ($depositAmt + @$_POST['discount']);
+      if($nowBalance > 0)
+      {
+        $updateAmount = $nowBalance;
+      }else{
+        $updateAmount = 0;
+      }
+      $updateFees = $this->db->query("UPDATE ".Table::studentHistoryTable." SET fees_due = '$updateAmount' WHERE student_id = '{$_POST['stuId']}' AND id = '{$_POST['historyId']}' ");
+
+      $inserArr['schoolUniqueCode'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
+      $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId']);
+      $inserArr['classId'] = '0';
+      $inserArr['sectionId'] = '0';
+      $inserArr['fmtId'] = $_POST['historyId'];
+      $inserArr['nftId'] = '0';
+      $inserArr['nfgId'] = '0';
+      $inserArr['depositDate'] = $this->CrudModel->sanitizeInput(date('Y-m-d'));
+      $inserArr['depositAmount'] = $this->CrudModel->sanitizeInput($_POST['depositAmount']);
+
+      $inserArr['invoiceId'] = ($invoiceID = $this->db->query("SELECT invoiceId FROM " . Table::newfeessubmitmasterTable . " WHERE invoiceId IS NOT NULL ORDER BY id DESC")->result_array()) ? $invoiceID[0]['invoiceId'] + 1 : '0';
+
+      $inserArr['discount'] = $this->CrudModel->sanitizeInput(@$_POST['discount']);
+      $inserArr['fine'] = '0';
+      $inserArr['paid'] = $this->CrudModel->sanitizeInput($_POST['depositAmount']+ @$_POST['discount']);
+      $inserArr['paymentMode'] = '0';
+      $inserArr['depositerName'] = '0';
+      $inserArr['depositerAddress'] = '0';
+      $inserArr['depositerMobileNo'] = '0';
+      $inserArr['note'] = 'Old Session Due Deposits';
       $inserArr['randomToken'] = $filterToken;
       $inserArr['session_table_id'] = $this->CrudModel->sanitizeInput($_SESSION['currentSession']);
 
@@ -287,6 +372,87 @@
                
                 </div>
               </div>
+              <?php 
+                  
+                  if(!empty($oldSessionData))
+                  { ?>
+                  <div class="card border-top border-danger">
+                   <div class="card-header">
+                   <h4>Old Session Due:</h4>
+                  </div>
+                  <div class="card-body bg-light border-top border-danger">
+                    <div class="table-responsive">
+                      <table class="table mb-0 bg-white align-middle">
+                        <thead class="bg-light">
+                          <th>Session Name</th>
+                          <th>Invoice Id</th>
+                          <th>Deposit Date</th>
+                          <th>Discounts</th>
+                          <th>Deposits Amount</th>
+                          <th>Balance</th>
+                          <th>Action</th>
+                        </thead>
+                        <?php foreach($oldSessionData as $old){ 
+                          if($old['fees_due'] < 0){continue;}
+                          ?>
+                        <tr>
+                          <td><h5>Session Years : <?= $old['session_start_year'] . ' - ' . $old['session_end_year']; ?></h5></td>
+                          <td colspan="4" ></td>
+                          <td><h5>Amount : <i class="fa-solid fa-indian-rupee-sign"></i> <?= number_format($old['fees_due'],2);  ?></h5></td>
+                          <td><button type="button" class="btn btn-dark" onclick="submitOldFees('<?= $old['student_id']?>','<?= $old['historyId']?>','<?= $old['fees_due'] ?>')"><i class="fa-solid fa-plus"></i></button></td>
+                          <tr>
+                          <?php
+                        
+                        
+                        $feesDepositsOld = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$old['student_id']}' AND fmtId = '{$old['historyId']}' AND status = '1'");
+                        //print_r($feesDepositsOld);
+
+                        foreach($feesDepositsOld as $fDO){?>
+
+                            <tr class="bg-light-dark">
+                                <td><img src="<?= base_url() . HelperClass::uploadImgDir . 'table-arrow.png' ?>"></td>
+                                <td>
+                                    <?= $fDO['invoiceId']; ?>
+                                </td>
+                                <td>
+                                    <?= date('d-m-y', strtotime($fDO['depositDate'])); ?>
+                                </td>
+                                <td>
+                                    <?= number_format($fDO['discount'], 2); ?>
+                                </td>
+                                <td>
+                                    <?= number_format($fDO['depositAmount'], 2); ?>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <a target="_blank" href="<?= base_url('feesInvoice?fees_id=') . $fDO['randomToken'] ?>" class="btn btn-info"> <i
+                                            class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
+                                    <a href="?action=deleteInvoice&delete_id=<?= $fDO['id'] ?>&stu_id=<?= $old['student_id'] ?>"
+                                        onclick="return confirm('Are you sure want to delete this?');"><i
+                                            class="fa-sharp fa-solid fa-trash"></i></a>
+                                </td>
+
+                            </tr>
+
+                      <?php  }
+
+
+                        
+                        
+                        }
+                        
+                        
+                        ?>
+                      </table>
+                    </div>
+                 
+                  </div>
+                   
+                  </div>
+                 <?php }
+                  
+                  
+                  ?>
               <div class="card border-top-3">
                 <div class="card-header">
                   Fees Details
@@ -298,6 +464,7 @@
                   </div>
                 </div>
                 <div class="card-body">
+                
                   <div class="table-responsive">
                     <table class="table align-middle mb-0 bg-white ">
                       <thead class="bg-light">
@@ -774,6 +941,50 @@
 
 
 
+  function submitOldFees(studentId,studentHistoryId,amount)
+  {
+    console.log(studentId);
+    console.log(studentHistoryId);
+    //  console.log(todayDate)
+    $("#modalTitle").html("Old Session Dues Fees");
+      let html = `<form method="POST">
+                <input type="hidden" name="stuId" value="${studentId}">
+                <input type="hidden" name="historyId" value="${studentHistoryId}">
+                <table class="table"> 
+                  <tbody>
+                    <tr>
+                     <td><label>Amount <span style="color:red;">*</span></label></td>
+                     <td>
+                     <input class="form-control" type="hidden" id="depositAmountFixValue" name="depositAmountFixValue" value="${amount}" required>
+                     <input class="form-control" type="number" id="depositAmount" name="depositAmount" value="${amount}" required>
+                     </td>
+                    </tr>
+                    <tr>
+                     <td> <label>Discounts</label></td>
+                     <td> <select  id="dis" class="form-control  select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showDiscount()">
+                              <option>Select Discounts</option>
+                              <?php
+                              if (isset($discountData)) {
+                                foreach ($discountData as $group) { ?>
+                                  <option value="<?= $group['amount'] ?>"><?= $group['feeDiscountName'] . ' - ' . $group['amount']; ?></option>
+                              <?php }
+                              }  ?>
+                            </select>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td><label>Discounts</label></td>
+                     <td><input class="form-control" type="number" id="showDis" name="discount" value="0" ></td>
+                     </tr>
+                    <tr>
+                    <td colspan="2"><button type="submit" name="depositsOldDue" class="btn btn-warning btn-lg btn-block">Collect Fees</button>
+                    </tr>
+                   </tbody>
+                </table>
+                   </form>`;
+      $("#feesDetails").html(html);
+      $("#detailsModal").modal('show');
+  }
 
 
 

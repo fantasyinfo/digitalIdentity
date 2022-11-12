@@ -110,11 +110,23 @@ class FeesManagementController extends CI_Controller
 		// check permission
 		//$this->checkPermission();
 		$dataArr = [
-			'pageTitle' => 'Students  Lists For Fees',
+			'pageTitle' => 'Students Lists For Fees',
 			'adminPanelUrl' => $this->adminPanelURL
 		];
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->digiDir . 'showStudentsForFees');
+	}
+	public function carryForward()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Fees Carry Forward',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'carryForward');
 	}
 
 

@@ -179,7 +179,7 @@ class StudentController extends CI_Controller
 	public function editTC()
 	{
 		$this->loginCheck();
-		$this->checkPermission();
+		//$this->checkPermission();
 	
 		$dataArr = [
 			'pageTitle' => 'Edit TC',

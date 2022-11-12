@@ -87,7 +87,30 @@
 
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
 <?php
+
+
+// $dd = $this->CrudModel->showStudentFeesViaIdClassAndSection(31,1, 1,$_SESSION['schoolUniqueCode'],$_SESSION['currentSession']);
+// echo "<pre>";
+// print_r($dd);
+
+
+
+
+
+
 
 $sheduleData = $this->db->query("
      SELECT cST.shedule_json, cST.id, ct.className,st.sectionName,cST.status FROM " . Table::classSheduleTable . " cST 

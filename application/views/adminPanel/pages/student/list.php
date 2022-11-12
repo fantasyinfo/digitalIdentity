@@ -126,16 +126,25 @@ if(isset($_GET['action']) )
               $this->session->unset_userdata('msg') ;
               }
               ?>
-      <h5>Search Filters</h5>
+     
         <div class="row">
         
-          <div class="form-group col-md-2">
+        <div class="col-md-12">
+        <div class="card border-top-3">
+              <div class="card-header">
+              <h5>Search Filters</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  
+              
+              <div class="form-group col-md-2">
           <label >Name</label>
             <input type="text" class="form-control" id="studentName" placeholder="Search by name">
           </div>
           <div class="form-group col-md-2">
           <label>Select Class </label>
-          <select  id="studentClass" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+          <select  id="studentClass" class="form-control  select2 select2-dark" required  data-dropdown-css-class="select2-dark" style="width: 100%;">
           <option></option>
               <?php 
               if(isset($classData))
@@ -148,7 +157,7 @@ if(isset($_GET['action']) )
           </div>
           <div class="form-group col-md-2">
           <label>Select Section </label>
-          <select  id="studentSection" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+          <select  id="studentSection" class="form-control  select2 select2-dark" required  data-dropdown-css-class="select2-dark" style="width: 100%;">
           <option></option>
               <?php 
               if(isset($sectionData))
@@ -175,31 +184,38 @@ if(isset($_GET['action']) )
           <label >To Date</label>
             <input type="date" class="form-control" id="toDate">
           </div>
-          <div class="form-group col-md-2 pt-4">
-            <button id="search" class="btn btn-primary">Submit</button>
-            <button onclick="window.location.reload();" class="btn btn-warning">Clear</button>
-          </div>
-          <!-- <div class="form-group col-md-2">
-            
-          </div> -->
+          <div class="form-group col-md-2 margin-top-30">
+          <button id="search" class="btn mybtnColor">Search</button>
+          <button onclick="window.location.reload();" class="btn mybtnColor">Clear</button>
+        </div>
+        </div>
+              </div>
+        </div>
+         
+        </div>  
+
+
         
           <div class="col-md-12">
-          <div class="card">
+          <div class="card border-top-3">
               <div class="card-header">
                 <h3 class="card-title">Showing All Students Data</h3>
-                <a href="<?=base_url('student/addStudent')?>" class="btn btn-primary ml-4">Add New Student</a>
+                <a href="<?=base_url('student/addStudent')?>" class="btn mybtnColor float-right">Add New Student</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="listDatatable" class="table table-bordered table-striped table-responsive">
-                  <thead>
+                <div class="table-responsive">
+
+                
+                <table id="listDatatable" class="table bg-white mb-0 align-middle">
+                  <thead class="bg-light">
                   <tr>
                     <th>Id</th>
                     <th>Image</th>
                     <th>Name</th>
                     <th>User Id</th>
                     <th>Mobile</th>
-                    <th>Class - Section</th>
+                    <th>Class</th>
                     <th>State - City - Pincode</th>
                     <th>Status</th>
                     <th>Date of Birth</th>
@@ -211,6 +227,7 @@ if(isset($_GET['action']) )
                   </tbody>
                
                 </table>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>

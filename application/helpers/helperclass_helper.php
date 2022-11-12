@@ -438,7 +438,7 @@ const setNotificationForWhat = [
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Something went wrong! <?= $msg; ?>',
+                text: 'Important Info:  <?= $msg; ?>',
             })
         </script>
 <?php }

@@ -60,19 +60,23 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-12 mx-auto">
+         
+         <div class="col-md-12">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Select Student Details</h3>
-
                 </div>
 
                 <div class="card-body" id="filter_frm">
+              
+
+                  
                   <form method="POST" action="<?= base_url('student/editTC')?>">
-                    <div class="form-group col-md-12">
+                  <div class="row">
+                    <div class="form-group col-md-3">
                       <label>Select Class </label>
-                      <select id="classId" name="class_id" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select id="classId" name="class_id" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                       <option>Please Select Class</option>
                         <?php
                         if (isset($classData)) {
@@ -82,9 +86,9 @@
                         } ?>
                       </select>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-3">
                       <label>Select Section </label>
-                      <select id="sectionId" name="section_id" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showStudents()">
+                      <select id="sectionId" name="section_id" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;" onchange="showStudents()">
                       <option>Please Select Section</option>
                         <?php
                         if (isset($sectionData)) {
@@ -94,19 +98,22 @@
                         } ?>
                       </select>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-3">
                       <label>Select Students </label>
-                      <select name="studentId" id="studentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="studentId" id="studentId" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Student</option>
                       </select>
                     </div>
-                    <div class="form-group col-md-12 pt-4">
-                      <button type="submit" name="search" class="btn btn-primary btn-block ">Submit</button>
+                    <div class="form-group col-md-3 margin-top-30">
+                      <button type="submit" name="search" class="btn mybtnColor btn-block ">Search</button>
                     </div>
                   </form>
-                </div>
+                 
                 <!-- /.card-header -->
                 <!-- form start -->
+                </div>
+              </div>
+              </div>
 
               </div>
             </div>
@@ -119,8 +126,8 @@
       </div>
 
       <!-- /.container-fluid -->
-    </div>
-                
+    <!-- </div>
+                      </div>      -->
     <!-- /.content -->
 
     <!-- /.content-wrapper -->
