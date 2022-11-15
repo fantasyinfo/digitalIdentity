@@ -17,7 +17,7 @@
   WHERE s.status = '1' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id = '{$_GET['stu_id']}'")->result_array()[0];
 
   $oldSessionData = $this->db->query("SELECT sh.id as historyId, sh.student_id, sh.fees_due, ss.session_start_year, ss.session_end_year FROM ".Table::studentHistoryTable." sh 
-  JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id
+  JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
   WHERE sh.student_id = '{$studentData['id']}'")->result_array();
 
   if(empty($oldSessionData))

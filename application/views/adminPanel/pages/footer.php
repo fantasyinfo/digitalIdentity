@@ -71,7 +71,18 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script> -->
 
 <script>
-  $('.datepicker').datepicker();
+   $( function() {
+    $( ".datePicker" ).datepicker({
+      changeYear: true,
+      changeMonth: true,
+      dateFormat: "yy-mm-dd",
+      orientation: 'bottom auto',
+      todayHighlight: true,
+      autoclose: true,
+    }
+      
+    );
+  } );
 
 </script> 
 

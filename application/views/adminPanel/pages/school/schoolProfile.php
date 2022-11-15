@@ -37,13 +37,21 @@
 
 
         $fileName = "";
-        if(!empty($_FILES['image']))
+
+        if(!empty($_POST['schoolLogoImg']))
+        {
+          $fileName = $_POST['schoolLogoImg'];
+        }
+
+
+        if(!empty($_FILES['image']['name']))
         {
           // upload files and get image path
           $fileName = $this->CrudModel->uploadImg($_FILES,'SCHOOL',HelperClass::schoolLogoImagePath);
         }
 
 
+     
 
         $updateSchool = $this->db->query("UPDATE " . Table::schoolMasterTable . " SET 
         school_name = '$school_name',
@@ -138,7 +146,7 @@
             <!-- left column -->
             <div class="col-md-12 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">All * Field Are Mandatory</h3>
                 </div>
@@ -158,9 +166,10 @@
                <?php }?>
                 
                   <div class="row">
+                  
                     <div class="card-body">
                     <div class="col-md-12">
-                    <table class="table">
+                    <table class="table table-borderless">
                       <tbody>
                           <tr>
                               <td width="40%"><label for="name">School Code</label></td>
@@ -175,6 +184,11 @@
                               <td><img src="<?= $dir.$sd['image'] ?>" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />
                               <div class="input-group mt-2">
                               <div class="custom-file">
+                                <?php 
+                                if(!empty($sd['image'])){
+                                  echo '<input type="hidden" name="schoolLogoImg" value="'.$sd['image'].'">';
+                                } ?>
+                                
                               <input type="file" class="custom-file-input" name="image" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
                               <label class="custom-file-label" for="img">Choose file</label>
                             </div>
@@ -233,7 +247,7 @@
                           <tr>
                             <td><label>Gifts System</label></td>
                             <td>
-                              <select name="gifts_system" class="form-control  select2 select2-danger" id="gifts_system">
+                              <select name="gifts_system" class="form-control select2 select2-dark" id="gifts_system" data-dropdown-css-class="select2-dark">
                                 <?php
                                 $selectedGiftsSystem = '';
                                 $giftsSystem = [
@@ -262,10 +276,10 @@
                           </tr>
                            <tr>
                               <td>#</td>
-                              <td><button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Update</button></td>
+                              <td><button type="submit" name="submit" class="btn mybtnColor btn-block btn-lg">Update</button></td>
                           </tr> 
                       </tbody>
-                  </table>
+                    </table>
                     </div>
                     </div>
                     <!-- /.card-body -->

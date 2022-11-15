@@ -58,7 +58,9 @@ CREATE TABLE `feetype` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT
 -- ALTER TABLE `newfeeclasswise` CHANGE `fee_type_id` `fee_type_id` INT(11) NULL;
 
 
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Fees Carry Forward', 'feesManagement/carryForward', NULL, '78', '0', '1', '1', '2022-08-29 14:55:52');
+-- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES (NULL, 'Fees Carry Forward', 'feesManagement/carryForward', NULL, '78', '0', '1', '1', '2022-08-29 14:55:52');
 
-ALTER TABLE `student_history` ADD `currentClassId` INT NULL AFTER `session_table_id`, ADD `currentSessionId` INT NULL AFTER `currentClassId`;
-ALTER TABLE `student_history` ADD `old_session_id` INT NULL AFTER `student_id`;
+-- ALTER TABLE `student_history` ADD `currentClassId` INT NULL AFTER `session_table_id`, ADD `currentSessionId` INT NULL AFTER `currentClassId`;
+-- ALTER TABLE `student_history` ADD `old_session_id` INT NULL AFTER `student_id`;
+
+-- ALTER TABLE `students` CHANGE `date_of_admission` `date_of_admission` VARCHAR NULL DEFAULT NULL;
