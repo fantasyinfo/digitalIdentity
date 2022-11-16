@@ -69,6 +69,14 @@
 
               $totalDueThisSession = $dd['totalDueNow'];
 
+              // also check old session dues and add to fees dues
+              $oldSessinDues = $this->CrudModel->showStudentOldSessionFeesDetails($ids[$i]);
+
+              if(!empty($oldSessinDues))
+              {
+                $totalDueThisSession = $oldSessinDues[0]['fees_due'];
+              }
+
               $insertPermoteHistory = $this->db->query("INSERT INTO " . Table::studentHistoryTable . " (schoolUniqueCode,student_id,old_session_id,session_table_id,currentClassId,currentSessionId,class_id,section_id,fees_due) VALUES ('{$_SESSION['schoolUniqueCode']}','$ids[$i]','{$_SESSION['currentSession']}','{$_POST['session_table_id']}','{$_POST['currentClassId']}','{$_POST['currentSectionId']}','{$_POST['class_id']}','{$_POST['section_id']}','$totalDueThisSession')");
 
         

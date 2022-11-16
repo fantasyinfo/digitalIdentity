@@ -2666,7 +2666,7 @@ public function numberToWordsCurrency(float $number)
         $sendArr = [];
         $dir = base_url() . HelperClass::studentImagePath;
 
-        $studentData = $this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
+        $studentData = @$this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
         JOIN " . Table::classTable . " cl ON cl.id = s.class_id
         JOIN " . Table::sectionTable . " se ON se.id = s.section_id
         WHERE s.status = '1' AND s.schoolUniqueCode = '$schoolCode' AND s.id = '$stuId'")->result_array()[0];
@@ -2805,22 +2805,29 @@ public function numberToWordsCurrency(float $number)
                 }
             } 
     
-  $j++;
+        $j++;
+            }
         }
+        $sendArr['gAmount'] = $gAmount;
+        $sendArr['gFine'] =  $gFine;
+        $sendArr['gdiscount'] = $gdiscount;
+        $sendArr['gFineD'] = $gFineD;
+        $sendArr['gPaid'] = $gPaid;
+        $sendArr['gBalance'] =$gBalance;
+        $sendArr['totalPaidIncludingDiscounts'] =$sendArr['gPaid'] + $sendArr['gdiscount'];
+        $sendArr['totalDueNow'] =$sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
+
+        
+
+        return $sendArr;
     }
-    $sendArr['gAmount'] = $gAmount;
-    $sendArr['gFine'] =  $gFine;
-    $sendArr['gdiscount'] = $gdiscount;
-    $sendArr['gFineD'] = $gFineD;
-    $sendArr['gPaid'] = $gPaid;
-    $sendArr['gBalance'] =$gBalance;
-    $sendArr['totalPaidIncludingDiscounts'] =$sendArr['gPaid'] + $sendArr['gdiscount'];
-    $sendArr['totalDueNow'] =$sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
 
-    
+    // show student old session fees details 
 
-    return $sendArr;
+    public function showStudentOldSessionFeesDetails($stuId){
+
+       return $oldFeesDetails =  $this->db->query("SELECT sh.fees_due FROM ".Table::studentHistoryTable." sh 
+        JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
+        WHERE sh.student_id = '$stuId' ORDER BY sh.id DESC LIMIT 1")->result_array();
     }
-
-   
 }

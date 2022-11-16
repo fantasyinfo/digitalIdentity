@@ -129,7 +129,7 @@
         }
 
         // insert a user for login to panel
-        $pass = 'abc012';
+        $pass = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" . rand(000000000, 999999999)), 0, 6);
         $saltY = HelperClass::generateRandomToken();
         $passWordForSaveY = HelperClass::encode($pass, $saltY);
         $loginUser = [];

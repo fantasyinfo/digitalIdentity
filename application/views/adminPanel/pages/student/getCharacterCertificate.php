@@ -77,6 +77,11 @@ if(isset($_POST['submit']))
 
 ?>
 
+<style>
+  #detailsShow{
+    display: none;
+  }
+</style>
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
@@ -140,7 +145,7 @@ if(isset($_POST['submit']))
             ?>
             <div class="col-md-12 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Select Student Details</h3>
 
@@ -148,9 +153,10 @@ if(isset($_POST['submit']))
 
                 <div class="card-body" id="filter_frm">
                 
-                    <div class="form-group col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-3">
                       <label>Select Class </label>
-                      <select id="classId" name="class_id" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select id="classId" name="class_id" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                       <option>Please Select Class</option>
                         <?php
                         if (isset($classData)) {
@@ -160,9 +166,9 @@ if(isset($_POST['submit']))
                         } ?>
                       </select>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-3">
                       <label>Select Section </label>
-                      <select id="sectionId" name="section_id" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="showStudents()">
+                      <select id="sectionId" name="section_id" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;" onchange="showStudents()">
                       <option>Please Select Section</option>
                         <?php
                         if (isset($sectionData)) {
@@ -172,16 +178,16 @@ if(isset($_POST['submit']))
                         } ?>
                       </select>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-3">
                       <label>Select Students </label>
-                      <select name="studentId" id="studentId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="studentId" id="studentId" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Student</option>
                       </select>
                     </div>
-                    <div class="form-group col-md-12 pt-4">
-                      <button id="getStudent" name="search" class="btn btn-primary btn-block ">Submit</button>
+                    <div class="form-group col-md-3 margin-top-30">
+                      <button id="getStudent" name="search" class="btn mybtnColor btn-block ">Search</button>
                     </div>
-                
+                    </div>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -193,8 +199,8 @@ if(isset($_POST['submit']))
           <!--/.col (left) -->
           <!-- right column -->
         </div>
-        <div class="row" id="detailsShow">
-                            <div class="col-md-12 card card-body">
+        <div class="row" id="detailsShow ">
+                            <div class="col-md-12 card card-body border-top-3">
                                 <div class="row" id="formBox">
                                    
                                    
@@ -272,14 +278,14 @@ if(isset($_POST['submit']))
                success: function(response) {
                    response = $.parseJSON(response);
                    console.log(response);
-                   let html = ` <div class="col-md-12"><form method="POST">
+                   let html = ` <div class="col-md-12 "><form method="POST">
                                    <input type="hidden" name="student_id" value="${response.id}">
                                    <input type="hidden" name="studentName" value="${response.name}">
                                    <input type="hidden" name="class_id" value="${response.class_id}">
                                    <input type="hidden" name="section_id" value="${response.section_id}">
                                    <input type="hidden" name="tc_id" value="${response.tc_id}">
                                    <textarea id="editor" name="content" class="form-control" rows="20"><p style="text-align:justify;font-size:26px;margin-top:20px;margin-bottom:20px;line-height:40px;">It is to be certified that Mr. / Km. <b>${response.name}</b> S/o, D/o Shri <b>${response.father_name} </b> has been the student of our School of class <b>${response.className} ${response.sectionName}</b> in the session <b>${response.session_start_year} - ${response.session_end_year}</b> . He / She was a well behaved and disciplined student. He / She bears a good moral character. We wish <b>${response.name}</b> all the best for their future.</p></textarea>
-                                   <input type="submit" class="mt-2 btn btn-primary btn-block" name="submit" value="Generate Character Certificate">
+                                   <input type="submit" class="mt-2 btn mybtnColor btn-block" name="submit" value="Generate Character Certificate">
                                    </form></div>`;
                        $("#formBox").html(html);
                        $("#detailsShow").show();

@@ -18,7 +18,7 @@
 
   $oldSessionData = $this->db->query("SELECT sh.id as historyId, sh.student_id, sh.fees_due, ss.session_start_year, ss.session_end_year FROM ".Table::studentHistoryTable." sh 
   JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
-  WHERE sh.student_id = '{$studentData['id']}'")->result_array();
+  WHERE sh.student_id = '{$studentData['id']}' ORDER BY sh.id DESC LIMIT 1")->result_array();
 
   if(empty($oldSessionData))
   {
@@ -392,57 +392,52 @@
                           <th>Balance</th>
                           <th>Action</th>
                         </thead>
-                        <?php foreach($oldSessionData as $old){ 
-                          if($old['fees_due'] < 0){continue;}
-                          ?>
-                        <tr>
-                          <td><h5>Session Years : <?= $old['session_start_year'] . ' - ' . $old['session_end_year']; ?></h5></td>
-                          <td colspan="4" ></td>
-                          <td><h5>Amount : <i class="fa-solid fa-indian-rupee-sign"></i> <?= number_format($old['fees_due'],2);  ?></h5></td>
-                          <td><button type="button" class="btn btn-dark" onclick="submitOldFees('<?= $old['student_id']?>','<?= $old['historyId']?>','<?= $old['fees_due'] ?>')"><i class="fa-solid fa-plus"></i></button></td>
+                        <?php 
+                          if($oldSessionData[0]['fees_due'] > 0){ ?>
                           <tr>
-                          <?php
-                        
-                        
-                        $feesDepositsOld = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$old['student_id']}' AND fmtId = '{$old['historyId']}' AND status = '1'");
-                        //print_r($feesDepositsOld);
+                          <td><h5>Old Session Due Amount </h5></td>
+                          <td colspan="4" ></td>
+                          <td><h5>Amount : <i class="fa-solid fa-indian-rupee-sign"></i> <?= number_format($oldSessionData[0]['fees_due'],2);  ?></h5></td>
+                          <td><button type="button" class="btn btn-dark" onclick="submitOldFees('<?= $oldSessionData[0]['student_id']?>','<?= $oldSessionData[0]['historyId']?>','<?= $oldSessionData[0]['fees_due'] ?>')"><i class="fa-solid fa-plus"></i></button></td>
+                          <tr>
 
-                        foreach($feesDepositsOld as $fDO){?>
+                        <?php 
 
-                            <tr class="bg-light-dark">
-                                <td><img src="<?= base_url() . HelperClass::uploadImgDir . 'table-arrow.png' ?>"></td>
-                                <td>
-                                    <?= $fDO['invoiceId']; ?>
-                                </td>
-                                <td>
-                                    <?= date('d-m-y', strtotime($fDO['depositDate'])); ?>
-                                </td>
-                                <td>
-                                    <?= number_format($fDO['discount'], 2); ?>
-                                </td>
-                                <td>
-                                    <?= number_format($fDO['depositAmount'], 2); ?>
-                                </td>
-                                <td></td>
-                                <td>
-                                    <a target="_blank" href="<?= base_url('feesInvoice?fees_id=') . $fDO['randomToken'] ?>" class="btn btn-info"> <i
-                                            class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
-                                    <a href="?action=deleteInvoice&delete_id=<?= $fDO['id'] ?>&stu_id=<?= $old['student_id'] ?>"
-                                        onclick="return confirm('Are you sure want to delete this?');"><i
-                                            class="fa-sharp fa-solid fa-trash"></i></a>
-                                </td>
+                      $feesDepositsOld = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$oldSessionData[0]['student_id']}' AND fmtId = '{$oldSessionData[0]['historyId']}' AND status = '1'");
 
-                            </tr>
+                      foreach($feesDepositsOld as $fDO){ ?>
 
-                      <?php  }
+                        <tr class="bg-light-dark">
+                            <td><img src="<?= base_url() . HelperClass::uploadImgDir . 'table-arrow.png' ?>"></td>
+                            <td>
+                                <?= $fDO['invoiceId']; ?>
+                            </td>
+                            <td>
+                                <?= date('d-m-y', strtotime($fDO['depositDate'])); ?>
+                            </td>
+                            <td>
+                                <?= number_format($fDO['discount'], 2); ?>
+                            </td>
+                            <td>
+                                <?= number_format($fDO['depositAmount'], 2); ?>
+                            </td>
+                            <td></td>
+                            <td>
+                                <a target="_blank" href="<?= base_url('feesInvoice?fees_id=') . $fDO['randomToken'] ?>" class="btn btn-info"> <i
+                                        class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
+                                <a href="?action=deleteInvoice&delete_id=<?= $fDO['id'] ?>&stu_id=<?= $oldSessionData[0]['student_id'] ?>"
+                                    onclick="return confirm('Are you sure want to delete this?');"><i
+                                        class="fa-sharp fa-solid fa-trash"></i></a>
+                            </td>
 
+                        </tr>
 
+                  <?php   
+                    }
+                     
+                      }  
+                      ?>
                         
-                        
-                        }
-                        
-                        
-                        ?>
                       </table>
                     </div>
                  

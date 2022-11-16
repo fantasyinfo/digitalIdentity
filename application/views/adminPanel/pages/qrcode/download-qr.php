@@ -38,11 +38,16 @@
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-      <h5>Search Filters</h5>
-        <div class="row">
-        <div class="form-group col-md-3">
+        
+          <div class="card border-top-3">
+            <div class="card-header">
+            Select Class & Section
+            </div>
+            <div class="card-body">
+            <div class="row">
+            <div class="form-group col-md-3">
                       <label>Select Class </label>
-                      <select name="studentClass" id="studentClass" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="studentClass" id="studentClass" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Class</option>
                         <?php
                         if (isset($classData)) {
@@ -55,10 +60,10 @@
                         ?>
 
                       </select>
-                    </div>
-                    <div class="form-group col-md-3">
+            </div>
+            <div class="form-group col-md-3">
                       <label>Select Section </label>
-                      <select name="studentSection" id="studentSection" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="studentSection" id="studentSection" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Section</option>
                         <?php
                         if (isset($sectionData)) {
@@ -70,18 +75,25 @@
 
                         ?>
                       </select>
-                    </div>
-          <div class="form-group col-md-2 mt-4">
-            <button id="search" class="btn btn-primary">Submit</button>
-            <button onclick="window.location.reload();" class="btn btn-warning">Clear</button>
+            </div>
+           <div class="form-group col-md-3 margin-top-30">
+            <button id="search" class="btn btn-block mybtnColor">Search</button>
+            <!-- <button onclick="window.location.reload();" class="btn btn-warning">Clear</button> -->
+            </div>
+            </div>
           </div>
+          </div>
+        
+
+ 
+
           <!-- <div class="form-group col-md-2">
             
           </div> -->
         
 </div>
       <!-- /.container-fluid -->
-    </div>
+    <!-- </div> -->
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

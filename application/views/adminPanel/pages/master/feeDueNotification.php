@@ -11,144 +11,54 @@
 
     <?php
 
-
-    function totalFeesDue(array $p, $db)
+$students = [];
+    function totalFeesDue(array $p, $db,$cModal)
     {
-      if (!empty($p)) {
-        // sessionStrtingFrom
-        $school =  $db->query("SELECT session_started_from,session_started_from_year, session_ended_to,session_ended_to_year FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+      if (!empty($p)) 
+      {
+        $sendArr = [];
+        // current session due;
+        $stuArr = $db->query("SELECT s.*, 
+        CONCAT(c.className , ' ( ' , ss.sectionName , ' ) ') as class, 
+        CONCAT(s.address, ' - ' , ct.cityName, ' - ' , st.stateName , ' - ' , s.pincode) as address 
+        FROM ".Table::studentTable." s
+        JOIN ".Table::classTable." c ON c.id = s.class_id
+        JOIN ".Table::sectionTable." ss ON ss.id = s.section_id
+        JOIN ".Table::cityTable." ct ON ct.id = s.city_id
+        JOIN ".Table::stateTable." st ON st.id = s.state_id
+        WHERE s.class_id = '{$p['classId']}' AND 
+        s.section_id = '{$p['sectionId']}' AND 
+        s.status = '1' AND 
+        s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
 
-        if (!empty($school)) {
-          $sessionStartingFrom = $school[0]['session_started_from']; // month
-          $sessionStartingYear = $school[0]['session_started_from_year'];
-          $sessionStartDate = 1;
 
-          $sessionStart = date("$sessionStartingYear-$sessionStartingFrom-$sessionStartDate");
 
-          $sessionEndingFrom =  $school[0]['session_ended_to']; // month
-          $sessionEndingYear =  $school[0]['session_ended_to_year'];
-          $sessionEndDate = 31;
+        for($i=0, $t = count($stuArr); $i < $t; $i++){
+          $subArr = [];
 
-          $sessionEnd = date("$sessionEndingYear-$sessionEndingFrom-$sessionEndDate");
-        } else {
-          return json_encode(array('msg' => 'Please Select The School Session Started From & Ending To on Profile Section.', 'status' => 404));
+          $subArr['studentDetails'] = $stuArr[$i];
+
+          $subArr['feesDetails'] = $cModal->showStudentFeesViaIdClassAndSection($stuArr[$i]['id'],$p['classId'], $p['sectionId'],$_SESSION['schoolUniqueCode'],$_SESSION['currentSession']);
+
+          $subArr['oldSessionDues'] = $cModal->showStudentOldSessionFeesDetails($stuArr[$i]['id']);
+
+          array_push($sendArr, $subArr);
         }
 
-
-
-        $currentMonth = date('m'); // current month
-        $currentYear = date('Y'); // current Year
-
+        return $sendArr;
         
-          $totalStudentsInTheClass = $db->query("SELECT * FROM " . Table::studentTable . " WHERE 
-          class_id = '{$p['classId']}' AND 
-          section_id = '{$p['sectionId']}' AND
-          status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
-
-
-          $sendArr = [];
-          if (!empty($totalStudentsInTheClass)) {
-
-            $d = $db->query("SELECT * FROM " . Table::feesTable . " WHERE class_id = '{$p['classId']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
-
-              $totalMonthsForFees = intval($currentMonth) - intval($sessionStartingFrom);
-
-              $totalDueFeesTillThisMonth =  (intval($d[0]['fees_amt']) * intval($totalMonthsForFees));
-
-
-
-            foreach ($totalStudentsInTheClass as $st) {
-
-              $check = $db->query( "SELECT * FROM " . Table::feesForStudentTable . " WHERE 
-                class_id = '{$p['classId']}' AND 
-                section_id = '{$p['sectionId']}' AND
-                student_id = {$st['id']} AND
-                status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
-                AND created_at BETWEEN '$sessionStart' AND '$sessionEnd'
-                ")->result_array();
-              
-
-                      if (!empty($check)) {
-                
-                        $totalCountCheck = count($check);
-
-                        $totalDepsitAmt = 0;
-                        $totalOfferAmt = 0;
-                        $totalDueAmt = 0;
-                        for ($i = 0; $i < $totalCountCheck; $i++) {
-                          $totalDepsitAmt = intval($totalDepsitAmt) + intval($check[$i]['deposit_amt']);
-                          $totalOfferAmt = intval($totalOfferAmt) +  intval($check[$i]['offer_amt']);
-                          $totalDueAmt = intval($totalDueAmt) + intval($check[$i]['total_due_balance']);
-                        }
-
-
-
-                        $totalDepositAmtAfterOfferAddedAndDueSubtracted = (intval($totalDepsitAmt) + intval($totalOfferAmt)) - intval($totalDueAmt);
-                        // check totalDepositFees
-  
-                        $totalBalance =  (intval($totalDueFeesTillThisMonth) - intval($totalDepositAmtAfterOfferAddedAndDueSubtracted));
-  
-                        // calcualte total months fees deposit
-                        $totalMonthFeesDue =  (intval($totalBalance) / intval($d[0]['fees_amt']));
-               
-                        $subArr = [];
-                        $subArr = [
-                          'perMonthFeesForThisClass' => $d[0]['fees_amt'],
-                          'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
-                          'sessionStartedFrom' => $sessionStartingFrom,
-                          'currentMonth' => $currentMonth,
-                          'totalDepositAmount' => $totalDepsitAmt,
-                          'totalOfferAmt' => $totalOfferAmt,
-                          'totalDueAmt' => $totalDueAmt,
-                          'totalDueAmountAfterOfferApplyAndDueSubstract' => $totalDepositAmtAfterOfferAddedAndDueSubtracted,
-                          'totalBalanceForDeposit' => $totalBalance,
-                          'totalMonthFeesDue' => floor($totalMonthFeesDue),
-                          'studentId' => $st['id'],
-                          'studentId' => $st['id'],
-                          'studentName' => $st['name'],
-                          'studentUserId' => $st['user_id']
-  
-                        ];
-  
-                         array_push($sendArr, $subArr);
-
-
-                      }else
-                      {
-  
-                        $totalBalance =  $totalDueFeesTillThisMonth;
-  
-                        $subArr = [];
-                        $subArr = [
-                          'perMonthFeesForThisClass' => $d[0]['fees_amt'],
-                          'totalFeesTillThisMonth' => $totalDueFeesTillThisMonth,
-                          'sessionStartedFrom' => $sessionStartingFrom,
-                          'currentMonth' => $currentMonth,
-                          'totalDepositAmount' => 0,
-                          'totalOfferAmt' => 0,
-                          'totalDueAmt' => $totalBalance,
-                          'totalDueAmountAfterOfferApplyAndDueSubstract' => $totalBalance,
-                          'totalBalanceForDeposit' => $totalBalance,
-                          'totalMonthFeesDue' => 0,
-                          'studentId' => $st['id'],
-                          'studentName' => $st['name'],
-                          'studentUserId' => $st['user_id']
-  
-                        ];
-  
-                         array_push($sendArr, $subArr);
-                      }
-
-                      
-                       
-            }
-          }
-          return $sendArr;
-        } 
-        //return json_encode($sql);
       }
   
+    }
+
+
+
+
+
+
+
+
 
     $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
     $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
@@ -160,8 +70,48 @@
         'classId' => $_POST['classId'],
         'sectionId' => $_POST['sectionId']
       ];
-      $students = totalFeesDue($p, $this->db);
+      $students = totalFeesDue($p, $this->db,$this->CrudModel);
+
+      // echo '<pre>';
+      // print_r($students);
+      // die();
    
+    }
+
+
+    if(isset($_POST['searchViaAddress'])){
+      
+        $sendArr = [];
+        $stuArr = $this->db->query("SELECT s.*, 
+        CONCAT(c.className , ' ( ' , ss.sectionName , ' ) ') as class, 
+        CONCAT(s.address, ' - ' , ct.cityName, ' - ' , st.stateName , ' - ' , s.pincode) as address 
+        FROM ".Table::studentTable." s
+        JOIN ".Table::classTable." c ON c.id = s.class_id
+        JOIN ".Table::sectionTable." ss ON ss.id = s.section_id
+        JOIN ".Table::cityTable." ct ON ct.id = s.city_id
+        JOIN ".Table::stateTable." st ON st.id = s.state_id
+        WHERE s.address LIKE '%{$_POST['address']}%' OR ct.cityName LIKE '%{$_POST['address']}%' AND
+        s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+
+      
+        for($i=0, $t = count($stuArr); $i < $t; $i++){
+          $subArr = [];
+
+          $subArr['studentDetails'] = $stuArr[$i];
+
+          $subArr['feesDetails'] = $this->CrudModel->showStudentFeesViaIdClassAndSection($stuArr[$i]['id'],$stuArr[$i]['class_id'], $stuArr[$i]['section_id'],$_SESSION['schoolUniqueCode'],$_SESSION['currentSession']);
+
+          $subArr['oldSessionDues'] = $this->CrudModel->showStudentOldSessionFeesDetails($stuArr[$i]['id']);
+
+          array_push($sendArr, $subArr);
+        }
+
+        $students =  $sendArr;
+
+      
+        // current session due;
+        
+
     }
 
 
@@ -288,7 +238,7 @@
                     <div class="row">
                     <div class="form-group col-md-3">
                       <label>Select Class </label>
-                      <select name="classId" id="classId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="classId" id="classId" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Class</option>
                         <?php
                         if (isset($classData)) {
@@ -304,7 +254,7 @@
                     </div>
                     <div class="form-group col-md-3">
                       <label>Select Section </label>
-                      <select name="sectionId" id="sectionId" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                      <select name="sectionId" id="sectionId" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                         <option>Please Select Section</option>
                         <?php
                         if (isset($sectionData)) {
@@ -318,7 +268,33 @@
                       </select>
                     </div>
                     <div class="col-md-4">
-                    <input type="submit" name="submit" class="btn btn-primary mt-4">
+                    <input type="submit" name="submit" class="btn mybtnColor margin-top-30">
+                    </div>
+                    </div>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+           
+     
+            </div>
+
+          </form>
+          <form method="post" action="">
+            <div class="row">
+              <div class="col-md-12"> 
+              <div class="card">
+                  <div class="card-header">Search Via Address or City</div>
+                  <div class="card-body">
+                    <div class="row">
+             
+                    <div class="form-group col-md-8">
+                      <label>Enter Address</label>
+                        <input type="text" name="address" placeholder="Enter Address or City" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                    <input type="submit" name="searchViaAddress" class="btn mybtnColor margin-top-30 btn-block">
                     </div>
                     </div>
                     
@@ -333,6 +309,8 @@
           </form>
 
 
+
+
           <div class="row">
           <div class="col-md-12">
                   <div class="card">
@@ -343,35 +321,46 @@
                     <!-- /.card-header -->
                     <form method="POST">
                     <div class="card-body">
-                      <table id="MonthDataTable" class="table table-bordered table-striped ">
-                        <thead>
+                      <div class="table-responsive">
+                      <table id="feesDueTable" class="table mb-0 align-middle bg-white ">
+                        <thead class="bg-light">
                           <tr>
                             <th>#</th>
-                            <th>Id</th>
-                            <th>Per Month Fees </th>
-                            <th>Total Fees Till Now</th>
-                            <th>Student Id</th>
-                            <th>Student Name</th>
-                            <th>Student User Id</th>
-                            <th>Total Fees For Deposit</th>
+                            <!-- <th>Student Id</th> -->
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Father Name</th>
+                            <th>Address</th>
+                            <th>Old Session Due</th>
+                            <th>Current Session Due</th>
+                            <th>Total Due Amount</th>
                           </tr>
                         </thead>
                         <tbody>
                           <?php if (isset( $students)) {
                             $i = 0;
-                            foreach ($students as $cn) { ?>
+                            foreach ($students as $cn) {  
+                              
+                              $t = $cn['feesDetails']['totalDueNow'] + @$cn['oldSessionDues'][0]['fees_due'];
+
+                              if($t <= 0){
+                                continue;
+                              }
+                              
+                              ?>
                            
                               <tr>
                                 <td>
-                                  <input type="checkbox" name="stuIds[<?=$cn['studentId']?>]" id="check_<?=$cn['studentId']?>">
+                                  <input type="checkbox" name="stuIds[<?=$cn['studentDetails']['id']?>]" id="check_<?=$cn['studentDetails']['id']?>">
                                 </td>
-                                <td><?=++$i?></td>
-                              <td><?=number_format($cn['perMonthFeesForThisClass'],2)?></td>
-                              <td><?=number_format($cn['totalFeesTillThisMonth'],2)?></td>
-                              <td> <?=@$cn['studentId']?> </td>
-                              <td> <?=@$cn['studentName']?> </td>
-                              <td> <?=@$cn['studentUserId']?> </td>
-                              <td><?=number_format($cn['totalBalanceForDeposit'],2)?></td>
+                              <!-- <td> <?=@$cn['studentDetails']['id']?> </td> -->
+                              <td> <?=@$cn['studentDetails']['name']?> </td>
+                              <td> <?=@$cn['studentDetails']['class']?> </td>
+                              <td> <?=@$cn['studentDetails']['father_name']?> </td>
+                              <td> <?=@$cn['studentDetails']['address']?> </td>
+                              <td><?=number_format(@$cn['oldSessionDues'][0]['fees_due'],2)?></td>
+                              <td><?=number_format($cn['feesDetails']['totalDueNow'],2)?></td>
+                              <td><?=number_format(($cn['feesDetails']['totalDueNow'] + @$cn['oldSessionDues'][0]['fees_due']),2)?></td>
                               </tr>
                            
                           <?php  }
@@ -380,8 +369,9 @@
                         </tbody>
 
                       </table>
+                      </div>
                       <hr>
-                      <input type="submit" class="btn btn-primary my-5 btn-block" value="submit" name="submit_not">
+                      <input type="submit" class="btn mybtnColor my-5 btn-block" value="submit" name="submit_not">
                     </div>
                     </form>
                     <!-- /.card-body -->
@@ -400,3 +390,18 @@
     <?php $this->load->view("adminPanel/pages/footer-copyright.php"); ?>
   </div>
   <?php $this->load->view("adminPanel/pages/footer.php"); ?>
+<script>
+  $("#feesDueTable").DataTable({
+    "responsive": true, "lengthChange": true, "autoWidth": true,
+     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+       dom: 'lBfrtip',
+       buttons: [
+           'copyHtml5',
+           'excelHtml5',
+           'csvHtml5',
+           'pdfHtml5'
+       ],
+       lengthMenu: [10,50,100,500,1000,2000,5000,10000,50000,100000],
+       pageLength: 100,
+  });
+</script>

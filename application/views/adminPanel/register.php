@@ -85,6 +85,17 @@ if(isset($_POST['submit']))
   $insertArr['classes_up_to'] = ($classes_up_to) ? $classes_up_to : '0';
   $insertArr['status'] = '2';
 
+
+
+
+  $already = $this->db->query("SELECT unique_id FROM ".Table::schoolMasterTable." WHERE unique_id = '{$insertArr['unique_id']}'")->result_array();
+
+  if(!empty($already))
+  {
+    $insertArr['unique_id'] = $already[0]['unique_id'] + 1;
+  }
+
+
   $insertId = $this->CrudModel->insert(Table::schoolMasterTable,$insertArr);
 
 
