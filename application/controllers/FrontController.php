@@ -139,5 +139,10 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'characterCertificate');
 	}
+	public function visitorEntry()
+	{
+
+		$this->load->view($this->frontViewDir . 'visitorEntry');
+	}
 
 }
