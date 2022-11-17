@@ -1758,13 +1758,24 @@ class APIModel extends CI_Model
       // echo $this->db->last_query();
       
       if (($d)) {
-        return true;
+        return $this->db->insert_id();
       } else {
         return false;
       }
     
   }
   
+
+  public function gatePass($schoolUniqueCode,$studentId,$class_id,$section_id,$guardian_name,$mobile,$address,$time,$date,$document_image_name){
+    $d = $this->db->query("INSERT INTO ".Table::gatePassTable." (schoolUniqueCode,student_id,class_id,section_id,guardian_name,mobile,address,time,date,image) VALUES ('$schoolUniqueCode','$studentId','$class_id','$section_id','$guardian_name','$mobile','$address','$time','$date','$document_image_name')");
+      // echo $this->db->last_query();
+      
+      if (($d)) {
+        return $this->db->insert_id();
+      } else {
+        return false;
+      }
+  }
 
   // upateDriverLatLng
   public function upateDriverLatLng($loginUserIdFromDB,$loginuserType,$lat,$lng,$schoolUniqueCode)

@@ -1038,9 +1038,8 @@ public function updateHomeWork()
 			$documentType=@$apiData['image'];
 			$document = base64_decode(@$apiData['image']);
 			$document_image_name='visitor_img_'.time().'.png';
-			$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/visitorentry".$document_image_name;
+			$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/visitorentry/".$document_image_name;
 			$success = file_put_contents($document_file, $document);
-	
 		}
 		
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
@@ -1057,9 +1056,57 @@ public function updateHomeWork()
 			return HelperClass::APIresponse(500, 'There is some technical issue, visitor entry not inserted ' . $this->db->last_query());
 		}else
 		{
-			return HelperClass::APIresponse(200, 'New Visitor Entry Added Successfully.');
+			return HelperClass::APIresponse(200, 'New Visitor Entry Added Successfully.','',['visitorEntry' => $visitorEntry]);
 		}
 	}
+
+
+	// gatePass
+	public function gatePass()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType'])  || empty($apiData['student_id'])|| empty($apiData['class_id'])|| empty($apiData['section_id']) || empty($apiData['guardian_name'])|| empty($apiData['mobile'])|| empty($apiData['address']) || empty($apiData['time']) || empty($apiData['date']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.', $apiData);
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$loginUserId = @$apiData['loginUserId'];
+		$studentId = $apiData['student_id'];
+		$class_id = $apiData['class_id'];
+		$section_id = $apiData['section_id'];
+		$guardian_name = $apiData['guardian_name'];
+		$mobile = $apiData['mobile'];
+		$address = $apiData['address'];
+		$time = $apiData['time'];
+		$date = $apiData['date'];
+		
+		$document_image_name = '';
+		
+		if(isset($apiData['image']) && !empty(@$apiData['image']))
+		{
+			$documentType=@$apiData['image'];
+			$document = base64_decode(@$apiData['image']);
+			$document_image_name='gate_pass_img_'.time().'.png';
+			$document_file = $_SERVER['DOCUMENT_ROOT']."/assets/uploads/gatepass/".$document_image_name;
+			$success = file_put_contents($document_file, $document);
+		}
+		
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$gatePassId = $this->APIModel->gatePass($schoolUniqueCode,$studentId,$class_id,$section_id,$guardian_name,$mobile,$address,$time,$date,$document_image_name);
+
+		if (!$gatePassId) {
+			return HelperClass::APIresponse(500, 'There is some technical issue, gate Pass not created ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'New Gate Pass Generated Successfully.','',['gatepassId' => $gatePassId]);
+		}
+	}
+
+
 
 	// bannerForApp
 	public function bannerForApp()

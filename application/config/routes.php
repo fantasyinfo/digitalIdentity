@@ -377,7 +377,8 @@ $apiRoutesArr = [
     'holidayCalender',
     'showSemesterExamNames',
     'showAllSemesterExam',
-    'addSemesterExamResult'
+    'addSemesterExamResult',
+    'gatePass'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

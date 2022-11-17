@@ -38,6 +38,7 @@ class HelperClass
     const teacherImagePath = HelperClass::uploadImgDir.'teacher/';
     const visitorEntryImagePath = HelperClass::uploadImgDir.'visitorentry/';
     const notificationsImagePath = HelperClass::uploadImgDir.'notifications/';
+    const gatePassImagePath = HelperClass::uploadImgDir.'gatepass/';
     const barCodeFilePath = 'assets/barcode/vendor/autoload.php';
 
     const monthsForSchool = [
