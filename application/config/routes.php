@@ -14,6 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
  $route['characterCertificate'] = 'FrontController/characterCertificate'; // characterCertificate
  $route['visitorEntry'] = 'FrontController/visitorEntry'; // characterCertificate
+ $route['gatePass'] = 'FrontController/gatePass'; // characterCertificate
  
  // front-end routes
 

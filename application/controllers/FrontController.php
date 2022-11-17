@@ -144,5 +144,10 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'visitorEntry');
 	}
+	public function gatePass()
+	{
+
+		$this->load->view($this->frontViewDir . 'gatePass');
+	}
 
 }
