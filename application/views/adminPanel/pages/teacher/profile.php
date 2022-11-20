@@ -166,7 +166,7 @@
                           <h6 class="mb-0">PassWord</h6>
                         </div>
                         <div class="col-sm-9 text-secondary" style="font-family:'Times New Roman', Times, serif">
-                        <?=$sd['password'];?>
+                        <?=strtoupper($sd['password']);?>
                         </div>
                       </div>
                       <hr>

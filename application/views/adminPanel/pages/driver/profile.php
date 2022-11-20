@@ -159,7 +159,7 @@
                           <h6 class="mb-0">PassWord</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                        <?=$sd['password'];?>
+                        <?=strtoupper($sd['password']);?>
                         </div>
                       </div>
                       <hr>
