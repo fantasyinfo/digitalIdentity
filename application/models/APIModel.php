@@ -1195,7 +1195,7 @@ class APIModel extends CI_Model
     if ($user_type == 'Teacher') {
       $dir = base_url() . HelperClass::giftsImagePath;
       $userTypeId = HelperClass::userType[$user_type];
-      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId' AND status = '1'")->result_array();
       if (!empty($d)) {
         return $d;
       } else {
@@ -1206,7 +1206,7 @@ class APIModel extends CI_Model
       $user_type = 'Student';
       $dir = base_url() . HelperClass::giftsImagePath;
       $userTypeId = HelperClass::userType[$user_type];
-      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId'  AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+      $d = $this->db->query("SELECT gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userTypeId'  AND status = '1'")->result_array();
       if (!empty($d)) {
         return $d;
       } else {
@@ -1224,7 +1224,7 @@ class APIModel extends CI_Model
       if (!empty($totalDigiCoinInWallet)) {
         
         $dir = base_url() . HelperClass::giftsImagePath;
-        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'  AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'  AND status = '1'")->result_array();
       }
 
       if (!empty($d)) {
@@ -1239,7 +1239,7 @@ class APIModel extends CI_Model
       if (!empty($totalDigiCoinInWallet)) {
         
         $dir = base_url() . HelperClass::giftsImagePath;
-        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'  AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+        $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'   AND status = '1'")->result_array();
       }
 
       if (!empty($d)) {
@@ -1260,7 +1260,7 @@ class APIModel extends CI_Model
       $userType = HelperClass::userType[$loginuserType];
 
     
-      $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' and id = '$giftId'  AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
+      $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' and id = '$giftId'   AND status = '1'")->result_array();
 
       if (!empty($giftValue)) {
         $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];

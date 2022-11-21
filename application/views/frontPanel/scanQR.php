@@ -33,7 +33,8 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
   }
 
   if(empty($table)){
-    return HelperClass::APIresponse(500, 'QR Code Table Not Found. Please Check QR Code Again.');
+    return;
+    // HelperClass::APIresponse(500, 'QR Code Table Not Found. Please Check QR Code Again.');
   }
 
   $d = $db->query("SELECT * FROM " . $table . " WHERE qrcodeUrl = '$qrCode' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
@@ -56,6 +57,9 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
 
 
     $details = $db->query("SELECT id, name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
+
+
+    $insertData = $db->query("INSERT INTO ".Table::qrScanHistory." (schoolUniqueCode,qrcode,user_id,user_type_id) VALUES ('$schoolUniqueCode','$qrCode','{$details[0]['id']}', '".HelperClass::userType[$identityType]."')");
    
     $details[0]['userType'] = $identityType;
 
@@ -123,7 +127,7 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
     }else
     {
       return;
-      HelperClass::APIresponse(500, 'Identity Not Verified');
+      //HelperClass::APIresponse(500, 'Identity Not Verified');
     }
 
 
@@ -149,6 +153,8 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
+      
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -160,10 +166,72 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
                 <form method="POST">
                 <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" name="qrCode" class="form-control" autofocus />
+                            <input type="text" name="qrCode" id="qrValue" class="form-control" autofocus />
                         </div>
                 </div>
                 </form>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <?php 
+                
+                $d = $this->db->query("SELECT qr.* FROM ".Table::qrScanHistory." qr
+                 WHERE qr.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY qr.id DESC")->result_array(); 
+                
+                if(!empty($d)){ 
+                  
+                 
+                  
+                  ?>
+
+                    <div class="table-responsive">
+                      <table id="cityDataTable" class="table mb-0 align-middle bg-white">
+                        <thead class="bg-light">
+                          <tr>
+                            <th>Id</th>
+                            <th>Id</th>
+                            <!-- <th>QR Code</th> -->
+                            <th>Name</th>
+                            <th>User Type</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php if (isset($d)) {
+                            $i = 0;
+                            foreach ($d as $dd) { 
+                              
+                              if($dd['user_type_id'] == '1'){
+                                $tableName = Table::studentTable;
+                              }else if($dd['user_type_id'] == '2'){
+                                $tableName = Table::teacherTable;
+                              }
+                              $name = @$this->db->query("SELECT name FROM ".$tableName." WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND id = '{$dd['user_id']}' ")->result_array()[0]['name']; 
+                              
+                              
+                              ?>
+                              <tr>
+                                <td><?= ++$i;?></td>
+                                <td><?= $dd['id'];?></td>
+                                <!-- <td><?= $dd['qrcode'];?></td> -->
+                                <td><?= $name;?></td>
+                                <td><?= HelperClass::userTypeR[$dd['user_type_id']];?></td>
+                                <td><?= date('F d Y ', strtotime($dd['created_at']));?></td>
+                              </tr>
+                          <?php  }
+                          } ?>
+
+                        </tbody>
+
+                      </table>
+                      </div>
+              <?php  }
+                
+                
+                ?>
+              </div>
             </div>
         </div>
 
@@ -174,6 +242,15 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
 
 
         <script src="https://code.jquery.com/jquery-1.8.2.js"></script> 
-        <script src="" async defer></script>
+        <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+        <script >
+         $( document ).ready(function() {
+          $("#qrValue").val("");
+      });
+
+
+      $("#cityDataTable").DataTable();
+
+        </script>
     </body>
 </html>

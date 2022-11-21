@@ -14,7 +14,7 @@
     $dir = base_url().HelperClass::giftsImagePath;
 
   // fetching city data
-    $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
+    $setDigiCoinData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE status != '4' ORDER BY id DESC")->result_array();
     
 
 
@@ -26,7 +26,7 @@
         if($_GET['action'] == 'edit')
         {
           $editId = $_GET['edit_id'];
-          $editUserData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE id='$editId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+          $editUserData = $this->db->query("SELECT * FROM " . Table::giftTable . " WHERE id='$editId' ")->result_array();
         }
 
   
@@ -34,7 +34,7 @@
         {
           $deleteId = $_GET['delete_id'];
 
-          $sql = "SELECT gift_image FROM " . Table::giftTable . " WHERE id='$deleteId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'";
+          $sql = "SELECT gift_image FROM " . Table::giftTable . " WHERE id='$deleteId' ";
 
           $delImg = $this->db->query($sql)->result_array();
 
@@ -44,7 +44,7 @@
             @unlink(HelperClass::giftsImagePath . $imgN);
           }
     
-          $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+          $deleteMonthData = $this->db->query("DELETE FROM " . Table::giftTable . " WHERE id='$deleteId'");
 
           if($deleteMonthData)
           {
@@ -68,7 +68,7 @@
         {
           $status = $_GET['status'];
           $updateId = $_GET['edit_id'];
-          $updateStatus = $this->db->query("UPDATE " . Table::giftTable . " SET status = '$status' WHERE id = '$updateId'   AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+          $updateStatus = $this->db->query("UPDATE " . Table::giftTable . " SET status = '$status' WHERE id = '$updateId'  ");
 
           if($updateStatus)
           {
@@ -153,7 +153,7 @@
         }
         $monthEditId = $_POST['updateMonthId'];
   
-        $updateMonth = $this->db->query("UPDATE " . Table::giftTable . " SET  $set gift_name = '$giftName',redeem_digiCoins = '$redeemDigiCoin' WHERE id = '$monthEditId' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+        $updateMonth = $this->db->query("UPDATE " . Table::giftTable . " SET  $set gift_name = '$giftName',redeem_digiCoins = '$redeemDigiCoin' WHERE id = '$monthEditId'");
   
         if($updateMonth)
         {
@@ -250,8 +250,8 @@
                 <!-- form start -->
 
                <?php  
-               //if(HelperClass::checkIfItsACEOAccount()) 
-               //{ ?>
+               if(HelperClass::checkIfItsACEOAccount()) 
+               { ?>
                 <div class="row">
                 <div class="card-body">
                   <form method="post" action="" enctype="multipart/form-data">
@@ -343,7 +343,7 @@
                 </div>
               </div> 
             <?php
-              // }
+               }
                ?>
             
                 <!--/.col (left) -->
@@ -368,10 +368,10 @@
                             <th>Gift Name</th>
                             <th>User Type</th>
                             <th>How Much DigiCoin</th>
-                            <?php //if(HelperClass::checkIfItsACEOAccount()) { ?>
+                            <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
                               <th>Status</th>
                             <th>Action</th>
-                            <?php  // } ?>
+                            <?php   } ?>
                             
                           </tr>
                         </thead>
@@ -386,7 +386,7 @@
                                 <td><?= $cn['gift_name'];?></td>
                                 <td><?= HelperClass::userTypeR[$cn['user_type']];?></td>
                                 <td><i class="fa-solid fa-coins"></i> <?= $cn['redeem_digiCoins'];?> Coins </td>
-                                <?php //if(HelperClass::checkIfItsACEOAccount()) { ?>
+                                <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
                                   <td>
                                   <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                       class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
@@ -399,7 +399,7 @@
                                 <?php   } ?>
                               </tr>
                           <?php  }
-                         // } ?>
+                          } ?>
 
                         </tbody>
 

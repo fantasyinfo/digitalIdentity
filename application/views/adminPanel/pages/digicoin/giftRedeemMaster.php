@@ -13,16 +13,15 @@
 
     $dir = base_url().HelperClass::giftsImagePath;
 
-    if(HelperClass::checkIfItsACEOAccount()) {
-      $schoolCodeCheck = '';
-    }else
-    {
-      $schoolCodeCheck = " WHERE grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
-    }
+    // if(HelperClass::checkIfItsACEOAccount()) {
+    //   $schoolCodeCheck = '';
+    // }else
+    // {
+    //   $schoolCodeCheck = " WHERE grt.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+    // }
   // fetching city data
     $giftRedeemData = $this->db->query("SELECT grt.*, gt.id as gift_id, gt.gift_image, gt.gift_name, gt.redeem_digiCoins FROM " . Table::giftRedeemTable . " grt 
-    LEFT JOIN ".Table::giftTable." gt ON gt.id = grt.gift_id
-   $schoolCodeCheck ORDER BY grt.id DESC")->result_array();
+    LEFT JOIN ".Table::giftTable." gt ON gt.id = grt.gift_id ORDER BY grt.id DESC")->result_array();
     
 
 
@@ -147,8 +146,10 @@
                             <th>User Type</th>
                             <th>Gift DigiCoin Cost</th>
                             <th>DigiCoin Used</th>
-                            <th>School Code</th>
-                            <th>Change Status</th>
+                            <?php if(HelperClass::checkIfItsACEOAccount()) { ?>
+                             <th>School Code</th>
+                             <?php } ?>
+                            <th>Status</th>
                             <th>Gift Redeem Date</th>
                           </tr>
                         </thead>
@@ -176,9 +177,9 @@
                                 //   $condition = "";
                                 // }else
                                 // {
-                                  $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+                                 // $condition = " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
                                 // }
-                                $s = $this->db->query("SELECT name, id, user_id FROM ".$tableName." WHERE id='{$cn['login_user_id']}' $condition LIMIT 1")->result_array();
+                                $s = $this->db->query("SELECT name, id, user_id FROM ".$tableName." WHERE id='{$cn['login_user_id']}' LIMIT 1")->result_array();
                                 
                                 ?>
 
@@ -188,7 +189,7 @@
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['redeem_digiCoins'];?> Coins</td>
                                 <td><i class="fa-solid fa-coins"></i>  <?= $cn['digiCoin_used'];?> Coins</td>
                                <?php 
-                               //if(HelperClass::checkIfItsACEOAccount()) { ?>
+                               if(HelperClass::checkIfItsACEOAccount()) { ?>
                                <td>
                                 <?= $cn['schoolUniqueCode'];?>
                                </td>
@@ -213,12 +214,12 @@
                                   </select>
                                 </td>
                                 
-                              <?php //}  else
-                                 //  { ?>
-                                    <!-- <td> -->
-                                      <?php // echo HelperClass::giftStatus[$cn['status']]; ?>
-                                    <!-- </td> -->
-                                  <?php //}?>
+                              <?php }  else
+                                   { ?>
+                                     <td> 
+                                      <?php  echo HelperClass::giftStatus[$cn['status']]; ?>
+                                     </td>
+                                  <?php }?>
                               
                                 <td><?= date('d-m-Y h:i:A', strtotime($cn['created_at']));?></td>
                               </tr>
