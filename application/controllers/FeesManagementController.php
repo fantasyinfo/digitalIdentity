@@ -128,6 +128,18 @@ class FeesManagementController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->digiDir . 'carryForward');
 	}
+	public function advanceFeesMaster()
+	{
+		//$this->loginCheck();
+		// check permission
+		//$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Fees Carry Forward',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->digiDir . 'advanceFeesMaster');
+	}
 
 
 

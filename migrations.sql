@@ -68,7 +68,17 @@ CREATE TABLE `feetype` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT
 -- CREATE TABLE `gatepass` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `student_id` INT NOT NULL , `class_id` INT NOT NULL , `section_id` INT NOT NULL , `guardian_name` VARCHAR(100) NOT NULL , `mobile` VARCHAR(100) NOT NULL , `address` VARCHAR(100) NOT NULL , `image` TEXT NOT NULL , `time` TIME NOT NULL , `date` DATE NOT NULL , `status` ENUM("1","2") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
 
 
-CREATE TABLE `qrscanhistory` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `qrcode` VARCHAR(100) NOT NULL , `student_id` INT NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+-- CREATE TABLE `qrscanhistory` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `qrcode` VARCHAR(100) NOT NULL , `student_id` INT NOT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
 
-ALTER TABLE `qrscanhistory` ADD `user_type_id` INT NOT NULL AFTER `student_id`;
-ALTER TABLE `qrscanhistory` CHANGE `student_id` `user_id` INT(11) NOT NULL;
+-- ALTER TABLE `qrscanhistory` ADD `user_type_id` INT NOT NULL AFTER `student_id`;
+-- ALTER TABLE `qrscanhistory` CHANGE `student_id` `user_id` INT(11) NOT NULL;
+
+
+-- CREATE TABLE `advancefeessystem` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `class_id` INT NOT NULL , `feesData` JSON NOT NULL , `status` ENUM("1","2") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
+
+-- ALTER TABLE `advancefeessystem` ADD `section_id` INT NOT NULL AFTER `class_id`;
+-- ALTER TABLE `advancefeessystem` ADD `session_table_id` INT NOT NULL AFTER `feesData`;
+
+-- ALTER TABLE `newfeestypes` ADD `durationType` ENUM('1','2',"3","4") NULL COMMENT '1= monthly, 2= one time, 3 = yearly, ' AFTER `description`;
+
+-- ALTER TABLE `newfeestypes` CHANGE `durationType` `durationType` ENUM('1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '1= monthly, 2 = yearly, ';

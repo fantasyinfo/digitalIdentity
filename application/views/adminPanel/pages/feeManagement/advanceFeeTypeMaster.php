@@ -75,23 +75,10 @@
     // insert new city
     if (isset($_POST['submit'])) {
 
-      // $alreadyFeeTypeAdded = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeestypesTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND shortCode = '{$this->CrudModel->sanitizeInput($_POST['shortCode'])}' ");
-
-      // if (!empty($alreadyFeeTypeAdded)) {
-      //   $msgArr = [
-      //     'class' => 'danger',
-      //     'msg' => 'This Fees Type Short Code is already inserted, Please Edit That',
-      //   ];
-      //   $this->session->set_userdata($msgArr);
-      //   header("Refresh:0 " . base_url() . "feesManagement/feeTypeMaster");
-      //   exit(0);
-      // }
-      // date_create()->format('Y-m-d')
       $insertArr = [
         "schoolUniqueCode" => $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']),
         "feeTypeName" => $this->CrudModel->sanitizeInput($_POST['feeTypeName']),
-        // "shortCode" => $this->CrudModel->sanitizeInput($_POST['shortCode']),
-        // "description" => $this->CrudModel->sanitizeInput($_POST['description']),
+        "durationType" => $this->CrudModel->sanitizeInput($_POST['durationType']),
         "session_table_id" => $this->CrudModel->sanitizeInput($_SESSION['currentSession'])
     ];
 
@@ -121,8 +108,7 @@
 
       $updateArr = [
         "feeTypeName" => $this->CrudModel->sanitizeInput($_POST['feeTypeName']),
-        // "shortCode" => $this->CrudModel->sanitizeInput($_POST['shortCode']),
-        // "description" => $this->CrudModel->sanitizeInput($_POST['description']),
+        "durationType" => $this->CrudModel->sanitizeInput($_POST['durationType']),
     ];
 
       $updateId = $this->CrudModel->update(Table::newfeestypesTable, $updateArr,$updateId);
@@ -222,8 +208,28 @@
                         <input type="text" name="shortCode" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editFeeTypeData[0]['shortCode'];} ?>" class="form-control" id="name" placeholder="adm-fees, july-fee,certificate-fee" required>
                       </div> -->
                       <div class="form-group col-md-12">
-                        <label>Description</label>
-                        <textarea name="description" class="form-control" id="name"><?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo trim($editFeeTypeData[0]['description']);} ?></textarea>
+                        <label>Duration Type <span style="color:red;">*</span></label>
+                        <select name="durationType" id="durationType" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
+                          <!-- <option>Select Duration</option> -->
+                          <?php
+                          $selected = '';
+                            foreach (HelperClass::durationType as $d => $v) {
+                              if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                                if ($editFeeTypeData[0]['durationType'] == $d) {
+                                  $selected = 'selected';
+                                } else {
+                                  $selected = '';
+                                }
+                              }
+
+
+                          ?>
+                              <option <?= $selected; ?> value="<?= $d ?>"><?= $v ?></option>
+                          <?php }
+                          
+
+                          ?>
+                        </select>
                       </div>
                       <div class="form-group col-md-12">
                         <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo 'update';} else {echo 'submit';} ?>" class="btn btn-lg float-right mybtnColor">Save</button>
@@ -251,8 +257,8 @@
                       <tr>
                         <!-- <th>Id</th> -->
                         <th>Name</th>
-                        <!-- <th>Short Code</th>
-                        <th>Description</th> -->
+                        <!-- <th>Short Code</th> -->
+                        <th>Duration Type</th>
                         <th>Status</th>
                        <th>Action</th>
                       </tr>
@@ -265,8 +271,8 @@
                             <!-- <td><?= ++$i; ?></td> -->
                             <!-- <td><?= $cn['id']; ?></td> -->
                             <td><?= $cn['feeTypeName']; ?></td>
-                            <!-- <td><?= $cn['shortCode']; ?></td>
-                            <td><?= $cn['description']; ?></td> -->
+                            <td><?= HelperClass::durationType[$cn['durationType']]; ?></td>
+                            <!-- <td><?= $cn['description']; ?></td> -->
                             <td>
                               <a href="?action=status&edit_id=<?= $cn['id']; ?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1'; ?>" class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger'; ?>">
                                 <?php echo ($cn['status'] == '1') ? 'Active' : 'Inactive'; ?>

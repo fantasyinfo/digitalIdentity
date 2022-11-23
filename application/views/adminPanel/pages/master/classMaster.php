@@ -100,6 +100,18 @@
       $insertNewCity = $this->db->query("INSERT INTO " . Table::classTable . " (schoolUniqueCode,className) VALUES ('{$_SESSION['schoolUniqueCode']}','$className')");
       if($insertNewCity)
       {
+
+        $this->load->model('CrudModel');
+        $insertArr = [
+          "schoolUniqueCode" => $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']),
+          "feeGroupName" => $this->CrudModel->sanitizeInput($className . " Class"),
+          "session_table_id" => $this->CrudModel->sanitizeInput($_SESSION['currentSession'])
+      ];
+  
+
+        $insertId = $this->CrudModel->insert(Table::newfeesgroupsTable, $insertArr);
+
+
         $msgArr = [
           'class' => 'success',
           'msg' => 'New class Added Successfully',

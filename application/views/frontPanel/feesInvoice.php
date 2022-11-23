@@ -64,38 +64,30 @@ $studentData = $this->db->query($sql)->result_array()[0];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 
     <style>
-   
+           #printArea{
+                height: 12cm;
+                width:18cm;
+                border: 1px solid #000;
+            }
+
         @media print {
             #printbtn {
                 display: none;
             }
 
             @page {
-                size: landscape;
-                margin: 10px;
-               
+                size: A4;
+                /* margin: 10px; */
+
+            }
+
+            #printArea{
+                height: 12cm;
+                width:18cm;
+                border: 1px solid #000;
             }
 
 
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-                font-size: 16px;
-                font-family: Segoe, Segoe UI, DejaVu Sans, Trebuchet MS, Verdana, " sans-serif";
-            }
-
-            h1 {
-                font-size: 22px;
-                color: #0086b3;
-                line-height: 30px;
-            }
-
-            /* table{
-                margin:0;
-                padding:0;
-            } */
-   
 
         }
     </style>
@@ -103,102 +95,104 @@ $studentData = $this->db->query($sql)->result_array()[0];
 
 <body>
 
-
-    <div class="container mt-3">
+<p align="right"><button id="printbtn" onclick="window.print();">Print</button></p>
+    <div class="container">
         <div class="row">
-        <p align="right"><button id="printbtn" onclick="window.print();">Print</button></p>
+            <div class="col-md-6" id="printArea">
+                <div class="container">
+                    <div class="row">
+                       
+                        <h2 class="text-center" style="font-size: 16px; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #000;"><i>Fees Deposit Receipt</i></h2>
+                       
+                        <table>
+                            <tr>
+                                <td><img src="<?= $schoolDetails['logo'] ?>" width="70px" height="auto" /></td>
+                                <td class="text-center">
+                                    <h2 style="font-size:14px;font-weight:bold"><?= strtoupper($schoolDetails['school_name']) ?></h2>
 
-        <center>
-            <h2 style="font-size: 24px; font-weight:bold; margin-bottom:20px;"><i>Fees Deposit Receipt</i></h2>
-        </center>
-            <table>
-                <tr>
-                    <td><img src="<?= $schoolDetails['logo'] ?>" width="130px" height="auto" /></td>
-                    <td>
-                        <h2 style="font-size:24px;font-weight:bold"><?= strtoupper($schoolDetails['school_name']) ?></h2>
+                                    <h4 style="font-size:12px;font-weight:bold">
+                                        <?= strtoupper($schoolDetails['address'] . " " . $schoolDetails['pincode']) ?></h4>
+                                    <!-- <h4 style="font-size:17px">Mobile: <?= $schoolDetails['mobile'] ?> Email:
+                            <?= $schoolDetails['email'] ?></h4> -->
+                                </td>
+                                <td>
+                                <img class="qrcode" src="https://chart.googleapis.com/chart?chs=100x100&amp;cht=qr&amp;chl=<?= base_url('feesInvoice') . "?fees_id=" . $_GET['fees_id']; ?>&amp;choe=UTF-8" alt="QR code">
+                                </td>
+                            </tr>
 
-                        <h4 style="font-size:17px;font-weight:bold">
-                            <?= strtoupper($schoolDetails['address'] . " " . $schoolDetails['pincode']) ?></h4>
-                        <h4 style="font-size:17px">Mobile: <?= $schoolDetails['mobile'] ?> Email:
-                            <?= $schoolDetails['email'] ?></h4>
-                    </td>
-                </tr>
+                        </table>
 
-            </table>
-       
-            <table class="table table-borderless my-2">
-                <tr>
-                    <td>Date: <b><?= date('d-F-Y', strtotime($feesInvoiceData['depositDate'])); ?></b></td>
-                    <td>
-                        Fees Invoice No: <b># <?= $feesInvoiceData['invoiceId']; ?></b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Student Name: <b><?= $studentData['name']; ?></b></td>
-                    <td>Class : <b><?= $studentData['className'] . " ( " . $studentData['sectionName'] . " ) "; ?></b></td>
-                </tr>
-                <tr>
-                    <td>Phone No: <b><?= $studentData['mobile']; ?></b></td>
-                    <td>Email: <b><?= $studentData['email']; ?></b></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Address : <b><?= $studentData['address'] . $studentData['cityName']  . ' ' . $studentData['stateName'] . ' ' . $studentData['pincode']; ?></b></td>
-                </tr>
-            </table>
-            <table class="table mb-0 align-middle bg-white my-2 border">
-                <thead class="bg-light">
-                    <tr>
-                        <th>Fees Group</th>
-                        <th>Fees Type</th>
-                        <th>Deposit Amount</th>
-                        <th>Discounts Amount</th>
-                        <th>Fine Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><?= $feesInvoiceData['feeGroupName']; ?></td>
-                        <td><?= $feesInvoiceData['feeTypeName']; ?></td>
-                        <!-- <td>₹ <?= number_format($feesInvoiceData['amount'], 2); ?></td> -->
-                        <td>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?></td>
-                        <td>₹ <?= number_format($feesInvoiceData['discount'], 2); ?></td>
-                        <td>₹ <?= number_format($feesInvoiceData['fine'], 2); ?></td>
-
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="col-md-12 mt-3">
-                <div class="row">
-                <div class="col-md-2 border"> <img class="qrcode" src="https://chart.googleapis.com/chart?chs=100x100&amp;cht=qr&amp;chl=<?= base_url('feesInvoice') . "?fees_id=" . $_GET['fees_id']; ?>&amp;choe=UTF-8" alt="QR code">
-            </div>
-            <div class="col-md-2 border">
-            <img src="<?= $dir ?>cerfified.png" alt="certified" class="float-end" height="100px" width="100px">
-            </div>
-            <!-- <div class="col-md-2"></div> -->
-                    <div class="col-md-8">
-                        <table class="table table-borderless">
+                        <table class="table table-borderless my-2" style="font-size:14px;">
+                            <tr>
+                                <td>Date: <b><?= date('d-F-Y', strtotime($feesInvoiceData['depositDate'])); ?></b></td>
+                                <td>
+                                    Fees Invoice No: <b># <?= $feesInvoiceData['invoiceId']; ?></b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Student Name: <b><?= $studentData['name']; ?></b></td>
+                                <td>Class : <b><?= $studentData['className'] . " ( " . $studentData['sectionName'] . " ) "; ?></b></td>
+                            </tr>
+                            <tr>
+                                <td>Father's Name: <b><?= $studentData['father_name']; ?></b></td>
+                                <td>Payment Mode : <b><?php if ($feesInvoiceData['paymentMode'] == '2') {
+                                                            echo 'Online';
+                                                        } else {
+                                                            echo 'Cash';
+                                                        } ?></b></td>
+                            </tr>
+                        </table>
+                        <table class="table mb-0 align-middle bg-white my-2" style="font-size:14px;border:1px solid #000">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Group</th>
+                                    <th>Type</th>
+                                    <th>Deposit</th>
+                                    <th>Discounts</th>
+                                    <th>Fine</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr>
-                                    <th style="width:50%">Total Deposit Amt </th>
-                                    <td>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?>/-</td>
-                                </tr>
-                                <tr>
-                                    <th>Total Amount ( Deposit + Fine )</th>
-                                    <td>₹ <?php
-                                            $tTotal = $feesInvoiceData['depositAmount'] + $feesInvoiceData['fine'];
-                                            echo number_format($tTotal, 2); ?>/-</td>
+                                    <td><?= $feesInvoiceData['feeGroupName']; ?></td>
+                                    <td><?= $feesInvoiceData['feeTypeName']; ?></td>
+                                    <td>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?></td>
+                                    <td>₹ <?= number_format($feesInvoiceData['discount'], 2); ?></td>
+                                    <td>₹ <?= number_format($feesInvoiceData['fine'], 2); ?></td>
+
                                 </tr>
                             </tbody>
                         </table>
+
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <table class="table table-borderless" style="font-size:14px; text-align:right;">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width:50%">Total Deposit Amt </th>
+                                                <td>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?>/-</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Amount ( Deposit + Fine )</th>
+                                                <td>₹ <?php
+                                                        $tTotal = $feesInvoiceData['depositAmount'] + $feesInvoiceData['fine'];
+                                                        echo number_format($tTotal, 2); ?>/-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>
-
-            
-           
         </div>
     </div>
+
 
 
 </body>

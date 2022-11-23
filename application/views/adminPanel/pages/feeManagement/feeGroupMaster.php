@@ -75,23 +75,23 @@
     // insert new city
     if (isset($_POST['submit'])) {
 
-      $alreadyFeeTypeAdded = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeesgroupsTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND shortCode = '{$this->CrudModel->sanitizeInput($_POST['shortCode'])}' ");
+      // $alreadyFeeTypeAdded = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeesgroupsTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND shortCode = '{$this->CrudModel->sanitizeInput($_POST['shortCode'])}' ");
 
-      if (!empty($alreadyFeeTypeAdded)) {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'This Fees Group Short Code is already inserted, Please Edit That',
-        ];
-        $this->session->set_userdata($msgArr);
-        header("Refresh:0 " . base_url() . "feesManagement/feeGroupMaster");
-        exit(0);
-      }
+      // if (!empty($alreadyFeeTypeAdded)) {
+      //   $msgArr = [
+      //     'class' => 'danger',
+      //     'msg' => 'This Fees Group Short Code is already inserted, Please Edit That',
+      //   ];
+      //   $this->session->set_userdata($msgArr);
+      //   header("Refresh:0 " . base_url() . "feesManagement/feeGroupMaster");
+      //   exit(0);
+      // }
       // date_create()->format('Y-m-d')
       $insertArr = [
         "schoolUniqueCode" => $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']),
         "feeGroupName" => $this->CrudModel->sanitizeInput($_POST['feeGroupName']),
-        "shortCode" => $this->CrudModel->sanitizeInput($_POST['shortCode']),
-        "description" => $this->CrudModel->sanitizeInput($_POST['description']),
+        // "shortCode" => $this->CrudModel->sanitizeInput($_POST['shortCode']),
+        // "description" => $this->CrudModel->sanitizeInput($_POST['description']),
         "session_table_id" => $this->CrudModel->sanitizeInput($_SESSION['currentSession'])
     ];
 
@@ -121,8 +121,8 @@
 
       $updateArr = [
         "feeGroupName" => $this->CrudModel->sanitizeInput($_POST['feeGroupName']),
-        "shortCode" => $this->CrudModel->sanitizeInput($_POST['shortCode']),
-        "description" => $this->CrudModel->sanitizeInput($_POST['description']),
+        // "shortCode" => $this->CrudModel->sanitizeInput($_POST['shortCode']),
+        // "description" => $this->CrudModel->sanitizeInput($_POST['description']),
     ];
 
       $updateId = $this->CrudModel->update(Table::newfeesgroupsTable, $updateArr,$updateId);
@@ -217,14 +217,14 @@
                         <label>Name <span style="color:red;">*</span></label>
                         <input type="text" name="feeGroupName" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editFeesGroupsData[0]['feeGroupName'];} ?>" class="form-control" id="name" placeholder="Monthly Fees, One Time Fees, Yearly Fees" required>
                       </div>
-                      <div class="form-group col-md-12">
+                      <!-- <div class="form-group col-md-12">
                         <label>Short Name / Code <span style="color:red;">*</span></label>
                         <input type="text" name="shortCode" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editFeesGroupsData[0]['shortCode'];} ?>" class="form-control" id="name" placeholder="mon-fees, yearly-fees, one-time-fees" required>
                       </div>
                       <div class="form-group col-md-12">
                         <label>Description</label>
                         <textarea name="description" class="form-control" id="name"><?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo trim($editFeesGroupsData[0]['description']);} ?></textarea>
-                      </div>
+                      </div> -->
                       <div class="form-group col-md-12">
                         <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo 'update';} else {echo 'submit';} ?>" class="btn btn-lg float-right mybtnColor">Save</button>
                       </div>
@@ -251,8 +251,8 @@
                       <tr>
                         <!-- <th>Id</th> -->
                         <th>Name</th>
-                        <th>Short Code</th>
-                        <th>Description</th>
+                        <!-- <th>Short Code</th>
+                        <th>Description</th> -->
                         <th>Status</th>
                        <th>Action</th>
                       </tr>
@@ -265,8 +265,8 @@
                             <!-- <td><?= ++$i; ?></td> -->
                             <!-- <td><?= $cn['id']; ?></td> -->
                             <td><?= $cn['feeGroupName']; ?></td>
-                            <td><?= $cn['shortCode']; ?></td>
-                            <td><?= $cn['description']; ?></td>
+                            <!-- <td><?= $cn['shortCode']; ?></td>
+                            <td><?= $cn['description']; ?></td> -->
                             <td>
                               <a href="?action=status&edit_id=<?= $cn['id']; ?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1'; ?>" class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger'; ?>">
                                 <?php echo ($cn['status'] == '1') ? 'Active' : 'Inactive'; ?>

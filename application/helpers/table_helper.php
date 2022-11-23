@@ -64,5 +64,6 @@ class Table{
     const newfeessubmitmasterTable = 'newfeessubmitmaster';
     const gatePassTable = 'gatepass';
     const qrScanHistory = 'qrscanhistory';
+    const advancefeessystem = 'advancefeessystem';
     
 }

@@ -95,6 +95,10 @@ class HelperClass
         'Coordinator' => '9'
     ];
 
+    const durationType = [
+        '1' => 'Monthly',
+        '2' => 'Yearly'
+      ];
 
     const actionType = [
         'Attendence' => '1',
