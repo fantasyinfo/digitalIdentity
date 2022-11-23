@@ -15,9 +15,9 @@
     $feeMasterData = $this->CrudModel->dbSqlQuery("SELECT FHM.newFeeGroupId FROM " . Table::newfeemasterTable . " FHM 
     WHERE FHM.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND FHM.status != '4' GROUP BY newFeeGroupId");
 
-    $feeGroupData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeesgroupsTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' ORDER BY id DESC");
+    $feeGroupData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeesgroupsTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' ");
 
-    $feeTypesData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeestypesTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' ORDER BY id DESC");
+    $feeTypesData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeestypesTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND status = '1' ");
 
 
 
@@ -344,7 +344,7 @@
                       </div>
                       <div class="form-group col-md-12">
                         <label>Fee Type <span style="color:red;">*</span></label>
-                        <select name="newFeeType" id="newFeeType" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
+                        <select name="newFeeType"  id="newFeeType" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                           <option>Select Fee Type</option>
                           <?php
                           $selected = '';

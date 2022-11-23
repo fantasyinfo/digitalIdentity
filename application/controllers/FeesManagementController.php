@@ -140,6 +140,18 @@ class FeesManagementController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->digiDir . 'advanceFeesMaster');
 	}
+	public function defaultFeesTypes()
+	{
+		$this->loginCheck();
+		// check permission
+		//$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Default Fees Types',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view('adminPanel/pages/cron/defaultFeesTypes');
+	}
 
 
 

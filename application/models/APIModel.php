@@ -2008,6 +2008,12 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
       return  ($insertId) ? true : false;
   }
 
+
+  public function studentNamesViaClassAndSectionId($class_id,$section_id,$schoolUniqueCode){
+
+    return $e = $this->db->query($s = "SELECT id, name FROM " . Table::studentTable . " WHERE 
+      class_id = '$class_id' AND section_id = '$section_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+  }
   
  
 }

@@ -91,7 +91,7 @@ WHERE nfm.newFeeGroupId = '{$f['fee_group_id']}' ";
         <?= $fGN; ?>
     </td>
     <td>
-        <?= $gwf['shortCode']; ?>
+        <?= $gwf['feeTypeName']; ?>
     </td>
     <td>
         <?= date('d-m-Y', strtotime($gwf['dueDate'])); ?>

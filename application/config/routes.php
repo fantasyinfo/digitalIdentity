@@ -238,7 +238,8 @@ $feeRoutes = [
     'collectStudentFee',
     'showStudentsForFees',
     'carryForward',
-    'advanceFeesMaster'
+    'advanceFeesMaster',
+    'defaultFeesTypes'
 ];
 
 foreach($feeRoutes as $aRoute)
@@ -381,7 +382,8 @@ $apiRoutesArr = [
     'showSemesterExamNames',
     'showAllSemesterExam',
     'addSemesterExamResult',
-    'gatePass'
+    'gatePass',
+    'studentNamesViaClassAndSectionId'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

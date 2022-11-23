@@ -1102,7 +1102,7 @@ public function updateHomeWork()
 			return HelperClass::APIresponse(500, 'There is some technical issue, gate Pass not created ' . $this->db->last_query());
 		}else
 		{
-			return HelperClass::APIresponse(200, 'New Gate Pass Generated Successfully.','',['gatepassId' => $gatePassId]);
+			return HelperClass::APIresponse(200, 'New Gate Pass Generated Successfully.','',['gatepassId' => "https://dvm.digitalfied.in/gatePass?gatePass=$gatePassId"]);
 		}
 	}
 
@@ -1130,6 +1130,33 @@ public function updateHomeWork()
 		}else
 		{
 			return HelperClass::APIresponse(200, 'All Banners Images.', $bannerImgs);
+		}
+	}
+
+	// studentNamesViaClassAndSectionId
+	public function studentNamesViaClassAndSectionId()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$class_id = $apiData['class_id'];
+		$section_id = $apiData['section_id'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$studentsLists = $this->APIModel->studentNamesViaClassAndSectionId($class_id,$section_id,$schoolUniqueCode);
+
+		if (!$studentsLists) {
+			return HelperClass::APIresponse(500, 'No Students Found ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Students Lists.', $studentsLists);
 		}
 	}
 

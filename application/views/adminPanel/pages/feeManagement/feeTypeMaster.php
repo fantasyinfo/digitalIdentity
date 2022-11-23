@@ -221,10 +221,10 @@
                         <label>Short Name / Code <span style="color:red;">*</span></label>
                         <input type="text" name="shortCode" value="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo $editFeeTypeData[0]['shortCode'];} ?>" class="form-control" id="name" placeholder="adm-fees, july-fee,certificate-fee" required>
                       </div> -->
-                      <div class="form-group col-md-12">
+                      <!-- <div class="form-group col-md-12">
                         <label>Description</label>
                         <textarea name="description" class="form-control" id="name"><?php if (isset($_GET['action']) && $_GET['action'] == 'edit') {echo trim($editFeeTypeData[0]['description']);} ?></textarea>
-                      </div>
+                      </div> -->
                       <div class="form-group col-md-12">
                         <button type="submit" name="<?php if (isset($_GET['action']) && $_GET['action'] == 'edit') { echo 'update';} else {echo 'submit';} ?>" class="btn btn-lg float-right mybtnColor">Save</button>
                       </div>
@@ -242,6 +242,13 @@
               <div class="card border-top-3">
                 <div class="card-header">
                   <h4>Fees Type List</h4>
+                  <?php 
+
+                  if(empty($feesTypesData)){ ?>
+ <a href="<?= base_url('feesManagement/defaultFeesTypes')?>" class="ml-2 btn mybtnColor" >Update Default Fees Types</a>
+                 <?php }
+                  ?>
+                 
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

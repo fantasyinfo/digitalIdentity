@@ -284,6 +284,32 @@ const setNotificationForWhat = [
 
 
 
+    const defaultFeesTypes = [
+        'January Fees',
+        'February Fees',
+        'March Fees',
+        'April Fees',
+        'May Fees',
+        'June Fees',
+        'July Fees',
+        'August Fees',
+        'September Fees',
+        'October Fees',
+        'November Fees',
+        'December Fees',
+        'Annaul Fees',
+        'Id Card Fees',
+        'Building Fees',
+        'Transport Fees',
+        'Tie Fees',
+        'Belt Fees',
+        'Dress Fees',
+        'Tution Fees',
+        'Exam Fees',
+        'Board Fees',
+        'Digital Software Fees'
+    ];
+
 
 
     const experience = ['Fresher', '1 to 3 Years', '3 to 5 Years', '5 to 10 Years', '10 to 15 Years', '15 Years +'
