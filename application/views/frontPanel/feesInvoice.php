@@ -145,8 +145,9 @@ $studentData = $this->db->query($sql)->result_array()[0];
                         <table class="table mb-0 align-middle bg-white my-2" style="font-size:14px;border:1px solid #000">
                             <thead class="bg-light">
                                 <tr>
-                                    <th>Group</th>
+                                    <!-- <th>Group</th> -->
                                     <th>Type</th>
+                                    <th>Fees</th>
                                     <th>Deposit</th>
                                     <th>Discounts</th>
                                     <th>Fine</th>
@@ -154,38 +155,24 @@ $studentData = $this->db->query($sql)->result_array()[0];
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><?= $feesInvoiceData['feeGroupName']; ?></td>
+                                    <!-- <td><?= $feesInvoiceData['feeGroupName']; ?></td> -->
                                     <td><?= $feesInvoiceData['feeTypeName']; ?></td>
+                                    <td>₹ <?= number_format($feesInvoiceData['amount'], 2); ?></td>
                                     <td>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?></td>
                                     <td>₹ <?= number_format($feesInvoiceData['discount'], 2); ?></td>
                                     <td>₹ <?= number_format($feesInvoiceData['fine'], 2); ?></td>
 
                                 </tr>
+                                <tr>
+                                    <td><b>Total Amount</b></td>
+                                    <td><b>₹ <?= number_format($feesInvoiceData['amount'],2); ?></b></td>
+                                    <td><b>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?></b></td>
+                                    <td><b>₹ <?= number_format($feesInvoiceData['discount'], 2); ?></b></td>
+                                    <td><b>₹ <?= number_format($feesInvoiceData['fine'], 2); ?></b></td>
+
+                                </tr>
                             </tbody>
                         </table>
-
-                        <div class="col-md-12 mt-3">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <table class="table table-borderless" style="font-size:14px; text-align:right;">
-                                        <tbody>
-                                            <tr>
-                                                <th style="width:50%">Total Deposit Amt </th>
-                                                <td>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?>/-</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total Amount ( Deposit + Fine )</th>
-                                                <td>₹ <?php
-                                                        $tTotal = $feesInvoiceData['depositAmount'] + $feesInvoiceData['fine'];
-                                                        echo number_format($tTotal, 2); ?>/-</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-
 
                     </div>
                 </div>

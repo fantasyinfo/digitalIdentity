@@ -440,7 +440,7 @@
                 <div class="row px-5 py-2">
                   <div class="col-md-12">
                     <button class="btn btn-warning" id="collectAllPayment"><i class="fa-solid fa-indian-rupee-sign"></i> Collect All</button>
-                    <button class="btn btn-dark" id="printAll"> Print All</button>
+                    <button class="btn btn-dark" id="printAll"> <i class="fa-solid fa-print"></i> Print All</button>
                   </div>
                 </div>
                 <div class="card-body">
@@ -947,6 +947,10 @@
 
       }
 
+      if(stuId == "" || stuId == undefined){
+        alert("Please Click on Checkbox First");
+        return;
+      }
       // console.log("fees master Id " + fmtId);
       // console.log("fees type Id " + nftId);
       // console.log("fees group Id " + nfgId);

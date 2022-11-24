@@ -37,7 +37,8 @@ if (isset($_GET['feesTypeId'])) {
         AND nfsm.status = '1' 
         AND nfsm.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
 
-    // print_r($feesInvoiceData);die();
+    //     echo '<pre>';
+    //  print_r($feesInvoiceData);die();
     if (empty($feesInvoiceData)) {
         header("Location: " . HelperClass::brandUrl);
     }
@@ -161,11 +162,12 @@ $studentData = $this->db->query($sql)->result_array()[0];
                                                         } ?></b></td>
                             </tr>
                         </table>
-                        <table class="table mb-0 align-middle bg-white my-2" style="font-size:14px;border:1px solid #000">
+                        <table class="table mb-2 align-middle bg-white my-2" style="font-size:14px;border:1px solid #000">
                             <thead class="bg-light">
                                 <tr>
                                     <!-- <th>Group</th> -->
                                     <th>Fees Type</th>
+                                    <th>Fees</th>
                                     <th>Deposit</th>
                                     <th>Discounts</th>
                                     <th>Fine</th>
@@ -178,12 +180,14 @@ $studentData = $this->db->query($sql)->result_array()[0];
                                 $depositAmt = 0;
                                 $discountAmt = 0;
                                 $fintAmt = 0;
+                                $feesAmt = 0;
                                 if(isset($feesInvoiceData)){
                                     foreach($feesInvoiceData as $f){ ?>
 
                                 <tr>
                                     <!-- <td><?= $f['feeGroupName']; ?></td> -->
                                     <td><?= $f['feeTypeName']; ?></td>
+                                    <td>₹ <?= number_format($f['amount'],2); ?></td>
                                     <td>₹ <?= number_format($f['depositAmount'], 2); ?></td>
                                     <td>₹ <?= number_format($f['discount'], 2); ?></td>
                                     <td>₹ <?= number_format($f['fine'], 2); ?></td>
@@ -195,37 +199,21 @@ $studentData = $this->db->query($sql)->result_array()[0];
                                     $depositAmt = $depositAmt + $f['depositAmount'];
                                     $discountAmt = $discountAmt + $f['discount'];
                                     $fintAmt = $fintAmt + $f['fine'];
-                                  
+                                    $feesAmt = $feesAmt + $f['amount'];
                                 }
 
                                 }?>
                                
+                               <tr>
+                                    <td><b>Total Amount</b></td>
+                                    <td><b>₹ <?= number_format($feesAmt,2); ?></b></td>
+                                    <td><b>₹ <?= number_format($depositAmt, 2); ?></b></td>
+                                    <td><b>₹ <?= number_format($discountAmt, 2); ?></b></td>
+                                    <td><b>₹ <?= number_format($fintAmt, 2); ?></b></td>
 
+                                </tr>
                             </tbody>
                         </table>
-
-                        <div class="col-md-12 mt-3">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <table class="table table-borderless" style="font-size:14px; text-align:right;">
-                                        <tbody>
-                                            <tr>
-                                                <th style="width:50%">Total Deposit Amt </th>
-                                                <td>₹ <?= number_format($depositAmt, 2); ?>/-</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total Amount ( Deposit + Fine )</th>
-                                                <td>₹ <?php
-                                                        $tTotal = $depositAmt + $fintAmt;
-                                                        echo number_format($tTotal, 2); ?>/-</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-
 
                     </div>
                 </div>
