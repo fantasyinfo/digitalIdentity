@@ -10,6 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['semResult'] = 'FrontController/semResult'; // semResult
  $route['downloadDateSheet'] = 'FrontController/downloadDateSheet'; // downloadDateSheet
  $route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
+ $route['feesInvoiceAll'] = 'FrontController/feesInvoiceAll'; // feesInvoice
  $route['salarySlip'] = 'FrontController/salarySlip'; // salarySlip
  $route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
  $route['characterCertificate'] = 'FrontController/characterCertificate'; // characterCertificate

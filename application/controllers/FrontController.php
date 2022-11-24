@@ -124,6 +124,11 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'feesInvoice');
 	}
+	public function feesInvoiceAll()
+	{
+
+		$this->load->view($this->frontViewDir . 'feesInvoiceAll');
+	}
 	public function salarySlip()
 	{
 

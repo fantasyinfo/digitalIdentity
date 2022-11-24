@@ -11,19 +11,18 @@
 
     $dir = base_url() . HelperClass::studentImagePath;
 
-  $studentData = $this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
+    $studentData = $this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
   JOIN " . Table::classTable . " cl ON cl.id = s.class_id
   JOIN " . Table::sectionTable . " se ON se.id = s.section_id
   WHERE s.status = '1' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.id = '{$_GET['stu_id']}'")->result_array()[0];
 
-  $oldSessionData = $this->db->query("SELECT sh.id as historyId, sh.student_id, sh.fees_due, ss.session_start_year, ss.session_end_year FROM ".Table::studentHistoryTable." sh 
-  JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
+    $oldSessionData = $this->db->query("SELECT sh.id as historyId, sh.student_id, sh.fees_due, ss.session_start_year, ss.session_end_year FROM " . Table::studentHistoryTable . " sh 
+  JOIN " . Table::schoolSessionTable . " ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
   WHERE sh.student_id = '{$studentData['id']}' ORDER BY sh.id DESC LIMIT 1")->result_array();
 
-  if(empty($oldSessionData))
-  {
+    if (empty($oldSessionData)) {
       //echo $this->db->last_query();
-  }
+    }
 
 
     $discountData = $this->db->query("SELECT * FROM " . Table::newfeesdiscountsTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
@@ -37,8 +36,6 @@
         'classId' => $_POST['classId'],
         'sectionId' => $_POST['sectionId']
       ];
-
-     
     }
 
 
@@ -46,7 +43,7 @@
     if (isset($_POST['depostFees'])) {
 
       $randomToken = HelperClass::generateRandomToken();
-      $filterToken = "token=".$randomToken;
+      $filterToken = "token=" . $randomToken;
 
       $inserArr['schoolUniqueCode'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
       $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId']);
@@ -80,18 +77,16 @@
         ];
         $this->session->set_userdata($msgArr);
 
-        
+
 
         $insertArr = [
-        'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
-        'token' => $filterToken,
-        'for_what' => 'Fees Invoice',
-        'insertId' => $insertId
+          'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+          'token' => $filterToken,
+          'for_what' => 'Fees Invoice',
+          'insertId' => $insertId
         ];
 
-        $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
-
-       
+        $d = $this->CrudModel->insert(Table::tokenFilterTable, $insertArr);
       } else {
         $msgArr = [
           'class' => 'danger',
@@ -106,22 +101,21 @@
     if (isset($_POST['depositsOldDue'])) {
 
       $randomToken = HelperClass::generateRandomToken();
-      $filterToken = "token=".$randomToken;
+      $filterToken = "token=" . $randomToken;
 
 
-      $details =   $this->db->query("SELECT sh.fees_due FROM ".Table::studentHistoryTable." sh 
+      $details =   $this->db->query("SELECT sh.fees_due FROM " . Table::studentHistoryTable . " sh 
       WHERE sh.student_id = '{$_POST['stuId']}' AND id = '{$_POST['historyId']}' LIMIT 1")->result_array()[0];
 
-     $oldDueAmout =  $details['fees_due'];
+      $oldDueAmout =  $details['fees_due'];
       $depositAmt = $_POST['depositAmount'];
       $nowBalance = $oldDueAmout - ($depositAmt + @$_POST['discount']);
-      if($nowBalance > 0)
-      {
+      if ($nowBalance > 0) {
         $updateAmount = $nowBalance;
-      }else{
+      } else {
         $updateAmount = 0;
       }
-      $updateFees = $this->db->query("UPDATE ".Table::studentHistoryTable." SET fees_due = '$updateAmount' WHERE student_id = '{$_POST['stuId']}' AND id = '{$_POST['historyId']}' ");
+      $updateFees = $this->db->query("UPDATE " . Table::studentHistoryTable . " SET fees_due = '$updateAmount' WHERE student_id = '{$_POST['stuId']}' AND id = '{$_POST['historyId']}' ");
 
       $inserArr['schoolUniqueCode'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
       $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId']);
@@ -137,7 +131,7 @@
 
       $inserArr['discount'] = $this->CrudModel->sanitizeInput(@$_POST['discount']);
       $inserArr['fine'] = '0';
-      $inserArr['paid'] = $this->CrudModel->sanitizeInput($_POST['depositAmount']+ @$_POST['discount']);
+      $inserArr['paid'] = $this->CrudModel->sanitizeInput($_POST['depositAmount'] + @$_POST['discount']);
       $inserArr['paymentMode'] = '0';
       $inserArr['depositerName'] = '0';
       $inserArr['depositerAddress'] = '0';
@@ -155,18 +149,16 @@
         ];
         $this->session->set_userdata($msgArr);
 
-        
+
 
         $insertArr = [
-        'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
-        'token' => $filterToken,
-        'for_what' => 'Fees Invoice',
-        'insertId' => $insertId
+          'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+          'token' => $filterToken,
+          'for_what' => 'Fees Invoice',
+          'insertId' => $insertId
         ];
 
-        $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
-
-       
+        $d = $this->CrudModel->insert(Table::tokenFilterTable, $insertArr);
       } else {
         $msgArr = [
           'class' => 'danger',
@@ -196,22 +188,19 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-        header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
-
+      header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
     }
 
 
 
 
 
-    if(isset($_POST['depostFeesArr']))
-    {
-     //HelperClass::prePrintR($_POST);
+    if (isset($_POST['depostFeesArr'])) {
+      //HelperClass::prePrintR($_POST);
       $totalFeesSubmited = count($_POST['fmtId']);
-      for($i=0; $i < $totalFeesSubmited; $i++)
-      {
+      for ($i = 0; $i < $totalFeesSubmited; $i++) {
         $randomToken = HelperClass::generateRandomToken();
-        $filterToken = "token=".$randomToken;
+        $filterToken = "token=" . $randomToken;
 
         $inserArr['schoolUniqueCode'] = $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']);
         $inserArr['stuId'] = $this->CrudModel->sanitizeInput($_POST['stuId'][$i]);
@@ -245,18 +234,16 @@
           ];
           $this->session->set_userdata($msgArr);
 
-          
+
 
           $insertArr = [
-          'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
-          'token' => $filterToken,
-          'for_what' => 'Fees Invoice',
-          'insertId' => $insertId
+            'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+            'token' => $filterToken,
+            'for_what' => 'Fees Invoice',
+            'insertId' => $insertId
           ];
 
-          $d = $this->CrudModel->insert(Table::tokenFilterTable,$insertArr);
-
-        
+          $d = $this->CrudModel->insert(Table::tokenFilterTable, $insertArr);
         } else {
           $msgArr = [
             'class' => 'danger',
@@ -266,7 +253,6 @@
         }
       }
       header("Refresh:1 " . base_url() . "feesManagement/collectStudentFee?stu_id=" . $_GET['stu_id']);
-
     }
 
 
@@ -334,51 +320,50 @@
                 </div>
                 <div class="card-body">
 
-                <div class="row">
-                  <div class="col-md-2">
-                   <img src="<?= $studentData['image'];?>" width="200px;">
-                  </div>
-                  <div class="col-md-10">
-                    <div class="table-responsive">
-                    <table class="table align-middle mb-0 bg-white ">
-                      <tr>
-                        <td><b>Name:</b> </td>
-                        <td><?= $studentData['name'];?></td>
-                        <td><b>Class: </b></td>
-                        <td><?= $studentData['className'] .  " ( {$studentData['sectionName']} )";?></td>
-                      </tr>
-                      <tr>
-                        <td><b>Father Name: </b></td>
-                        <td><?= @$studentData['father_name'];?></td>
-                        <td><b>User Id: </b></td>
-                        <td><?= $studentData['user_id'] ;?></td>
-                      </tr>
-                      <tr>
-                        <td><b>Mobile No: </b></td>
-                        <td><?= @$studentData['mobile'];?></td>
-                        <td><b>Roll No: </b></td>
-                        <td><?= $studentData['roll_no'] ;?></td>
-                      </tr>
-                      <tr>
-                        <td><b>Admission No: </b></td>
-                        <td><?= @$studentData['admission_no'];?></td>
-                        <td><b>SR No: </b></td>
-                        <td><?= $studentData['sr_number'] ;?></td>
-                      </tr>
-                    </table>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <img src="<?= $studentData['image']; ?>" width="200px;">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="table-responsive">
+                        <table class="table align-middle mb-0 bg-white ">
+                          <tr>
+                            <td><b>Name:</b> </td>
+                            <td><?= $studentData['name']; ?></td>
+                            <td><b>Class: </b></td>
+                            <td><?= $studentData['className'] .  " ( {$studentData['sectionName']} )"; ?></td>
+                          </tr>
+                          <tr>
+                            <td><b>Father Name: </b></td>
+                            <td><?= @$studentData['father_name']; ?></td>
+                            <td><b>User Id: </b></td>
+                            <td><?= $studentData['user_id']; ?></td>
+                          </tr>
+                          <tr>
+                            <td><b>Mobile No: </b></td>
+                            <td><?= @$studentData['mobile']; ?></td>
+                            <td><b>Roll No: </b></td>
+                            <td><?= $studentData['roll_no']; ?></td>
+                          </tr>
+                          <tr>
+                            <td><b>Admission No: </b></td>
+                            <td><?= @$studentData['admission_no']; ?></td>
+                            <td><b>SR No: </b></td>
+                            <td><?= $studentData['sr_number']; ?></td>
+                          </tr>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
-               
+
                 </div>
               </div>
-              <?php 
-                  
-                  if(!empty($oldSessionData))
-                  { ?>
-                  <div class="card border-top border-danger">
-                   <div class="card-header">
-                   <h4>Old Session Due:</h4>
+              <?php
+
+              if (@$oldSessionData[0]['fees_due'] > 0) { ?>
+                <div class="card border-top border-danger">
+                  <div class="card-header">
+                    <h4>Old Session Due:</h4>
                   </div>
                   <div class="card-body bg-light border-top border-danger">
                     <div class="table-responsive">
@@ -392,62 +377,62 @@
                           <th>Balance</th>
                           <th>Action</th>
                         </thead>
-                        <?php 
-                          if($oldSessionData[0]['fees_due'] > 0){ ?>
+                        <?php
+                        if ($oldSessionData[0]['fees_due'] > 0) { ?>
                           <tr>
-                          <td><h5>Old Session Due Amount </h5></td>
-                          <td colspan="4" ></td>
-                          <td><h5>Amount : <i class="fa-solid fa-indian-rupee-sign"></i> <?= number_format($oldSessionData[0]['fees_due'],2);  ?></h5></td>
-                          <td><button type="button" class="btn btn-dark" onclick="submitOldFees('<?= $oldSessionData[0]['student_id']?>','<?= $oldSessionData[0]['historyId']?>','<?= $oldSessionData[0]['fees_due'] ?>')"><i class="fa-solid fa-plus"></i></button></td>
+                            <td>
+                              <h5>Old Session Due Amount </h5>
+                            </td>
+                            <td colspan="4"></td>
+                            <td>
+                              <h5>Amount : <i class="fa-solid fa-indian-rupee-sign"></i> <?= number_format($oldSessionData[0]['fees_due'], 2);  ?></h5>
+                            </td>
+                            <td><button type="button" class="btn btn-dark" onclick="submitOldFees('<?= $oldSessionData[0]['student_id'] ?>','<?= $oldSessionData[0]['historyId'] ?>','<?= $oldSessionData[0]['fees_due'] ?>')"><i class="fa-solid fa-plus"></i></button></td>
                           <tr>
 
-                        <?php 
+                            <?php
 
-                      $feesDepositsOld = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$oldSessionData[0]['student_id']}' AND fmtId = '{$oldSessionData[0]['historyId']}' AND status = '1'");
+                            $feesDepositsOld = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '{$oldSessionData[0]['student_id']}' AND fmtId = '{$oldSessionData[0]['historyId']}' AND status = '1'");
 
-                      foreach($feesDepositsOld as $fDO){ ?>
+                            foreach ($feesDepositsOld as $fDO) { ?>
 
-                        <tr class="bg-light-dark">
+                          <tr class="bg-light-dark">
                             <td><img src="<?= base_url() . HelperClass::uploadImgDir . 'table-arrow.png' ?>"></td>
                             <td>
-                                <?= $fDO['invoiceId']; ?>
+                              <?= $fDO['invoiceId']; ?>
                             </td>
                             <td>
-                                <?= date('d-m-y', strtotime($fDO['depositDate'])); ?>
+                              <?= date('d-m-y', strtotime($fDO['depositDate'])); ?>
                             </td>
                             <td>
-                                <?= number_format($fDO['discount'], 2); ?>
+                              <?= number_format($fDO['discount'], 2); ?>
                             </td>
                             <td>
-                                <?= number_format($fDO['depositAmount'], 2); ?>
+                              <?= number_format($fDO['depositAmount'], 2); ?>
                             </td>
                             <td></td>
                             <td>
-                                <a target="_blank" href="<?= base_url('feesInvoice?fees_id=') . $fDO['randomToken'] ?>" class="btn btn-info"> <i
-                                        class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
-                                <a href="?action=deleteInvoice&delete_id=<?= $fDO['id'] ?>&stu_id=<?= $oldSessionData[0]['student_id'] ?>"
-                                    onclick="return confirm('Are you sure want to delete this?');"><i
-                                        class="fa-sharp fa-solid fa-trash"></i></a>
+                              <a target="_blank" href="<?= base_url('feesInvoice?fees_id=') . $fDO['randomToken'] ?>" class="btn btn-info"> <i class="fa-solid fa-file-invoice"></i> </a>&nbsp;&nbsp;&nbsp;
+                              <a href="?action=deleteInvoice&delete_id=<?= $fDO['id'] ?>&stu_id=<?= $oldSessionData[0]['student_id'] ?>" onclick="return confirm('Are you sure want to delete this?');"><i class="fa-sharp fa-solid fa-trash"></i></a>
                             </td>
 
-                        </tr>
+                          </tr>
 
-                  <?php   
-                    }
-                     
-                      }  
+                      <?php
+                            }
+                          }
                       ?>
-                        
+
                       </table>
                     </div>
-                 
+
                   </div>
-                   
-                  </div>
-                 <?php }
-                  
-                  
-                  ?>
+
+                </div>
+              <?php }
+
+
+              ?>
               <div class="card border-top-3">
                 <div class="card-header">
                   Fees Details
@@ -455,11 +440,11 @@
                 <div class="row px-5 py-2">
                   <div class="col-md-12">
                     <button class="btn btn-warning" id="collectAllPayment"><i class="fa-solid fa-indian-rupee-sign"></i> Collect All</button>
-                    <!-- <button class="btn btn-dark"> Print All</button> -->
+                    <button class="btn btn-dark" id="printAll"> Print All</button>
                   </div>
                 </div>
                 <div class="card-body">
-                
+
                   <div class="table-responsive">
                     <table class="table align-middle mb-0 bg-white ">
                       <thead class="bg-light">
@@ -481,32 +466,34 @@
                         </tr>
                       </thead>
                       <tbody>
-                    
-                          <?php 
 
-                          include('normalFees.php');
-                          //include('studentExtrafees.php');
-                           ?>
+                        <?php
+
+                        include('normalFees.php');
+                        //include('studentExtrafees.php');
+                        ?>
 
                         <tr>
-                        <input type="hidden" value="<?=$j?>" id="jNO">
-                          <td colspan="4"><h4 class="text-center">Grand Total</h3></td>
-                          <td><?php echo number_format($gAmount,2) . " + " .  " " .   number_format($gFine,2) . "</span>" ?> </td>
+                          <input type="hidden" value="<?= $j ?>" id="jNO">
+                          <td colspan="4">
+                            <h4 class="text-center">Grand Total</h3>
+                          </td>
+                          <td><?php echo number_format($gAmount, 2) . " + " .  " " .   number_format($gFine, 2) . "</span>" ?> </td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td><?= number_format($gdiscount ,2);?></td>
-                          <td><?= number_format($gFineD ,2);?></td>
-                          <td><?= number_format($gPaid ,2);?></td>
-                          <td><?= number_format( $gBalance ,2);?></td>
+                          <td><?= number_format($gdiscount, 2); ?></td>
+                          <td><?= number_format($gFineD, 2); ?></td>
+                          <td><?= number_format($gPaid, 2); ?></td>
+                          <td><?= number_format($gBalance, 2); ?></td>
                           <td></td>
                         </tr>
-                       
+
                       </tbody>
 
                     </table>
-                  
+
                   </div>
                 </div>
               </div>
@@ -548,25 +535,25 @@
 
 
   <!-- Modal -->
-<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Collect All Fees</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer"  style=" border-bottom:2px solid red;">
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Collect All Fees</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer" style=" border-bottom:2px solid red;">
+          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
 
@@ -595,9 +582,8 @@
         amountNow = amount;
         if (depositD != null || depositD != 0) {
           amountNow = amount - depositD;
-          if(discountD != null || discountD != 0)
-          {
-            amountNow = amount - depositD - discountD ;
+          if (discountD != null || discountD != 0) {
+            amountNow = amount - depositD - discountD;
           }
         }
       } else {
@@ -710,13 +696,12 @@
         $("#showDis").val(dis);
 
         let newVal = parseFloat(damount) - parseFloat(dis);
-        if(newVal > 0)
-        {
+        if (newVal > 0) {
           $("#depositAmount").val(newVal);
-        }else{
+        } else {
           $("#depositAmount").val(0);
         }
-        
+
         //damount.val(newVal);
       } else {
         $("#showDis").val(0);
@@ -730,57 +715,56 @@
 
 
     $("#checkAll").change(function() {
-    if($(this).prop('checked')) {
+      if ($(this).prop('checked')) {
         console.log("Checked Box Selected");
         $(".feeTypeCheckbox").attr('checked', 'checked');
-        
+
         let totalRows = parseInt($("#jNO").val());
         //console.log(totalRows);
         let abc;
-       
-        for(abc = 1; abc < totalRows; abc++)
-        {
+
+        for (abc = 1; abc < totalRows; abc++) {
           //console.log($("#fees_id_"+abc).val());
         }
-    } else {
-      console.log("Checked Box deselect");
-      $(".feeTypeCheckbox").attr('checked', false);
-    }
-});
+      } else {
+        console.log("Checked Box deselect");
+        $(".feeTypeCheckbox").attr('checked', false);
+      }
+    });
 
 
 
 
-  $("#collectAllPayment").click(function(e){
-    e.preventDefault();
-    let totalRows = parseInt($("#jNO").val());
-    console.log(totalRows);
-    let abc;
-    
+    $("#collectAllPayment").click(function(e) {
+      e.preventDefault();
+      let totalRows = parseInt($("#jNO").val());
+      console.log(totalRows);
+      let abc;
 
 
-    let fgName;
-    let todayDate;
-    let amount;
-    let fine;
-    let fmtId;
-    let nftId;
-    let nfgId;
-    let stuId;
-    let classId;
-    let sectionId;
-    let discountD;
-    let fineD;
-    let depositD;
-    let amountNow;
-    let fineNow;
-    let html;
 
-    let totalAmount = 0;
-    let totalFine = 0;
-    
+      let fgName;
+      let todayDate;
+      let amount;
+      let fine;
+      let fmtId;
+      let nftId;
+      let nfgId;
+      let stuId;
+      let classId;
+      let sectionId;
+      let discountD;
+      let fineD;
+      let depositD;
+      let amountNow;
+      let fineNow;
+      let html;
 
-    html += `<form method="POST">
+      let totalAmount = 0;
+      let totalFine = 0;
+
+
+      html += `<form method="POST">
                 
                 <table class="table"> 
                   <tbody>
@@ -815,64 +799,59 @@
                     </tr>
                   `;
 
-    for(abc = 1; abc < totalRows; abc++)
-    {
-      if($("#fees_id_"+abc)[0].checked == true)
-      {
-        //console.log("yeh payment le lo ji..." + $("#fees_id_"+abc).val());
-        let x = $("#fees_id_"+abc).val();
-        //console.log(x);
-        fgName = $("#fgName_" + x).val();
-        todayDate = $("#todayDate_" + x).val();
-        amount = $("#amount_" + x).val();
-        fine = $("#fine_" + x).val();
-        fmtId = $("#fmtId_" + x).val();
-        nftId = $("#nftId_" + x).val();
-        nfgId = $("#nfgId_" + x).val();
-        stuId = $("#stuId_" + x).val();
-        classId = $("#classId_" + x).val();
-        sectionId = $("#sectionId_" + x).val();
+      for (abc = 1; abc < totalRows; abc++) {
+        if ($("#fees_id_" + abc)[0].checked == true) {
+          //console.log("yeh payment le lo ji..." + $("#fees_id_"+abc).val());
+          let x = $("#fees_id_" + abc).val();
+          //console.log(x);
+          fgName = $("#fgName_" + x).val();
+          todayDate = $("#todayDate_" + x).val();
+          amount = $("#amount_" + x).val();
+          fine = $("#fine_" + x).val();
+          fmtId = $("#fmtId_" + x).val();
+          nftId = $("#nftId_" + x).val();
+          nfgId = $("#nfgId_" + x).val();
+          stuId = $("#stuId_" + x).val();
+          classId = $("#classId_" + x).val();
+          sectionId = $("#sectionId_" + x).val();
 
 
-        discountD = $("#discount_" + x).val();
-        fineD = $("#fineD_" + x).val();
-        depositD = $("#deposit_" + x).val();
+          discountD = $("#discount_" + x).val();
+          fineD = $("#fineD_" + x).val();
+          depositD = $("#deposit_" + x).val();
 
-        
-        if (amount > 0) {
-          amountNow = amount;
-          if (depositD != null || depositD != 0) {
-            amountNow = amount - depositD;
-            if(discountD != null || discountD != 0)
-            {
-              amountNow = amount - depositD - discountD ;
+
+          if (amount > 0) {
+            amountNow = amount;
+            if (depositD != null || depositD != 0) {
+              amountNow = amount - depositD;
+              if (discountD != null || discountD != 0) {
+                amountNow = amount - depositD - discountD;
+              }
             }
+          } else {
+            amountNow = 0;
           }
-        } else {
-          amountNow = 0;
-        }
 
-       
-        if (fine > 0) {
-          fineNow = fine;
-          if (fineD != null || fineD != 0) {
-            fineNow = fine - fineD;
+
+          if (fine > 0) {
+            fineNow = fine;
+            if (fineD != null || fineD != 0) {
+              fineNow = fine - fineD;
+            }
+          } else {
+            fineNow = 0.00;
           }
-        } else {
-          fineNow = 0.00;
-        }
 
-        if(amountNow <=0)
-        {
-          continue;
-        }
-        let showFine = true;
-        if(fineNow <= 0)
-        {
-          showFine = false;
-        }
+          if (amountNow <= 0) {
+            continue;
+          }
+          let showFine = true;
+          if (fineNow <= 0) {
+            showFine = false;
+          }
 
-        html += `<input type="hidden" name="stuId[]" value="${stuId}">
+          html += `<input type="hidden" name="stuId[]" value="${stuId}">
                 <input type="hidden" name="classId[]" value="${classId}">
                 <input type="hidden" name="sectionId[]" value="${sectionId}">
                 <input type="hidden" name="fmtId[]" value="${fmtId}">
@@ -880,42 +859,40 @@
                 
                 <input type="hidden" name="nfgId[]" value="${nfgId}">`;
 
-                html += `
+          html += `
                 <tr>
                   <td><b>${fgName}</b></td>`;
-                if(showFine)
-                {
-                  totalAmount = totalAmount + amountNow + fineNow;
-                  totalFine = totalFine + fineNow;
-                  html += `
+          if (showFine) {
+            totalAmount = totalAmount + amountNow + fineNow;
+            totalFine = totalFine + fineNow;
+            html += `
                   <input type="hidden" name="depositAmount[]" value="${amountNow}">
                   <td><i class="fa-solid fa-indian-rupee-sign"></i> ${amountNow} + <span style="color:red;"><i class="fa-solid fa-indian-rupee-sign"></i> ${fineNow}</span></td>
                   </tr>`;
-                
-                }else{
-                  totalAmount = totalAmount + amountNow;
-                  html += `
+
+          } else {
+            totalAmount = totalAmount + amountNow;
+            html += `
                   <input type="hidden" name="depositAmount[]" value="${amountNow}">
                   <td><i class="fa-solid fa-indian-rupee-sign"></i> ${amountNow}</td>
                   </tr>`;
-                }
-      }else{
-        //console.log(abc + " Ishki Pyament rehnge do../.");
+          }
+        } else {
+          //console.log(abc + " Ishki Pyament rehnge do../.");
+        }
       }
-    }
 
-    console.log(totalAmount);
-    html += `<tr><td><b>Total Amount </b></td>`;
+      console.log(totalAmount);
+      html += `<tr><td><b>Total Amount </b></td>`;
 
-    if(totalFine > 0)
-    {
-      html +=`<td><h4>Amount: <i class="fa-solid fa-indian-rupee-sign"></i>  ${totalAmount} +  Fine: <i class="fa-solid fa-indian-rupee-sign"></i> ${totalFine}</h4></td>`;
-    }else{
-      html +=`<td><h4></i> Amount: <i class="fa-solid fa-indian-rupee-sign"></i>  ${totalAmount}</h4></td>`;
-    }
-    
-    let totalToPay = parseInt(totalAmount)+ parseInt(totalFine);
-   html += `<tr>
+      if (totalFine > 0) {
+        html += `<td><h4>Amount: <i class="fa-solid fa-indian-rupee-sign"></i>  ${totalAmount} +  Fine: <i class="fa-solid fa-indian-rupee-sign"></i> ${totalFine}</h4></td>`;
+      } else {
+        html += `<td><h4></i> Amount: <i class="fa-solid fa-indian-rupee-sign"></i>  ${totalAmount}</h4></td>`;
+      }
+
+      let totalToPay = parseInt(totalAmount) + parseInt(totalFine);
+      html += `<tr>
    <input type="hidden" name="totalDepositAmount" value="${totalToPay}">
    <td><h4>Total Amount To Collect: </td><td><h4><i class="fa-solid fa-indian-rupee-sign"></i> ${totalToPay}</td></h4></tr>
     
@@ -924,24 +901,70 @@
                    </tbody>
                 </table>
                    </form>`;
-                   $("#modalTitle").html("Collect All Fees");
-    $("#feesDetails").html(html);
+      $("#modalTitle").html("Collect All Fees");
+      $("#feesDetails").html(html);
 
-       $("#detailsModal").modal('show');
-    
-  })
+      $("#detailsModal").modal('show');
 
-
+    })
 
 
+    $("#printAll").click(function(e) {
+      e.preventDefault();
+      // console.log('Clicked');
+
+      let totalRows = parseInt($("#jNO").val());
+      // console.log(totalRows);
+      let abc;
+      let fmtId = [];
+      let nftId = [];
+      let nfgId = [];
+
+      let stuId;
+      let classId;
+      let sectionId;
+
+      let baseUrl = '<?= base_url() ; ?>';
 
 
-  function submitOldFees(studentId,studentHistoryId,amount)
-  {
-    console.log(studentId);
-    console.log(studentHistoryId);
-    //  console.log(todayDate)
-    $("#modalTitle").html("Old Session Dues Fees");
+
+      for (abc = 1; abc < totalRows; abc++) {
+        if ($("#fees_id_" + abc)[0].checked == true) {
+          let x = $("#fees_id_" + abc).val();
+          if (x == '') {
+            continue;
+          }
+
+          fmtId.push($("#fmtId_" + x).val());
+          nftId.push($("#nftId_" + x).val());
+          nfgId.push($("#nfgId_" + x).val());
+
+          stuId = $("#stuId_" + x).val();
+          classId = $("#classId_" + x).val();
+          sectionId = $("#sectionId_" + x).val();
+
+        }
+
+      }
+
+      // console.log("fees master Id " + fmtId);
+      // console.log("fees type Id " + nftId);
+      // console.log("fees group Id " + nfgId);
+      // console.log("class Id " + classId);
+      // console.log("section Id " + sectionId);
+      // console.log("student Id " + stuId);
+
+      window.location.href =  `${baseUrl}feesInvoiceAll?feesMasterId=${fmtId}&feesTypeId=${nftId}&feesGroupId=${nfgId}&classId=${classId}&sectionId=${sectionId}&studentId=${stuId}`; 
+    });
+
+
+
+
+    function submitOldFees(studentId, studentHistoryId, amount) {
+      console.log(studentId);
+      console.log(studentHistoryId);
+      //  console.log(todayDate)
+      $("#modalTitle").html("Old Session Dues Fees");
       let html = `<form method="POST">
                 <input type="hidden" name="stuId" value="${studentId}">
                 <input type="hidden" name="historyId" value="${studentHistoryId}">
@@ -979,8 +1002,5 @@
                    </form>`;
       $("#feesDetails").html(html);
       $("#detailsModal").modal('show');
-  }
-
-
-
+    }
   </script>
