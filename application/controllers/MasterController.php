@@ -430,6 +430,21 @@ class MasterController extends CI_Controller
 	}
 
 
+	// this is only for super admin
+	public function showTotalStudentsSchoolWise()
+	{
+		$this->loginCheck();
+		// check permission
+		$this->checkPermission();
+		$dataArr = [
+			'pageTitle' => 'Total Students School Wise',
+			'adminPanelUrl' => $this->adminPanelURL
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->masterDir . 'showTotalStudentsSchoolWise');
+	}
+
+
 
 
 

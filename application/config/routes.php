@@ -154,7 +154,8 @@ $masterRoutesArr = [
     'staffAttendance',
     'checkSalary',
     'getExperienceLetter',
-    'givePermissionMaster' // only for super Admin
+    'givePermissionMaster', // only for super Admin
+    'showTotalStudentsSchoolWise'// only for super Admin
     
 ];
 
