@@ -214,6 +214,26 @@ $studentData = $this->db->query($sql)->result_array()[0];
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10">
+                                    <table class="table table-borderless" style="font-size:16px; text-align:right;">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width:50%">Total Deposit Amt : ₹ <?= number_format(($depositAmt + $fintAmt), 2); ?>/-</th>
+
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                               <b> <?= strtoupper($this->CrudModel->numberToWordsCurrency(($depositAmt + $fintAmt))); ?></b>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

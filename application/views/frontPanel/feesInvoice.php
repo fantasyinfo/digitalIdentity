@@ -64,11 +64,11 @@ $studentData = $this->db->query($sql)->result_array()[0];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 
     <style>
-           #printArea{
-                height: 12cm;
-                width:18cm;
-                border: 1px solid #000;
-            }
+        #printArea {
+            height: 13cm;
+            width: 18cm;
+            border: 1px solid #000;
+        }
 
         @media print {
             #printbtn {
@@ -81,9 +81,9 @@ $studentData = $this->db->query($sql)->result_array()[0];
 
             }
 
-            #printArea{
-                height: 12cm;
-                width:18cm;
+            #printArea {
+                height: 13cm;
+                width: 18cm;
                 border: 1px solid #000;
             }
 
@@ -95,15 +95,15 @@ $studentData = $this->db->query($sql)->result_array()[0];
 
 <body>
 
-<p align="right"><button id="printbtn" onclick="window.print();">Print</button></p>
+    <p align="right"><button id="printbtn" onclick="window.print();">Print</button></p>
     <div class="container">
         <div class="row">
             <div class="col-md-6" id="printArea">
                 <div class="container">
                     <div class="row">
-                       
+
                         <h2 class="text-center" style="font-size: 16px; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #000;"><i>Fees Deposit Receipt</i></h2>
-                       
+
                         <table>
                             <tr>
                                 <td><img src="<?= $schoolDetails['logo'] ?>" width="70px" height="auto" /></td>
@@ -116,7 +116,7 @@ $studentData = $this->db->query($sql)->result_array()[0];
                             <?= $schoolDetails['email'] ?></h4> -->
                                 </td>
                                 <td>
-                                <img class="qrcode" src="https://chart.googleapis.com/chart?chs=100x100&amp;cht=qr&amp;chl=<?= base_url('feesInvoice') . "?fees_id=" . $_GET['fees_id']; ?>&amp;choe=UTF-8" alt="QR code">
+                                    <img class="qrcode" src="https://chart.googleapis.com/chart?chs=100x100&amp;cht=qr&amp;chl=<?= base_url('feesInvoice') . "?fees_id=" . $_GET['fees_id']; ?>&amp;choe=UTF-8" alt="QR code">
                                 </td>
                             </tr>
 
@@ -165,7 +165,7 @@ $studentData = $this->db->query($sql)->result_array()[0];
                                 </tr>
                                 <tr>
                                     <td><b>Total Amount</b></td>
-                                    <td><b>₹ <?= number_format($feesInvoiceData['amount'],2); ?></b></td>
+                                    <td><b>₹ <?= number_format($feesInvoiceData['amount'], 2); ?></b></td>
                                     <td><b>₹ <?= number_format($feesInvoiceData['depositAmount'], 2); ?></b></td>
                                     <td><b>₹ <?= number_format($feesInvoiceData['discount'], 2); ?></b></td>
                                     <td><b>₹ <?= number_format($feesInvoiceData['fine'], 2); ?></b></td>
@@ -173,11 +173,32 @@ $studentData = $this->db->query($sql)->result_array()[0];
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10">
+                                    <table class="table table-borderless" style="font-size:16px; text-align:right;">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width:50%">Total Deposit Amt : ₹ <?= number_format(($feesInvoiceData['depositAmount'] + $feesInvoiceData['fine']), 2); ?>/-</th>
+
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <b><?= strtoupper($this->CrudModel->numberToWordsCurrency(($feesInvoiceData['depositAmount'] + $feesInvoiceData['fine']))); ?></b>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 
