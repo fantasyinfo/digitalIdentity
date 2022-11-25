@@ -501,6 +501,45 @@ class AjaxController extends CI_Controller
 		}
 	}
 
+	public function showStudentViaClassAndSectionAndStudentIdForBonefide()
+	{
+		if (isset($_POST)) {
+			$d = @$this->db->query($sql = "SELECT s.*, DATE_FORMAT(s.date_of_admission, '%d %M %Y') as doa,cl.className,sc.sectionName, sch.school_name,sst.session_start_year , sst.session_end_year, sch.address as sAddress, city.cityName,state.stateName FROM " . Table::studentTable . " s
+			INNER JOIN " . Table::classTable . " cl ON cl.id = s.class_id
+    		INNER JOIN " . Table::sectionTable . " sc ON sc.id = s.section_id
+    		INNER JOIN " . Table::cityTable . " city ON city.id = s.city_id
+    		INNER JOIN " . Table::stateTable . " state ON state.id = s.state_id
+			INNER JOIN " . Table::schoolMasterTable . " sch ON sch.unique_id = s.schoolUniqueCode
+			INNER JOIN " . Table::schoolSessionTable . " sst ON sst.schoolUniqueCode = s.schoolUniqueCode
+			WHERE 
+			s.class_id = '{$_POST['classId']}' 
+			AND s.section_id = '{$_POST['sectionId']}' 
+			AND s.id = '{$_POST['studentId']}' 
+			AND s.status = '1' 
+			AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array()[0];
+			
+			$html = '';
+			$d['todayDate'] = date('d F Y');
+
+			if (!empty($d)) {
+
+				echo json_encode($d);
+				exit(0);
+			}
+			echo json_encode(array(0 => array('msg' => 'Student Details Not Found.')));
+			exit(0);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
 	public function showSalaryDetails()
 	{
 		if (isset($_POST)) {

@@ -14,6 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['salarySlip'] = 'FrontController/salarySlip'; // salarySlip
  $route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
  $route['characterCertificate'] = 'FrontController/characterCertificate'; // characterCertificate
+ $route['bonafideCertificate'] = 'FrontController/bonafideCertificate'; // characterCertificate
  $route['visitorEntry'] = 'FrontController/visitorEntry'; // characterCertificate
  $route['gatePass'] = 'FrontController/gatePass'; // characterCertificate
  $route['scanQR'] = 'FrontController/scanQR'; // scanQR
@@ -39,7 +40,9 @@ $studentRoutesArr = [
     'permoteStudent',
     'generateTC',
     'editTC',
-    'getCharacterCertificate'
+    'getCharacterCertificate',
+    'getBonafideCertificate',
+    'srRegisterAdd'
 ];
 
 foreach($studentRoutesArr as $stRoute)
@@ -319,7 +322,8 @@ $ajaxRoutesArr = [
    'showEmployeesViaDepAndDesId',
    'showEmployeesDetailsViaDepAndDesId',
    'showStudentViaClassAndSectionIdForCharacterCertificate',
-   'showStudentViaClassAndSectionAndStudentIdForCharacter'
+   'showStudentViaClassAndSectionAndStudentIdForCharacter',
+   'showStudentViaClassAndSectionAndStudentIdForBonefide'
     
 ];
 

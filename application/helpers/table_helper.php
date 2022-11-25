@@ -65,5 +65,7 @@ class Table{
     const gatePassTable = 'gatepass';
     const qrScanHistory = 'qrscanhistory';
     const advancefeessystem = 'advancefeessystem';
+    const studentBonafideCertificate = 'studentbonafidecertificate';
+    const srRegisterTable = 'srregister';
     
 }

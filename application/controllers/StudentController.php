@@ -200,6 +200,18 @@ class StudentController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'getCharacterCertificate');
 	}
+	public function getBonafideCertificate()
+	{
+		$this->loginCheck();
+		$this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'Bonafide Certificate',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'getBonafideCertificate');
+	}
 
 	public function deleteStudent($id)
 	{
