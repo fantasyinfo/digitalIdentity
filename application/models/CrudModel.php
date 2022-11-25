@@ -2830,4 +2830,66 @@ public function numberToWordsCurrency(float $number)
         JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
         WHERE sh.student_id = '$stuId' ORDER BY sh.id DESC LIMIT 1")->result_array();
     }
+
+
+
+
+ // save attendence
+ public function submitAttendence($stu_id)
+ {
+
+
+    $this->load->model('APIModel');
+    $currentDate = date_create()->format('Y-m-d');
+
+     $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+
+     if (!empty($d)) {
+       return;
+     }
+
+     $de = $this->db->query("SELECT c.className,sec.sectionName FROM " . Table::studentTable . " s 
+     JOIN ".Table::classTable." c ON c.id = s.class_id
+     JOIN ".Table::sectionTable." sec ON sec.id = s.section_id
+      WHERE s.id = '$stu_id' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+
+     $insertArr = [
+       "schoolUniqueCode" =>$_SESSION['schoolUniqueCode'],
+       "stu_id" => $stu_id,
+       "stu_class" => $de[0]['className'],
+       "stu_section" => $de[0]['sectionName'],
+       "login_user_id" => '1',
+       "login_user_type" => 'Staff',
+       "attendenceStatus" => '1',
+       "dateTime" => date_create()->format('Y-m-d h:i:s'),
+       "att_date" => date_create()->format('Y-m-d'),
+       "session_table_id" => $_SESSION['currentSession']
+     ];
+     $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
+     if (!empty($insertId)) {
+
+       // check digiCoin is set for this attendence time for students
+       $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'], HelperClass::userType['Student'], $_SESSION['schoolUniqueCode']);
+
+       if ($digiCoinF) {
+         // insert the digicoin
+         $insertDigiCoin = $this->APIModel->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $_SESSION['schoolUniqueCode'],$insertId);
+         if ($insertDigiCoin) {
+           return true;
+         } else {
+           return;
+         }
+       }
+
+       return true;
+     
+   }
+ }
+
+
+
+
+
+
+
 }

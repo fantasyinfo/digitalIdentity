@@ -1,5 +1,6 @@
 <?php 
 
+
 if(isset($_POST['qrCode'])){
 
     $qrCode = trim($_POST['qrCode']);
@@ -8,7 +9,19 @@ if(isset($_POST['qrCode'])){
    $identity =  validateQRCode($qrCode,$loginuserType, $schoolUniqueCode, $this->db, $this->CrudModel);
     //print_r($identity);
 
-    header('Refresh:0');
+    if($identity){ ?>
+        <audio  autoplay="true" style="display:none;">
+          <source src="<?= base_url('assets/uploads/sounds/attendanceSuccess.mp3') ?>" type="audio/mpeg">
+        Your browser does not support the audio element.
+        </audio>
+   <?php }else{ ?>
+      <audio autoplay="true" style="display:none;">
+      <source src="<?= base_url('assets/uploads/sounds/attendaneFailedTryAgain.mp3') ?>" type="audio/mpeg">
+      Your browser does not support the audio element.
+      </audio>
+   <?php }
+
+    header('Refresh:2');
 
 
 }
@@ -33,7 +46,7 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
   }
 
   if(empty($table)){
-    return;
+    return FALSE;
     // HelperClass::APIresponse(500, 'QR Code Table Not Found. Please Check QR Code Again.');
   }
 
@@ -59,6 +72,14 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
     $details = $db->query("SELECT id, name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
 
 
+    // mark attendance now 
+
+    if($tableB == Table::studentTable){
+      // mark student attendance
+      $cM->submitAttendence($details[0]['id']);
+    }
+
+
     $insertData = $db->query("INSERT INTO ".Table::qrScanHistory." (schoolUniqueCode,qrcode,user_id,user_type_id) VALUES ('$schoolUniqueCode','$qrCode','{$details[0]['id']}', '".HelperClass::userType[$identityType]."')");
    
     $details[0]['userType'] = $identityType;
@@ -67,17 +88,16 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
 
     if(!empty($details))
     {
-      // fetch token
       $tokensFromDB =  $db->query("SELECT fcm_token FROM " . $tableB . " WHERE id = '$idForUser' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
 
         if($loginuserType == HelperClass::userTypeR[3])
         {
-          // staff 
+ 
 
           if(!empty($tokensFromDB))
           {
             $tokenArr = [$tokensFromDB[0]['fcm_token']];
-            // fetch notification from db
+  
             $notificationFromDB = $db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '4' LIMIT 1")->result_array();
 
             if(!empty($notificationFromDB))
@@ -91,49 +111,21 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
             }
           }
         }
-        // else if($loginuserType == HelperClass::userTypeR[7])
-        // {
-        //   // driver
-
-        //   if(!empty($tokensFromDB))
-        //   {
-        //     $tokenArr = [$tokensFromDB[0]['fcm_token']];
-
-        //         // fetch notification from db
-        //         $notificationFromDB = $db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '3' LIMIT 1")->result_array();
-
-        //         if(!empty($notificationFromDB))
-        //         {
-        //           $title = $cM->replaceNotificationsWords((String)$notificationFromDB[0]['title'],['identity'=>$identityType]);
-        //           $body =  $cM->replaceNotificationsWords((String)$notificationFromDB[0]['body'],['identity'=>$identityType]);
-        //         }else
-        //         {
-        //           $title = "$identityType Entry On 🚌 Transport.";
-        //           $body = "Hey 👋 Dear $identityType, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!";
-        //         }
-
-
-            
-        //   }
-        // }
-
-
 
         $image = null;
         $sound = null;
         $sendPushSMS= json_decode($cM->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-      return; 
-      HelperClass::APIresponse(200, 'Identity Verified Successfully.',$details);
+      return TRUE; 
     }else
     {
-      return;
-      //HelperClass::APIresponse(500, 'Identity Not Verified');
+      return FALSE;
     }
 
 
     
   } else {
-    return HelperClass::APIresponse(500, 'QrCode Not found.', '', ['query' => $db->last_query()]);
+    return FALSE;
+    //return HelperClass::APIresponse(500, 'QrCode Not found.', '', ['query' => $db->last_query()]);
   }
 }
 
@@ -218,7 +210,7 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
                                 <!-- <td><?= $dd['qrcode'];?></td> -->
                                 <td><?= $name;?></td>
                                 <td><?= HelperClass::userTypeR[$dd['user_type_id']];?></td>
-                                <td><?= date('F d Y ', strtotime($dd['created_at']));?></td>
+                                <td><?= date('F d Y h:i:A', strtotime($dd['created_at']));?></td>
                               </tr>
                           <?php  }
                           } ?>

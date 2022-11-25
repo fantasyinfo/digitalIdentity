@@ -57,6 +57,9 @@
             <li class="nav-item" role="presentation">
               <a href="<?= base_url('feesManagement/collectStudentFee?stu_id=')  . $sd['id'] ?>" class="nav-link" aria-selected="false" target="_blank">Fees</a>
             </li>
+            <li class="nav-item" role="presentation">
+              <a href="#history" class="nav-link" aria-selected="false" role="tab" data-toggle="tab">TimeLine</a>
+            </li>
 
           </ul>
 
@@ -224,6 +227,71 @@
 
                       </div>
                     </div>
+                  </div>
+
+                </div>
+              </div>
+              <div id="history" role="tabpanel" class="tab-pane fade">
+                <div class="row">
+                  <div class="col-md-12 mb-3">
+                    <div class="card h-100">
+                      <div class="card-header border-top-3">
+                        <h6 class="d-flex align-items-center mb-3">Student Class Timeline</h6>
+                      </div>
+                      <div class="card-body">
+                        <?php
+
+                        $history = $this->db->query("SELECT st.*, s.name, s.father_name, CONCAT(c.className , ' ( ' , sec.sectionName , ' ) ') as className, CONCAT(session.session_start_year, ' - ' , session.session_end_year) as years FROM " . Table::studentHistoryTable . " st 
+                       JOIN " . Table::studentTable . " s ON s.id = st.student_id
+                       JOIN " . Table::classTable . " c ON c.id = st.class_id
+                       JOIN " . Table::sectionTable . " sec ON sec.id = st.section_id
+                       JOIN " . Table::schoolSessionTable . " session ON session.id = st.session_table_id
+                       WHERE st.student_id = '{$sd['id']}' AND st.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'
+                       ORDER BY st.id DESC")->result_array();
+
+                        //  echo '<pre>';
+                        //  print_r($history);
+                        ?>
+
+                        <section style="background-color: #F0F2F5;">
+                          <div class="container py-5">
+
+                            <div class="main-timeline">
+                              <?php 
+                              
+                              foreach($history as $h){ ?>
+                              <div class="timeline left">
+                                <div class="card">
+                                  <div class="card-body p-4">
+                                    <h3><?= $h['years'];?></h3>
+                                      <table class="table mb-0 bg-white">
+                                        <thead>
+                                          <!-- <th>Name</th>
+                                          <th>Father's Name</th> -->
+                                          <th>Class</th>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <!-- <td><?= $h['name'];?></td>
+                                            <td><?= $h['father_name'];?></td> -->
+                                            <td><?= $h['className'];?></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                  </div>
+                                </div>
+                              </div>
+                            <?php  }
+                              
+                              ?>
+                             
+
+                            </div>
+                        </section>
+                      </div>
+
+                    </div>
+
                   </div>
 
                 </div>
