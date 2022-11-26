@@ -213,12 +213,15 @@ if(isset($_GET['action']) )
                     <th>Id</th>
                     <th>Image</th>
                     <th>Name</th>
-                    <th>User Id</th>
+                    <th>Father's Name</th>
+                    <!-- <th>User Id</th> -->
                     <th>Mobile</th>
+                    <th>Password</th>
+                    <th>School Code</th>
                     <th>Class</th>
                     <th>State - City - Pincode</th>
                     <th>Status</th>
-                    <th>Date of Birth</th>
+                    <!-- <th>Date of Birth</th> -->
                     <th>Assign Transport</th>
                     <th>Action</th>
                   </tr>

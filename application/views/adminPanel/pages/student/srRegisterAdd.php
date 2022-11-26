@@ -190,7 +190,7 @@ if (isset($_POST['search'])) {
                                                             echo '<input type="text" name="classIds[]" value="'.$cd['className'].'" disabled>'; ?></td>
                                                             <td><?php
 
-                                                                $datte = $cd['date_of_admission'];
+                                                                $datte = $cd['doa'];
 
                                                                 if (!empty($datte)) {
                                                                     echo '<input type="text" name="admissionDate" value="'.date('d-m-Y', strtotime($datte)).'" disabled>' ;

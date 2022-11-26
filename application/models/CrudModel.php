@@ -218,7 +218,7 @@ class CrudModel extends CI_Model
             }
 
             $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
-                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " . $this->tableName . " s
+                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName,s.password,s.schoolUniqueCode,s.father_name FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
@@ -235,7 +235,7 @@ class CrudModel extends CI_Model
                 WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC";
         } else {
             $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,
-                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName,dt.name as DriverName FROM " . $this->tableName . " s
+                s.driver_id, s.vechicle_type,c.className,ss.sectionName,st.stateName,ct.cityName,dt.name as DriverName,s.password,s.schoolUniqueCode,s.father_name FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
@@ -262,8 +262,11 @@ class CrudModel extends CI_Model
             $subArr[] = ($j = $i + 1);
             $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
             $subArr[] = $d[$i]['name'];
-            $subArr[] = $d[$i]['user_id'];
+            $subArr[] = $d[$i]['father_name'];
+            // $subArr[] = $d[$i]['user_id'];
             $subArr[] = $d[$i]['mobile'];
+            $subArr[] = strtoupper($d[$i]['password']);
+            $subArr[] = $d[$i]['schoolUniqueCode'];
             $subArr[] = $d[$i]['className'] . " ( " . $d[$i]['sectionName'] . " )";
             $subArr[] = $d[$i]['stateName'] . " - " . $d[$i]['cityName'] . " - " . $d[$i]['pincode'];
 
@@ -288,7 +291,7 @@ class CrudModel extends CI_Model
 
 
 
-            $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
+            // $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
             if ($d[$i]['driver_id'] != '' || $d[$i]['vechicle_type'] != '' || $d[$i]['vechicle_type'] != null || $d[$i]['driver_id'] != null) {
                 $subArr[] = HelperClass::vehicleType[$d[$i]['vechicle_type']] . " - " . $d[$i]['DriverName'] . " <br>" . '<button onclick="assingDriver(' . $d[$i]['id'] . ')" class="btn btn-warning mt-1" >Change Driver</button>';
             } else {
@@ -645,7 +648,7 @@ class CrudModel extends CI_Model
                 }
             }
 
-            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education, s.driver_id, s.vechicle_type, c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " . $this->tableName . " s
+            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.password,s.schoolUniqueCode,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education, s.driver_id, s.vechicle_type, c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
@@ -661,7 +664,7 @@ class CrudModel extends CI_Model
                 LEFT JOIN " . Table::driverTable . " dt ON dt.id =  s.driver_id
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
         } else {
-            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education, s.driver_id, s.vechicle_type, c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " . $this->tableName . " s
+            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,,s.password,s.schoolUniqueCode,s.mobile,s.dob,s.pincode,s.address,s.experience, s.education, s.driver_id, s.vechicle_type, c.className,ss.sectionName,st.stateName,ct.cityName, dt.name as DriverName FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::classTable . " c ON c.id =  s.class_id
                 LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  s.section_id
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
@@ -689,10 +692,12 @@ class CrudModel extends CI_Model
             $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
             $subArr[] = $d[$i]['name'];
             $subArr[] = $d[$i]['user_id'];
+            $subArr[] = strtoupper($d[$i]['password']);
+            $subArr[] = $d[$i]['schoolUniqueCode'];
             $subArr[] = $d[$i]['mobile'];
-            $subArr[] = $d[$i]['className'] . " - " . $d[$i]['sectionName'];
-            $subArr[] = $d[$i]['education'];
-            $subArr[] = @HelperClass::experience[$d[$i]['experience']];
+            $subArr[] = $d[$i]['className'] . " ( " . $d[$i]['sectionName'] . " ) ";
+            // $subArr[] = $d[$i]['education'];
+            // $subArr[] = @HelperClass::experience[$d[$i]['experience']];
             $subArr[] = $d[$i]['stateName'] . " - " . $d[$i]['cityName'] . " - " . $d[$i]['pincode'];
 
             if ($d[$i]['status'] == '1') {
@@ -714,7 +719,7 @@ class CrudModel extends CI_Model
 
             $subArr[] = "<a href='?action=status&edit_id=" . $d[$i]['id'] . "&status=" . $ns . " ' class='badge badge-" . $cclas . "'> " . $ssus . "</a>";
 
-            $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
+            // $subArr[] = date('d-m-Y', strtotime($d[$i]['dob']));
 
             if ($d[$i]['driver_id'] != '' || $d[$i]['vechicle_type'] != '' || $d[$i]['vechicle_type'] != null || $d[$i]['driver_id'] != null) {
                 $subArr[] = HelperClass::vehicleType[$d[$i]['vechicle_type']] . " - " . $d[$i]['DriverName'] . " <br>" . '<button onclick="assingDriver(' . $d[$i]['id'] . ')" class="btn btn-warning mt-1" >Change Driver</button>';
@@ -764,7 +769,7 @@ class CrudModel extends CI_Model
                 }
             }
 
-            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,
+            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile, s.password,s.schoolUniqueCode,
                 s.vechicle_type,s.vechicle_no,s.total_seats,
                 s.pincode,s.address,st.stateName,ct.cityName FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
@@ -776,7 +781,7 @@ class CrudModel extends CI_Model
                 LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city_id
                 WHERE s.status != 4 $condition ORDER BY s.id DESC";
         } else {
-            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,
+            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.name,s.user_id,s.mobile,s.password,s.schoolUniqueCode,
                 s.vechicle_type,s.vechicle_no,s.total_seats,
                 s.pincode,s.address,st.stateName,ct.cityName FROM " . $this->tableName . " s
                 LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state_id
@@ -799,8 +804,10 @@ class CrudModel extends CI_Model
             $subArr[] = ($j = $i + 1);
             $subArr[] = "<img src='{$d[$i]['image']}' alt='100x100' height='50px' width='50px' class='img-fluid rounded-circle' />";
             $subArr[] = $d[$i]['name'];
-            $subArr[] = $d[$i]['user_id'];
+            // $subArr[] = $d[$i]['user_id'];
             $subArr[] = $d[$i]['mobile'];
+            $subArr[] = strtoupper($d[$i]['password']);
+            $subArr[] = $d[$i]['schoolUniqueCode'];
             $subArr[] = HelperClass::vehicleType[$d[$i]['vechicle_type']];
             $subArr[] = $d[$i]['vechicle_no'];
             $subArr[] = $d[$i]['total_seats'];

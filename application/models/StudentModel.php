@@ -116,7 +116,8 @@ class StudentModel extends CI_Model
                 'session_table_id' => ($_SESSION['currentSession']) ? $_SESSION['currentSession'] : '0',
                 'class_id' => $post['class'],
                 'section_id' => $post['section'],
-                'fees_due' => '0'
+                'fees_due' => '0',
+                'doa' => date('Y-m-d', strtotime($post['date_of_admission']))
 
               ];
               if($this->CrudModel->insert(Table::studentHistoryTable,$historyArr))

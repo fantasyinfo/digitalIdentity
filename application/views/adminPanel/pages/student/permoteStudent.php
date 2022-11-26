@@ -78,7 +78,7 @@
               }
 
 
-              $olderPermoteHistory = $this->db->query("SELECT * FROM ".Table::studentHistoryTable." sht WHERE student_id = '{$ids[$i]}' AND schooolUniqueCode = '{$olderPermoteHistory[0]['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
+              $olderPermoteHistory = $this->db->query("SELECT * FROM ".Table::studentHistoryTable." sht WHERE student_id = '{$ids[$i]}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
 
 
 
@@ -90,7 +90,7 @@
 
 
 
-              $insertPermoteHistory = $this->db->query("INSERT INTO " . Table::studentHistoryTable . " (schoolUniqueCode,student_id,old_session_id,session_table_id,currentClassId,currentSessionId,permotion_date,class_id,section_id,fees_due) VALUES ('{$_SESSION['schoolUniqueCode']}','$ids[$i]','{$_SESSION['currentSession']}','{$_POST['session_table_id']}','{$_POST['currentClassId']}','{$_POST['currentSectionId']}','$todayDate','{$_POST['class_id']}','{$_POST['section_id']}','$totalDueThisSession')");
+              $insertPermoteHistory = $this->db->query("INSERT INTO " . Table::studentHistoryTable . " (schoolUniqueCode,student_id,old_session_id,session_table_id,currentClassId,currentSessionId,class_id,section_id,fees_due,doa) VALUES ('{$_SESSION['schoolUniqueCode']}','$ids[$i]','{$_SESSION['currentSession']}','{$_POST['session_table_id']}','{$_POST['currentClassId']}','{$_POST['currentSectionId']}','{$_POST['class_id']}','{$_POST['section_id']}','$totalDueThisSession','".date('Y-m-d',strtotime("+1 Day", strtotime($todayDate)))."')");
 
 
             if ($insertPermoteHistory) {
@@ -115,34 +115,18 @@
             $totalDueThisSession = $dd['totalDueNow'];
 
 
-            $insertPermoteHistory = $this->db->query("INSERT INTO " . Table::studentHistoryTable . " (schoolUniqueCode,student_id,old_session_id,session_table_id,currentClassId,currentSessionId,permotion_date,class_id,section_id,fees_due) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['student_id']}','{$_SESSION['currentSession']}','{$_POST['session_table_id']}','{$_POST['currentClassId']}','{$_POST['currentSectionId']}','$todayDate','{$_POST['class_id']}','{$_POST['section_id']}','$totalDueThisSession')");
-
-
-             //update permote history and insert new one
-
-             $olderPermoteHistory =  $this->db->query("SELECT * FROM ".Table::studentPermotionHistory." WHERE student_id = '{$_POST['student_id']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC")->result_array();
-
-
-             if(!empty($olderPermoteHistory)){
-              // update the permotion date
-              $this->db->query("UPDATE ".Table::studentPermotionHistory." SET dop = '$todayDate' WHERE id = '{$olderPermoteHistory[0]['id']}' AND student_id = '{$olderPermoteHistory[0]['student_id']}' AND schoolUniqueCode = '{$olderPermoteHistory[0]['schoolUniqueCode']}' ");
-             }
-                // insert permotion data
-            $permoteArr = [
-              'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
-              'student_id' => $_POST['student_id'],
-              'session_table_id' => ($_SESSION['currentSession']) ? $_SESSION['currentSession'] : '0',
-              'class_id' => $_POST['class_id'],
-              'section_id' => $_POST['section_id'],
-              'doa' => date('Y-m-d', strtotime("+1 Day", strtotime($todayDate)))
-            ];
-            $this->CrudModel->insert(Table::studentPermotionHistory,$permoteArr);
+            $olderPermoteHistory = $this->db->query("SELECT * FROM ".Table::studentHistoryTable." sht WHERE student_id = '{$_POST['student_id']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
 
 
 
+              if(!empty($olderPermoteHistory)){
+                // update the permotion date
+                $this->db->query("UPDATE ".Table::studentHistoryTable." SET permotion_date = '$todayDate' WHERE id = '{$olderPermoteHistory[0]['id']}' AND student_id = '{$olderPermoteHistory[0]['student_id']}' AND schoolUniqueCode = '{$olderPermoteHistory[0]['schoolUniqueCode']}' ");
+               }
 
 
 
+            $insertPermoteHistory = $this->db->query("INSERT INTO " . Table::studentHistoryTable . " (schoolUniqueCode,student_id,old_session_id,session_table_id,currentClassId,currentSessionId,class_id,section_id,fees_due,doa) VALUES ('{$_SESSION['schoolUniqueCode']}','{$_POST['student_id']}','{$_SESSION['currentSession']}','{$_POST['session_table_id']}','{$_POST['currentClassId']}','{$_POST['currentSectionId']}','{$_POST['class_id']}','{$_POST['section_id']}','$totalDueThisSession','".date('Y-m-d',strtotime("+1 Day", strtotime($todayDate)))."')");
 
 
             if ($insertPermoteHistory) {

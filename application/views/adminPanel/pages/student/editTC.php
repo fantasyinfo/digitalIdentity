@@ -51,8 +51,8 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
         'mother_name' => $_POST['mother_name'],
         'gender' => $_POST['gender'],
         'category' => $_POST['category'],
-        'date_of_birth' => $_POST['date_of_birth'],
-        'date_of_admission' => $_POST['date_of_admission'],
+        'date_of_birth' =>  date('Y-m-d',strtotime($_POST['date_of_birth'])),
+        'date_of_admission' =>  date('Y-m-d',strtotime($_POST['date_of_admission'])),
         'nationality' => $_POST['nationality'],
         'shedule_tribe' => $_POST['shedule_tribe'],
         'last_class_studies' => $_POST['last_class_studies'],
@@ -64,8 +64,8 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
         'fees_due' => $_POST['fees_due'],
         'total_working_days' => $_POST['total_working_days'],
         'total_present_days' => $_POST['total_present_days'],
-        'date_of_application' => $_POST['date_of_application'],
-        'date_of_issue' => $_POST['date_of_issue'],
+        'date_of_application' =>  date('Y-m-d',strtotime($_POST['date_of_application'])),
+        'date_of_issue' =>  date('Y-m-d',strtotime($_POST['date_of_issue'])),
         'reason_for_leaving' => $_POST['reason_for_leaving'],
         'remark' => $_POST['remark'],
         'session_table_id' => $_POST['session_table_id'],
@@ -232,15 +232,15 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
                                                 </tr>
                                                 <tr>
                                                     <td>Category :</td>
-                                                    <td><input type="text" name="category" width="30px" class="form-control" value="<?= $student['cast_category']; ?>" required></td>
+                                                    <td><input type="text" name="category" width="30px" class="form-control" value="<?= HelperClass::casteCategory[$student['cast_category']]; ?>" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Date Of Birth : </td>
-                                                    <td><input type="date" name="date_of_birth" width="30px" class="form-control" value="<?= $student['dob']; ?>" required></td>
+                                                    <td><input type="date" name="date_of_birth" width="30px" class="form-control" value="<?= date('Y-m-d',strtotime($student['dob'])); ?>" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Date Of Admission : </td>
-                                                    <td><input type="date" name="date_of_admission" width="30px" class="form-control" value="<?= $student['date_of_admission']; ?>" required></td>
+                                                    <td><input type="date" name="date_of_admission" width="30px" class="form-control" value="<?=  date('Y-m-d',strtotime($student['date_of_admission'])); ?>" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Nationality : </td>
@@ -302,11 +302,11 @@ if (isset($_POST['class_id']) && isset($_POST['section_id']) && isset($_POST['st
 
                                                 <tr>
                                                     <td>Date Of Application For Certificate : </td>
-                                                    <td><input type="text" name="date_of_application" width="30px" class="form-control" value="<?= date('Y-m-d') ?>" required></td>
+                                                    <td><input type="date" name="date_of_application" width="30px" class="form-control" value="<?= date('Y-m-d') ?>" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Date Of Issue Of Certificate :</td>
-                                                    <td><input type="text" name="date_of_issue" width="30px" class="form-control" value="<?= date('Y-m-d') ?>" required></td>
+                                                    <td><input type="date" name="date_of_issue" width="30px" class="form-control" value="<?= date('Y-m-d') ?>" required></td>
                                                 </tr>
 
                                                 <tr>

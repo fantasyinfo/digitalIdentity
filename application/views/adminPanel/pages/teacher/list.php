@@ -168,13 +168,15 @@ if(isset($_GET['action']) )
                     <th>Image</th>
                     <th>Name</th>
                     <th>User Id</th>
+                    <th>Password</th>
+                    <th>School Code</th>
                     <th>Mobile</th>
                     <th>Class Teacher</th>
-                    <th>Education</th>
-                    <th>Experience</th>
+                    <!-- <th>Education</th>
+                    <th>Experience</th> -->
                     <th>State - City - Pincode</th>
                     <th>Status</th>
-                    <th>Date Of Birth</th>
+                    <!-- <th>Date Of Birth</th> -->
                     <th>Assign Transport</th>
                     <th>Action</th>
                   </tr>

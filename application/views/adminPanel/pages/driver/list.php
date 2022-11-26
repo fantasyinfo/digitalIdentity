@@ -144,8 +144,10 @@ if(isset($_GET['action']) )
                     <th>Id</th>
                     <th>Image</th>
                     <th>Name</th>
-                    <th>User Id</th>
+                    <!-- <th>User Id</th> -->
                     <th>Mobile</th>
+                    <th>Password</th>
+                    <th>School Code</th>
                     <th>Vechile Type</th>
                     <th>Vechile Number</th>
                     <th>Total Seats</th> 

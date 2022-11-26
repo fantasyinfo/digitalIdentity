@@ -43,6 +43,7 @@ $studentRoutesArr = [
     'getCharacterCertificate',
     'getBonafideCertificate',
     'srRegisterAdd',
+   
 ];
 
 foreach($studentRoutesArr as $stRoute)
