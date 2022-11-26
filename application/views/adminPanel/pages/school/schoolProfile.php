@@ -34,6 +34,9 @@
         $current_session = $_POST['current_session'];
         $fee_invoice_start = $_POST['fee_invoice_start'];
         $gifts_system = $_POST['gifts_system'];
+        $schoolNo = $_POST['schoolNo'];
+        $schoolBoardName = $_POST['schoolBoardName'];
+        $affiliatedUpto = $_POST['affiliatedUpto'];
 
 
         $fileName = "";
@@ -61,7 +64,10 @@
         image = '$fileName', 
         current_session = '$current_session', 
         fee_invoice_start = '$fee_invoice_start',
-        gifts_system = '$gifts_system'
+        gifts_system = '$gifts_system',
+        schoolNo = '$schoolNo',
+        schoolBoardName = '$schoolBoardName',
+        affiliatedUpto = '$affiliatedUpto'
         WHERE id = '$schoolId' AND unique_id = '{$_SESSION['schoolUniqueCode']}'");
         if($updateSchool)
         {
@@ -239,6 +245,18 @@
                           <tr>
                               <td> <label for="pincode">Pincode</label></td>
                               <td> <input type="text" name="pincode" class="form-control" id="pincode" value="<?=$sd['pincode'];?>"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="schoolNo">School Affiliation No</label></td>
+                              <td> <input type="text" name="schoolNo" class="form-control" id="schoolNo" value="<?=$sd['schoolNo'];?>"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="schoolBoardName">School Board Name</label></td>
+                              <td> <input type="text" name="schoolBoardName" class="form-control" id="schoolBoardName" value="<?=$sd['schoolBoardName'];?>"></td>
+                          </tr>
+                          <tr>
+                              <td> <label for="affiliatedUpto">School Affiliated Upto</label></td>
+                              <td> <input type="text" name="affiliatedUpto" class="form-control" id="affiliatedUpto" value="<?=$sd['affiliatedUpto'];?>"></td>
                           </tr>
                           <tr>
                               <td> <label for="fee_invoice_start">Fees Invoice Start</label></td>

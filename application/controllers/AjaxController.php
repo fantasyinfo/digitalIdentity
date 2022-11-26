@@ -101,6 +101,17 @@ class AjaxController extends CI_Controller
 		}
 	}
 
+	public function showStudentViaClassAndSectionIdSR()
+	{
+		if (isset($_POST)) {
+			//HelperClass::prePrintR($_POST);
+			echo $this->StudentModel->showStudentViaClassAndSectionIdSR($_POST);
+		}
+	}
+
+
+
+
 	public function showStudentViaClassAndSectionIdForCharacterCertificate()
 	{
 		if (isset($_POST)) {

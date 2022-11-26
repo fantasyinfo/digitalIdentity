@@ -42,7 +42,7 @@ $studentRoutesArr = [
     'editTC',
     'getCharacterCertificate',
     'getBonafideCertificate',
-    'srRegisterAdd'
+    'srRegisterAdd',
 ];
 
 foreach($studentRoutesArr as $stRoute)
@@ -295,6 +295,7 @@ $ajaxRoutesArr = [
     'listTeachersAjax',
     'listDriversAjax',
     'showStudentViaClassAndSectionId',
+    'showStudentViaClassAndSectionIdSR',
     'totalFeesDue',
     'listDigiCoinAjax',
     'showCityViaStateId',
@@ -389,7 +390,8 @@ $apiRoutesArr = [
     'showAllSemesterExam',
     'addSemesterExamResult',
     'gatePass',
-    'studentNamesViaClassAndSectionId'
+    'studentNamesViaClassAndSectionId',
+    'gatePassList'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

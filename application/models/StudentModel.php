@@ -101,6 +101,8 @@ class StudentModel extends CI_Model
           $qrInsertId = $this->CrudModel->insert(Table::qrcodeTable,$qrDataArr);
           if($qrInsertId)
           {
+
+            // update qrid
             $updateArr['u_qr_id'] = $qrInsertId;
             if($this->CrudModel->update(Table::studentTable,$updateArr,$insertId))
             {
@@ -251,6 +253,25 @@ class StudentModel extends CI_Model
       if(!empty($p))
       {
         $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status NOT IN ('3','4') AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+        $html = '';
+
+        if(!empty($d))
+        {
+          foreach($d as $dd)
+          {
+           $html .= "<option value='{$dd['id']}'>{$dd['name']}</option>";
+          }
+          return json_encode($html);
+        }
+        return json_encode($sql);
+      }
+    }
+
+    public function showStudentViaClassAndSectionIdSR(array $p)
+    {
+      if(!empty($p))
+      {
+        $d = $this->db->query($sql = "SELECT * FROM ".Table::studentTable." WHERE class_id = '{$p['classId']}' AND section_id = '{$p['sectionId']}' AND status != '4' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
         $html = '';
 
         if(!empty($d))

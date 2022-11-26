@@ -66,6 +66,7 @@ class Table{
     const qrScanHistory = 'qrscanhistory';
     const advancefeessystem = 'advancefeessystem';
     const studentBonafideCertificate = 'studentbonafidecertificate';
-    const srRegisterTable = 'srregister';
+    const srRegisterTable = 'srregister'; 
+    const studentPermotionHistory = 'studentpermotionhistory'; 
     
 }

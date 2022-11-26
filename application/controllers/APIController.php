@@ -1066,16 +1066,16 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType'])  || empty($apiData['student_id'])|| empty($apiData['class_id'])|| empty($apiData['section_id']) || empty($apiData['guardian_name'])|| empty($apiData['mobile'])|| empty($apiData['address']) || empty($apiData['time']) || empty($apiData['date']))
+		if(empty($apiData['authToken']) || empty($apiData['userType'])  || empty($apiData['studentId'])|| empty($apiData['classId'])|| empty($apiData['sectionId']) || empty($apiData['guardian_name'])|| empty($apiData['mobile'])|| empty($apiData['address']) || empty($apiData['time']) || empty($apiData['date']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.', $apiData);
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
 		$loginUserId = @$apiData['loginUserId'];
-		$studentId = $apiData['student_id'];
-		$class_id = $apiData['class_id'];
-		$section_id = $apiData['section_id'];
+		$studentId = $apiData['studentId'];
+		$class_id = $apiData['classId'];
+		$section_id = $apiData['sectionId'];
 		$guardian_name = $apiData['guardian_name'];
 		$mobile = $apiData['mobile'];
 		$address = $apiData['address'];
@@ -1133,6 +1133,31 @@ public function updateHomeWork()
 		}
 	}
 
+	// gatePassList
+	public function gatePassList()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$bannerImgs = $this->APIModel->gatePassList($schoolUniqueCode);
+
+		if (!$bannerImgs) {
+			return HelperClass::APIresponse(500, 'No Gate Pass Found ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Gate Pass Lists.', $bannerImgs);
+		}
+	}
+
 	// studentNamesViaClassAndSectionId
 	public function studentNamesViaClassAndSectionId()
 	{
@@ -1144,8 +1169,8 @@ public function updateHomeWork()
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
-		$class_id = $apiData['class_id'];
-		$section_id = $apiData['section_id'];
+		$class_id = $apiData['classId'];
+		$section_id = $apiData['sectionId'];
 
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];

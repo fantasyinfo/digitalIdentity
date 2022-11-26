@@ -110,3 +110,9 @@ CREATE TABLE `feetype` ( `id` INT NOT NULL , `schoolUniqueCode` VARCHAR(100) NOT
 CREATE TABLE `srregister` ( `id` INT NOT NULL AUTO_INCREMENT , `schoolUniqueCode` VARCHAR(100) NOT NULL , `book_no` VARCHAR(100) NULL , `sr_no` VARCHAR(100) NOT NULL , `name` VARCHAR(100) NOT NULL , `nationality` VARCHAR(100) NOT NULL , `caste` VARCHAR(100) NOT NULL , `father_name` VARCHAR(100) NOT NULL , `occupation` VARCHAR(100) NOT NULL , `mother_name` VARCHAR(100) NOT NULL , `address` VARCHAR(255) NOT NULL , `last_school_name` VARCHAR(100) NULL , `residence_of_india_since` VARCHAR(100) NOT NULL , `dob` VARCHAR(100) NOT NULL , `date_of_birth_words` VARCHAR(255) NOT NULL , `className` VARCHAR(100) NOT NULL , `date_of_admission` VARCHAR(100) NOT NULL , `date_of_permotion` VARCHAR(100) NULL , `date_of_removal` VARCHAR(100) NULL , `cause_of_removal` VARCHAR(100) NULL , `session_year` VARCHAR(100) NOT NULL , `conduct` VARCHAR(100) NULL , `work` VARCHAR(100) NULL , `signature` VARCHAR(100) NULL , `session_table_id` INT NOT NULL , `status` ENUM("1","2") NOT NULL DEFAULT '1' , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;
 
 ALTER TABLE `srregister` ADD `student_id` INT NOT NULL AFTER `sr_no`, ADD `unique_id` VARCHAR(100) NULL AFTER `student_id`;
+
+ALTER TABLE `schoolmaster` ADD `schoolNo` VARCHAR(100) NULL AFTER `current_session`, ADD `schoolBoardName` VARCHAR(100) NULL AFTER `schoolNo`, ADD `affiliatedUpto` VARCHAR(100) NULL AFTER `schoolBoardName`;
+
+ALTER TABLE `student_history` ADD `permotion_date` DATE NULL AFTER `currentSessionId`;
+
+ALTER TABLE `student_history` ADD `dop` DATE NULL AFTER `fees_due`;

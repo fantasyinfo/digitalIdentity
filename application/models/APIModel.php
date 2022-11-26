@@ -1744,6 +1744,13 @@ class APIModel extends CI_Model
 
     return $this->db->query("SELECT *, CONCAT('$dir',image) as image FROM " . Table::bannerTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
   }
+  public function gatePassList($schoolUniqueCode)
+  {
+
+    $dir = base_url() . HelperClass::gatePassImagePath;
+
+    return $this->db->query("SELECT *, CONCAT('$dir',image) as image, CONCAT('https://dvm.digitalfied.in/gatePass?gatePass=', id) as link FROM " . Table::gatePassTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
+  }
 
   public function notificationsForParent($schoolUniqueCode)
   {
