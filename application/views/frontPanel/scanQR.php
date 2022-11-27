@@ -4,6 +4,7 @@
 if(isset($_POST['qrCode'])){
 
     $qrCode = trim($_POST['qrCode']);
+
     $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
     $loginuserType = 'Staff';
    $identity =  validateQRCode($qrCode,$loginuserType, $schoolUniqueCode, $this->db, $this->CrudModel);
@@ -146,9 +147,13 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
         <link rel="stylesheet" href="">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
-      
+      <style>
+        #abcd{
+          opacity: 0;
+        }
+      </style>
     </head>
-    <body>
+    <body onLoad="disableClick()">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -158,7 +163,7 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
                 <form method="POST">
                 <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" name="qrCode" id="qrValue" class="form-control" autofocus />
+                            <input id="abcd" type="text" name="qrCode" id="qrValue" class="form-control" autofocus />
                         </div>
                 </div>
                 </form>
@@ -235,6 +240,19 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
 
         <script src="https://code.jquery.com/jquery-1.8.2.js"></script> 
         <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+        <script>
+ function disableClick(){
+ document.onclick=function(event){
+ if (event.button == 2) {
+ alert('Right Click is Disabled');
+ return false;
+ }
+ }
+ }
+ </script>
+
+
         <script >
          $( document ).ready(function() {
           $("#qrValue").val("");

@@ -233,6 +233,25 @@
                           </div>
                      
                         </div>
+
+                        <div class="row">
+                          <div class="form-group col-md-3">
+                            <label for="occupation">Father Occupation</label>
+                            <input type="text" name="occupation" class="form-control"  placeholder="Doctor, Job">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="last_schoool_name">Last School Name</label>
+                            <input type="text" name="last_schoool_name" class="form-control" placeholder="Digitalfied School">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="aadhar_no">Aadhar Card No</label>
+                            <input type="text" name="aadhar_no" class="form-control" placeholder="9638521470">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="residence_in_india_since">Residence in India Since</label>
+                            <input type="textr" name="residence_in_india_since" class="form-control" placeholder="By Birth">
+                          </div>
+                        </div>
                           <button type="submit" name="submit" class="btn mybtnColor btn-block btn-lg">Save</button>
                         </div>
                       </div>

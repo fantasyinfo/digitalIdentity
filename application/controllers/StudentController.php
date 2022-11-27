@@ -224,6 +224,18 @@ class StudentController extends CI_Controller
 		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
 		$this->load->view($this->viewDir . $this->studentDir . 'srRegisterAdd');
 	}
+	public function srRegisterHistory()
+	{
+		$this->loginCheck();
+		$this->checkPermission();
+	
+		$dataArr = [
+			'pageTitle' => 'SR Register',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir . 'pages/header', ['data' => $dataArr]);
+		$this->load->view($this->viewDir . $this->studentDir . 'srRegisterHistory');
+	}
 
 	public function deleteStudent($id)
 	{

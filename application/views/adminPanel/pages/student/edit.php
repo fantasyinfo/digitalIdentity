@@ -254,6 +254,25 @@
                           </div>
 
                         </div>
+                        
+                        <div class="row">
+                          <div class="form-group col-md-3">
+                            <label for="occupation">Father Occupation</label>
+                            <input type="text" name="occupation" class="form-control"   value="<?= $sd['occupation']; ?>">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="last_schoool_name">Last School Name</label>
+                            <input type="text" name="last_schoool_name" class="form-control"  value="<?= $sd['last_schoool_name']; ?>">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="aadhar_no">Aadhar Card No</label>
+                            <input type="text" name="aadhar_no" class="form-control"  value="<?= $sd['aadhar_no']; ?>">
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label for="residence_in_india_since">Residence in India Since</label>
+                            <input type="textr" name="residence_in_india_since" class="form-control"  value="<?= $sd['residence_in_india_since']; ?>">
+                          </div>
+                        </div>
                         <button type="submit" name="submit" class="btn mybtnColor btn-block btn-lg">Save</button>
                       </div>
                     </div>

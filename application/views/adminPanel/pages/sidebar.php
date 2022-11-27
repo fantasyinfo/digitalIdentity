@@ -12,6 +12,7 @@ $dir = base_url() . HelperClass::schoolLogoImagePath;
     <span class="brand-text font-weight-light"><?= @$schoolD[0]['school_name'] ?></span>
   </a>
 
+  
   <?php
 
 

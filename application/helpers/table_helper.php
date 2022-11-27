@@ -68,5 +68,6 @@ class Table{
     const studentBonafideCertificate = 'studentbonafidecertificate';
     const srRegisterTable = 'srregister'; 
     const studentPermotionHistory = 'studentpermotionhistory'; 
+    const srRegisterHistory = 'srregisterhistory'; 
     
 }

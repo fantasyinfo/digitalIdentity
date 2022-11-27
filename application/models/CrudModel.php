@@ -2624,7 +2624,9 @@ public function numberToWordsCurrency(float $number)
     private function sendPushNotification($fields)
     {
 
-        $FIREBASE_API_KEY = 'AAAAQYspnuk:APA91bEPPfgjLopJqUtJ0DmD0q19vKQ6kkQ_vgGRG9CL7YGrd46g1h_Bz6-JwnU_4ANwGMW7Uzu7MUGFXhjsbDD2dyWuFhY9-q0vvCTBQzWzv42VE-wn0Jvj3glkTUp_P9lrzn-xbB7f';
+        // $FIREBASE_API_KEY = 'AAAAQYspnuk:APA91bEPPfgjLopJqUtJ0DmD0q19vKQ6kkQ_vgGRG9CL7YGrd46g1h_Bz6-JwnU_4ANwGMW7Uzu7MUGFXhjsbDD2dyWuFhY9-q0vvCTBQzWzv42VE-wn0Jvj3glkTUp_P9lrzn-xbB7f';
+
+        $FIREBASE_API_KEY = 'AAAA4IuVEk8:APA91bHjVHQT1X5PyyXZyRh5-iCRk2PU-ecajeFWR2aFcnEZqBZDU_3p3VXS77O1VEdoP5IvIUFGslyLVJ7LfgLEccvkYU-C1Ua7-BqDGPnJbiGVjxqVZVYrXpEiFsRLVePokXdC-0Xx';
         //firebase server url to send the curl request
         $url = 'https://fcm.googleapis.com/fcm/send';
 

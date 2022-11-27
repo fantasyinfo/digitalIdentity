@@ -61,6 +61,8 @@
           {
             //HelperClass::prePrintR($_POST);
            $ids =  explode(",",$_POST['student_id']);
+
+           
            
            $total =  count($ids);
             for($i=0; $i < $total; $i++ )
@@ -76,6 +78,59 @@
               {
                 $totalDueThisSession = $oldSessinDues[0]['fees_due'];
               }
+
+            // insert SR Data for Student
+
+            $alreadySRCheck =  $this->db->query("SELECT * FROM ".Table::srRegisterHistory." WHERE student_id = '{$ids[$i]}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+                          
+            if(!empty($alreadySRCheck)){
+              // update SR Class
+              $srData = count($srObj = json_decode($alreadySRCheck[0]['srData'],TRUE));
+              for($j=1; $j < $srData; $j++){
+                $currentClassId = "";
+                if($srObj[$j]['classId'] == $alreadySRCheck[0]['currentClass']){
+                  $currentClassId = intval($srObj[$j]['classId']);
+                  // update permote date
+                  $srObj[$j]['dop'] = $todayDate;
+                  $srObj[$j]['work'] = 'Passed';
+                  $srObj[$j]['conduct'] = 'Good';
+                }
+
+                
+                @$srObj[@$currentClassId]['classId'] = @$srObj[@$currentClassId]['classId'];
+                $srObj[@$currentClassId]['doa'] =  date('Y-m-d',strtotime("+1 Day", strtotime($todayDate)));
+                $srObj[@$currentClassId]['dop'] = "";
+                $srObj[@$currentClassId]['dor'] = "";
+                $srObj[@$currentClassId]['causeOfRemoval'] = "";
+                $srObj[@$currentClassId]['sessionYears'] = '';
+                $srObj[@$currentClassId]['sessionYears'] = $this->db->query("SELECT CONCAT(session_start_year, ' - ' ,  session_end_year) as sessionYears FROM ".Table::schoolSessionTable." WHERE id = '{$_POST['session_table_id']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array()[0]['sessionYears'];
+              
+                $srObj[@$currentClassId]['conduct'] = "";
+                $srObj[@$currentClassId]['work'] = "";
+              }
+
+            }
+
+            // echo '<pre>';
+            if(!empty($srObj)){
+              array_pop($srObj);
+
+              $updateSRArr = [
+                'srData' => json_encode($srObj),
+                'currentClass' => $_POST['srRegisterClass']
+              ];
+              $updateSR = $this->CrudModel->update(Table::srRegisterHistory, $updateSRArr,$alreadySRCheck[0]['id']);
+            }
+            
+            // print_r($srObj);
+            // die();
+
+            
+
+
+
+
+
 
 
               $olderPermoteHistory = $this->db->query("SELECT * FROM ".Table::studentHistoryTable." sht WHERE student_id = '{$ids[$i]}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ORDER BY id DESC LIMIT 1")->result_array();
@@ -93,6 +148,21 @@
               $insertPermoteHistory = $this->db->query("INSERT INTO " . Table::studentHistoryTable . " (schoolUniqueCode,student_id,old_session_id,session_table_id,currentClassId,currentSessionId,class_id,section_id,fees_due,doa) VALUES ('{$_SESSION['schoolUniqueCode']}','$ids[$i]','{$_SESSION['currentSession']}','{$_POST['session_table_id']}','{$_POST['currentClassId']}','{$_POST['currentSectionId']}','{$_POST['class_id']}','{$_POST['section_id']}','$totalDueThisSession','".date('Y-m-d',strtotime("+1 Day", strtotime($todayDate)))."')");
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             if ($insertPermoteHistory) {
               $updateStudent = $this->db->query("UPDATE " . Table::studentTable . " SET class_id = '{$_POST['class_id']}', section_id = '{$_POST['section_id']}' WHERE id = '$ids[$i]' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
 
@@ -104,11 +174,71 @@
               'msg' => 'Class Permoted Successfully',
             ];
             $this->session->set_userdata($msgArr);
-          header("Refresh:1 " . base_url() . "student/permoteStudent");
+          //header("Refresh:1 " . base_url() . "student/permoteStudent");
           }
 
 
           if (isset($_POST['submit'])) {
+
+
+
+
+
+              // insert SR Data for Student
+
+              $alreadySRCheck =  $this->db->query("SELECT * FROM ".Table::srRegisterHistory." WHERE student_id = '{$_POST['student_id']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+              
+              if(!empty($alreadySRCheck)){
+                // update SR Class
+                $srData = count($srObj = json_decode($alreadySRCheck[0]['srData'],TRUE));
+                for($i=1; $i < $srData; $i++){
+                  $currentClassId = "";
+                  if($srObj[$i]['classId'] == $alreadySRCheck[0]['currentClass']){
+                    $currentClassId = intval($srObj[$i]['classId']);
+                    // update permote date
+                    $srObj[$i]['dop'] = $todayDate;
+                    $srObj[$i]['work'] = 'Passed';
+                    $srObj[$i]['conduct'] = 'Good';
+                  }
+
+                  
+                  @$srObj[@$currentClassId]['classId'] = @$srObj[@$currentClassId]['classId'];
+                  $srObj[@$currentClassId]['doa'] =  date('Y-m-d',strtotime("+1 Day", strtotime($todayDate)));
+                  $srObj[@$currentClassId]['dop'] = "";
+                  $srObj[@$currentClassId]['dor'] = "";
+                  $srObj[@$currentClassId]['causeOfRemoval'] = "";
+                  $srObj[@$currentClassId]['sessionYears'] = '';
+                  $srObj[@$currentClassId]['sessionYears'] = $this->db->query("SELECT CONCAT(session_start_year, ' - ' ,  session_end_year) as sessionYears FROM ".Table::schoolSessionTable." WHERE id = '{$_POST['session_table_id']}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array()[0]['sessionYears'];
+                
+                  $srObj[@$currentClassId]['conduct'] = "";
+                  $srObj[@$currentClassId]['work'] = "";
+                }
+
+              }
+
+              // echo '<pre>';
+              if(!empty($srObj)){
+                array_pop($srObj);
+                $updateSRArr = [
+                  'srData' => json_encode($srObj),
+                  'currentClass' => $_POST['srRegisterClass']
+              ];
+              $updateSR = $this->CrudModel->update(Table::srRegisterHistory, $updateSRArr,$alreadySRCheck[0]['id']);
+              }
+              
+              // print_r($srObj);
+              // die();
+
+           
+
+
+
+
+
+
+
+
+
 
             $dd = $this->CrudModel->showStudentFeesViaIdClassAndSection($_POST['student_id'],$_POST['currentClassId'], $_POST['currentSectionId'],$_SESSION['schoolUniqueCode'],$_SESSION['currentSession']);
 
@@ -308,7 +438,7 @@
           <form method="POST">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Current Class <span id="currentClassName"></span> And Session <span id="currentSessionName"></span></h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Current Class <span id="currentClassName"></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -351,6 +481,17 @@
                       } ?>
                     </select>
                   </div>
+                  <div class="form-group col-md-12">
+                    <label>Select SR Register Class</label>
+                    <select id="srRegisterClass" class="form-control  select2 select2-dark" name="srRegisterClass" required data-dropdown-css-class="select2-dark" style="width: 100%;">
+                    <option>Please Select Next SR Register Class</option>
+                      <?php
+                        foreach (HelperClass::srClass as $classes => $values) { ?>
+                          <option value="<?= $classes ?>"><?= $values ?></option>
+                      <?php }
+                       ?>
+                    </select>
+                  </div>
                 </div>
                 <input type="hidden" name="student_id" id="stu_id">
                 <input type="hidden" name="currentClassId" id="currentClassId">
@@ -376,7 +517,7 @@
           <form method="POST">
             <div class="modal-content">
               <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Current Class <span id="currentClassNameC"></span> - <span id="currentSessionNameC"></span></h5>
+              <h5 class="modal-title" id="exampleModalLongTitle">Current Class <span id="currentClassNameC"></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -417,6 +558,17 @@
                           <option value="<?= $sd['id'] ?>"><?= $sd['sectionName'] ?></option>
                       <?php }
                       } ?>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-12">
+                    <label>Select SR Register Class</label>
+                    <select id="srRegisterClassI" class="form-control  select2 select2-dark" name="srRegisterClass" required data-dropdown-css-class="select2-dark" style="width: 100%;">
+                    <option>Please Select Next SR Register Class</option>
+                      <?php
+                        foreach (HelperClass::srClass as $classes => $values) { ?>
+                          <option value="<?= $classes ?>"><?= $values ?></option>
+                      <?php }
+                       ?>
                     </select>
                   </div>
                 </div>

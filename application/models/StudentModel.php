@@ -37,6 +37,10 @@ class StudentModel extends CI_Model
       $insertArr['cast_category'] = $post['cast_category'];
       $insertArr['admission_no'] = $post['admission_no'];
       $insertArr['date_of_admission'] = $post['date_of_admission'];
+      $insertArr['occupation'] = $post['occupation'];
+      $insertArr['last_schoool_name'] = $post['last_schoool_name'];
+      $insertArr['aadhar_no'] = $post['aadhar_no'];
+      $insertArr['residence_in_india_since'] = $post['residence_in_india_since'];
       $insertArr['image'] = '';
 
 
@@ -174,6 +178,10 @@ class StudentModel extends CI_Model
       $insertArr['cast_category'] = $post['cast_category'];
       $insertArr['admission_no'] = $post['admission_no'];
       $insertArr['date_of_admission'] = $post['date_of_admission'];
+      $insertArr['occupation'] = $post['occupation'];
+      $insertArr['last_schoool_name'] = $post['last_schoool_name'];
+      $insertArr['aadhar_no'] = $post['aadhar_no'];
+      $insertArr['residence_in_india_since'] = $post['residence_in_india_since'];
       $insertArr['image'] = @$post['image'];
       $insertArr['user_id'] = $post['user_id'];
 

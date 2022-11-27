@@ -206,6 +206,21 @@ class HelperClass
         '6' => 'Van'
     ];
 
+    const srClass = [
+        '1' => 'I',
+        '2' => 'II',
+        '3' => 'III',
+        '4' => 'IV',
+        '5' => 'V',
+        '6' => 'VI',
+        '7' => 'VII',
+        '8' => 'VII',
+        '9' => 'IX',
+        '10' => 'X',
+        '11' => 'XI',
+        '12' => 'XII',
+    ];
+
 const invoicePrefix = 'INVOICE-00';
 
 
