@@ -211,9 +211,9 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-4 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit Teachers Subjects</h3>
                 </div>
@@ -232,9 +232,9 @@
                     
                     ?>
                       <div class="row">
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-12">
                         <label>Select Teacher </label>
-                        <select name="teacherId" class="form-control  select2 select2-danger" required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        <select name="teacherId" class="form-control  select2 select2-dark" required  data-dropdown-css-class="select2-dark" style="width: 100%;">
                           <?php 
                           if(isset($teachersData))
                           {
@@ -256,9 +256,9 @@
                           
                         </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-12">
                         <label>Select Subjects Multiple </label>
-                        <select name="subjectIds[]" class="form-control  select2 select2-danger" multiple required  data-dropdown-css-class="select2-danger" style="width: 100%;">
+                        <select name="subjectIds[]" class="form-control  select2 select2-dark" multiple required  data-dropdown-css-class="select2-dark" style="width: 100%;">
                           <?php 
                           if(isset($subjectsData))
                           {
@@ -290,7 +290,7 @@
                           
                         </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-12">
                           <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary mt-4">Submit</button>
                         </div>
                       </div>
@@ -302,17 +302,18 @@
                 <!-- right column -->
               </div>
 
-              <div class="row">
+                        </div>
 
-                <div class="col-md-12">
+                <div class="col-md-8">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header border-top-3">
                       <h3 class="card-title">Showing All Teachers Subjects Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="cityDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+                      <table id="cityDataTable" class="table mb-0 align-middle bg-white">
+                        <thead class="bg-light">
                           <tr>
                             <th>Id</th>
                             <th>Teacher Name - User Id</th>
@@ -377,6 +378,7 @@
                         </tbody>
 
                       </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                   </div>

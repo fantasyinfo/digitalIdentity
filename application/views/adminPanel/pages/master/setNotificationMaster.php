@@ -113,7 +113,7 @@
 
                 <div class="col-md-12">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header border-top-3">
                       <h3 class="card-title">Showing All Notifications</h3>
                       <a href="<?= base_url('master/notificationDefault')?>" class="ml-2 btn btn-primary float-right" >Update Default Notifications</a>
                     </div>

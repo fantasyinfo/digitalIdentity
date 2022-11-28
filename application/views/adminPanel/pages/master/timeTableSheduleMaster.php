@@ -266,7 +266,7 @@
             ?>
             <div class="col-md-12 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit Class Shedule</h3>
                 </div>
@@ -314,7 +314,7 @@
                                            <!-- <input type="hidden" name="teacherId" id="teacherInput"> -->
                                     <tr>
                                       <td scope="row">
-                                      <select name="class" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                      <select name="class" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                                                 <option value="" selected>Class</option>
                                                 <?php  foreach ($classData as $class) { 
                                                   $classSelected = '';
@@ -336,7 +336,7 @@
                                       </select>
                                       </td>
                                       <td>
-                                      <select name="section" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                      <select name="section" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                                           <option value="" selected>Section</option>
                                         <?php  
                                         $sectionSelected = '';
@@ -381,7 +381,7 @@
                                              { 
                                               
                                               ?>
-                                             <select name="subjects[]" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                             <select name="subjects[]" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                                              <option value="" selected>Subjects</option>
                                              <?php  foreach ($subjectData as $sub) { 
                                               
@@ -409,7 +409,7 @@
                                               $teacherSelected = '';
                                               for ($i = 0; $i < count($hoursTableData); $i++)
                                               { ?>
-                                                <select name="teacherId[]" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                <select name="teacherId[]" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                                                 <option value="" selected>Teachers</option>
                                              <?php foreach ($teachersData as $techers) {
                                               
@@ -437,7 +437,7 @@
                                         echo 'update';
                                       } else {
                                         echo 'submit';
-                                      } ?>" class="btn btn-primary mt-4">Submit</button>
+                                      } ?>" class="btn mybtnColor btn-block mt-4">Submit</button>
                                         </form>
                                       </td>
                                     </tr>
@@ -471,17 +471,17 @@
 
                 <div class="col-md-12">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header border-top-3">
                       <h3 class="card-title">Showing All Class Shedule Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="timeTableDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+                      <table id="timeTableDataTable" class="table mb-0 align-middle bg-white">
+                        <thead class="bg-light">
                           <tr>
                             <th>Id</th>
                             <th>Class Name</th>
-                            <th>Section Names</th>
                             <th>Shedule</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -494,8 +494,8 @@
                             foreach ($sheduleData as $cn) { ?>
                               <tr>
                                 <td><?= ++$j; ?></td>
-                                <td><?= $cn['className']; ?></td>
-                                <td><?= $cn['sectionName']; ?></td>
+                                <td><?= $cn['className'] . " ( ". $cn['sectionName']. " )" ; ?></td>
+                               
                                 <td><?php
 
                                     if (isset($cn['shedule_json'])) {
@@ -547,6 +547,7 @@
                         </tbody>
 
                       </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                   </div>

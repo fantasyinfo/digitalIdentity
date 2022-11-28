@@ -199,9 +199,9 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-4 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit Hours</h3>
                  
@@ -221,14 +221,14 @@
                     
                     ?>
                       <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-12">
                           <input type="time" name="start_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['start_time'];}?>" class="form-control " id="name"  required>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-12">
                           <input type="time" name="end_time" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editHourData[0]['end_time'];}?>" class="form-control " id="name"  required>
                         </div>
                         <div class="form-group col-md-3">
-                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
+                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-block mybtnColor">Save</button>
                         </div>
                       </div>
                     </form>
@@ -239,17 +239,18 @@
                 <!-- right column -->
               </div>
 
-              <div class="row">
+                    </div>
 
-                <div class="col-md-12">
+                <div class="col-md-8">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header border-top-3">
                       <h3 class="card-title">Showing All Hours Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="hourDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+                      <table id="hourDataTable" class="table mb-0 bg-white align-middle">
+                        <thead class="bg-white">
                           <tr>
                             <th>Id</th>
                             <!-- <th>Hours Id</th> -->
@@ -266,8 +267,8 @@
                               <tr>
                                 <td><?= ++$i;?></td>
                                 <!-- <td><?= $cn['id'];?></td> -->
-                                <td><?= $cn['start_time'];?></td>
-                                <td><?= $cn['end_time'];?></td>
+                                <td><?= date('h:i A',strtotime($cn['start_time']));?></td>
+                                <td><?= date('h:i A',strtotime($cn['end_time']));?></td>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
@@ -284,6 +285,7 @@
                         </tbody>
 
                       </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                   </div>

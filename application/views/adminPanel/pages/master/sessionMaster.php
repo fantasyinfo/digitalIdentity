@@ -202,9 +202,9 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-4 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   <h3 class="card-title">Add / Edit New Session</h3>
                 </div>
@@ -231,13 +231,13 @@
                             </thead>
                             <tbody>
                             <tr>
-                              <td> <label for="dob">School Session Started From ( April )</label></td>
+                              <td> <label for="dob">Session Started</label></td>
                               <td>  
                                 <div class="row">
 
                               
                                 <div class="col-md-6">
-                                    <select name="session_start_month" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                    <select name="session_start_month" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                                   <option value="" selected>Select Month</option>
                                   <?php  foreach ($monthD as $mon) { 
                                       if($sd['session_start_month'] == $mon['monthName'])
@@ -255,7 +255,7 @@
                                 </div>
                                 <div class="col-md-6">
  
-                                <select name="session_start_year" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                <select name="session_start_year" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                               <option value="" selected>Select Year</option>
                               <?php  foreach (HelperClass::sessionYears as $sec => $val) { 
                                   if($sd['session_start_year'] == $val)
@@ -275,11 +275,11 @@
                             </td>
                           </tr>
                           <tr>
-                              <td> <label for="dob">School Session Ended To ( March )</label></td>
+                              <td> <label for="dob">Session End</label></td>
                               <td> 
                               <div class="row">
                                 <div class="col-md-6">
-                                <select name="session_end_month" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                <select name="session_end_month" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                               <option value="" selected>Select Month</option>
                               <?php  foreach ($monthD as $monA) { 
                             
@@ -299,7 +299,7 @@
                               </select>
                                 </div> 
                                 <div class="col-md-6">
-                                <select name="session_end_year" class="form-control  select2 select2-danger" required data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                <select name="session_end_year" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                               <option value="" selected>Select Year</option>
                               <?php  foreach (HelperClass::sessionYears as $secA => $valA) { 
                             
@@ -325,9 +325,8 @@
                         </table>
                        
                         <tr >
-                          <td>#</td>
-                          <td>
-                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
+                          <td colspan="2">
+                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-block mybtnColor">Save</button>
                           </td>
                           
                         </tr>
@@ -340,17 +339,18 @@
                 <!-- right column -->
               </div>
 
-              <div class="row">
+                                </div>
 
-                <div class="col-md-12">
+                <div class="col-md-8">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header border-top-3">
                       <h3 class="card-title">Showing All Session Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="sectionDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+                      <table id="sectionDataTable" class="table mb-0 bg-white align-middle">
+                        <thead class="bg-white">
                           <tr>
                             <th>Id</th>
                             <th>Session Id</th>
@@ -385,6 +385,7 @@
                         </tbody>
 
                       </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                   </div>
