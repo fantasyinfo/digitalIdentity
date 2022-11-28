@@ -470,24 +470,24 @@ const setNotificationForWhat = [
 
     public static function swalSuccess($msg = 'Changes have been saved')
     { ?>
-        <script>
+        <!-- <script>
             Swal.fire(
                 'Good job!',
                 '<?= $msg; ?>',
                 'success'
             )
-        </script>
+        </script> -->
     <?php }
 
 
     public static function swalError($msg = 'Changes not saved')
     { ?>
-        <script>
+        <!-- <script>
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Important Info:  <?= $msg; ?>',
             })
-        </script>
+        </script> -->
 <?php }
 }

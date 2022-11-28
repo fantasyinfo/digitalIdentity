@@ -68,7 +68,7 @@
                           </div>
                           <div class="form-group col-md-3">
                             <label for="date_of_admission">Date of Admission</label>
-                            <input type="text" name="date_of_admission" class="form-control datePicker" id="date_of_admission" placeholder="Date of Admission" value="<?= $sd['date_of_admission']; ?>">
+                            <input type="date" name="date_of_admission" class="form-control" id="date_of_admission" placeholder="Date of Admission" value="<?= $sd['date_of_admission']; ?>">
                           </div>
                           <div class="form-group col-md-3">
                             <label for="name">Full Name</label>
@@ -234,7 +234,7 @@
                         <div class="row">
                           <div class="form-group col-md-3">
                             <label for="dob">Select Date of Birth</label>
-                            <input type="text" name="dob" class="form-control datePicker" id="dob" value="<?= $sd['dob']; ?>">
+                            <input type="date" name="dob" class="form-control " id="dob" value="<?= $sd['dob']; ?>">
                           </div>
                           <div class="form-group col-md-3">
                             <img src="<?= $sd['image'] ?>" alt='100x100' id="img" height='100px' width='100px' class='img-fluid' />

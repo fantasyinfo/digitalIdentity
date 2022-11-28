@@ -262,15 +262,18 @@ if(!empty($schoolUniqueCode)){
 					<tr>
 						<th class="text-center">Date of Birth</th>
 						<th class="text-center">Date of Birth in Words</th>
+						<th class="text-center">Caste</th>
 						<th class="text-center">The last School of student attended before joining this school</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td><?= date('jS F Y', strtotime(@$studentDetails['dob'])); ?></td>
+
 						<td><?php echo $this->CrudModel->dateToWords(date('d',strtotime(@$studentDetails['dob'])));
 							echo  ' ' . date('F',strtotime(@$studentDetails['dob']));
 							echo ' ' .  $this->CrudModel->dateToWords(date('Y',strtotime(@$studentDetails['dob']))); ?></td>
+						<td><?= @HelperClass::casteCategory[@$studentDetails[0]['cast_category']]; ?></td>
 						<td><?= @$studentDetails['last_schoool_name']; ?></td>
 					</tr>
 

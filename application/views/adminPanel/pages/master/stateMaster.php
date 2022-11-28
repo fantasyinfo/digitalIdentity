@@ -193,9 +193,9 @@
             <!-- left column -->
             <?php //print_r($data['class']);
             ?>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-4 mx-auto">
               <!-- jquery validation -->
-              <div class="card card-primary">
+              <div class="card border-top-3">
                 <div class="card-header">
                   State Master
                   <!-- <h3 class="card-title">Add / Edit State</h3> -->
@@ -215,11 +215,11 @@
                     
                     ?>
                       <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-12">
                           <input type="text" name="stateName" value="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo $editStateData[0]['stateName'];}?>" class="form-control" id="name" placeholder="Enter state name" required>
                         </div>
-                        <div class="form-group col-md-3">
-                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-primary">Submit</button>
+                        <div class="form-group col-md-12">
+                          <button type="submit" name="<?php if(isset($_GET['action']) && $_GET['action'] == 'edit'){ echo 'update';}else{echo 'submit';}?>" class="btn btn-block mybtnColor">Save</button>
                         </div>
                       </div>
                     </form>
@@ -230,23 +230,24 @@
                 <!-- right column -->
               </div>
 
-              <div class="row">
+                    </div>
 
-                <div class="col-md-12">
+                <div class="col-md-8">
                   <div class="card">
-                    <div class="card-header">
+                    <div class="card-header border-top-3">
                       <h3 class="card-title">Showing All State Data</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="stateDataTable" class="table table-bordered table-striped">
-                        <thead>
+                      <div class="table-responsive">
+                      <table id="stateDataTable" class="table bg-white mb-0 align-middle">
+                        <thead class="bg-white">
                           <tr>
                             <th>Id</th>
-                            <th>State Id</th>
+                            <!-- <th>State Id</th> -->
                             <th>State Name</th>
                             <th>Status</th>
-                            <!-- <th>Action</th> -->
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -255,17 +256,17 @@
                             foreach ($stateData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['stateName'];?></td>
                                 <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
                                 </td>
-                                <!-- <td>
+                                <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
                                   <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
-                                </td> -->
+                                </td>
                               </tr>
                           <?php  }
                           } ?>
@@ -273,6 +274,7 @@
                         </tbody>
 
                       </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                   </div>
