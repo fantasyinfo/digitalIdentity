@@ -1,5 +1,5 @@
 <style>
-    #srDetails{
+    #srDetails {
         display: none;
     }
 </style>
@@ -16,7 +16,7 @@ if (isset($_POST['search'])) {
     }
 
 
-    $studentDetails = $this->db->query("SELECT s.name, s.id, s.date_of_admission, s.admission_no, s.father_name, c.className FROM " . Table::studentTable . " s
+    $studentDetails = $this->db->query("SELECT s.*, c.className FROM " . Table::studentTable . " s
     JOIN " . Table::classTable . " c ON c.id = s.class_id
     JOIN " . Table::sectionTable . " sec ON sec.id = s.section_id
     WHERE s.id = '$studentId' 
@@ -25,79 +25,41 @@ if (isset($_POST['search'])) {
 
 
 
-    if(!empty($studentDetails)){
-        
-        
-        $alreadySRCheck =  $this->db->query("SELECT * FROM ".Table::srRegisterHistory." WHERE student_id = '$studentId' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
-        
-        
-        
-        ?>
-       <style>
-        #srDetails{
-            display: block;
-        }
-    </style>
-  <?php  }
+    if (!empty($studentDetails)) {
+
+
+        $alreadySRCheck =  $this->db->query("SELECT * FROM " . Table::srRegisterHistory . " WHERE student_id = '$studentId' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+
+
+
+?>
+        <style>
+            #srDetails {
+                display: block;
+            }
+
+            #filter_frm {
+                display: none;
+            }
+        </style>
+<?php  }
 }
 
 
-if(isset($_POST['submitSR'])){
+if (isset($_POST['submitSR'])) {
 
     // first check if already a sr created for this student then update them
 
-   $alreadySR =  $this->db->query("SELECT * FROM ".Table::srRegisterHistory." WHERE student_id = '{$_POST['student_id']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+    $alreadySR =  $this->db->query("SELECT * FROM " . Table::srRegisterHistory . " WHERE student_id = '{$_POST['student_id']}' AND status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
 
-   if(empty($alreadySR)){
+    if (empty($alreadySR)) {
 
-   
-    // HelperClass::prePrintR($_POST); 
-    $classIdsArr = count($_POST['classIds']);
 
-    $sendObj = [];
-    for($i=0; $i < $classIdsArr; $i++){
-        $subArr = [];
-        $subArr['classId'] = @$_POST['classIds'][$i];
-        $subArr['doa'] = @$_POST['doa'][$i];
-        $subArr['dop'] = @$_POST['dop'][$i];
-        $subArr['dor'] = @$_POST['dor'][$i];
-        $subArr['causeOfRemoval'] = @$_POST['causeOfRemoval'][$i];
-        $subArr['sessionYears'] = @$_POST['sessionYears'][$i];
-        $subArr['conduct'] = @$_POST['conduct'][$i];
-        $subArr['work'] = @$_POST['work'][$i];
-        array_push($sendObj,$subArr);
-
-    }
-
-    $this->load->model('CrudModel');
-    $insertArr = [
-        'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
-        'student_id' => $_POST['student_id'],
-        'srData' => json_encode($sendObj),
-        'currentClass' => $_POST['currentClass']
-    ];
-    $insert = $this->CrudModel->insert(Table::srRegisterHistory, $insertArr);
-
-    if ($insert) {
-        $msgArr = [
-          'class' => 'success',
-          'msg' => 'SR Saved Successfully',
-        ];
-        $this->session->set_userdata($msgArr);
-      } else {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'SR Not Saved due to this Error. ' . $this->db->last_query(),
-        ];
-        $this->session->set_userdata($msgArr);
-      }
-      header("Refresh:1 " . base_url() . "student/srRegisterHistory");
-    }else{
-        // update the SR
+        // HelperClass::prePrintR($_POST); 
         $classIdsArr = count($_POST['classIds']);
 
         $sendObj = [];
-        for($i=0; $i < $classIdsArr; $i++){
+        for ($i = 0; $i < $classIdsArr; $i++) {
             $subArr = [];
             $subArr['classId'] = @$_POST['classIds'][$i];
             $subArr['doa'] = @$_POST['doa'][$i];
@@ -107,31 +69,71 @@ if(isset($_POST['submitSR'])){
             $subArr['sessionYears'] = @$_POST['sessionYears'][$i];
             $subArr['conduct'] = @$_POST['conduct'][$i];
             $subArr['work'] = @$_POST['work'][$i];
-            array_push($sendObj,$subArr);
-    
+            array_push($sendObj, $subArr);
         }
-    
+
+        $this->load->model('CrudModel');
+        $insertArr = [
+            'schoolUniqueCode' => $_SESSION['schoolUniqueCode'],
+            'student_id' => $_POST['student_id'],
+            'srData' => json_encode($sendObj),
+            'currentClass' => $_POST['currentClass']
+        ];
+        $insert = $this->CrudModel->insert(Table::srRegisterHistory, $insertArr);
+
+        if ($insert) {
+            $msgArr = [
+                'class' => 'success',
+                'msg' => 'SR Saved Successfully',
+            ];
+            $this->session->set_userdata($msgArr);
+        } else {
+            $msgArr = [
+                'class' => 'danger',
+                'msg' => 'SR Not Saved due to this Error. ' . $this->db->last_query(),
+            ];
+            $this->session->set_userdata($msgArr);
+        }
+        header("Refresh:1 " . base_url() . "student/srRegisterHistory");
+    } else {
+        // update the SR
+        $classIdsArr = count($_POST['classIds']);
+
+        $sendObj = [];
+        for ($i = 0; $i < $classIdsArr; $i++) {
+            $subArr = [];
+            $subArr['classId'] = @$_POST['classIds'][$i];
+            $subArr['doa'] = @$_POST['doa'][$i];
+            $subArr['dop'] = @$_POST['dop'][$i];
+            $subArr['dor'] = @$_POST['dor'][$i];
+            $subArr['causeOfRemoval'] = @$_POST['causeOfRemoval'][$i];
+            $subArr['sessionYears'] = @$_POST['sessionYears'][$i];
+            $subArr['conduct'] = @$_POST['conduct'][$i];
+            $subArr['work'] = @$_POST['work'][$i];
+            array_push($sendObj, $subArr);
+        }
+
         $this->load->model('CrudModel');
         $updateArr = [
             'srData' => json_encode($sendObj),
             'currentClass' => $_POST['currentClass']
         ];
-        $insert = $this->CrudModel->update(Table::srRegisterHistory, $updateArr,$alreadySR[0]['id']);
-    
+        $insert = $this->CrudModel->update(Table::srRegisterHistory, $updateArr, $alreadySR[0]['id']);
+
         if ($insert) {
             $msgArr = [
-              'class' => 'success',
-              'msg' => 'SR Saved Successfully',
+                'class' => 'success',
+                'msg' => 'SR Saved Successfully',
             ];
             $this->session->set_userdata($msgArr);
-          } else {
+        } else {
             $msgArr = [
-              'class' => 'danger',
-              'msg' => 'SR Not Saved due to this Error. ' . $this->db->last_query(),
+                'class' => 'danger',
+                'msg' => 'SR Not Saved due to this Error. ' . $this->db->last_query(),
             ];
             $this->session->set_userdata($msgArr);
-          }
-          header("Refresh:1 " . base_url() . "student/srRegisterHistory");
+        }
+        header("Refresh:1 " . base_url() . "student/srRegisterHistory");
     }
 }
 
@@ -258,101 +260,185 @@ if(isset($_POST['submitSR'])){
                         </div>
 
                         <div id="srDetails">
-                        <form method="POST">
+                            <form method="POST">
 
-                            <div class="col-md-12">
-                                <div class="card boarder-top-3">
-                                    <div class="card-header">Student Details </div>
-                                    <div class="card-body">
+                                <div class="col-md-12">
+                                    <div class="card boarder-top-3">
+                                        <div class="card-body">
 
-                                        <?php if (isset($studentDetails)) { ?>
-                                            <div class="row my-2 py-2 " style="border:1px dotted black;">
-                                                <input type="hidden" name="student_id" value="<?= $studentDetails[0]['id']; ?>">
-                                                <div class="col-md-3"><b>Name: <?= $studentDetails[0]['name']; ?> </b></div>
-                                                <div class="col-md-3"><b>Father's Name: <?= $studentDetails[0]['father_name']; ?></b></div>
-                                                <div class="col-md-3"><b>Admission No: <?= $studentDetails[0]['admission_no']; ?></b></div>
-                                            </div>
-                                        <?php  } ?>
+                                            <?php if (isset($studentDetails)) { ?>
+                                                <div class="row">
+                                                    <a href="<?= base_url() .  'scholarRegisterCertificate?stu_id=' . $studentDetails[0]['id'] ?>" target="_blank" class="btn btn-success">Download SR</a>
+                                                    <div class="table-responsive">
+                                                        <table class="table mb-0 align-middle bg-white">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        Name
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['name']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        Class
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['className']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        Aadhar No
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['aadhar_no']; ?></b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        Father's Name
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['father_name']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        Mother' Name
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['mother_name']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        Occupation
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['occupation']; ?></b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        Caste - Religion
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @HelperClass::casteCategory[@$studentDetails[0]['cast_category']]; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        D.O.B
+                                                                    </td>
+                                                                    <td>
+                                                                        <b><?= @$studentDetails[0]['dob']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        Last School Name
+                                                                    </td>
+                                                                    <td>
+                                                                        <b><?= @$studentDetails[0]['last_schoool_name']; ?></b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        Admission No
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['admission_no']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        SR No
+                                                                    </td>
+                                                                    <td>
+                                                                        <b> <?= @$studentDetails[0]['sr_number']; ?></b>
+                                                                    </td>
+                                                                    <td>
+                                                                        Address
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= @$studentDetails[0]['address']; ?></b>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <input type="hidden" name="student_id" value="<?= $studentDetails[0]['id']; ?>">
+                                                </div>
+                                            <?php  } ?>
 
 
-                                        <div class="table-responsive">
+                                            <div class="table-responsive">
 
 
-                                            <table class="table mb-0 align-middle bg-white table-borderless">
-                                                <thead class="bg-light">
-                                                    <tr>
-                                                        <th>Class</th>
-                                                        <th>Date of Admission</th>
-                                                        <th>Date of Promotion</th>
-                                                        <th>Date of Removal</th>
-                                                        <th>Cause of Removal</th>
-                                                        <th>Session Year</th>
-                                                        <th>Conduct</th>
-                                                        <th>Work</th>
-                                                        <th>Current Class</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-
-                                                    $srDetails = [];
-                                                    if (!empty($alreadySRCheck)){
-                                                        $srDetails = json_decode($alreadySRCheck[0]['srData'],true);
-                                                    }
-                                                    //print_r($srDetails);
-                                                    $i = 0;
-                                                    foreach (HelperClass::srClass as $classes => $values) { ?>
+                                                <table class="table mb-0 align-middle bg-white table-borderless">
+                                                    <thead class="bg-light">
                                                         <tr>
-                                                            <td>
-                                                                <input type="hidden" name="classIds[]" value="<?= $classes; ?>">
-                                                                <input type="text" disabled value="<?= $values; ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="date" class="form-control" name="doa[]" value="<?= !empty($srDetails[$i]['doa']) ? $srDetails[$i]['doa'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="date" class="form-control" name="dop[]" value="<?= !empty($srDetails[$i]['dop']) ? $srDetails[$i]['dop'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="date" class="form-control" name="dor[]" value="<?= !empty($srDetails[$i]['dor']) ? $srDetails[$i]['dor'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="causeOfRemoval[]" value="<?= !empty($srDetails[$i]['causeOfRemoval']) ? $srDetails[$i]['causeOfRemoval'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="sessionYears[]" placeholder="2022-2023" value="<?= !empty($srDetails[$i]['sessionYears']) ? $srDetails[$i]['sessionYears'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="conduct[]" placeholder="Good" value="<?= !empty($srDetails[$i]['conduct']) ? $srDetails[$i]['conduct'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="work[]" placeholder="Passed" value="<?= !empty($srDetails[$i]['work']) ? $srDetails[$i]['work'] : '' ?>">
-                                                            </td>
-                                                            <td>
-                                                                <?php 
-                                                                $checked = '';
-                                                                if(@$alreadySRCheck[0]['currentClass'] == $classes){
-                                                                    $checked = 'checked';
-                                                                }else{
-                                                                    $checked = '';
-                                                                }?>
-                                                                <input <?= $checked ?> type="checkbox" class="form-control" name="currentClass"  value="<?= $classes; ?>">
-                                                            </td>
-                                                    </tr> <?php $i++; }  ?> 
-                                                </tbody>
-                                            </table>
+                                                            <th>Class</th>
+                                                            <th>Date of Admission</th>
+                                                            <th>Date of Promotion</th>
+                                                            <th>Date of Removal</th>
+                                                            <th>Cause of Removal</th>
+                                                            <th>Session Year</th>
+                                                            <th>Conduct</th>
+                                                            <th>Work</th>
+                                                            <th>Current Class</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
 
+                                                        $srDetails = [];
+                                                        if (!empty($alreadySRCheck)) {
+                                                            $srDetails = json_decode($alreadySRCheck[0]['srData'], true);
+                                                        }
+                                                        //print_r($srDetails);
+                                                        $i = 0;
+                                                        foreach (HelperClass::srClass as $classes => $values) { ?>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="hidden" name="classIds[]" value="<?= $classes; ?>">
+                                                                    <input type="text" disabled value="<?= $values; ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="date" class="form-control" name="doa[]" value="<?= !empty($srDetails[$i]['doa']) ? $srDetails[$i]['doa'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="date" class="form-control" name="dop[]" value="<?= !empty($srDetails[$i]['dop']) ? $srDetails[$i]['dop'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="date" class="form-control" name="dor[]" value="<?= !empty($srDetails[$i]['dor']) ? $srDetails[$i]['dor'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control" name="causeOfRemoval[]" value="<?= !empty($srDetails[$i]['causeOfRemoval']) ? $srDetails[$i]['causeOfRemoval'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control" name="sessionYears[]" placeholder="2022-2023" value="<?= !empty($srDetails[$i]['sessionYears']) ? $srDetails[$i]['sessionYears'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control" name="conduct[]" placeholder="Good" value="<?= !empty($srDetails[$i]['conduct']) ? $srDetails[$i]['conduct'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control" name="work[]" placeholder="Passed" value="<?= !empty($srDetails[$i]['work']) ? $srDetails[$i]['work'] : '' ?>">
+                                                                </td>
+                                                                <td>
+                                                                    <?php
+                                                                    $checked = '';
+                                                                    if (@$alreadySRCheck[0]['currentClass'] == $classes) {
+                                                                        $checked = 'checked';
+                                                                    } else {
+                                                                        $checked = '';
+                                                                    } ?>
+                                                                    <input <?= $checked ?> type="checkbox" class="form-control" name="currentClass" value="<?= $classes; ?>">
+                                                                </td>
+                                                            </tr> <?php $i++;
+                                                                }  ?>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mt-3">
+                                <div class="col-md-12 mt-3">
 
 
-                                <button type="submit" name="submitSR" value="Submit" class="btn mybtnColor btn-block">Save SR </button>
-                            </div>
-                        </form>
-                                                    </div>
+                                    <button type="submit" name="submitSR" value="Submit" class="btn mybtnColor btn-block">Save SR </button>
+                                </div>
+                            </form>
+                        </div>
 
 
 

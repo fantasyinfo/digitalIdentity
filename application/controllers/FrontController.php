@@ -164,5 +164,10 @@ class FrontController extends CI_Controller {
 
 		$this->load->view($this->frontViewDir . 'scanQR');
 	}
+	public function scholarRegisterCertificate()
+	{
+
+		$this->load->view($this->frontViewDir . 'scholarRegisterCertificate');
+	}
 
 }

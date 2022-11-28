@@ -18,6 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  $route['visitorEntry'] = 'FrontController/visitorEntry'; // characterCertificate
  $route['gatePass'] = 'FrontController/gatePass'; // characterCertificate
  $route['scanQR'] = 'FrontController/scanQR'; // scanQR
+ $route['scholarRegisterCertificate'] = 'FrontController/scholarRegisterCertificate'; // srCertificate
  
  // front-end routes
 
