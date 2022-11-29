@@ -121,11 +121,11 @@
                         </select></td>
                           </tr>
                           <tr>
-                              <td> <label for="mother">Mother Name</label></td>
+                              <td> <label for="mother">Mother / Wife Name</label></td>
                               <td> <input type="text" name="mother" class="form-control" id="mother" value="<?=$sd['mother_name'];?>"></td>
                           </tr>
                           <tr>
-                              <td> <label for="father">Father Name</label></td>
+                              <td> <label for="father">Father / Husband Name</label></td>
                               <td> <input type="text" name="father" class="form-control" id="father" value="<?=$sd['father_name'];?>"></td>
                           </tr>
                           <tr>
@@ -273,7 +273,7 @@
                           </select></td>
                           </tr>
                           <tr>
-                              <td> <label for="cbse_id">CBSE ID</label></td>
+                              <td> <label for="cbse_id">Board Id</label></td>
                               <td> <input type="text" name="cbse_id" class="form-control" id="cbse_id" value="<?=$sd['cbse_id'];?>"></td>
                           </tr>
                            <tr>

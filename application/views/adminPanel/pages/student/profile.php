@@ -91,9 +91,9 @@
                       <div class="card-body">
                         <?php
 
-                        $google_chart_api_url = "https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl=" . $string . "&choe=UTF-8";
+                        $google_chart_api_url = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" . $string . "&choe=UTF-8";
                         // let's display the generated QR code
-                        echo "<img src='" . $google_chart_api_url . "' alt='" . $string . "'>";
+                        echo "<img class='img-responsive' src='" . $google_chart_api_url . "' alt='" . $string . "'>";
                         ?>
                       </div>
                     </div>
