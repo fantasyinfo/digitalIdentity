@@ -137,14 +137,14 @@ if(isset($_GET['action']) )
           <label >User Id</label>
             <input type="text" class="form-control" id="teacherUserId" placeholder="Search by teacher UserId">
           </div>
-          <div class="form-group col-md-2">
+          <!-- <div class="form-group col-md-2">
             <label >From Date</label>
             <input type="date" class="form-control" id="fromDate">
           </div>
           <div class="form-group col-md-2">
           <label >To Date</label>
             <input type="date" class="form-control" id="toDate">
-          </div>
+          </div> -->
           <div class="form-group col-md-2 pt-4">
             <button id="searchTeacher" class="btn btn-primary">Submit</button>
             <button onclick="window.location.reload();" class="btn btn-warning">Clear</button>

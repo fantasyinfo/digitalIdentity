@@ -237,6 +237,7 @@ class StudentController extends CI_Controller
 		$this->load->view($this->viewDir . $this->studentDir . 'srRegisterHistory');
 	}
 
+
 	public function deleteStudent($id)
 	{
 		$this->loginCheck();

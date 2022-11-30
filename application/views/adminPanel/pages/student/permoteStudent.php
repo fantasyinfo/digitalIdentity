@@ -44,7 +44,7 @@
             AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' 
             AND s.class_id = '{$_POST['classId']}' AND s.section_id = '{$_POST['sectionId']}' ")->result_array();
 
-            $sessionDataToShow = $this->db->query("SELECT * FROM " . Table::schoolSessionTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND id='{$_SESSION['currentSession']}' AND status = '1' LIMIT 1")->result_array()[0];
+            @$sessionDataToShow = $this->db->query("SELECT * FROM " . Table::schoolSessionTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND id='{$_SESSION['currentSession']}' AND status = '1' LIMIT 1")->result_array()[0];
 
           }
 

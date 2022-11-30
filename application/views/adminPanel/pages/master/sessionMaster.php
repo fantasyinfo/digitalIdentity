@@ -353,10 +353,10 @@
                         <thead class="bg-white">
                           <tr>
                             <th>Id</th>
-                            <th>Session Id</th>
+                            <!-- <th>Session Id</th> -->
                             <th>Session Start</th>
                             <th>Session End</th>
-                            <th>Status</th>
+                            <!-- <th>Status</th> -->
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -366,17 +366,17 @@
                             foreach ($sectionData as $cn) { ?>
                               <tr>
                                 <td><?= ++$i;?></td>
-                                <td><?= $cn['id'];?></td>
+                                <!-- <td><?= $cn['id'];?></td> -->
                                 <td><?= $cn['session_start_month'] . ' - ' . $cn['session_start_year'];?></td>
                                 <td><?= $cn['session_end_month'] . ' - ' . $cn['session_end_year'];?></td>
-                                <td>
+                                <!-- <td>
                                 <a href="?action=status&edit_id=<?= $cn['id'];?>&status=<?php echo ($cn['status'] == '1') ? '2' : '1';?>"
                                     class="badge badge-<?php echo ($cn['status'] == '1') ? 'success' : 'danger';?>">
                                     <?php  echo ($cn['status'] == '1')? 'Active' : 'Inactive';?>
-                                </td>
+                                </td> -->
                                 <td>
                                   <a href="?action=edit&edit_id=<?= $cn['id'];?>" class="btn btn-warning">Edit</a>
-                                  <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a>
+                                  <!-- <a href="?action=delete&delete_id=<?= $cn['id'];?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this?');">Delete</a> -->
                                 </td>
                               </tr>
                           <?php  }
@@ -390,12 +390,11 @@
                     <!-- /.card-body -->
                   </div>
                 </div>
-              </div>
-
+          
 
 
               <!--/.col (right) -->
-            </div>
+           
 
             <!-- /.container-fluid -->
           </div>

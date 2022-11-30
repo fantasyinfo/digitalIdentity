@@ -84,7 +84,7 @@
           ];
           $this->session->set_userdata($msgArr);
         }
-        header("Refresh:1 ".base_url()."school/schoolProfile");
+        header("Refresh:1 ".base_url());
       }
 
 

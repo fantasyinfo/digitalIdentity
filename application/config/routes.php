@@ -44,7 +44,8 @@ $studentRoutesArr = [
     'getCharacterCertificate',
     'getBonafideCertificate',
     'srRegisterAdd',
-    'srRegisterHistory'
+    'srRegisterHistory',
+   
    
 ];
 

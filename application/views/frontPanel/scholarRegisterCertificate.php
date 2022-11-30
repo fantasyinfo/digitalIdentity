@@ -273,7 +273,7 @@ if(!empty($schoolUniqueCode)){
 						<td><?php echo $this->CrudModel->dateToWords(date('d',strtotime(@$studentDetails['dob'])));
 							echo  ' ' . date('F',strtotime(@$studentDetails['dob']));
 							echo ' ' .  $this->CrudModel->dateToWords(date('Y',strtotime(@$studentDetails['dob']))); ?></td>
-						<td><?= @HelperClass::casteCategory[@$studentDetails[0]['cast_category']]; ?></td>
+						<td><?= @HelperClass::casteCategory[@$studentDetails['cast_category']]; ?></td>
 						<td><?= @$studentDetails['last_schoool_name']; ?></td>
 					</tr>
 

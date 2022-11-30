@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Asia/Kolkata');
+
 include 'assets/smtp/src/Exception.php';
 include 'assets/smtp/src/PHPMailer.php';
 include 'assets/smtp/src/SMTP.php';

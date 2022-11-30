@@ -176,14 +176,14 @@ if(isset($_GET['action']) )
           <label >User Id</label>
             <input type="text" class="form-control" id="studentUserId" placeholder="Search by Student UserId">
           </div>
-          <div class="form-group col-md-2">
+          <!-- <div class="form-group col-md-2">
             <label >From Date</label>
             <input type="date" class="form-control" id="fromDate">
           </div>
           <div class="form-group col-md-2">
           <label >To Date</label>
             <input type="date" class="form-control" id="toDate">
-          </div>
+          </div> -->
           <div class="form-group col-md-2 margin-top-30">
           <button id="search" class="btn mybtnColor">Search</button>
           <button onclick="window.location.reload();" class="btn mybtnColor">Clear</button>
