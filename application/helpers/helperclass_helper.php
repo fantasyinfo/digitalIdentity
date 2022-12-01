@@ -209,6 +209,9 @@ class HelperClass
     ];
 
     const srClass = [
+        'Nur' => 'Nur',
+        'LKG' => 'LKG',
+        'UKG' => 'UKG',
         '1' => 'I',
         '2' => 'II',
         '3' => 'III',

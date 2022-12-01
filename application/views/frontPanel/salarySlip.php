@@ -11,12 +11,12 @@ if (isset($_GET['tec_id'])) {
 
 	if(!empty($tokenFiter))
 	{
-		$salarySlipData = $this->db->query("SELECT * FROM ".Table::checkSalarySlipTable." WHERE id = '{$tokenFiter['id']}' AND status = '1' AND schoolUniqueCode = '{$tokenFiter['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
+		$salarySlipData = $this->db->query("SELECT * FROM ".Table::checkSalarySlipTable." WHERE id = '{$tokenFiter['insertId']}' AND status = '1' AND schoolUniqueCode = '{$tokenFiter['schoolUniqueCode']}' LIMIT 1")->result_array()[0];
 
-		if(empty($salarySlipData))
-		{
-			header("Location: " . HelperClass::brandUrl);
-		}
+		// if(empty($salarySlipData))
+		// {
+		// 	header("Location: " . HelperClass::brandUrl);
+		// }
 	}
 
 	// print_r($salarySlipData);die();
@@ -42,7 +42,7 @@ if (isset($_GET['tec_id'])) {
 		];
 		$this->session->set_userdata($msgArr);
 
-		header("Location: " . HelperClass::brandUrl);
+		//header("Location: " . HelperClass::brandUrl);
 	}
 } else {
 	$msgArr = [
@@ -51,7 +51,7 @@ if (isset($_GET['tec_id'])) {
 	];
 	$this->session->set_userdata($msgArr);
 
-	header("Location: " . HelperClass::brandUrl);
+	//header("Location: " . HelperClass::brandUrl);
 }
 
 

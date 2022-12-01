@@ -476,7 +476,7 @@ if(isset($_POST['submit']))
    
     // first check if salary slip is already generated for this month
 
-    $already = $this->db->query("SELECT empId FROM ".Table::checkSalarySlipTable." WHERE empId = '$salaryEmpId' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' AND generateDate = '$todayDate'")->result_array();
+    $already = $this->db->query("SELECT empId,id FROM ".Table::checkSalarySlipTable." WHERE empId = '$salaryEmpId' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' AND generateDate = '$todayDate'")->result_array();
 
     if(!empty($already))
     {
@@ -486,7 +486,10 @@ if(isset($_POST['submit']))
         ];
         $this->session->set_userdata($msgArr);
 
-        header("Refresh:1 " . base_url() . "master/checkSalary");
+        $fToken = $this->db->query("SELECT token FROM ".Table::tokenFilterTable." WHERE insertId = '{$already[0]['id']}' AND for_what = 'Salary Slip' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' ")->result_array();
+
+        header("Location: " . base_url('salarySlip?tec_id=') . $fToken[0]['token']);
+        //header("Refresh:1 " . base_url() . "master/checkSalary");
         die();
     }
 
