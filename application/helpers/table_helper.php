@@ -69,5 +69,6 @@ class Table{
     const srRegisterTable = 'srregister'; 
     const studentPermotionHistory = 'studentpermotionhistory'; 
     const srRegisterHistory = 'srregisterhistory'; 
+    const preLoader = 'preloader'; 
     
 }

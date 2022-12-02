@@ -148,6 +148,14 @@
           
           $p = $this->db->query("INSERT INTO " . Table::panelMenuPermissionTable . " (schoolUniqueCode,user_id, user_type,permissions) VALUES ('$schoolUniqueCode','$loginDefaultSchool','Admin','{$permissions[0]['permissions']}')");
 
+          $py = $this->db->query("INSERT INTO " . Table::preLoader . " (schoolUniqueCode,isRun) VALUES ('$schoolUniqueCode','1')");
+
+
+
+
+
+
+
           if($p)
           {
 

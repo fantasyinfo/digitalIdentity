@@ -26,7 +26,7 @@ class AdminController extends CI_Controller {
 		];
 		$this->load->view($this->viewDir .'pages/header',['data' => $dataArr]);
 		$this->load->view($this->viewDir .'dashboard');
-		$this->load->view($this->viewDir .'pages/footer');
+		//$this->load->view($this->viewDir .'pages/footer');
 	}
 	
 	public function loginCheck()
