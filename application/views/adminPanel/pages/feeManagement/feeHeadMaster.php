@@ -1,3 +1,9 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+<style>
+.multiselect-container {
+  width:300px;
+}
+</style>
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
@@ -108,32 +114,34 @@
     // insert new city
     if (isset($_POST['submit']) && isset($_POST['newFeeGroupId'])) {
 
-      $alreadyFeeTypeAdded = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeemasterTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND newFeeGroupId = '{$this->CrudModel->sanitizeInput($_POST['newFeeGroupId'])}' AND newFeeType = '{$this->CrudModel->sanitizeInput($_POST['newFeeType'])}' LIMIT 1");
-
-      if (!empty($alreadyFeeTypeAdded)) {
-        $msgArr = [
-          'class' => 'danger',
-          'msg' => 'This Fees Master is already inserted, Please Edit That',
-        ];
-        $this->session->set_userdata($msgArr);
-        header("Refresh:0 " . base_url() . "feesManagement/feeHeadMaster");
-        exit(0);
-      }
       // date_create()->format('Y-m-d')
-      $insertArr = [
-        "schoolUniqueCode" => $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']),
-        "newFeeGroupId" => $this->CrudModel->sanitizeInput($_POST['newFeeGroupId']),
-        "newFeeType" => $this->CrudModel->sanitizeInput($_POST['newFeeType']),
-        "dueDate" => $this->CrudModel->sanitizeInput($_POST['dueDate']),
-        "amount" => $this->CrudModel->sanitizeInput($_POST['amount']),
-        "fineType" => $this->CrudModel->sanitizeInput($_POST['fineType']),
-        "finePercentage" => isset($_POST['finePercentage']) ? $this->CrudModel->sanitizeInput($_POST['finePercentage']) : 0,
-        "fineFixAmount" => isset($_POST['fineFixAmount']) ? $this->CrudModel->sanitizeInput($_POST['fineFixAmount']) : 0,
-        "session_table_id" => $this->CrudModel->sanitizeInput($_SESSION['currentSession'])
-      ];
+
+      $totalFeesTypes = count($_POST['newFeeType']);
+      for($i=0; $i < $totalFeesTypes;$i++){
+
+        $alreadyFeeTypeAdded = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeemasterTable . " WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND newFeeGroupId = '{$_POST['newFeeGroupId']}' AND newFeeType = '{$_POST['newFeeType'][$i]}' LIMIT 1");
+
+        if(!empty( $alreadyFeeTypeAdded )){
+          continue;
+        }
 
 
-      $insertId = $this->CrudModel->insert(Table::newfeemasterTable, $insertArr);
+        $insertArr = [
+          "schoolUniqueCode" => $this->CrudModel->sanitizeInput($_SESSION['schoolUniqueCode']),
+          "newFeeGroupId" => $this->CrudModel->sanitizeInput($_POST['newFeeGroupId']),
+          "newFeeType" => $_POST['newFeeType'][$i],
+          "dueDate" => $this->CrudModel->sanitizeInput($_POST['dueDate']),
+          "amount" => $this->CrudModel->sanitizeInput($_POST['amount']),
+          "fineType" => $this->CrudModel->sanitizeInput($_POST['fineType']),
+          "finePercentage" => isset($_POST['finePercentage']) ? $this->CrudModel->sanitizeInput($_POST['finePercentage']) : 0,
+          "fineFixAmount" => isset($_POST['fineFixAmount']) ? $this->CrudModel->sanitizeInput($_POST['fineFixAmount']) : 0,
+          "session_table_id" => $this->CrudModel->sanitizeInput($_SESSION['currentSession'])
+        ];
+  
+  
+        $insertId = $this->CrudModel->insert(Table::newfeemasterTable, $insertArr);
+      }
+      
 
       if ($insertId) {
         $msgArr = [
@@ -148,7 +156,7 @@
         ];
         $this->session->set_userdata($msgArr);
       }
-      header("Refresh:1 " . base_url() . "feesManagement/feeHeadMaster");
+      //header("Refresh:1 " . base_url() . "feesManagement/feeHeadMaster");
     }
 
     // update exiting city
@@ -156,17 +164,25 @@
 
       $updateId = $this->CrudModel->sanitizeInput($_POST['updateStateId']);
 
-      $updateArr = [
-        "newFeeGroupId" => $this->CrudModel->sanitizeInput($_POST['newFeeGroupId']),
-        "newFeeType" => $this->CrudModel->sanitizeInput($_POST['newFeeType']),
-        "dueDate" => $this->CrudModel->sanitizeInput($_POST['dueDate']),
-        "amount" => $this->CrudModel->sanitizeInput($_POST['amount']),
-        "fineType" => $this->CrudModel->sanitizeInput($_POST['fineType']),
-        "finePercentage" => isset($_POST['finePercentage']) ? $this->CrudModel->sanitizeInput($_POST['finePercentage']) : 0,
-        "fineFixAmount" => isset($_POST['fineFixAmount']) ? $this->CrudModel->sanitizeInput($_POST['fineFixAmount']) : 0,
-      ];
+      $totalFeesTypes = count($_POST['newFeeType']);
 
-      $updateId = $this->CrudModel->update(Table::newfeemasterTable, $updateArr, $updateId);
+      for($i=0; $i < $totalFeesTypes;$i++){
+        $updateArr = [
+          "newFeeGroupId" => $this->CrudModel->sanitizeInput($_POST['newFeeGroupId']),
+          "newFeeType" => $_POST['newFeeType'][$i],
+          "dueDate" => $this->CrudModel->sanitizeInput($_POST['dueDate']),
+          "amount" => $this->CrudModel->sanitizeInput($_POST['amount']),
+          "fineType" => $this->CrudModel->sanitizeInput($_POST['fineType']),
+          "finePercentage" => isset($_POST['finePercentage']) ? $this->CrudModel->sanitizeInput($_POST['finePercentage']) : 0,
+          "fineFixAmount" => isset($_POST['fineFixAmount']) ? $this->CrudModel->sanitizeInput($_POST['fineFixAmount']) : 0,
+        ];
+  
+        $updateId = $this->CrudModel->update(Table::newfeemasterTable, $updateArr, $updateId);
+      }
+
+      
+
+      
 
       if ($updateId) {
         $msgArr = [
@@ -344,8 +360,7 @@
                       </div>
                       <div class="form-group col-md-12">
                         <label>Fee Type <span style="color:red;">*</span></label>
-                        <select name="newFeeType"  id="newFeeType" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
-                          <option>Select Fee Type</option>
+                        <select name="newFeeType[]" multiple  id="newFeeType" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
                           <?php
                           $selected = '';
                           if (isset($feeTypesData)) {
@@ -700,4 +715,16 @@
 
 
 
+  </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+
+
+
+  <script>
+    $(document).ready(function() {
+      $('#newFeeType').multiselect({
+        includeSelectAllOption: true,
+      });
+    });
   </script>

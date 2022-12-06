@@ -61,6 +61,17 @@
         margin-top:30px;
       }
 
+      .bg-blue-my{
+        background-color: #D4F5FC;
+      }
+
+      .bg-red-my{
+        background-color: #FF78AB;
+      }
+
+      .font-size-22{
+        font-size:22px;
+      }
 
    </style>
 </head>

@@ -80,30 +80,28 @@
 
                 $insertId = $this->CrudModel->insert(Table::newfeesgroupsTable, $insertArr);
               }
-
             }
-              // sections
-              $sections = $_POST['sections'];
+            // sections
+            $sections = $_POST['sections'];
 
-              $totalSections = count($sections);
-              for ($i = 0; $i < $totalSections; $i++) {
+            $totalSections = count($sections);
+            for ($i = 0; $i < $totalSections; $i++) {
 
-                $sectonsInsert = $this->db->query("INSERT INTO " . Table::sectionTable . " (schoolUniqueCode,sectionName) VALUES ('{$_SESSION['schoolUniqueCode']}','$sections[$i]')");
-              }
-              $updatePreLoader = $this->db->query("UPDATE " . Table::preLoader . " SET isRun = '2' WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
-
-              $msgArr = [
-                'class' => 'success',
-                'msg' => 'PreLoader Added Successfully',
-              ];
-              $this->session->set_userdata($msgArr);
-              header("Refresh:1 ".base_url()."adminPanel");
-
+              $sectonsInsert = $this->db->query("INSERT INTO " . Table::sectionTable . " (schoolUniqueCode,sectionName) VALUES ('{$_SESSION['schoolUniqueCode']}','$sections[$i]')");
             }
+            $updatePreLoader = $this->db->query("UPDATE " . Table::preLoader . " SET isRun = '2' WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ");
+
+            $msgArr = [
+              'class' => 'success',
+              'msg' => 'PreLoader Added Successfully',
+            ];
+            $this->session->set_userdata($msgArr);
+            header("Refresh:1 " . base_url() . "adminPanel");
+          }
 
 
-            
-          
+
+
 
 
 
@@ -298,16 +296,47 @@
           <div id="accordion">
 
             <div class="card card-primary card-outline">
-              <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
+              <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapsestudents" aria-expanded="false">
                 <div class="card-header">
                   <h4 class="card-title w-100">
                     Students Section
                   </h4>
                 </div>
               </a>
-              <div id="collapseOne" class="collapse show" data-parent="#accordion">
+              <div id="collapsestudents" class="collapse show" data-parent="#accordion">
                 <div class="card-body">
                   <?php include("dashinclude/student_section.php"); ?>
+                </div>
+              </div>
+            </div>
+            <div class="card card-primary card-outline">
+              <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseteacher" aria-expanded="false">
+                <div class="card-header">
+                  <h4 class="card-title w-100">
+                    Teachers Section
+                  </h4>
+                </div>
+              </a>
+              <div id="collapseteacher" class="collapse show" data-parent="#accordion">
+                <div class="card-body">
+                  <?php include("dashinclude/teacher_section.php"); ?>
+                </div>
+              </div>
+            </div>
+
+     
+
+            <div class="card card-primary card-outline">
+              <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false">
+                <div class="card-header">
+                  <h4 class="card-title w-100">
+                    Fees Section
+                  </h4>
+                </div>
+              </a>
+              <div id="collapseThree" class="collapse show" data-parent="#accordion">
+                <div class="card-body">
+                  <?php include("dashinclude/fees_section.php"); ?>
                 </div>
               </div>
             </div>
@@ -323,21 +352,6 @@
               <div id="collapseTwo" class="collapse show" data-parent="#accordion">
                 <div class="card-body">
                   <?php include("dashinclude/academic_section.php"); ?>
-                </div>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false">
-                <div class="card-header">
-                  <h4 class="card-title w-100">
-                    Fees Section
-                  </h4>
-                </div>
-              </a>
-              <div id="collapseThree" class="collapse show" data-parent="#accordion">
-                <div class="card-body">
-                  <?php include("dashinclude/fees_section.php"); ?>
                 </div>
               </div>
             </div>
@@ -440,3 +454,9 @@
       });
     });
   </script>
+
+
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <?php include("dashinclude/chartjs.php"); ?>
