@@ -160,6 +160,26 @@ class AjaxController extends CI_Controller
 		}
 	}
 
+	public function bookIdtoChapters()
+	{
+		if (isset($_POST)) {
+
+			$bookId = $_POST['bookId'];
+			$chaptersData = [];
+			$chaptersData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::chaptersTable . " WHERE book_id = '$bookId' AND status != '4' ORDER BY id DESC");
+
+			$sendArr = '';
+			foreach($chaptersData as $c){
+				$sendArr .= '<option value="'.$c['id'].'">'.$c['chapter_name'].'</option>';
+			}
+
+
+
+
+			echo json_encode($sendArr);
+		}
+	}
+
 
 
 

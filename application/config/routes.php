@@ -256,6 +256,19 @@ foreach($feeRoutes as $aRoute)
     $route[$baseFeesManagement.$aRoute] = "FeesManagementController"."/".$aRoute;
 }
 
+
+$baseQuestionBank = "questionBank/";
+$questionRoutes = [
+    'booksMaster',
+    'chapterMaster',
+    'questionBankMaster'
+];
+
+foreach($questionRoutes as $aRoute)
+{
+    $route[$baseQuestionBank.$aRoute] = "QuestionBankController"."/".$aRoute;
+}
+
 // old database
 $oldDatabase = "oldData/";
 $oldDataBaseRoutes = [
@@ -328,7 +341,8 @@ $ajaxRoutesArr = [
    'showEmployeesDetailsViaDepAndDesId',
    'showStudentViaClassAndSectionIdForCharacterCertificate',
    'showStudentViaClassAndSectionAndStudentIdForCharacter',
-   'showStudentViaClassAndSectionAndStudentIdForBonefide'
+   'showStudentViaClassAndSectionAndStudentIdForBonefide',
+   'bookIdtoChapters'
     
 ];
 

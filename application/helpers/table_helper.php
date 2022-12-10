@@ -70,5 +70,9 @@ class Table{
     const studentPermotionHistory = 'studentpermotionhistory'; 
     const srRegisterHistory = 'srregisterhistory'; 
     const preLoader = 'preloader'; 
+    const booksTable = 'books'; 
+    const chaptersTable = 'chapters'; 
+    const questionsTypesTable = 'questions_types'; 
+    const questionsBankTable = 'question_bank'; 
     
 }

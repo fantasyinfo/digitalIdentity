@@ -37,8 +37,8 @@ $totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM " . Table
     <div class="card border-top-3 ">
       <div class="card-body">
          <p class="card-text font-size-22">Total Teachers : <i class="fa-solid fa-user"></i> <b ><?= $totalStudents ?></b></p>
-        <p class="card-text font-size-22">Total Boys : <i class="fa-solid fa-child"></i>  <b><?= $totalboys ?> </b></p>
-        <p class="card-text font-size-22">Total Girls : <i class="fa-solid fa-child-dress"></i> <b><?= $totalgirls ?></b></p>
+        <p class="card-text font-size-22">Total Sir : <i class="fa-solid fa-child"></i>  <b><?= $totalboys ?> </b></p>
+        <p class="card-text font-size-22">Total Mam : <i class="fa-solid fa-child-dress"></i> <b><?= $totalgirls ?></b></p>
       
     
          

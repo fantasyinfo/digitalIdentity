@@ -654,7 +654,7 @@
                     <tr>
                     <td><label>Payment Mode <span style="color:red;">*</span></label></td>
                      <td>
-                     <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="1" required> Offline &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                     <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="1" checked="checked" required> Cash &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                      <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="2" required> Online
                      </td>
                     </tr>
@@ -736,7 +736,9 @@
 
 
     $("#collectAllPayment").click(function(e) {
+
       e.preventDefault();
+      let todayDateToShow = '<?= date('Y-m-d')?>';
       let totalRows = parseInt($("#jNO").val());
       console.log(totalRows);
       let abc;
@@ -771,18 +773,18 @@
                   
                   <tr>
                      <td><label>Date <span style="color:red;">*</span></label></td>
-                     <td><input class="form-control" type="date" name="depositDate" required></td>
+                     <td><input class="form-control" type="date" name="depositDate" value="${todayDateToShow}" required></td>
                     </tr>
                     <td><label>Payment Mode <span style="color:red;">*</span></label></td>
                      <td>
-                     <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="1" required> Offline &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                     <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="1" checked="checked" required> Cash &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                      <input class="form-check-input" type="radio" name="paymentMode" id="inlineRadio1" value="2" required> Online
                      </td>
                     </tr>
                     <tr>
                      <td><label>Note</label></td>
                      <td>
-                     <textarea class="form-control" id="exampleFormControlTextarea1" name="note" rows="3"></textarea>
+                     <textarea class="form-control" id="exampleFormControlTextarea1" name="note" rows="3">Fees Deposits Today.</textarea>
                      </td>
                     </tr>
                     <tr>

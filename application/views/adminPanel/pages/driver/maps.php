@@ -93,7 +93,7 @@
 
 <!-- AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg // jsfidder -->
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk&callback=loadMap&v=weekly" defer ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZqk8PcPra_04N9ZWT_Mogj2gHWN_KRoI&callback=loadMap&v=weekly" defer ></script>
 
     <script>
 let llFromResponse = [];

@@ -226,6 +226,64 @@ class HelperClass
         '12' => 'XII',
     ];
 
+    const normalClass = [
+        'Nur' => 'Nur',
+        'LKG' => 'LKG',
+        'UKG' => 'UKG',
+        '1' => '1st',
+        '2' => '2nd',
+        '3' => '3rd',
+        '4' => '4th',
+        '5' => '5th',
+        '6' => '6th',
+        '7' => '7th',
+        '8' => '8th',
+        '9' => '9th',
+        '10' => '10th',
+        '11' => '11th',
+        '12' => '12th',
+        
+    ];
+
+
+    const subjectNames = [
+        'Hindi',
+        'Hindi Literature',
+        'Hindi Grammer',
+        'English',
+        'English Literature',
+        'English Grammer',
+        'Maths',
+        'Science',
+        'Social Science',
+        'General Knowledge',
+        'Computer Science',
+        'EVS',
+        'Sports',
+        'Arts',
+        'History',
+        'Geography',
+        'Civics',
+        'Physics',
+        'Chemestry',
+        'Biology',
+        'Accounts',
+        'Business Studeis',
+        'Physical Education',
+        'Economics'
+    ];
+
+
+    const questionTypes = [
+        '1' => 'One Words',
+        '2' => 'One Line',
+        '3' => 'Short Answer',
+        '4' => 'Long Answer',
+        '5' => 'Fill in the blanks',
+        '6' => 'MCQ'
+
+    ];
+
 const invoicePrefix = 'INVOICE-00';
 
 
