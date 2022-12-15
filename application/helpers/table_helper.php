@@ -74,5 +74,6 @@ class Table{
     const chaptersTable = 'chapters'; 
     const questionsTypesTable = 'questions_types'; 
     const questionsBankTable = 'question_bank'; 
+    const schoolModulesTable = 'schoolmodules'; 
     
 }

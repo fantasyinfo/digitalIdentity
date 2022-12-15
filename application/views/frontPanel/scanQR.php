@@ -25,6 +25,7 @@ if(isset($_POST['qrCode'])){
     header('Refresh:2');
 
 
+    
 }
 
 
@@ -163,7 +164,7 @@ function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode,$db,$cM)
                 <form method="POST">
                 <div class="col-md-12">
                         <div class="form-group">
-                            <input id="abcd" type="text" name="qrCode" id="qrValue" class="form-control" autofocus />
+                            <input  type="text" name="qrCode" id="qrValue" class="form-control" autofocus />
                         </div>
                 </div>
                 </form>

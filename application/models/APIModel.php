@@ -15,9 +15,9 @@ class APIModel extends CI_Model
   {
     $dir = base_url() . HelperClass::schoolLogoImagePath;
     $schoolData = [];
-    $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+    $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . Table::schoolMasterTable . " WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
 
-    
+
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::teacherImagePath;
       $sql = "
@@ -97,41 +97,37 @@ class APIModel extends CI_Model
 
       $userData = $this->db->query($sql)->result_array();
       $passWord = '';
-      if(!empty($userData))
-      {
+      if (!empty($userData)) {
         $passWord = HelperClass::decode($userData[0]['password'], $userData[0]['salt']);
       }
-      
-      if($passWord !== $password)
-      {
+
+      if ($passWord !== $password) {
         return HelperClass::APIresponse(500, 'Password Not Matched. Please Use Correct Details.');
       }
 
-      
-      if(!empty($userData))
-      {
-          $authToken = HelperClass::generateRandomToken();
-           // update auth token on driver
-          $this->db->query("UPDATE " . Table::userTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
 
-          $responseData = [];
-          $responseData["staffId"] = @$userData[0]["id"];
-          $responseData["name"] = @$userData[0]["name"];
-          $responseData["email"] = @$userData[0]["email"];
-          $responseData["mobile"] = @$userData[0]["mobile"];
-          $responseData["authToken"] = @$authToken;
-          $responseData["userType"] = @$type;
-          $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
-          $responseData["schoolData"] = $schoolData;
-      
+      if (!empty($userData)) {
+        $authToken = HelperClass::generateRandomToken();
+        // update auth token on driver
+        $this->db->query("UPDATE " . Table::userTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+
+        $responseData = [];
+        $responseData["staffId"] = @$userData[0]["id"];
+        $responseData["name"] = @$userData[0]["name"];
+        $responseData["email"] = @$userData[0]["email"];
+        $responseData["mobile"] = @$userData[0]["mobile"];
+        $responseData["authToken"] = @$authToken;
+        $responseData["userType"] = @$type;
+        $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+        $responseData["schoolData"] = $schoolData;
+
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
       }
     } else if ($type == 'Principal') {
       //
-    }else if($type == 'Parent' || $type == 'Student')
-    {
+    } else if ($type == 'Parent' || $type == 'Student') {
       $dir = base_url() . HelperClass::studentImagePath;
       $mobile = $id;
       $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName , ss.id as sectionId,c.id as classId FROM " . Table::studentTable . " t 
@@ -139,15 +135,13 @@ class APIModel extends CI_Model
       LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
       WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.password = '$password' AND t.status = '1'";
       $userData = $this->db->query($sql)->result_array();
-      if(!empty($userData))
-      {
+      if (!empty($userData)) {
         $authToken = HelperClass::generateRandomToken();
         $totalStudentsCount = count($userData);
         $responseData = [];
         $responseData['studentsData'] = [];
         $responseData["schoolData"] = $schoolData;
-        for($i = 0; $i < $totalStudentsCount; $i++)
-        {
+        for ($i = 0; $i < $totalStudentsCount; $i++) {
           // update auth token on all students
           $this->db->query("UPDATE " . Table::studentTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[$i]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
 
@@ -165,41 +159,39 @@ class APIModel extends CI_Model
           $subArr["authToken"] = @$authToken;
           $subArr["userType"] = @$type;
           $subArr["schoolUniqueCode"] = @$schoolUniqueCode;
-          
+
           array_push($responseData["studentsData"], $subArr);
         }
-        
+
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
       }
-    }else if($type == 'Driver')
-    {
+    } else if ($type == 'Driver') {
       $dir = base_url() . HelperClass::driverImagePath;
       $mobile = $id;
       $sql = "SELECT t.*, CONCAT('$dir',t.image) as image FROM " . Table::driverTable . " t 
       WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.mobile = '$mobile' AND t.password = '$password' AND t.status = '1'";
       $userData = $this->db->query($sql)->result_array();
-      if(!empty($userData))
-      {
-          $authToken = HelperClass::generateRandomToken();
-           // update auth token on driver
-          $this->db->query("UPDATE " . Table::driverTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
+      if (!empty($userData)) {
+        $authToken = HelperClass::generateRandomToken();
+        // update auth token on driver
+        $this->db->query("UPDATE " . Table::driverTable . " SET auth_token = '$authToken' , fcm_token = '$fcmToken' WHERE id = {$userData[0]['id']} AND schoolUniqueCode = '$schoolUniqueCode'");
 
-          $responseData = [];
-          $responseData["driverId"] = @$userData[0]["id"];
-          $responseData["userId"] = @$userData[0]["user_id"];
-          $responseData["name"] = @$userData[0]["name"];
-          $responseData["image"] = @$userData[0]["image"];
-          $responseData["user_id"] = @$userData[0]["user_id"];
-          $responseData["mobile"] = @$userData[0]["mobile"];
-          $responseData["vechicle_type"] = HelperClass::vehicleType[@$userData[0]["vechicle_type"]];
-          $responseData["vechicle_no"] = @$userData[0]["vechicle_no"];
-          $responseData["total_seats"] = @$userData[0]["total_seats"];
-          $responseData["authToken"] = @$authToken;
-          $responseData["userType"] = @$type;
-          $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
-          $responseData["schoolData"] = $schoolData;
+        $responseData = [];
+        $responseData["driverId"] = @$userData[0]["id"];
+        $responseData["userId"] = @$userData[0]["user_id"];
+        $responseData["name"] = @$userData[0]["name"];
+        $responseData["image"] = @$userData[0]["image"];
+        $responseData["user_id"] = @$userData[0]["user_id"];
+        $responseData["mobile"] = @$userData[0]["mobile"];
+        $responseData["vechicle_type"] = HelperClass::vehicleType[@$userData[0]["vechicle_type"]];
+        $responseData["vechicle_no"] = @$userData[0]["vechicle_no"];
+        $responseData["total_seats"] = @$userData[0]["total_seats"];
+        $responseData["authToken"] = @$authToken;
+        $responseData["userType"] = @$type;
+        $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+        $responseData["schoolData"] = $schoolData;
         return $responseData;
       } else {
         return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
@@ -211,13 +203,13 @@ class APIModel extends CI_Model
   public function validateLogin($authToken, $type)
   {
 
-    
+
     if ($type == 'Teacher') {
 
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::teacherTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
-        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $currentSession = $this->db->query("SELECT current_session FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
         $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
         $userData[0]['userType'] = $type;
         return $userData;
@@ -229,7 +221,7 @@ class APIModel extends CI_Model
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::userTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
-        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $currentSession = $this->db->query("SELECT current_session FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
         $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
 
         $userData[0]['userType'] = $type;
@@ -240,10 +232,10 @@ class APIModel extends CI_Model
     } else if ($type == 'Principal') {
       //
     } else if ($type == 'Parent' || $type == 'Student') {
-    $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
+      $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::studentTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
-        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $currentSession = $this->db->query("SELECT current_session FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
         $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
 
         $userData[0]['userType'] = $type;
@@ -251,12 +243,11 @@ class APIModel extends CI_Model
       } else {
         return HelperClass::APIresponse(500, 'Please Relogin Again. Timeout.');
       }
-    }else if($type == 'Driver')
-    {
+    } else if ($type == 'Driver') {
       $sql = "SELECT id as login_user_id, schoolUniqueCode FROM " . Table::driverTable . " WHERE auth_token = '$authToken' AND status = '1'";
       $userData = $this->db->query($sql)->result_array();
       if (!empty($userData)) {
-        $currentSession = $this->db->query("SELECT current_session FROM ".Table::schoolMasterTable." WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
+        $currentSession = $this->db->query("SELECT current_session FROM " . Table::schoolMasterTable . " WHERE unique_id = '{$userData[0]['schoolUniqueCode']}' LIMIT 1")->result_array()[0]['current_session'];
         $userData[0]['session_table_id'] = (@$currentSession) ? @$currentSession : null;
 
         $userData[0]['userType'] = $type;
@@ -269,21 +260,19 @@ class APIModel extends CI_Model
 
 
 
-// showAllStudentsForSwitchProfile
-  public function showAllStudentsForSwitchProfile($schoolUniqueCode,$stuIds)
+  // showAllStudentsForSwitchProfile
+  public function showAllStudentsForSwitchProfile($schoolUniqueCode, $stuIds)
   {
     $dir = base_url() . HelperClass::studentImagePath;
-   $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
+    $sql = "SELECT t.*, CONCAT('$dir',t.image) as image,c.className,ss.sectionName FROM " . Table::studentTable . " t 
     LEFT JOIN " . Table::classTable . " c ON c.id =  t.class_id
     LEFT JOIN " . Table::sectionTable . " ss ON ss.id =  t.section_id
     WHERE t.schoolUniqueCode = '$schoolUniqueCode' AND t.id in('$stuIds')  AND t.status = '1'";
     $userData = $this->db->query($sql)->result_array();
-    if(!empty($userData))
-    {
+    if (!empty($userData)) {
       $totalStudentsCount = count($userData);
       $responseData = [];
-      for($i = 0 ; $i < $totalStudentsCount; $i++)
-      {
+      for ($i = 0; $i < $totalStudentsCount; $i++) {
         $subArr = [];
         $subArr["studentId"] = @$userData[$i]["id"];
         $subArr["name"] = @$userData[$i]["name"];
@@ -301,7 +290,7 @@ class APIModel extends CI_Model
   }
 
   // student dashboard
-  public function studentDashboard($schoolUniqueCode,$studentId)
+  public function studentDashboard($schoolUniqueCode, $studentId)
   {
     $dir = base_url() . HelperClass::studentImagePath;
 
@@ -314,25 +303,24 @@ class APIModel extends CI_Model
 
 
     $schoolData = [];
-    $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM ".Table::schoolMasterTable." WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
+    $schoolData = $this->db->query("SELECT *,CONCAT('$dir',image) as image FROM " . Table::schoolMasterTable . " WHERE unique_id = '$schoolUniqueCode' LIMIT 1")->result_array();
 
     $type = 'Parent';
-    if(!empty($userData))
-    {
-        $responseData = [];
-        $responseData["schoolData"] = @$schoolData;
-        $responseData["studentId"] = @$userData[0]["id"];
-        $responseData["userId"] = @$userData[0]["user_id"];
-        $responseData["name"] = @$userData[0]["name"];
-        $responseData["image"] = @$userData[0]["image"];
-        $responseData["user_id"] = @$userData[0]["user_id"];
-        $responseData["className"] = @$userData[0]["className"];
-        $responseData["sectionName"] = @$userData[0]["sectionName"];
-        $responseData["section_id"] = @$userData[0]["sectionId"];
-        $responseData["class_id"] = @$userData[0]["classId"];
-        $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
-        $responseData["authToken"] = @$userData[0]["auth_token"];
-        $responseData["userType"] = @$type;
+    if (!empty($userData)) {
+      $responseData = [];
+      $responseData["schoolData"] = @$schoolData;
+      $responseData["studentId"] = @$userData[0]["id"];
+      $responseData["userId"] = @$userData[0]["user_id"];
+      $responseData["name"] = @$userData[0]["name"];
+      $responseData["image"] = @$userData[0]["image"];
+      $responseData["user_id"] = @$userData[0]["user_id"];
+      $responseData["className"] = @$userData[0]["className"];
+      $responseData["sectionName"] = @$userData[0]["sectionName"];
+      $responseData["section_id"] = @$userData[0]["sectionId"];
+      $responseData["class_id"] = @$userData[0]["classId"];
+      $responseData["schoolUniqueCode"] = @$schoolUniqueCode;
+      $responseData["authToken"] = @$userData[0]["auth_token"];
+      $responseData["userType"] = @$type;
       return $responseData;
     } else {
       return HelperClass::APIresponse(500, 'User Not Found. Please Use Correct Details.');
@@ -343,7 +331,7 @@ class APIModel extends CI_Model
   public function showAllStudentForAttendence($type, $class, $section, $schoolUniqueCode)
   {
 
-  
+
 
     if ($type == 'Teacher') {
       $dir = base_url() . HelperClass::studentImagePath;
@@ -378,8 +366,8 @@ class APIModel extends CI_Model
   public function countStudentViaClassAndSectionName($className, $sectionName, $schoolUniqueCode)
   {
     $totalStudents =  $this->db->query("SELECT count(1) as count FROM " . Table::studentTable . " s
-    INNER JOIN ".Table::classTable." c ON c.id = s.class_id 
-    INNER JOIN ".Table::sectionTable." ss ON ss.id = s.section_id
+    INNER JOIN " . Table::classTable . " c ON c.id = s.class_id 
+    INNER JOIN " . Table::sectionTable . " ss ON ss.id = s.section_id
     WHERE c.className = '$className' AND ss.sectionName = '$sectionName' AND s.status = '1' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     if (!empty($totalStudents)) {
       return $totalStudents[0]['count'];
@@ -390,7 +378,7 @@ class APIModel extends CI_Model
 
 
   // save attendence
-  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode,$session_table_id)
+  public function submitAttendence($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode, $session_table_id)
   {
 
 
@@ -398,7 +386,7 @@ class APIModel extends CI_Model
 
 
 
-    if( date('D') == 'Sun') { 
+    if (date('D') == 'Sun') {
       return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
     }
 
@@ -406,17 +394,17 @@ class APIModel extends CI_Model
     //check if today is holiday
 
 
-      $holiday = $this->db->query("SELECT title FROM " . Table::holidayCalendarTable . " WHERE event_date = '$currentDate' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+    $holiday = $this->db->query("SELECT title FROM " . Table::holidayCalendarTable . " WHERE event_date = '$currentDate' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
-      if (!empty($holiday)) {
-        $h = (String) $holiday[0]['title'];
-        return HelperClass::APIresponse(500, "Today is $h Holiday. Try on School Working Days.");
-      }
-
-
+    if (!empty($holiday)) {
+      $h = (string) $holiday[0]['title'];
+      return HelperClass::APIresponse(500, "Today is $h Holiday. Try on School Working Days.");
+    }
 
 
-    
+
+
+
     if ($login_user_type == 'Teacher') {
 
 
@@ -453,7 +441,7 @@ class APIModel extends CI_Model
 
         if ($digiCoinF) {
           // insert the digicoin
-          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $schoolUniqueCode,$insertId);
+          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $schoolUniqueCode, $insertId);
           if ($insertDigiCoin) {
             return true;
           } else {
@@ -477,7 +465,7 @@ class APIModel extends CI_Model
   {
 
     $currentDate = date_create()->format('Y-m-d');
-    $dir = base_url() .HelperClass::studentImagePath;
+    $dir = base_url() . HelperClass::studentImagePath;
     $d = $this->db->query("SELECT at.id as attendenceId, at.attendenceStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::attendenceTable . " at 
       LEFT JOIN " . Table::studentTable . " stu ON at.stu_id = stu.id
       LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
@@ -492,9 +480,9 @@ class APIModel extends CI_Model
   }
 
   // save departure
-  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode,$session_table_id)
+  public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode, $session_table_id)
   {
-    if( date('D') == 'Sun') { 
+    if (date('D') == 'Sun') {
       return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
     }
     $currentDate = date_create()->format('Y-m-d');
@@ -529,7 +517,7 @@ class APIModel extends CI_Model
 
         if ($digiCoinF) {
           // insert the digicoin
-          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Departure'], $digiCoinF, $schoolUniqueCode,$insertId);
+          $insertDigiCoin = $this->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Departure'], $digiCoinF, $schoolUniqueCode, $insertId);
           if ($insertDigiCoin) {
             return true;
           } else {
@@ -627,13 +615,13 @@ class APIModel extends CI_Model
       $returnArr['roll_no'] = @$d[0]['roll_no'];
 
       // results with exam
-      $returnArr['resultData'] = $this->StudentModel->showResultDataWithExam($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
-    
-  
- 
+      $returnArr['resultData'] = $this->StudentModel->showResultDataWithExam($schoolUniqueCode, $d[0]['classId'], $d[0]['sectionId'], $d[0]['id']);
+
+
+
       // fees data
-      $returnArr['feesData'] = $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
-      $returnArr['feesDetails'] = $this->StudentModel->totalFeesDueToday($schoolUniqueCode,$d[0]['classId'],$d[0]['sectionId'],$d[0]['id']);
+      $returnArr['feesData'] = $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode, $d[0]['classId'], $d[0]['sectionId'], $d[0]['id']);
+      $returnArr['feesDetails'] = $this->StudentModel->totalFeesDueToday($schoolUniqueCode, $d[0]['classId'], $d[0]['sectionId'], $d[0]['id']);
 
       return $returnArr;
     } else {
@@ -643,40 +631,37 @@ class APIModel extends CI_Model
 
 
 
-  public function studentFeesSubmitData($classId,$sectionId,$studentId,$schoolUniqueCode)
+  public function studentFeesSubmitData($classId, $sectionId, $studentId, $schoolUniqueCode)
   {
 
     $sendArr = [
-      'studentFeesDepositData' => $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode,$classId,$sectionId,$studentId),
-      'totalFeesDueDetails' => $this->StudentModel->totalFeesDueToday($schoolUniqueCode,$classId,$sectionId,$studentId),
+      'studentFeesDepositData' => $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode, $classId, $sectionId, $studentId),
+      'totalFeesDueDetails' => $this->StudentModel->totalFeesDueToday($schoolUniqueCode, $classId, $sectionId, $studentId),
     ];
     return $sendArr;
   }
 
 
 
-  public function showResultDataWithExam($classId,$sectionId,$studentId,$schoolUniqueCode)
+  public function showResultDataWithExam($classId, $sectionId, $studentId, $schoolUniqueCode)
   {
 
-   return $this->StudentModel->showResultDataWithExam($schoolUniqueCode,$classId,$sectionId,$studentId);
-
-
+    return $this->StudentModel->showResultDataWithExam($schoolUniqueCode, $classId, $sectionId, $studentId);
   }
 
 
 
-// showAttendanceDataForStudentId
-  public function showAttendanceDataForStudentId($studentId,$schoolUniqueCode,$dateWithYear = null)
+  // showAttendanceDataForStudentId
+  public function showAttendanceDataForStudentId($studentId, $schoolUniqueCode, $dateWithYear = null)
   {
     // attendence
-    if($dateWithYear == null)
-    {
+    if ($dateWithYear == null) {
       $dateWithYear = date('Y-m-01');
     }
-     return $returnArr = $this->StudentModel->showAttendenceData($studentId,$dateWithYear,$schoolUniqueCode);
+    return $returnArr = $this->StudentModel->showAttendenceData($studentId, $dateWithYear, $schoolUniqueCode);
   }
   // add Exam
-  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode,$session_table_id)
+  public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode, $session_table_id)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -765,7 +750,7 @@ class APIModel extends CI_Model
 
 
   // add homeWork
-  public function addHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $schoolUniqueCode,$document_image_name)
+  public function addHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $schoolUniqueCode, $document_image_name)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -829,7 +814,7 @@ class APIModel extends CI_Model
 
 
   // showAllExam
-  public function showAllHomeWorks($classId,$sectionId,$schoolUniqueCode,$date)
+  public function showAllHomeWorks($classId, $sectionId, $schoolUniqueCode, $date)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::homeworkImagePath;
@@ -846,63 +831,59 @@ class APIModel extends CI_Model
     if (!empty($d)) {
       return $d;
     } else {
-      return HelperClass::APIresponse(500, 'No Home Work Found For ' .$date. ' & This Class');
+      return HelperClass::APIresponse(500, 'No Home Work Found For ' . $date . ' & This Class');
     }
   }
 
 
   // holiday calender
-    // showAllExam
-    public function holidayCalender($schoolUniqueCode,$dateWithYear = null)
-    {
-   
-      if($dateWithYear == null)
-      {
-        $dateWithYear = date('Y-m-01');
-      }
-      $d = $this->db->query($sql = "SELECT * FROM " . Table::holidayCalendarTable . " e
+  // showAllExam
+  public function holidayCalender($schoolUniqueCode, $dateWithYear = null)
+  {
+
+    if ($dateWithYear == null) {
+      $dateWithYear = date('Y-m-01');
+    }
+    $d = $this->db->query($sql = "SELECT * FROM " . Table::holidayCalendarTable . " e
           WHERE e.status = '1' AND e.schoolUniqueCode = '$schoolUniqueCode'
           AND MONTH(e.event_date) = MONTH('$dateWithYear')
           AND YEAR(e.event_date) = YEAR('$dateWithYear')
           ")->result_array();
 
 
-         $totalC =  count($d);
+    $totalC =  count($d);
 
-         $sendArr = [];
-         for($i=0; $i < $totalC; $i++)
-         {
-          $subArr = [];
-          $subArr['date'] = date('d',strtotime($d[$i]['event_date']));
-          $subArr['event_date'] = date('d-m-Y',strtotime($d[$i]['event_date']));
-          $subArr['title'] = $d[$i]['title'];
-          array_push($sendArr,$subArr);
-         }
-
-
-      if (!empty($sendArr)) {
-        return $sendArr;
-      } else {
-        return HelperClass::APIresponse(500, 'No Holiday\'s Found.');
-      }
+    $sendArr = [];
+    for ($i = 0; $i < $totalC; $i++) {
+      $subArr = [];
+      $subArr['date'] = date('d', strtotime($d[$i]['event_date']));
+      $subArr['event_date'] = date('d-m-Y', strtotime($d[$i]['event_date']));
+      $subArr['title'] = $d[$i]['title'];
+      array_push($sendArr, $subArr);
     }
+
+
+    if (!empty($sendArr)) {
+      return $sendArr;
+    } else {
+      return HelperClass::APIresponse(500, 'No Holiday\'s Found.');
+    }
+  }
 
   // validateQRCode
 
-  public function validateQRCode($qrCode,$loginuserType, $schoolUniqueCode)
+  public function validateQRCode($qrCode, $loginuserType, $schoolUniqueCode)
   {
     $currentDate = date_create()->format('Y-m-d');
-    
+
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
     $identityType = $this->CrudModel->extractQrCodeAndReturnUserType($qrCode);
     if ($identityType == HelperClass::userTypeR[1]) {
       $table = Table::qrcodeTable;
-    }else if ($identityType == HelperClass::userTypeR[2])
-    {
+    } else if ($identityType == HelperClass::userTypeR[2]) {
       $table = Table::qrcodeTeachersTable;
-    }else if ($identityType == HelperClass::userTypeR[7])
-    {
+    } else if ($identityType == HelperClass::userTypeR[7]) {
       $table = Table::qrcodeDriversTable;
     }
 
@@ -913,12 +894,10 @@ class APIModel extends CI_Model
       if ($identityType == HelperClass::userTypeR[1]) {
         $tableB = Table::studentTable;
         $dir = base_url() . HelperClass::studentImagePath;
-      }else if ($identityType == HelperClass::userTypeR[2])
-      {
+      } else if ($identityType == HelperClass::userTypeR[2]) {
         $tableB = Table::teacherTable;
         $dir = base_url() . HelperClass::teacherImagePath;
-      }else if ($identityType == HelperClass::userTypeR[7])
-      {
+      } else if ($identityType == HelperClass::userTypeR[7]) {
         $tableB = Table::driverTable;
         $dir = base_url() . HelperClass::driverImagePath;
       }
@@ -926,75 +905,59 @@ class APIModel extends CI_Model
 
 
       $details = $this->db->query("SELECT id, name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
-     
+
       $details[0]['userType'] = $identityType;
 
-      $idForUser = (String) $details[0]['id'];
+      $idForUser = (string) $details[0]['id'];
 
-      if(!empty($details))
-      {
+      if (!empty($details)) {
         // fetch token
         $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . $tableB . " WHERE id = '$idForUser' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
 
-          if($loginuserType == HelperClass::userTypeR[3])
-          {
-            // staff 
+        if ($loginuserType == HelperClass::userTypeR[3]) {
+          // staff 
 
-            if(!empty($tokensFromDB))
-            {
-              $tokenArr = [$tokensFromDB[0]['fcm_token']];
-              // fetch notification from db
-              $notificationFromDB = $this->db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '4' LIMIT 1")->result_array();
+          if (!empty($tokensFromDB)) {
+            $tokenArr = [$tokensFromDB[0]['fcm_token']];
+            // fetch notification from db
+            $notificationFromDB = $this->db->query("SELECT title, body FROM " . Table::setNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '4' LIMIT 1")->result_array();
 
-              if(!empty($notificationFromDB))
-              {
-                $title = $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['title'],['identity'=>$identityType]);
-                $body =  $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['body'],['identity'=>$identityType]);
-              }else
-              {
-                $title = "$identityType Entry On 🏫 School.";
-                $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
-              }
-            }
-          }else if($loginuserType == HelperClass::userTypeR[7])
-          {
-            // driver
-
-            if(!empty($tokensFromDB))
-            {
-              $tokenArr = [$tokensFromDB[0]['fcm_token']];
-
-              	// fetch notification from db
-                  $notificationFromDB = $this->db->query("SELECT title, body FROM ".Table::setNotificationTable." WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '3' LIMIT 1")->result_array();
-
-                  if(!empty($notificationFromDB))
-                  {
-                    $title = $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['title'],['identity'=>$identityType]);
-                    $body =  $this->CrudModel->replaceNotificationsWords((String)$notificationFromDB[0]['body'],['identity'=>$identityType]);
-                  }else
-                  {
-                    $title = "$identityType Entry On 🚌 Transport.";
-                    $body = "Hey 👋 Dear $identityType, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!";
-                  }
-
-
-              
+            if (!empty($notificationFromDB)) {
+              $title = $this->CrudModel->replaceNotificationsWords((string)$notificationFromDB[0]['title'], ['identity' => $identityType]);
+              $body =  $this->CrudModel->replaceNotificationsWords((string)$notificationFromDB[0]['body'], ['identity' => $identityType]);
+            } else {
+              $title = "$identityType Entry On 🏫 School.";
+              $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
             }
           }
+        } else if ($loginuserType == HelperClass::userTypeR[7]) {
+          // driver
+
+          if (!empty($tokensFromDB)) {
+            $tokenArr = [$tokensFromDB[0]['fcm_token']];
+
+            // fetch notification from db
+            $notificationFromDB = $this->db->query("SELECT title, body FROM " . Table::setNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '3' LIMIT 1")->result_array();
+
+            if (!empty($notificationFromDB)) {
+              $title = $this->CrudModel->replaceNotificationsWords((string)$notificationFromDB[0]['title'], ['identity' => $identityType]);
+              $body =  $this->CrudModel->replaceNotificationsWords((string)$notificationFromDB[0]['body'], ['identity' => $identityType]);
+            } else {
+              $title = "$identityType Entry On 🚌 Transport.";
+              $body = "Hey 👋 Dear $identityType, We Welcome You On 🚌 Bus / Rikshaw. Parents Can Check 📍 Track Location On App 📱 Now!!";
+            }
+          }
+        }
 
 
 
-          $image = null;
-          $sound = null;
-          $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-        return HelperClass::APIresponse(200, 'Identity Verified Successfully.',$details);
-      }else
-      {
+        $image = null;
+        $sound = null;
+        $sendPushSMS = json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title, $body, $image, $sound), TRUE);
+        return HelperClass::APIresponse(200, 'Identity Verified Successfully.', $details);
+      } else {
         return HelperClass::APIresponse(500, 'Identity Not Verified');
       }
-
-
-      
     } else {
       return HelperClass::APIresponse(500, 'QrCode Not found.', '', ['query' => $this->db->last_query()]);
     }
@@ -1050,7 +1013,7 @@ class APIModel extends CI_Model
 
 
   // save attendence
-  public function addResult($loginUserId, $loginuserType, $resultDate, $studentId, $marks, $reMarks, $examId, $schoolUniqueCode,$session_table_id)
+  public function addResult($loginUserId, $loginuserType, $resultDate, $studentId, $marks, $reMarks, $examId, $schoolUniqueCode, $session_table_id)
   {
     $currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Teacher') {
@@ -1095,7 +1058,7 @@ class APIModel extends CI_Model
       $insertId = $this->CrudModel->insert(Table::resultTable, $insertArr);
       if (!empty($insertId)) {
 
-        
+
 
 
 
@@ -1111,7 +1074,7 @@ class APIModel extends CI_Model
 
           if ($digiCoinToInsert > 0) {
             // insert the digicoin
-            $insertDigiCoin = $this->insertDigiCoin($studentId, HelperClass::userTypeR['1'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode,$examId);
+            $insertDigiCoin = $this->insertDigiCoin($studentId, HelperClass::userTypeR['1'], HelperClass::actionType['Result'], $digiCoinToInsert, $schoolUniqueCode, $examId);
             if ($insertDigiCoin) {
               return true;
             } else {
@@ -1151,11 +1114,10 @@ class APIModel extends CI_Model
   }
 
   // calculate digicoin
-  public function getAlreadyDigiCoinCount($user_id, $user_type_id, $user_type_key,$schoolUniqueCode)
+  public function getAlreadyDigiCoinCount($user_id, $user_type_id, $user_type_key, $schoolUniqueCode)
   {
-    
-    if($user_type_key == 'Parent' || $user_type_key == 'Student')
-    {
+
+    if ($user_type_key == 'Parent' || $user_type_key == 'Student') {
       $user_type_key = 'Student';
       $user_type_id = '1';
     }
@@ -1167,7 +1129,7 @@ class APIModel extends CI_Model
     }
 
     // check total digicoin redeem
-   
+
     $c = $this->db->query("SELECT SUM(digiCoin_used) as digiCoinUsed FROM " . Table::giftRedeemTable . " WHERE login_user_type = '$user_type_id' AND login_user_id = '$user_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
 
@@ -1201,8 +1163,7 @@ class APIModel extends CI_Model
       } else {
         return 0;
       }
-    }else if($user_type == 'Student' || $user_type == 'Parent')
-    {
+    } else if ($user_type == 'Student' || $user_type == 'Parent') {
       $user_type = 'Student';
       $dir = base_url() . HelperClass::giftsImagePath;
       $userTypeId = HelperClass::userType[$user_type];
@@ -1222,7 +1183,7 @@ class APIModel extends CI_Model
       $userType = HelperClass::userType[$loginuserType];
       $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
       if (!empty($totalDigiCoinInWallet)) {
-        
+
         $dir = base_url() . HelperClass::giftsImagePath;
         $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'  AND status = '1'")->result_array();
       }
@@ -1237,7 +1198,7 @@ class APIModel extends CI_Model
       $userType = HelperClass::userType[$loginuserType];
       $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
       if (!empty($totalDigiCoinInWallet)) {
-        
+
         $dir = base_url() . HelperClass::giftsImagePath;
         $d = $this->db->query("SELECT id as gift_id, gift_name,CONCAT('$dir',gift_image) as image,redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' AND redeem_digiCoins <= '{$totalDigiCoinInWallet['balanceDigiCoin']}'   AND status = '1'")->result_array();
       }
@@ -1259,42 +1220,39 @@ class APIModel extends CI_Model
       // check sum of there digicoins first
       $userType = HelperClass::userType[$loginuserType];
 
-    
+
       $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' and id = '$giftId'   AND status = '1'")->result_array();
 
       if (!empty($giftValue)) {
         $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];
-      }else
-      {
+      } else {
         return HelperClass::APIresponse(500, 'This Gift Id\'s Not found, Please Check Another Gift ' . $this->db->last_query());
       }
 
 
       // send notification now
 
-			  $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+      $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
 
-        if(!empty($tokensFromDB))
-        {
-          $tokenArr = [$tokensFromDB[0]['fcm_token']];
-          $title = "🎁 Gift Redeem Successfully.";
-          $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
-          $image = null;
-          $sound = null;
-          $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-        }
-       
-      
-      
-  
+      if (!empty($tokensFromDB)) {
+        $tokenArr = [$tokensFromDB[0]['fcm_token']];
+        $title = "🎁 Gift Redeem Successfully.";
+        $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
+        $image = null;
+        $sound = null;
+        $sendPushSMS = json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title, $body, $image, $sound), TRUE);
+      }
+
+
+
+
 
       // total digiCoins in wallet
-      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType,$loginuserType, $schoolUniqueCode);
+      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
 
       if ($totalDigiCoinInWallet['balanceDigiCoin'] >= $giftValueDigiCoin) {
         $insertRedeem = $this->db->query("INSERT INTO " . Table::giftRedeemTable . " (schoolUniqueCode,login_user_id,login_user_type,gift_id,digiCoin_used) VALUES ('$schoolUniqueCode','$loginUserId','$userType','$giftId','$giftValueDigiCoin')");
-      }else
-      {
+      } else {
         return HelperClass::APIresponse(500, 'This Gifts Not Redeem, Because Your DigiCoins are too low. Gift Id is ' . $giftId . ' if you have redeem 1 or more gifts then check all other is redeem successfully.');
       }
 
@@ -1309,42 +1267,39 @@ class APIModel extends CI_Model
       $loginuserType = 'Student';
       $userType = HelperClass::userType[$loginuserType];
 
-    
+
       $giftValue = $this->db->query("SELECT redeem_digiCoins FROM " . Table::giftTable . " WHERE user_type = '$userType' and id = '$giftId'  AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1'")->result_array();
 
       if (!empty($giftValue)) {
         $giftValueDigiCoin = $giftValue[0]['redeem_digiCoins'];
-      }else
-      {
+      } else {
         return HelperClass::APIresponse(500, 'This Gift Id\'s Not found, Please Check Another Gift ' . $this->db->last_query());
       }
 
 
       // send notification now
 
-			  $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+      $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . Table::teacherTable . " WHERE id = '$loginUserId' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
 
-        if(!empty($tokensFromDB))
-        {
-          $tokenArr = [$tokensFromDB[0]['fcm_token']];
-          $title = "🎁 Gift Redeem Successfully.";
-          $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
-          $image = null;
-          $sound = null;
-          $sendPushSMS= json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title,$body,$image,$sound), TRUE);
-        }
-       
-      
-      
-  
+      if (!empty($tokensFromDB)) {
+        $tokenArr = [$tokensFromDB[0]['fcm_token']];
+        $title = "🎁 Gift Redeem Successfully.";
+        $body = "Hey 👋 Dear Teacher, We Have Successfully Recived Your Gift Redeem Request You Will Get Your Gift Soon.";
+        $image = null;
+        $sound = null;
+        $sendPushSMS = json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title, $body, $image, $sound), TRUE);
+      }
+
+
+
+
 
       // total digiCoins in wallet
-      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType,$loginuserType, $schoolUniqueCode);
+      $totalDigiCoinInWallet = $this->getAlreadyDigiCoinCount($loginUserId, $userType, $loginuserType, $schoolUniqueCode);
 
       if ($totalDigiCoinInWallet['balanceDigiCoin'] >= $giftValueDigiCoin) {
         $insertRedeem = $this->db->query("INSERT INTO " . Table::giftRedeemTable . " (schoolUniqueCode,login_user_id,login_user_type,gift_id,digiCoin_used) VALUES ('$schoolUniqueCode','$loginUserId','$userType','$giftId','$giftValueDigiCoin')");
-      }else
-      {
+      } else {
         return HelperClass::APIresponse(500, 'This Gifts Not Redeem, Because Your DigiCoins are too low. Gift Id is ' . $giftId . ' if you have redeem 1 or more gifts then check all other is redeem successfully.');
       }
 
@@ -1357,44 +1312,41 @@ class APIModel extends CI_Model
   }
 
 
-// gift redeem status
+  // gift redeem status
   public function giftRedeemStatus($loginUserId, $loginuserType, $schoolUniqueCode)
   {
     $dir = base_url() . HelperClass::giftsImagePath;
-      if ($loginuserType == 'Teacher') {
-        $userType = HelperClass::userType[$loginuserType];
+    if ($loginuserType == 'Teacher') {
+      $userType = HelperClass::userType[$loginuserType];
 
-        $sql = "SELECT grt.*, gt.id as giftId, gt.gift_name, CONCAT('$dir',gt.gift_image) as image FROM " . Table::giftRedeemTable . " grt
-        LEFT JOIN ".Table::giftTable." gt ON grt.gift_id = gt.id AND gt.user_type = '$userType'
+      $sql = "SELECT grt.*, gt.id as giftId, gt.gift_name, CONCAT('$dir',gt.gift_image) as image FROM " . Table::giftRedeemTable . " grt
+        LEFT JOIN " . Table::giftTable . " gt ON grt.gift_id = gt.id AND gt.user_type = '$userType'
          WHERE grt.login_user_id = '$loginUserId' AND grt.login_user_type = '$userType' AND grt.schoolUniqueCode = '$schoolUniqueCode'";
 
-        $allGiftsRedeemData = $this->db->query($sql)->result_array();
-        if($allGiftsRedeemData){
+      $allGiftsRedeemData = $this->db->query($sql)->result_array();
+      if ($allGiftsRedeemData) {
 
-          $totalC = count($allGiftsRedeemData);
-          $sendArr = [];
-          $sendArr['giftStatus'] = [];
-          for($i=0; $i< $totalC; $i++)
-          {
-            $subArr = [];
-            $subArr['giftRedeemId'] = $allGiftsRedeemData[$i]['id'];
-            $subArr['giftId'] = $allGiftsRedeemData[$i]['giftId'];
-            $subArr['giftName'] = $allGiftsRedeemData[$i]['gift_name'];
-            $subArr['giftImage'] = $allGiftsRedeemData[$i]['image'];
-            $subArr['digiCoinUsed'] = $allGiftsRedeemData[$i]['digiCoin_used'];
-            $subArr['redeemStatus'] = HelperClass::giftStatus[$allGiftsRedeemData[$i]['status']];
-            $subArr['redeemDate'] = date('d-m-Y h:i:A', strtotime($allGiftsRedeemData[$i]['created_at']));
-            array_push($sendArr['giftStatus'],$subArr);
-          }
-          return $sendArr;
-        }else
-        {
-          return HelperClass::APIresponse(500, 'There is no gift redeem found for this user.');
+        $totalC = count($allGiftsRedeemData);
+        $sendArr = [];
+        $sendArr['giftStatus'] = [];
+        for ($i = 0; $i < $totalC; $i++) {
+          $subArr = [];
+          $subArr['giftRedeemId'] = $allGiftsRedeemData[$i]['id'];
+          $subArr['giftId'] = $allGiftsRedeemData[$i]['giftId'];
+          $subArr['giftName'] = $allGiftsRedeemData[$i]['gift_name'];
+          $subArr['giftImage'] = $allGiftsRedeemData[$i]['image'];
+          $subArr['digiCoinUsed'] = $allGiftsRedeemData[$i]['digiCoin_used'];
+          $subArr['redeemStatus'] = HelperClass::giftStatus[$allGiftsRedeemData[$i]['status']];
+          $subArr['redeemDate'] = date('d-m-Y h:i:A', strtotime($allGiftsRedeemData[$i]['created_at']));
+          array_push($sendArr['giftStatus'], $subArr);
         }
-
-      } else if ($loginuserType == 'Student') {
-        //
+        return $sendArr;
+      } else {
+        return HelperClass::APIresponse(500, 'There is no gift redeem found for this user.');
       }
+    } else if ($loginuserType == 'Student') {
+      //
+    }
   }
 
   // wallet History
@@ -1425,12 +1377,12 @@ class APIModel extends CI_Model
      ";
 
       $d = $this->db->query($sql)->result_array();
-      
+
       if (!empty($d)) {
 
         $sendArr = [];
         $totalCount = count($d);
-   
+
         $sendArr['totalDigiCoins'] = 0;
         $sendArr['transactions'] = [];
         $totalCoins = 0;
@@ -1450,8 +1402,7 @@ class APIModel extends CI_Model
       } else {
         return 0;
       }
-    }else if($loginuserType == 'Parent' || $loginuserType == 'Student')
-    {
+    } else if ($loginuserType == 'Parent' || $loginuserType == 'Student') {
       $userType = '1';
       //$userType = HelperClass::userType[$loginuserType];
 
@@ -1479,12 +1430,12 @@ class APIModel extends CI_Model
 
       // echo $sql;
       $d = $this->db->query($sql)->result_array();
-      
+
       if (!empty($d)) {
 
         $sendArr = [];
         $totalCount = count($d);
-   
+
         $sendArr['totalDigiCoins'] = 0;
         $sendArr['transactions'] = [];
         $totalCoins = 0;
@@ -1509,16 +1460,16 @@ class APIModel extends CI_Model
 
 
   // leaderBoard
-  public function leaderBoard($loginuserType, $schoolUniqueCode,$loginUserId)
+  public function leaderBoard($loginuserType, $schoolUniqueCode, $loginUserId)
   {
-    
+
     if ($loginuserType == 'Teacher') {
-      $dir = base_url().HelperClass::teacherImagePath;
+      $dir = base_url() . HelperClass::teacherImagePath;
       $tableName = Table::teacherTable;
       // $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       $d = $this->db->query($sql1 = "SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id AND schoolUniqueCode = '$schoolUniqueCode') as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
-      
-  
+
+
       if (!empty($d)) {
 
         $sendArr = [];
@@ -1530,82 +1481,74 @@ class APIModel extends CI_Model
         $totalCount = count($d);
         $a = 1;
         for ($i = 0; $i < $totalCount; $i++) {
-         $userDetails =  $this->db->query($sql2 = "SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+          $userDetails =  $this->db->query($sql2 = "SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM " . $tableName . " s LEFT JOIN " . Table::classTable . " c ON c.id = s.class_id LEFT JOIN " . Table::sectionTable . " sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
-        //  if(empty($userDetails)) 
-        //  {
-        //   continue;
-        //  }
+          //  if(empty($userDetails)) 
+          //  {
+          //   continue;
+          //  }
 
           // for first, second & third position
-         if($i == 0 || $i == 1 || $i == 2)
-         {
-          if($i == 0 )
-          {
-            $topSubArr = [];
-            $topSubArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $topSubArr['myPosition'] = TRUE;
+          if ($i == 0 || $i == 1 || $i == 2) {
+            if ($i == 0) {
+              $topSubArr = [];
+              $topSubArr['myPosition'] = FALSE;
+              if ($loginUserId == @$userDetails[0]['id']) {
+                $topSubArr['myPosition'] = TRUE;
+              }
+              $topSubArr['position'] = $a++;
+              $topSubArr['userType'] = @$d[$i]['user_type'];
+              $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+              $topSubArr['id'] = @$userDetails[0]['id'];
+              $topSubArr['name'] = @$userDetails[0]['name'];
+              $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+              $topSubArr['className'] = @$userDetails[0]['className'];
+              $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+              $topSubArr['image'] = @$dir . @$userDetails[0]['image'];
+              $sendArr['topOne'] = $topSubArr;
             }
-            $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = @$d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
-            $topSubArr['id'] = @$userDetails[0]['id'];
-            $topSubArr['name'] = @$userDetails[0]['name'];
-            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-            $topSubArr['className'] = @$userDetails[0]['className'];
-            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
-            $sendArr['topOne']= $topSubArr;
-          }
-          if($i == 1)
-          {
-            $topSubArr = [];
-            $topSubArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $topSubArr['myPosition'] = TRUE;
+            if ($i == 1) {
+              $topSubArr = [];
+              $topSubArr['myPosition'] = FALSE;
+              if ($loginUserId == @$userDetails[0]['id']) {
+                $topSubArr['myPosition'] = TRUE;
+              }
+              $topSubArr['position'] = $a++;
+              $topSubArr['userType'] = @$d[$i]['user_type'];
+              $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+              $topSubArr['id'] = @$userDetails[0]['id'];
+              $topSubArr['name'] = @$userDetails[0]['name'];
+              $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+              $topSubArr['className'] = @$userDetails[0]['className'];
+              $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+              $topSubArr['image'] = @$dir . @$userDetails[0]['image'];
+              $sendArr['topTwo'] = $topSubArr;
             }
-            $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = @$d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
-            $topSubArr['id'] = @$userDetails[0]['id'];
-            $topSubArr['name'] = @$userDetails[0]['name'];
-            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-            $topSubArr['className'] = @$userDetails[0]['className'];
-            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
-            $sendArr['topTwo'] = $topSubArr;
-          }
-          if($i == 2)
-          {
-            $topSubArr = [];
-            $topSubArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $topSubArr['myPosition'] = TRUE;
+            if ($i == 2) {
+              $topSubArr = [];
+              $topSubArr['myPosition'] = FALSE;
+              if ($loginUserId == @$userDetails[0]['id']) {
+                $topSubArr['myPosition'] = TRUE;
+              }
+              $topSubArr['position'] = $a++;
+              $topSubArr['userType'] = @$d[$i]['user_type'];
+              $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+              $topSubArr['id'] = @$userDetails[0]['id'];
+              $topSubArr['name'] = @$userDetails[0]['name'];
+              $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+              $topSubArr['className'] = @$userDetails[0]['className'];
+              $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+              $topSubArr['image'] = @$dir . @$userDetails[0]['image'];
+              $sendArr['topThree'] = $topSubArr;
             }
-            $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = @$d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
-            $topSubArr['id'] = @$userDetails[0]['id'];
-            $topSubArr['name'] = @$userDetails[0]['name'];
-            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-            $topSubArr['className'] = @$userDetails[0]['className'];
-            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
-            $sendArr['topThree'] =$topSubArr;
+
+            continue;
           }
-         
-           continue;
-         }
 
 
           $subArr = [];
           $subArr['myPosition'] = FALSE;
-          if($loginUserId == @$userDetails[0]['id'])
-          {
+          if ($loginUserId == @$userDetails[0]['id']) {
             $subArr['myPosition'] = TRUE;
           }
           $subArr['position'] = $a++;
@@ -1616,22 +1559,21 @@ class APIModel extends CI_Model
           $subArr['uniqueId'] = @$userDetails[0]['user_id'];
           $subArr['className'] = @$userDetails[0]['className'];
           $subArr['sectionName'] = @$userDetails[0]['sectionName'];
-          $subArr['image'] = @$dir.@$userDetails[0]['image'];
+          $subArr['image'] = @$dir . @$userDetails[0]['image'];
           array_push($sendArr['restAll'], $subArr);
         }
-        
+
         return $sendArr;
       } else {
         return 0;
       }
-    }else if($loginuserType == 'Student' || $loginuserType == 'Parent')
-    {
-      $dir = base_url().HelperClass::studentImagePath;
+    } else if ($loginuserType == 'Student' || $loginuserType == 'Parent') {
+      $dir = base_url() . HelperClass::studentImagePath;
       $tableName = Table::studentTable;
       $loginuserType = 'Student';
       // $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id) as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType' AND MONTH(gdc.created_at)=MONTH(now()) AND YEAR(gdc.created_at)=YEAR(now()) GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
       $d = $this->db->query("SELECT SUM(gdc.digiCoin) as totalDigiCoinsEarn, gdc.user_id,gdc.user_type, (SELECT name FROM students WHERE id = gdc.user_id AND schoolUniqueCode = '$schoolUniqueCode') as userName FROM " . Table::getDigiCoinTable . " gdc WHERE gdc.schoolUniqueCode = '$schoolUniqueCode' AND user_type = '$loginuserType'  GROUP BY gdc.user_id ORDER BY SUM(gdc.digiCoin) DESC")->result_array();
-      
+
       if (!empty($d)) {
 
         $sendArr = [];
@@ -1643,81 +1585,73 @@ class APIModel extends CI_Model
         $totalCount = count($d);
         $a = 1;
         for ($i = 0; $i < $totalCount; $i++) {
-         $userDetails =  $this->db->query("SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM ".$tableName." s LEFT JOIN ".Table::classTable." c ON c.id = s.class_id LEFT JOIN ".Table::sectionTable." sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+          $userDetails =  $this->db->query("SELECT s.id, s.name,s.user_id,s.image,c.className,sc.sectionName FROM " . $tableName . " s LEFT JOIN " . Table::classTable . " c ON c.id = s.class_id LEFT JOIN " . Table::sectionTable . " sc ON sc.id = s.section_id WHERE s.id = '{$d[$i]['user_id']}' AND s.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
 
-        //  if(empty($userDetails)) 
-        //  {
-        //   continue;
-        //  }
-         if($i == 0 || $i == 1 || $i == 2)
-         {
-          if($i == 0 )
-          {
-            $topSubArr = [];
-            $topSubArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $topSubArr['myPosition'] = TRUE;
+          //  if(empty($userDetails)) 
+          //  {
+          //   continue;
+          //  }
+          if ($i == 0 || $i == 1 || $i == 2) {
+            if ($i == 0) {
+              $topSubArr = [];
+              $topSubArr['myPosition'] = FALSE;
+              if ($loginUserId == @$userDetails[0]['id']) {
+                $topSubArr['myPosition'] = TRUE;
+              }
+              $topSubArr['position'] = $a++;
+              $topSubArr['userType'] = @$d[$i]['user_type'];
+              $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+              $topSubArr['id'] = @$userDetails[0]['id'];
+              $topSubArr['name'] = @$userDetails[0]['name'];
+              $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+              $topSubArr['className'] = @$userDetails[0]['className'];
+              $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+              $topSubArr['image'] = @$dir . @$userDetails[0]['image'];
+              $sendArr['topOne'] =  $topSubArr;
             }
-            $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = @$d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
-            $topSubArr['id'] = @$userDetails[0]['id'];
-            $topSubArr['name'] = @$userDetails[0]['name'];
-            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-            $topSubArr['className'] = @$userDetails[0]['className'];
-            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
-            $sendArr['topOne'] =  $topSubArr;
-          }
-          if($i == 1)
-          {
-            $topSubArr = [];
-            $topSubArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $topSubArr['myPosition'] = TRUE;
+            if ($i == 1) {
+              $topSubArr = [];
+              $topSubArr['myPosition'] = FALSE;
+              if ($loginUserId == @$userDetails[0]['id']) {
+                $topSubArr['myPosition'] = TRUE;
+              }
+              $topSubArr['position'] = $a++;
+              $topSubArr['userType'] = @$d[$i]['user_type'];
+              $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+              $topSubArr['id'] = @$userDetails[0]['id'];
+              $topSubArr['name'] = @$userDetails[0]['name'];
+              $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+              $topSubArr['className'] = @$userDetails[0]['className'];
+              $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+              $topSubArr['image'] = @$dir . @$userDetails[0]['image'];
+              $sendArr['topTwo'] = $topSubArr;
             }
-            $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = @$d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
-            $topSubArr['id'] = @$userDetails[0]['id'];
-            $topSubArr['name'] = @$userDetails[0]['name'];
-            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-            $topSubArr['className'] = @$userDetails[0]['className'];
-            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
-            $sendArr['topTwo'] = $topSubArr;
-          }
-          if($i == 2)
-          {
-            $topSubArr = [];
-            $topSubArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $topSubArr['myPosition'] = TRUE;
+            if ($i == 2) {
+              $topSubArr = [];
+              $topSubArr['myPosition'] = FALSE;
+              if ($loginUserId == @$userDetails[0]['id']) {
+                $topSubArr['myPosition'] = TRUE;
+              }
+              $topSubArr['position'] = $a++;
+              $topSubArr['userType'] = @$d[$i]['user_type'];
+              $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
+              $topSubArr['id'] = @$userDetails[0]['id'];
+              $topSubArr['name'] = @$userDetails[0]['name'];
+              $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
+              $topSubArr['className'] = @$userDetails[0]['className'];
+              $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
+              $topSubArr['image'] = @$dir . @$userDetails[0]['image'];
+              $sendArr['topThree'] =  $topSubArr;
             }
-            $topSubArr['position'] = $a++;
-            $topSubArr['userType'] = @$d[$i]['user_type'];
-            $topSubArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
-            $topSubArr['id'] = @$userDetails[0]['id'];
-            $topSubArr['name'] = @$userDetails[0]['name'];
-            $topSubArr['uniqueId'] = @$userDetails[0]['user_id'];
-            $topSubArr['className'] = @$userDetails[0]['className'];
-            $topSubArr['sectionName'] = @$userDetails[0]['sectionName'];
-            $topSubArr['image'] = @$dir.@$userDetails[0]['image'];
-            $sendArr['topThree'] =  $topSubArr;
+            continue;
           }
-           continue;
-         }
 
 
           $subArr = [];
           $subArr['myPosition'] = FALSE;
-            if($loginUserId == @$userDetails[0]['id'])
-            {
-              $subArr['myPosition'] = TRUE;
-            }
+          if ($loginUserId == @$userDetails[0]['id']) {
+            $subArr['myPosition'] = TRUE;
+          }
           $subArr['position'] = $a++;
           $subArr['userType'] = @$d[$i]['user_type'];
           $subArr['totalDigiCoinsEarn'] = @$d[$i]['totalDigiCoinsEarn'];
@@ -1726,10 +1660,10 @@ class APIModel extends CI_Model
           $subArr['uniqueId'] = @$userDetails[0]['user_id'];
           $subArr['className'] = @$userDetails[0]['className'];
           $subArr['sectionName'] = @$userDetails[0]['sectionName'];
-          $subArr['image'] = @$dir.@$userDetails[0]['image'];
-         array_push($sendArr['restAll'], $subArr);
+          $subArr['image'] = @$dir . @$userDetails[0]['image'];
+          array_push($sendArr['restAll'], $subArr);
         }
-        
+
         return $sendArr;
       } else {
         return 0;
@@ -1751,9 +1685,9 @@ class APIModel extends CI_Model
 
     return $this->db->query("SELECT g.*, CONCAT('$dir',g.image) as image, CONCAT('https://dvm.digitalfied.in/gatePass?gatePass=', g.id) as link ,c.className, sec.sectionName, s.name
     FROM " . Table::gatePassTable . " g 
-    INNER JOIN ".Table::studentTable." s ON s.id = g.student_id
-    INNER JOIN ".Table::classTable." c ON c.id = g.class_id
-    INNER JOIN ".Table::sectionTable." sec ON sec.id = g.section_id
+    INNER JOIN " . Table::studentTable . " s ON s.id = g.student_id
+    INNER JOIN " . Table::classTable . " c ON c.id = g.class_id
+    INNER JOIN " . Table::sectionTable . " sec ON sec.id = g.section_id
     WHERE g.status = '1' AND g.schoolUniqueCode = '$schoolUniqueCode' ")->result_array();
   }
 
@@ -1763,34 +1697,34 @@ class APIModel extends CI_Model
   }
 
   // leaderBoard
-  public function visitorEntry($visit_date,$visit_time,$visitor_name,$person_to_meet,$purpose_to_meet,$visitor_mobile_no,$file,$schoolUniqueCode,$session_table_id)
+  public function visitorEntry($visit_date, $visit_time, $visitor_name, $person_to_meet, $purpose_to_meet, $visitor_mobile_no, $file, $schoolUniqueCode, $session_table_id)
   {
-    
-      $d = $this->db->query("INSERT INTO ".Table::visitorTable." (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image,session_table_id) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$file','$session_table_id')");
-      // echo $this->db->last_query();
-      
-      if (($d)) {
-        return $this->db->insert_id();
-      } else {
-        return false;
-      }
-    
-  }
-  
 
-  public function gatePass($schoolUniqueCode,$studentId,$class_id,$section_id,$guardian_name,$mobile,$address,$time,$date,$document_image_name){
-    $d = $this->db->query("INSERT INTO ".Table::gatePassTable." (schoolUniqueCode,student_id,class_id,section_id,guardian_name,mobile,address,time,date,image) VALUES ('$schoolUniqueCode','$studentId','$class_id','$section_id','$guardian_name','$mobile','$address','$time','$date','$document_image_name')");
-      // echo $this->db->last_query();
-      
-      if (($d)) {
-        return $this->db->insert_id();
-      } else {
-        return false;
-      }
+    $d = $this->db->query("INSERT INTO " . Table::visitorTable . " (schoolUniqueCode,visit_date,visit_time,visitor_name,person_to_meet,purpose_to_meet,visitor_mobile_no,visitor_image,session_table_id) VALUES ('$schoolUniqueCode','$visit_date','$visit_time','$visitor_name','$person_to_meet','$purpose_to_meet','$visitor_mobile_no','$file','$session_table_id')");
+    // echo $this->db->last_query();
+
+    if (($d)) {
+      return $this->db->insert_id();
+    } else {
+      return false;
+    }
+  }
+
+
+  public function gatePass($schoolUniqueCode, $studentId, $class_id, $section_id, $guardian_name, $mobile, $address, $time, $date, $document_image_name)
+  {
+    $d = $this->db->query("INSERT INTO " . Table::gatePassTable . " (schoolUniqueCode,student_id,class_id,section_id,guardian_name,mobile,address,time,date,image) VALUES ('$schoolUniqueCode','$studentId','$class_id','$section_id','$guardian_name','$mobile','$address','$time','$date','$document_image_name')");
+    // echo $this->db->last_query();
+
+    if (($d)) {
+      return $this->db->insert_id();
+    } else {
+      return false;
+    }
   }
 
   // upateDriverLatLng
-  public function upateDriverLatLng($loginUserIdFromDB,$loginuserType,$lat,$lng,$schoolUniqueCode)
+  public function upateDriverLatLng($loginUserIdFromDB, $loginuserType, $lat, $lng, $schoolUniqueCode)
   {
     //$currentDate = date_create()->format('Y-m-d');
     if ($loginuserType == 'Driver') {
@@ -1813,10 +1747,10 @@ class APIModel extends CI_Model
     }
   }
 
-// add Compalint
-public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName,$guiltyPersonPosition,$subject,$issue,$schoolUniqueCode)
-{
-  //$currentDate = date_create()->format('Y-m-d');
+  // add Compalint
+  public function addComplaint($loginUserIdFromDB, $loginuserType, $guiltyPersonName, $guiltyPersonPosition, $subject, $issue, $schoolUniqueCode)
+  {
+    //$currentDate = date_create()->format('Y-m-d');
     $insertArr = [
       "schoolUniqueCode" => $schoolUniqueCode,
       "login_user_id" => $loginUserIdFromDB,
@@ -1834,22 +1768,162 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
     } else {
       return false;
     }
-  
-}
+  }
+
+  // add Compalint
+  public function markAttendance($loginuserType, $qrCode, $schoolUniqueCode, $session_table_id)
+  {
+    $currentDate = date_create()->format('Y-m-d');
+    $dataStatus = '';
+    $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
+
+    $identityType = $this->CrudModel->extractQrCodeAndReturnUserType($qrCode);
+    if ($identityType == HelperClass::userTypeR[1]) {
+      $table = Table::qrcodeTable;
+    } else if ($identityType == HelperClass::userTypeR[2]) {
+      $table = Table::qrcodeTeachersTable;
+    } else if ($identityType == HelperClass::userTypeR[7]) {
+      $table = Table::qrcodeDriversTable;
+    }
+
+    if (empty($table)) {
+      $dataStatus = '5'; // qr code is not valid
+      return $dataStatus;
+      // HelperClass::APIresponse(500, 'QR Code Table Not Found. Please Check QR Code Again.');
+    }
+
+
+
+    $d = $this->db->query("SELECT * FROM " . $table . " WHERE qrcodeUrl = '$qrCode' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
+
+ 
+
+    if (!empty($d)) {
+
+      if ($identityType == HelperClass::userTypeR[1]) {
+        $tableB = Table::studentTable;
+        $dir = base_url() . HelperClass::studentImagePath;
+      } else if ($identityType == HelperClass::userTypeR[2]) {
+        $tableB = Table::teacherTable;
+        $dir = base_url() . HelperClass::teacherImagePath;
+      } else if ($identityType == HelperClass::userTypeR[7]) {
+        $tableB = Table::driverTable;
+        $dir = base_url() . HelperClass::driverImagePath;
+      }
+
+
+
+
+      $details = $this->db->query("SELECT id, name,email,mobile,CONCAT('$dir',image) as image FROM " . $tableB . " WHERE user_id = '{$d[0]['uniqueValue']}' AND u_qr_id = '{$d[0]['id']}' AND schoolUniqueCode = '$schoolUniqueCode' AND status = '1' LIMIT 1")->result_array();
+
+
+      // mark attendance now 
+
+      if ($tableB == Table::studentTable) {
+        // mark student attendance
+        $currentDate = date_create()->format('Y-m-d');
+
+        $stu_id = $details[0]['id'];
+        $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+        if (!empty($d)) {
+          $dataStatus = '1'; // already mark
+          return $dataStatus;
+        }
+
+        $de = $this->db->query("SELECT c.className,sec.sectionName FROM " . Table::studentTable . " s 
+     JOIN " . Table::classTable . " c ON c.id = s.class_id
+     JOIN " . Table::sectionTable . " sec ON sec.id = s.section_id
+      WHERE s.id = '$stu_id' AND s.schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+        $insertArr = [
+          "schoolUniqueCode" => $schoolUniqueCode,
+          "stu_id" => $stu_id,
+          "stu_class" => $de[0]['className'],
+          "stu_section" => $de[0]['sectionName'],
+          "login_user_id" => '1',
+          "login_user_type" => 'Staff',
+          "attendenceStatus" => '1',
+          "dateTime" => date_create()->format('Y-m-d h:i:s'),
+          "att_date" => date_create()->format('Y-m-d'),
+          "session_table_id" => $session_table_id
+        ];
+        $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
+        if (!empty($insertId)) {
+
+          // insert scan history
+          $insertData = $this->db->query("INSERT INTO " . Table::qrScanHistory . " (schoolUniqueCode,qrcode,user_id,user_type_id) VALUES ('$schoolUniqueCode','$qrCode','{$details[0]['id']}', '" . HelperClass::userType[$identityType] . "')");
+
+          $details[0]['userType'] = $identityType;
+
+          $idForUser = (string) $details[0]['id'];
+
+
+          // send  firebase notification
+          if (!empty($details)) {
+            $tokensFromDB =  $this->db->query("SELECT fcm_token FROM " . $tableB . " WHERE id = '$idForUser' AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' LIMIT 1")->result_array();
+
+            if ($loginuserType == HelperClass::userTypeR[3]) {
+
+
+              if (!empty($tokensFromDB)) {
+                $tokenArr = [$tokensFromDB[0]['fcm_token']];
+
+                $notificationFromDB = $this->db->query("SELECT title, body FROM " . Table::setNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '4' LIMIT 1")->result_array();
+
+                if (!empty($notificationFromDB)) {
+                  $title = $this->CrudModel->replaceNotificationsWords((string)$notificationFromDB[0]['title'], ['identity' => $identityType]);
+                  $body =  $this->CrudModel->replaceNotificationsWords((string)$notificationFromDB[0]['body'], ['identity' => $identityType]);
+                } else {
+                  $title = "$identityType Entry On 🏫 School.";
+                  $body = "Hey 👋 Dear $identityType, We Welcome You On 🏫 School, You Have Entered Into The 🏫 School, Entry Gate.";
+                }
+              }
+            }
+
+            $image = null;
+            $sound = null;
+            $sendPushSMS = json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title, $body, $image, $sound), TRUE);
+          }
+
+          // check digiCoin is set for this attendence time for students
+          $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'], HelperClass::userType['Student'], $schoolUniqueCode);
+
+          if ($digiCoinF) {
+            // insert the digicoin
+            $insertDigiCoin = $this->APIModel->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $schoolUniqueCode, $insertId);
+            if ($insertDigiCoin) {
+              $dataStatus = '2'; // attendance Marked
+              return $dataStatus;
+            } else {
+              $dataStatus = '2'; // attendance Marked but coin not added
+              return $dataStatus;
+            }
+          }
+
+          $dataStatus = '2'; // attendance Marked successfully
+          return $dataStatus;
+        }
+      }
+
+      return $dataStatus;
+    } else {
+      $dataStatus = '5'; // qrcode is not valid or not found
+      return $dataStatus;
+    }
+  }
 
 
   // get driver lat lng
-  public function getDriverLatLng($studentId,$schoolUniqueCode)
+  public function getDriverLatLng($studentId, $schoolUniqueCode)
   {
     $d = $this->db->query("SELECT d.* FROM " . Table::driverTable . " d
-    INNER JOIN ".Table::studentTable." s ON s.driver_id = d.id AND s.vechicle_type = d.vechicle_type
+    INNER JOIN " . Table::studentTable . " s ON s.driver_id = d.id AND s.vechicle_type = d.vechicle_type
     WHERE d.status = '1' AND d.schoolUniqueCode = '$schoolUniqueCode' AND s.id = '$studentId'")->result_array();
 
-    if(!empty($d))
-    {
+    if (!empty($d)) {
       return $d[0];
-    }else
-    {
+    } else {
       return HelperClass::APIresponse(500, 'Driver Details Not Found Linking With The Student ');
     }
   }
@@ -1867,7 +1941,7 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
   }
 
   // insert digiCoin
-  public function insertDigiCoin($user_id, $user_type, $for_what, $digiCoin, $schoolUniqueCode,$for_what_id = null)
+  public function insertDigiCoin($user_id, $user_type, $for_what, $digiCoin, $schoolUniqueCode, $for_what_id = null)
   {
     $d = $this->db->query("INSERT INTO " . Table::getDigiCoinTable . " (schoolUniqueCode,user_type,user_id,for_what,for_what_id,digiCoin) VALUES ('$schoolUniqueCode','$user_type','$user_id',$for_what,'$for_what_id','$digiCoin')");
     if (!empty($d)) {
@@ -1934,33 +2008,33 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
 
 
 
-    // showAll Semester Exam Name
-    public function showSemesterExamNames($schoolUniqueCode,$session_table_id)
-    {
- 
-      $d = $this->db->query("SELECT sem.* , sem.id as semExamNameId FROM " . Table::semExamNameTable . " sem
+  // showAll Semester Exam Name
+  public function showSemesterExamNames($schoolUniqueCode, $session_table_id)
+  {
+
+    $d = $this->db->query("SELECT sem.* , sem.id as semExamNameId FROM " . Table::semExamNameTable . " sem
         WHERE  sem.schoolUniqueCode = '$schoolUniqueCode' AND sem.status = '1' AND session_table_id = '$session_table_id'")->result_array();
-  
-      if (!empty($d)) {
-        return $d;
-      } else {
-        return HelperClass::APIresponse(500, 'No Semesters Exams found for this school');
-      }
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'No Semesters Exams found for this school');
     }
+  }
 
 
-     // showAll Semester Exam
-  public function showAllSemesterExam($semExamId,$classId,$sectionId,$subjectId,$schoolUniqueCode,$session_table_id)
+  // showAll Semester Exam
+  public function showAllSemesterExam($semExamId, $classId, $sectionId, $subjectId, $schoolUniqueCode, $session_table_id)
   {
     $d = $this->db->query("SELECT 
     sec.id as semExamId, sec.sem_exam_id as semExamNameId, sec.exam_date,sec.exam_day,sec.min_marks,sec.max_marks,
     sem.sem_exam_name, sem.exam_year,
     c.className,se.sectionName,sub.subjectName
      FROM " . Table::secExamTable . " sec
-    JOIN ".Table::classTable." c ON c.id = sec.class_id
-    JOIN ".Table::sectionTable." se ON se.id = sec.section_id
-    JOIN ".Table::subjectTable." sub ON sub.id = sec.subject_id
-    JOIN ".Table::semExamNameTable." sem ON sem.id = sec.sem_exam_id
+    JOIN " . Table::classTable . " c ON c.id = sec.class_id
+    JOIN " . Table::sectionTable . " se ON se.id = sec.section_id
+    JOIN " . Table::subjectTable . " sub ON sub.id = sec.subject_id
+    JOIN " . Table::semExamNameTable . " sem ON sem.id = sec.sem_exam_id
       WHERE sec.class_id = '$classId' 
       AND sec.section_id = '$sectionId' 
       AND sec.subject_id = '$subjectId' 
@@ -1979,53 +2053,52 @@ public function addComplaint($loginUserIdFromDB,$loginuserType,$guiltyPersonName
 
 
 
- // add semester exam result
+  // add semester exam result
 
-  public function addSemesterExamResult($studentId,$marks,$examId,$semExamNameId,$schoolUniqueCode,$session_table_id)
+  public function addSemesterExamResult($studentId, $marks, $examId, $semExamNameId, $schoolUniqueCode, $session_table_id)
   {
 
-      $e = $this->db->query($s = "SELECT min_marks,max_marks,class_id,section_id,subject_id FROM " . Table::secExamTable . " WHERE 
+    $e = $this->db->query($s = "SELECT min_marks,max_marks,class_id,section_id,subject_id FROM " . Table::secExamTable . " WHERE 
       id = '$examId' AND schoolUniqueCode = '$schoolUniqueCode' AND session_table_id = '$session_table_id' AND sem_exam_id = '$semExamNameId'  LIMIT 1")->result_array()[0];
 
-      if (!empty($e)) {
-        if ($marks >= $e['min_marks'] && $marks <= $e['max_marks']) {
-          $resultStatus = '1'; // pass
-        } else {
-          $resultStatus = '2'; // fail
-        }
+    if (!empty($e)) {
+      if ($marks >= $e['min_marks'] && $marks <= $e['max_marks']) {
+        $resultStatus = '1'; // pass
+      } else {
+        $resultStatus = '2'; // fail
       }
+    }
 
 
-      $d = $this->db->query($sql = "SELECT * FROM " . Table::semExamResults . " WHERE sem_id = '$semExamNameId' AND sec_exam_id = '$examId' AND student_id = '$studentId' AND session_table_id = '$session_table_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+    $d = $this->db->query($sql = "SELECT * FROM " . Table::semExamResults . " WHERE sem_id = '$semExamNameId' AND sec_exam_id = '$examId' AND student_id = '$studentId' AND session_table_id = '$session_table_id' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
 
-      if (!empty($d)) {
-        return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
-      }
+    if (!empty($d)) {
+      return HelperClass::APIresponse(500, 'Result For This Student is Already Submited.' . $d[0]['student_id']);
+    }
 
-      $insertArr = [
-        "schoolUniqueCode" => $schoolUniqueCode,
-        "sem_id" => $semExamNameId,
-        "sec_exam_id" => $examId,
-        "class_id" => $e['class_id'],
-        "section_id" => $e['section_id'],
-        "subject_id" => $e['subject_id'],
-        "student_id" => $studentId,
-        "marks" => $marks,
-        "result_status" => $resultStatus,
-        "session_table_id" => $session_table_id
-      ];
+    $insertArr = [
+      "schoolUniqueCode" => $schoolUniqueCode,
+      "sem_id" => $semExamNameId,
+      "sec_exam_id" => $examId,
+      "class_id" => $e['class_id'],
+      "section_id" => $e['section_id'],
+      "subject_id" => $e['subject_id'],
+      "student_id" => $studentId,
+      "marks" => $marks,
+      "result_status" => $resultStatus,
+      "session_table_id" => $session_table_id
+    ];
 
 
-      $insertId = $this->CrudModel->insert(Table::semExamResults, $insertArr);
-      return  ($insertId) ? true : false;
+    $insertId = $this->CrudModel->insert(Table::semExamResults, $insertArr);
+    return ($insertId) ? true : false;
   }
 
 
-  public function studentNamesViaClassAndSectionId($class_id,$section_id,$schoolUniqueCode){
+  public function studentNamesViaClassAndSectionId($class_id, $section_id, $schoolUniqueCode)
+  {
 
     return $e = $this->db->query($s = "SELECT id, name FROM " . Table::studentTable . " WHERE 
       class_id = '$class_id' AND section_id = '$section_id' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
   }
-  
- 
 }

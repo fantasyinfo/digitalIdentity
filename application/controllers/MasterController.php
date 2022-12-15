@@ -31,6 +31,7 @@ class MasterController extends CI_Controller
 	}
 
 
+
 	public function cityMaster()
 	{
 		$this->loginCheck();

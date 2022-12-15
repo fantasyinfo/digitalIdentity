@@ -25,12 +25,13 @@ $dir = base_url() . HelperClass::schoolLogoImagePath;
 
   $this->load->library('session');
 
-  $parentMenu = $this->db->query("SELECT * FROM " . Table::adminPanelMenuTable . " WHERE is_parent = 1 AND status = '1'")->result_array();
+  $parentMenu = $this->db->query("SELECT * FROM " . Table::adminPanelMenuTable . " WHERE is_parent = 1 AND status = '1' ORDER BY position ASC")->result_array();
 
   $childMenu = $this->db->query("SELECT * FROM " . Table::adminPanelMenuTable . " WHERE is_child = 1 AND status = '1'")->result_array();
 
-  $exitingPermission = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$_SESSION['id']}' AND user_type = '{$_SESSION['user_type']}' AND status = '1'")->result_array();
+  $exitingPermission = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_id = '{$_SESSION['id']}' AND user_type = '{$_SESSION['user_type']}' AND status = '1' ORDER BY id DESC")->result_array();
 
+  // print_r($exitingPermission);
   @$exitingPermission = json_decode(@$exitingPermission[0]['permissions'], TRUE);
   ?>
   <!-- Sidebar -->

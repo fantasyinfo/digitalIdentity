@@ -105,11 +105,11 @@
       if ($insertNewUser) {
 
         if ($user_type == 'Admin') {
-          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND is_head = '1' AND status = '1'")->result_array();
+          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND is_head = '1' AND status = '1' ORDER BY id DESC LIMIT 1")->result_array();
         } else if ($user_type == 'Staff') {
-          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND is_head = '1' AND status = '1'")->result_array();
+          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND is_head = '1' AND status = '1'  ORDER BY id DESC LIMIT 1")->result_array();
         } else if ($user_type == 'Principal') {
-          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE  user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND is_head = '1' AND status = '1'")->result_array();
+          $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE  user_type = '$user_type' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND is_head = '1' AND status = '1'  ORDER BY id DESC LIMIT 1")->result_array();
         }else
         {
           $permissions = $this->db->query("SELECT permissions FROM " . Table::panelMenuPermissionTable . " WHERE user_type = 'Admin' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND is_head = '1' AND status = '1'")->result_array();

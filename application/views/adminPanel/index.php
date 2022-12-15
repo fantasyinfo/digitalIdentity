@@ -43,7 +43,7 @@ if(isset($_POST['submit']))
   $schoolUniqueCode = HelperClass::sanitizeInput($_POST['schoolUniqueCode']);
   $password = HelperClass::sanitizeInput($_POST['password']);
 
-  $userData = $this->db->query("SELECT * FROM " . Table::userTable . " WHERE email = '$email' AND schoolUniqueCode = '$schoolUniqueCode' AND status = 1 LIMIT 1")->result_array();
+  $userData = $this->db->query("SELECT * FROM " . Table::userTable . " WHERE email = '$email' AND schoolUniqueCode = '$schoolUniqueCode' AND status = 1 ORDER BY id DESC LIMIT 1")->result_array();
 
   @$currentSession = $this->db->query("SELECT * FROM " . Table::schoolMasterTable . " WHERE unique_id = '$schoolUniqueCode'")->result_array()[0]['current_session'];
 

@@ -488,7 +488,7 @@ const setNotificationForWhat = [
     {
         
         $mail = new PHPMailer();
-        $mail->SMTPDebug = 2;
+        // $mail->SMTPDebug = 2;
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';

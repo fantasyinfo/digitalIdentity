@@ -1543,6 +1543,38 @@ public function updateHomeWork()
 		}
 	}
 
+	// add complaint
+	public function markAttendance()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['qrCode']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$qrCode = $apiData['qrCode'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
+	
+		$markAtt = $this->APIModel->markAttendance($loginuserType,$qrCode,$schoolUniqueCode,$session_table_id);
+
+		
+		if (!$markAtt) {
+			return HelperClass::APIresponse(500, 'Attendance Not Registerd.');
+		}else
+		{
+			return HelperClass::APIresponse(200, 'API Working Check Response.',[],['responseCode' =>$markAtt]);
+		}
+	}
+
+
+	
+
 	// fetching all classes
 	public function allClasses()
 	{

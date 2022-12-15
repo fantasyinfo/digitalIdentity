@@ -159,6 +159,13 @@ class AjaxController extends CI_Controller
 			return $this->CrudModel->dateSheetList(Table::secExamTable, $_POST);
 		}
 	}
+	public function questionLists()
+	{
+		if (isset($_POST)) {
+			return $this->CrudModel->questionLists(Table::questionsBankTable, $_POST);
+		}
+	}
+
 
 	public function bookIdtoChapters()
 	{
@@ -169,8 +176,58 @@ class AjaxController extends CI_Controller
 			$chaptersData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::chaptersTable . " WHERE book_id = '$bookId' AND status != '4' ORDER BY id DESC");
 
 			$sendArr = '';
-			foreach($chaptersData as $c){
-				$sendArr .= '<option value="'.$c['id'].'">'.$c['chapter_name'].'</option>';
+			foreach ($chaptersData as $c) {
+				$sendArr .= '<option value="' . $c['id'] . '">' . $c['chapter_name'] . '</option>';
+			}
+
+
+
+
+			echo json_encode($sendArr);
+		}
+	}
+	public function showBooksViaSubject()
+	{
+		if (isset($_POST)) {
+
+			$subjectId = $_POST['subjectId'];
+			$classId = $_POST['classId'];
+			$booksData = [];
+			$booksData = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::booksTable . " WHERE subject_name = '$subjectId' AND class_name = '$classId' AND status != '4' ORDER BY id DESC");
+
+			$sendArr = '';
+			foreach ($booksData as $c) {
+				$sendArr .= '<option value="' . $c['id'] . '">' . $c['book_name'] . '</option>';
+			}
+
+
+
+
+			echo json_encode($sendArr);
+		}
+	}
+
+	public function loadQuestions()
+	{
+		if (isset($_POST)) {
+
+			$bookId = $_POST['bookId'];
+			$chapterId = $_POST['chapterId'];
+			$questionsData = [];
+
+			$questionsData = $this->CrudModel->dbSqlQuery("SELECT q.*,b.book_name,b.class_name,b.subject_name,b.board_name,c.chapter_name FROM " . Table::questionsBankTable . " q
+			LEFT JOIN " . Table::booksTable . " b ON b.id =  q.book_id
+			LEFT JOIN " . Table::chaptersTable . " c ON c.id =  q.chapter_id
+			WHERE q.status = '1' AND q.book_id = '$bookId' AND q.chapter_id = '$chapterId' ");
+
+			$sendArr = '';
+			foreach ($questionsData as $c) {
+				$sendArr .= '<div class="leftSide card px-2 py-2 ">
+				<input type="hidden" name="q[]" value="'.$c['id'].'" />
+				<div class="card-header border-top-3">For '. ucwords($c['class_name']).' Class & '. ucwords($c['subject_name']).' Subject</div>
+				<div class="card-body"><b>Q.</b> '. html_entity_decode($c['question'], ENT_QUOTES).'</div>
+				<div class="card-footer">From The Book '. ucwords($c['book_name']).'</div>
+			  </div>';
 			}
 
 
@@ -191,130 +248,118 @@ class AjaxController extends CI_Controller
 
 			$sendArr = [];
 			$sendArr['id'] = $_POST['id'];
-			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($_POST['monthId'],$_POST['yearId']);
+			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($_POST['monthId'], $_POST['yearId']);
 
 			$sendArr['workingDays'] = $totalWorkingDays;
 
 			$condition = " AND s.id = '{$_POST['id']}' ";
-			if($sessionId != '')
-			{
+			if ($sessionId != '') {
 				$condition .= " AND s.schoolUniqueCode = '$sessionId' ";
-			}else
-			{
+			} else {
 				$condition .= " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
 			}
-			
+
 			$d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
-            JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
-            JOIN ".Table::designationTable." des ON des.id = s.designationId 
+            JOIN " . Table::departmentTable . " dep  ON dep.id = s.departmentId 
+            JOIN " . Table::designationTable . " des ON des.id = s.designationId 
             WHERE s.status != 4 $condition ")->result_array();
 
 
 			$sendArr['employeeDetails'] = $d[0];
 
-			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($_POST['id'],$_POST['monthId'],$_POST['yearId']);
+			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($_POST['id'], $_POST['monthId'], $_POST['yearId']);
 
 
 			$totalPresentDays = $totalAttendanceArr['present'];
-            $totalAbsentDays = $totalAttendanceArr['absent'];
-            $totalHalfDays = $totalAttendanceArr['helfDay'];
-            $totalLeavesDays = $totalAttendanceArr['leaves'];
+			$totalAbsentDays = $totalAttendanceArr['absent'];
+			$totalHalfDays = $totalAttendanceArr['helfDay'];
+			$totalLeavesDays = $totalAttendanceArr['leaves'];
 
 
 			$sendArr['attendanceData'] = $totalAttendanceArr;
 
-            // check how many leaves allow in one month for employee
-            $totalLeavesAllowPerMonth = $d[0]['leavesPerMonth'];
+			// check how many leaves allow in one month for employee
+			$totalLeavesAllowPerMonth = $d[0]['leavesPerMonth'];
 
-            // per day salary
-            $perDaySalary = $d[0]['basicSalaryDay'];
-            // per month salary
-            $perMonthSalary = $d[0]['basicSalaryMonth'];
+			// per day salary
+			$perDaySalary = $d[0]['basicSalaryDay'];
+			// per month salary
+			$perMonthSalary = $d[0]['basicSalaryMonth'];
 
-            // if absent How much deducat per day
-            $absentDeducation = $d[0]['lwp'];
+			// if absent How much deducat per day
+			$absentDeducation = $d[0]['lwp'];
 
-            // half day deducation
-            $halfDayDeducation = $d[0]['ded_half_day'];
-
-           
-
-            
-            
-            // absent / leave Deducations days
-            if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
-                $lwpDeducationsDays = $t;
-            } else {
-                $lwpDeducationsDays = 0;
-            }
+			// half day deducation
+			$halfDayDeducation = $d[0]['ded_half_day'];
 
 
-         
-            // leave deducation amount
 
-            if ($lwpDeducationsDays > 0) {
-                $leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
-            }else
-            {
-                $leaveDudutionAmt = 0;
-            }
+
+
+			// absent / leave Deducations days
+			if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
+				$lwpDeducationsDays = $t;
+			} else {
+				$lwpDeducationsDays = 0;
+			}
+
+
+
+			// leave deducation amount
+
+			if ($lwpDeducationsDays > 0) {
+				$leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
+			} else {
+				$leaveDudutionAmt = 0;
+			}
 
 			$sendArr['leaves'] =  ['totalLeaves' => $lwpDeducationsDays, 'leaveAmountToDeducat' => $leaveDudutionAmt];
 
-            // half day deducations    
+			// half day deducations    
 
-            if ($totalHalfDays > 0) {
-                $halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
-            }else
-            {
-                $halfDayDeducationAmt = 0;
-            }
+			if ($totalHalfDays > 0) {
+				$halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
+			} else {
+				$halfDayDeducationAmt = 0;
+			}
 
 			$sendArr['halfDays'] =  ['totalHalfDays' => $totalHalfDays, 'halfDaysAmountToDeducat' => $halfDayDeducationAmt];
 
-            // total working days present days
-            $t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth ;
-            if($t > 0)
-            {
-                $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
-            }else
-            {
-                $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
-            }
-            
+			// total working days present days
+			$t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth;
+			if ($t > 0) {
+				$totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
+			} else {
+				$totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
+			}
+
 			$sendArr['totalWorkingDaysAspected'] =  $totalDaysExpectToPresentForMonthlySalary;
 
-            if($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary){
-                // salary per day
-                if($totalPresentDays > 0)
-                {
-                    $salary0 = $totalPresentDays * $perDaySalary; // full day salary
-                }else
-                {
-                    $salary0 = 0; // full day salary
-                }
-                
-                if($totalHalfDays > 0)
-                {
-                    $salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
-                }else
-                {
-                    $salary1 = 0;
-                }
-                
-                $ssalary = $salary0 + $salary1;
-            }else if($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary){
-                if($totalPresentDays > 0)
-                {
-                    // salary per month
-                    $salary0 = $perMonthSalary;
-                }else
-                {
-                    $salary0 = 0;
-                }
-               
-                $ssalary = $salary0;
-            }
+			if ($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary) {
+				// salary per day
+				if ($totalPresentDays > 0) {
+					$salary0 = $totalPresentDays * $perDaySalary; // full day salary
+				} else {
+					$salary0 = 0; // full day salary
+				}
+
+				if ($totalHalfDays > 0) {
+					$salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
+				} else {
+					$salary1 = 0;
+				}
+
+				$ssalary = $salary0 + $salary1;
+			} else if ($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary) {
+				if ($totalPresentDays > 0) {
+					// salary per month
+					$salary0 = $perMonthSalary;
+				} else {
+					$salary0 = 0;
+				}
+
+				$ssalary = $salary0;
+			}
 
 
 			$sendArr['basicPay'] = $ssalary;
@@ -322,37 +367,37 @@ class AjaxController extends CI_Controller
 
 
 
-            $da0 = ($d[0]['dearnessAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['dearnessAll']) : 0;
-            $hra0 = ($d[0]['hra'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['hra'] ) : 0;
-            $ca0 = ($d[0]['conAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['conAll'] ) : 0;
-            $ma0 = ($d[0]['medicalAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['medicalAll'] ) : 0;
-            $sa0 = ($d[0]['specialAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['specialAll']) : 0;
+			$da0 = ($d[0]['dearnessAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['dearnessAll']) : 0;
+			$hra0 = ($d[0]['hra'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['hra']) : 0;
+			$ca0 = ($d[0]['conAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['conAll']) : 0;
+			$ma0 = ($d[0]['medicalAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['medicalAll']) : 0;
+			$sa0 = ($d[0]['specialAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['specialAll']) : 0;
 
-             // total allowances
-             $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
+			// total allowances
+			$totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
 
-			 $sendArr['allowances'] = ['da' => $da0, 'hra' => $hra0 , 'ca' => $ca0, 'ma' => $ma0, 'sa' => $sa0, 'total' => $totalAll];
-            
-            $ptpm0 = ($d[0]['professionalTaxPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['professionalTaxPerMonth']) : 0;
-            $pfm0 = ($d[0]['pfPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['pfPerMonth']) : 0;
-            $tds0 = ($d[0]['tdsPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['tdsPerMonth']) : 0;
+			$sendArr['allowances'] = ['da' => $da0, 'hra' => $hra0, 'ca' => $ca0, 'ma' => $ma0, 'sa' => $sa0, 'total' => $totalAll];
 
-            // total deducations
-            $totalDed = $ptpm0 + $pfm0 + $tds0;
-          
+			$ptpm0 = ($d[0]['professionalTaxPerMonth'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['professionalTaxPerMonth']) : 0;
+			$pfm0 = ($d[0]['pfPerMonth'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['pfPerMonth']) : 0;
+			$tds0 = ($d[0]['tdsPerMonth'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['tdsPerMonth']) : 0;
 
-			$sendArr['deducations'] = ['ptpm' => $ptpm0, 'pfpm' => $pfm0 , 'tds' => $tds0, 'total' => $totalDed];
+			// total deducations
+			$totalDed = $ptpm0 + $pfm0 + $tds0;
+
+
+			$sendArr['deducations'] = ['ptpm' => $ptpm0, 'pfpm' => $pfm0, 'tds' => $tds0, 'total' => $totalDed];
 
 			// totalSalaryAfterDeduation basicpay + allownaces - deducations
-            $totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
+			$totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
 			$sendArr['actualSalary'] =  $totalSalaryAfterDeducation;
-			
-            // totalSalaryToPay
-            $totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
-            $totalAllowMonth = @$totalAll;
 
-            // total salary now basicpay + allowance - deducation
-            $ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
+			// totalSalaryToPay
+			$totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
+			$totalAllowMonth = @$totalAll;
+
+			// total salary now basicpay + allowance - deducation
+			$ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
 
 			$sendArr['totalSalaryToPay'] =  $ssalaryAmount;
 
@@ -548,7 +593,7 @@ class AjaxController extends CI_Controller
 			AND s.id = '{$_POST['studentId']}' 
 			AND s.status = '1' 
 			AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array()[0];
-			
+
 			$html = '';
 			$d['todayDate'] = date('d F Y');
 

@@ -28,6 +28,22 @@ class AdminController extends CI_Controller {
 		$this->load->view($this->viewDir .'dashboard');
 		//$this->load->view($this->viewDir .'pages/footer');
 	}
+	public function newOptions()
+	{
+		// login check
+		$this->loginCheck();
+		// check permission
+		//$this->checkPermission();
+
+
+		$dataArr = [
+			'pageTitle' => 'Menus',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view($this->viewDir .'pages/header',['data' => $dataArr]);
+		$this->load->view($this->viewDir .'newOptions');
+		//$this->load->view($this->viewDir .'pages/footer');
+	}
 	
 	public function loginCheck()
 	{

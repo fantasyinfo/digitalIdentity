@@ -27,6 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
  // admin panel routes
  $route['adminPanel'] = 'AdminController/index';
+ $route['adminPanel/menues'] = 'AdminController/newOptions';
 
 
 
@@ -129,6 +130,7 @@ foreach($schoolRoutesArr as $schoolRoute)
 
 
 // master routes
+
 
 $baseMaster = "master/";
 $masterRoutesArr = [
@@ -261,7 +263,9 @@ $baseQuestionBank = "questionBank/";
 $questionRoutes = [
     'booksMaster',
     'chapterMaster',
-    'questionBankMaster'
+    'questionBankMaster',
+    'questionsLists',
+    'createQuestionPaper'
 ];
 
 foreach($questionRoutes as $aRoute)
@@ -342,7 +346,11 @@ $ajaxRoutesArr = [
    'showStudentViaClassAndSectionIdForCharacterCertificate',
    'showStudentViaClassAndSectionAndStudentIdForCharacter',
    'showStudentViaClassAndSectionAndStudentIdForBonefide',
-   'bookIdtoChapters'
+   'bookIdtoChapters',
+   'questionLists',
+   'showBooksViaSubject',
+   'loadQuestions'
+   
     
 ];
 
@@ -409,7 +417,9 @@ $apiRoutesArr = [
     'addSemesterExamResult',
     'gatePass',
     'studentNamesViaClassAndSectionId',
-    'gatePassList'
+    'gatePassList',
+    'testBoxCheck',
+    'markAttendance'
 ];
 
 foreach($apiRoutesArr as $apiRoute)

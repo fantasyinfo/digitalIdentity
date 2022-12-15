@@ -90,7 +90,7 @@
       $book_id = $this->CrudModel->sanitizeInput($_POST['book_id']);
       $chapter_id = $this->CrudModel->sanitizeInput($_POST['chapter_id']);
       $question_type = $this->CrudModel->sanitizeInput($_POST['question_type']);
-      $question = $this->CrudModel->sanitizeInput($_POST['question']);
+      $question = htmlentities($_POST['question'], ENT_QUOTES);
       $option_1 = $this->CrudModel->sanitizeInput($_POST['option_1']);
       $option_2 = $this->CrudModel->sanitizeInput($_POST['option_2']);
       $option_3 = $this->CrudModel->sanitizeInput($_POST['option_3']);
@@ -136,7 +136,7 @@
         "book_id" => $book_id,
         "chapter_id" => $chapter_id,
         "question_type" => $question_type,
-        "question" => $question,
+        "question" => htmlentities($_POST['question'], ENT_QUOTES),
         "option_1" => $option_1,
         "option_2" => $option_2,
         "option_3" => $option_3,

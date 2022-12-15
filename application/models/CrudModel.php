@@ -358,6 +358,114 @@ class CrudModel extends CI_Model
         echo json_encode($dataTableArr);
     }
 
+    public function questionLists($tableName, $data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url() . HelperClass::studentImagePath;
+        if (!empty($data)) {
+            $condition = '';
+         
+            if (isset($data['className']) || isset($data['subjectName']) || isset($data['book']) || isset($data['chapterName']) || isset($data['questionType']) ) {
+                if (!empty($data['className'])) {
+                    $condition .= " AND b.class_name LIKE '%{$data['className']}%' ";
+                }
+                if (!empty($data['subjectName'])) {
+                    $condition .= " AND b.subject_name LIKE '%{$data['subjectName']}%' ";
+                }
+                if (!empty($data['book'])) {
+                    $condition .= " AND b.id = '{$data['book']}' ";
+                }
+                if (!empty($data['chapterName'])) {
+                    $condition .= " AND c.chapter_name LIKE '%{$data['chapterName']}%' ";
+                }
+                if (!empty($data['questionType'])) {
+                    $condition .= " AND s.questionType = '{$data['questionType']}' ";
+                }
+
+                if (!empty($data['search']['value'])) {
+                    $condition .= " 
+                    OR s.name LIKE '%{$data['search']['value']}%' 
+                    OR c.id LIKE '%{$data['search']['value']}%' 
+                    OR s.mobile LIKE '%{$data['search']['value']}%' 
+                    OR s.user_id LIKE '%{$data['search']['value']}%' 
+                    ";
+                }
+            }
+
+            $d = $this->db->query("SELECT s.schoolUniqueCode,s.id,s.status,s.question_type,s.question,s.image,s.option_1,s.option_2,s.option_3,s.option_4,b.book_name,b.class_name,b.subject_name,b.board_name,c.chapter_name FROM " . $this->tableName . " s
+                LEFT JOIN " . Table::booksTable . " b ON b.id =  s.book_id
+                LEFT JOIN " . Table::chaptersTable . " c ON c.id =  s.chapter_id
+                WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+            $countSql = "SELECT count(s.id) as count  FROM " . $this->tableName . " s
+            LEFT JOIN " . Table::booksTable . " b ON b.id =  s.book_id
+            LEFT JOIN " . Table::chaptersTable . " c ON c.id =  s.chapter_id
+                WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC";
+        } else {
+            $d = $this->db->query("SELECT s.schoolUniqueCode,s.id, s.status,s.question_type,s.question,s.image,s.option_1,s.option_2,s.option_3,s.option_4,b.book_name,b.class_name,b.subject_name,b.board_name,c.chapter_name FROM " . $this->tableName . " s
+            LEFT JOIN " . Table::booksTable . " b ON b.id =  s.book_id
+            LEFT JOIN " . Table::chaptersTable . " c ON c.id =  s.chapter_id
+                WHERE s.status NOT IN ('3','4')  ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+            $countSql = "SELECT count(s.id) as count FROM " . $this->tableName . " s
+            LEFT JOIN " . Table::booksTable . " b ON b.id =  s.book_id
+            LEFT JOIN " . Table::chaptersTable . " c ON c.id =  s.chapter_id
+                WHERE s.status NOT IN ('3','4')  ORDER BY s.id DESC";
+        }
+
+
+        $tCount = $this->db->query($countSql)->result_array();
+
+        $sendArr = [];
+        for ($i = 0; $i < count($d); $i++) {
+            $subArr = [];
+
+            $subArr[] = ($j = $i + 1);
+            $subArr[] = HelperClass::questionTypes[$d[$i]['question_type']];
+            $subArr[] = html_entity_decode($d[$i]['question'],ENT_QUOTES);
+            $subArr[] = $d[$i]['board_name'];
+            $subArr[] = $d[$i]['class_name'];
+            $subArr[] = $d[$i]['subject_name'];
+            $subArr[] = $d[$i]['book_name'];
+            $subArr[] = $d[$i]['chapter_name'];
+            if ($d[$i]['status'] == '1') {
+                $ns =  '2';
+            } else {
+                $ns = '1';
+            }
+
+
+            // if ($d[$i]['status'] == '1') {
+            //     $cclas = 'success';
+            //     $ssus = 'Active';
+            // } else {
+            //     $cclas = 'danger';
+            //     $ssus = 'Inactive';
+            // }
+
+            // $subArr[] = "<a href='?action=status&edit_id=" . $d[$i]['id'] . "&status=" . $ns . " ' class='badge badge-" . $cclas . "'> " . $ssus . "</a>";
+
+            if($_SESSION['schoolUniqueCode'] == $d[$i]['schoolUniqueCode']){
+                $subArr[] = '
+                <a href="editStudent/' . $d[$i]['id'] . '" class="btn btn-warning" ><i class="fas fa-edit"></i></a>';
+
+            }else{
+                $subArr[] = '---';
+            }
+            
+            $sendArr[] = $subArr;
+        }
+
+        $dataTableArr = [
+            "draw" => $data['draw'],
+            "recordsTotal" => $tCount[0]['count'],
+            "recordsFiltered" => $tCount[0]['count'],
+            "data" => $sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+    }
+
     public function listStudentsPermote($tableName, $data = '')
     {
         $this->tableName = $tableName;
