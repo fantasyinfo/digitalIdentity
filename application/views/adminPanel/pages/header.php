@@ -74,5 +74,65 @@
         font-size:22px;
       }
 
+
+      .bg-light-primary {
+        background-color: rgba(0,123,255,.5);
+      }
+      .bg-light-warning {
+        background-color: rgba(255,193,7,.5);
+      }
+      .bg-light-danger {
+        background-color: rgba(220,53,69,.5);
+      }
+      .bg-light-info {
+        background-color: rgba(23,162,84,.5);
+      }
+      .bg-light-success {
+        background-color: rgba(40,167,69,.5);
+      }
+
+
+
+
+      /* .txt-light-primary {
+        color: rgba(0,123,255,.5);
+      }
+      .txt-light-warning {
+        color: rgba(255,193,7,.5);
+      }
+      .txt-light-danger {
+        color: rgba(220,53,69,.5);
+      }
+      .txt-light-info {
+        color: rgba(23,162,84,.5);
+      }
+      .txt-light-success {
+        color: rgba(40,167,69,.5);
+      }
+
+
+      .txt-light-primary:hover {
+        color: rgb(0,123,255);
+      }
+      .txt-light-warning:hover {
+        color: rgb(255,193,7);
+      }
+      .txt-light-danger:hover {
+        color: rgb(220,53,69);
+      }
+      .txt-light-info:hover {
+        color: rgb(23,162,84);
+      }
+      .txt-light-success:hover {
+        color: rgb(40,167,69);
+      } */
+
+
+
+
+
    </style>
+
+<script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@latest/pace-theme-default.min.css">
 </head>

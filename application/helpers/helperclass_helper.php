@@ -19,6 +19,7 @@ class HelperClass
     const tecPrefix = 'tec0000';
     const driverPrefix = 'dri0000';
     const schoolIDPrefix = 'sch0000';
+    const regPrefix = 'REG/' . '2022-2023' . '/';
     const imgPrefix = 'img-';
     const uploadImgDir = 'assets/uploads/';
     const qrcodeUrl = 'https://qverify.in';
@@ -41,6 +42,7 @@ class HelperClass
     const visitorEntryImagePath = HelperClass::uploadImgDir.'visitorentry/';
     const notificationsImagePath = HelperClass::uploadImgDir.'notifications/';
     const gatePassImagePath = HelperClass::uploadImgDir.'gatepass/';
+    const registrationImagePath = HelperClass::uploadImgDir.'registration/';
     const barCodeFilePath = 'assets/barcode/vendor/autoload.php';
 
     const monthsForSchool = [
@@ -498,7 +500,7 @@ const setNotificationForWhat = [
         //$mail->addAttachment('sample.pdf');
         $mail->CharSet = 'UTF-8';
         $mail->Username = "digitalfied@gmail.com";
-        $mail->Password = 'jovkhbrckpqcvjwg';
+        $mail->Password = 'jglsfgcasidryyvo';
         $mail->SetFrom("digitalfied@gmail.com");
         $mail->Subject = $subject;
         $mail->Body = $msg;

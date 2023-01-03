@@ -75,5 +75,6 @@ class Table{
     const questionsTypesTable = 'questions_types'; 
     const questionsBankTable = 'question_bank'; 
     const schoolModulesTable = 'schoolmodules'; 
+    const registrationTable = 'adm_registration'; 
     
 }

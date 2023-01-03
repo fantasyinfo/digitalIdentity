@@ -15,36 +15,52 @@ $totalAbsentStudents = $this->db->query("SELECT count(1) as count FROM " . Table
 
 
 <div class="row">
-
-
-            <div class="col-md-6">
-    <div class="card border-top-3">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-9">
-        <p class="card-text  font-size-22">Today Presents : <b><?= $totalPresentStudents ?></b>   <i class="fa-solid fa-circle-check text-success"></i></p>
-        <p class="card-text font-size-22">Today Absents : <b><?= $totalAbsentStudents ?></b>   <i class="fa-sharp fa-solid fa-circle-xmark text-danger"></i></p>
-          </div>
-         
+    <div class="col-xl-6 col-md-6">
+       
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Today Attendance</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value text-success" data-toggle="tooltip" data-placement="top" title="Presents">P <?= $totalPresentStudents ?></span> <span class="counter-value text-danger" data-toggle="tooltip" data-placement="top" title="Absents"> A <?= $totalAbsentStudents ?></span></h4>
+                        <a href="<?= base_url('teacher/list'); ?>" class="text-decoration-underline">View all attendance</a>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-success rounded fs-3">
+                            <i class="bx bx-dollar-circle text-success"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
         </div>
-        
 
-      </div>
     </div>
-  </div>
 
-  <div class="col-md-6">
-    <div class="card border-top-3 ">
-      <div class="card-body">
-         <p class="card-text font-size-22">Total Teachers : <i class="fa-solid fa-user"></i> <b ><?= $totalStudents ?></b></p>
-        <p class="card-text font-size-22">Total Sir : <i class="fa-solid fa-child"></i>  <b><?= $totalboys ?> </b></p>
-        <p class="card-text font-size-22">Total Mam : <i class="fa-solid fa-child-dress"></i> <b><?= $totalgirls ?></b></p>
-      
-    
-         
-      </div>
-    </div>
-  </div>
-
+    <div class="col-xl-6 col-md-6">
+       
+       <div class="card card-animate">
+           <div class="card-body">
+               <div class="d-flex align-items-center">
+                   <div class="flex-grow-1 overflow-hidden">
+                       <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total Teachers</p>
+                   </div>
+               </div>
+               <div class="d-flex align-items-end justify-content-between mt-4">
+                   <div>
+                       <h3 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value text-success" data-toggle="tooltip" data-placement="top" title="Ladies"> <i class="fa-solid fa-child-dress"></i> <?= $totalgirls ?></span> <span class="counter-value text-danger" data-toggle="tooltip" data-placement="top" title="Gents"> <i class="fa-solid fa-child"></i> <?= $totalboys ?></span></h3>
+                       <a href="<?= base_url('academic/allAttendance'); ?>" class="text-decoration-underline">View all teachers</a>
+                   </div>
+                
+               </div>
+           </div><!-- end card body -->
+       </div>
+       
+   </div>
 
 </div>
+
+

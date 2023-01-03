@@ -218,6 +218,19 @@ foreach($examRoutesArr as $examRoute)
 }
 
 
+// admission 
+$baseExam = "registration/";
+$examRoutesArr = [
+    'newRegistration',
+    'registrationLists'
+];
+
+foreach($examRoutesArr as $examRoute)
+{
+    $route[$baseExam.$examRoute] = "RegistrationController"."/".$examRoute;
+}
+
+
 
 // academic
 
@@ -349,7 +362,8 @@ $ajaxRoutesArr = [
    'bookIdtoChapters',
    'questionLists',
    'showBooksViaSubject',
-   'loadQuestions'
+   'loadQuestions',
+   'registrationLists'
    
     
 ];

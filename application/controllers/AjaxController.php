@@ -166,6 +166,13 @@ class AjaxController extends CI_Controller
 		}
 	}
 
+	public function registrationLists()
+	{
+		if (isset($_POST)) {
+			return $this->CrudModel->registrationLists(Table::registrationTable, $_POST);
+		}
+	}
+
 
 	public function bookIdtoChapters()
 	{

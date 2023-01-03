@@ -364,8 +364,8 @@ class CrudModel extends CI_Model
         $dir = base_url() . HelperClass::studentImagePath;
         if (!empty($data)) {
             $condition = '';
-         
-            if (isset($data['className']) || isset($data['subjectName']) || isset($data['book']) || isset($data['chapterName']) || isset($data['questionType']) ) {
+
+            if (isset($data['className']) || isset($data['subjectName']) || isset($data['book']) || isset($data['chapterName']) || isset($data['questionType'])) {
                 if (!empty($data['className'])) {
                     $condition .= " AND b.class_name LIKE '%{$data['className']}%' ";
                 }
@@ -422,7 +422,7 @@ class CrudModel extends CI_Model
 
             $subArr[] = ($j = $i + 1);
             $subArr[] = HelperClass::questionTypes[$d[$i]['question_type']];
-            $subArr[] = html_entity_decode($d[$i]['question'],ENT_QUOTES);
+            $subArr[] = html_entity_decode($d[$i]['question'], ENT_QUOTES);
             $subArr[] = $d[$i]['board_name'];
             $subArr[] = $d[$i]['class_name'];
             $subArr[] = $d[$i]['subject_name'];
@@ -445,14 +445,13 @@ class CrudModel extends CI_Model
 
             // $subArr[] = "<a href='?action=status&edit_id=" . $d[$i]['id'] . "&status=" . $ns . " ' class='badge badge-" . $cclas . "'> " . $ssus . "</a>";
 
-            if($_SESSION['schoolUniqueCode'] == $d[$i]['schoolUniqueCode']){
+            if ($_SESSION['schoolUniqueCode'] == $d[$i]['schoolUniqueCode']) {
                 $subArr[] = '
                 <a href="editStudent/' . $d[$i]['id'] . '" class="btn btn-warning" ><i class="fas fa-edit"></i></a>';
-
-            }else{
+            } else {
                 $subArr[] = '---';
             }
-            
+
             $sendArr[] = $subArr;
         }
 
@@ -465,6 +464,128 @@ class CrudModel extends CI_Model
 
         echo json_encode($dataTableArr);
     }
+
+
+    public function registrationLists($tableName, $data = '')
+    {
+        $this->tableName = $tableName;
+        $dir = base_url() . HelperClass::studentImagePath;
+        if (!empty($data)) {
+            $condition = '';
+
+            if (isset($data['className']) || isset($data['subjectName']) || isset($data['book']) || isset($data['chapterName']) || isset($data['questionType'])) {
+                if (!empty($data['className'])) {
+                    $condition .= " AND b.class_name LIKE '%{$data['className']}%' ";
+                }
+                if (!empty($data['subjectName'])) {
+                    $condition .= " AND b.subject_name LIKE '%{$data['subjectName']}%' ";
+                }
+                if (!empty($data['book'])) {
+                    $condition .= " AND b.id = '{$data['book']}' ";
+                }
+                if (!empty($data['chapterName'])) {
+                    $condition .= " AND c.chapter_name LIKE '%{$data['chapterName']}%' ";
+                }
+                if (!empty($data['questionType'])) {
+                    $condition .= " AND s.questionType = '{$data['questionType']}' ";
+                }
+
+                if (!empty($data['search']['value'])) {
+                    $condition .= " 
+                    OR s.name LIKE '%{$data['search']['value']}%' 
+                    OR c.id LIKE '%{$data['search']['value']}%' 
+                    OR s.mobile LIKE '%{$data['search']['value']}%' 
+                    OR s.user_id LIKE '%{$data['search']['value']}%' 
+                    ";
+                }
+            }
+
+            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.regNo,s.address,s.regDate,s.stuName,s.mobile,s.dob,s.pincode,
+            s.reg_fee,c.className,st.stateName,ct.cityName,s.schoolUniqueCode,s.father_name FROM " . $this->tableName . " s
+            LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
+            LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
+            LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
+            WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+            $countSql = "SELECT count(s.id) as count  FROM " . $this->tableName . " s
+            LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
+            LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
+            LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
+                WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC";
+        } else {
+            $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.regNo,s.regDate,s.address,s.stuName,s.mobile,s.dob,s.pincode,
+            s.reg_fee,c.className,st.stateName,ct.cityName,s.schoolUniqueCode,s.father_name FROM " . $this->tableName . " s
+           LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
+           LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
+           LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
+                WHERE s.status NOT IN ('3','4')  ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+
+            $countSql = "SELECT count(s.id) as count FROM " . $this->tableName . " s
+            LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
+            LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
+            LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
+                WHERE s.status NOT IN ('3','4')  ORDER BY s.id DESC";
+        }
+
+
+        $tCount = $this->db->query($countSql)->result_array();
+
+        $sendArr = [];
+        for ($i = 0; $i < count($d); $i++) {
+            $subArr = [];
+
+            $subArr[] = ($j = $i + 1);
+            $subArr[] = $d[$i]['regNo'];
+            $subArr[] = date('d F Y' ,strtotime($d[$i]['regDate']));
+            $subArr[] = ucwords($d[$i]['stuName']);
+            $subArr[] = $d[$i]['mobile'];
+            // $subArr[] = date('d F Y' ,strtotime($d[$i]['dob']));
+            $subArr[] = $d[$i]['className'];
+            $subArr[] = $d[$i]['cityName'];
+            if ($d[$i]['status'] == '1') {
+                $ns =  '2';
+            } else {
+                $ns = '1';
+            }
+
+
+            if ($d[$i]['status'] == '1') {
+                $cclas = 'success';
+                $ssus = 'Active';
+            } else {
+                $cclas = 'danger';
+                $ssus = 'Inactive';
+            }
+
+            $subArr[] = "<a href='?action=status&edit_id=" . $d[$i]['id'] . "&status=" . $ns . " ' class='badge badge-" . $cclas . "'> " . $ssus . "</a>";
+
+            if ($_SESSION['schoolUniqueCode'] == $d[$i]['schoolUniqueCode']) {
+                $subArr[] = '
+                <a href="newRegistration?stu_id=' . $d[$i]['id'] . '" class="btn btn-warning" ><i class="fas fa-edit"></i></a>';
+            } else {
+                $subArr[] = '---';
+            }
+
+            $sendArr[] = $subArr;
+        }
+
+        $dataTableArr = [
+            "draw" => $data['draw'],
+            "recordsTotal" => $tCount[0]['count'],
+            "recordsFiltered" => $tCount[0]['count'],
+            "data" => $sendArr
+        ];
+
+        echo json_encode($dataTableArr);
+    }
+
+
+
+
+
+
+
+
 
     public function listStudentsPermote($tableName, $data = '')
     {
@@ -550,9 +671,9 @@ class CrudModel extends CI_Model
         echo json_encode($dataTableArr);
     }
 
-    public function calculatePercentageAmount($amount,$percentage)
+    public function calculatePercentageAmount($amount, $percentage)
     {
-        return ceil($amount*$percentage/100); 
+        return ceil($amount * $percentage / 100);
     }
     public function showEmployeesViaDepartmentIdAndDesignationId($data)
     {
@@ -563,26 +684,26 @@ class CrudModel extends CI_Model
             $condition = " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND s.departmentId = '{$data['departmentId']}' AND s.designationId = '{$data['designationId']}' ";
 
             $d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
-            JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
-            JOIN ".Table::designationTable." des ON des.id = s.designationId 
+            JOIN " . Table::departmentTable . " dep  ON dep.id = s.departmentId 
+            JOIN " . Table::designationTable . " des ON des.id = s.designationId 
             WHERE s.status != 4 $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
-        $query = $this->db->last_query();
+            $query = $this->db->last_query();
 
             $tCount = $this->db->query("SELECT count(s.id) as count  FROM " . $this->tableName . " s 
-            JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
-            JOIN ".Table::designationTable." des ON des.id = s.designationId 
+            JOIN " . Table::departmentTable . " dep  ON dep.id = s.departmentId 
+            JOIN " . Table::designationTable . " des ON des.id = s.designationId 
             WHERE s.status != 4 $condition ORDER BY s.id DESC")->result_array();
         }
 
         $sendArr = [];
 
-        $totalWorkingDays =  $this->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($data['monthId'],$data['yearId']);
-      
+        $totalWorkingDays =  $this->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($data['monthId'], $data['yearId']);
+
 
         for ($i = 0; $i < count($d); $i++) {
 
-            $totalAttendanceArr =  $this->getTotalAttendanceOfEmployeeCurrentMonth($d[$i]['id'],$data['monthId'],$data['yearId']);
+            $totalAttendanceArr =  $this->getTotalAttendanceOfEmployeeCurrentMonth($d[$i]['id'], $data['monthId'], $data['yearId']);
 
 
             $totalPresentDays = $totalAttendanceArr['present'];
@@ -606,10 +727,10 @@ class CrudModel extends CI_Model
             // half day deducation
             $halfDayDeducation = $d[$i]['ded_half_day'];
 
-           
-           
 
-            
+
+
+
             // absent / leave Deducations days
             if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
                 $lwpDeducationsDays = $t;
@@ -617,13 +738,12 @@ class CrudModel extends CI_Model
                 $lwpDeducationsDays = 0;
             }
 
-         
+
             // leave deducation amount
 
             if ($lwpDeducationsDays > 0) {
                 $leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
-            }else
-            {
+            } else {
                 $leaveDudutionAmt = 0;
             }
 
@@ -632,75 +752,66 @@ class CrudModel extends CI_Model
 
             if ($totalHalfDays > 0) {
                 $halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
-            }else
-            {
+            } else {
                 $halfDayDeducationAmt = 0;
             }
 
 
             // total working days present days
-            $t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth ;
-            if($t > 0)
-            {
+            $t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth;
+            if ($t > 0) {
                 $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
-            }else
-            {
+            } else {
                 $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
             }
-            
+
             // echo "presentDays " . $totalPresentDays;
             // echo "expectedDays " .$totalDaysExpectToPresentForMonthlySalary;
             // die();
-            if($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary){
+            if ($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary) {
                 // salary per day
-                if($totalPresentDays > 0)
-                {
+                if ($totalPresentDays > 0) {
                     $salary0 = $totalPresentDays * $perDaySalary; // full day salary
-                }else
-                {
+                } else {
                     $salary0 = 0; // full day salary
                 }
-                
-                if($totalHalfDays > 0)
-                {
+
+                if ($totalHalfDays > 0) {
                     $salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
-                }else
-                {
+                } else {
                     $salary1 = 0;
                 }
-                
+
                 $ssalary = $salary0 + $salary1;
-            }else if($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary){
-                if($totalPresentDays > 0)
-                {
+            } else if ($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary) {
+                if ($totalPresentDays > 0) {
                     // salary per month
                     $salary0 = $perMonthSalary;
-                }else
-                {
+                } else {
                     $salary0 = 0;
                 }
-               
+
                 $ssalary = $salary0;
             }
 
 
-            $da0 = ($d[$i]['dearnessAll'] > 0) ? $this->calculatePercentageAmount($ssalary,$d[$i]['dearnessAll']) : 0;
-            $hra0 = ($d[$i]['hra'] > 0) ? $this->calculatePercentageAmount($ssalary,$d[$i]['hra'] ) : 0;
-            $ca0 = ($d[$i]['conAll'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['conAll'] ) : 0;
-            $ma0 = ($d[$i]['medicalAll'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['medicalAll'] ) : 0;
-            $sa0 = ($d[$i]['specialAll'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['specialAll']) : 0;
+            $da0 = ($d[$i]['dearnessAll'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['dearnessAll']) : 0;
+            $hra0 = ($d[$i]['hra'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['hra']) : 0;
+            $ca0 = ($d[$i]['conAll'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['conAll']) : 0;
+            $ma0 = ($d[$i]['medicalAll'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['medicalAll']) : 0;
+            $sa0 = ($d[$i]['specialAll'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['specialAll']) : 0;
 
-             // total allowances
-             $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
+            // total allowances
+            $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
 
-            
-            $ptpm0 = ($d[$i]['professionalTaxPerMonth'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['professionalTaxPerMonth']) : 0;
-            $pfm0 = ($d[$i]['pfPerMonth'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['pfPerMonth']) : 0;
-            $tds0 = ($d[$i]['tdsPerMonth'] > 0) ?$this->calculatePercentageAmount($ssalary,$d[$i]['tdsPerMonth']) : 0;
+
+            $ptpm0 = ($d[$i]['professionalTaxPerMonth'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['professionalTaxPerMonth']) : 0;
+            $pfm0 = ($d[$i]['pfPerMonth'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['pfPerMonth']) : 0;
+            $tds0 = ($d[$i]['tdsPerMonth'] > 0) ? $this->calculatePercentageAmount($ssalary, $d[$i]['tdsPerMonth']) : 0;
 
             // total deducations
             $totalDed = $ptpm0 + $pfm0 + $tds0;
-          
+
 
             // totalSalaryAfterDeduation basicpay + allownaces - deducations
             $totalSalaryAfterDeducation = ($ssalary + $totalAll) - $totalDed;
@@ -2235,25 +2346,21 @@ class CrudModel extends CI_Model
 
 
 
-    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth($monthId = '',$yearId = '',$sessionId = '')
+    public function totalEmployeesWorkingDaysAndHolidaysCurrentMonth($monthId = '', $yearId = '', $sessionId = '')
     {
-       
-        if($yearId == '')
-        {
+
+        if ($yearId == '') {
             $currentYear = date('Y');
-        }else
-        {
+        } else {
             $currentYear = $yearId;
         }
 
-        if($monthId == '')
-        {
+        if ($monthId == '') {
             $currentMonth = date('m');
-        }else
-        {
+        } else {
             $currentMonth = $monthId;
         }
-        
+
         $first_day = "01"; // first Days hardcoded
         $last_day =  date('t', strtotime($currentYear . '-' . $currentMonth . '-' . $first_day));
         $startDate = date($currentYear . '-' . $currentMonth . '-' . $first_day);
@@ -2261,13 +2368,11 @@ class CrudModel extends CI_Model
 
 
         $condition = "";
-        if($sessionId != '')
-			{
-				$condition .= " AND schoolUniqueCode = '$sessionId' ";
-			}else
-			{
-				$condition .= " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
-			}
+        if ($sessionId != '') {
+            $condition .= " AND schoolUniqueCode = '$sessionId' ";
+        } else {
+            $condition .= " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+        }
         $totalHolidays = $this->db->query("SELECT count(1) as c FROM " . Table::holidayCalendarTable . " WHERE status = '1' AND  event_date >= '$startDate' AND event_date <= '$endDate' $condition")->result_array()[0]['c'];
 
         $sendArr = [
@@ -2281,281 +2386,266 @@ class CrudModel extends CI_Model
 
 
 
-	public function checkEmployeeSalaryById($id,$month,$year,$sessionId = "")
-	{
+    public function checkEmployeeSalaryById($id, $month, $year, $sessionId = "")
+    {
 
 
-			$this->tableName = Table::salaryTable;
+        $this->tableName = Table::salaryTable;
 
-            $condition = " AND s.id = '$id' ";
+        $condition = " AND s.id = '$id' ";
 
-            if($sessionId != '')
-			{
-				$condition .= " AND s.schoolUniqueCode = '$sessionId' ";
-			}else
-			{
-                $sessionId = '';
-				$condition .= " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
-			}
+        if ($sessionId != '') {
+            $condition .= " AND s.schoolUniqueCode = '$sessionId' ";
+        } else {
+            $sessionId = '';
+            $condition .= " AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+        }
 
 
-			$sendArr = [];
-			$sendArr['id'] = $id;
-			$totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($month,$year,$sessionId);
+        $sendArr = [];
+        $sendArr['id'] = $id;
+        $totalWorkingDays =  $this->CrudModel->totalEmployeesWorkingDaysAndHolidaysCurrentMonth($month, $year, $sessionId);
 
-			$sendArr['workingDays'] = $totalWorkingDays;
-
-			
-
-            
+        $sendArr['workingDays'] = $totalWorkingDays;
 
 
-			$d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
-            JOIN ".Table::departmentTable." dep  ON dep.id = s.departmentId 
-            JOIN ".Table::designationTable." des ON des.id = s.designationId 
+
+
+
+
+        $d = $this->db->query("SELECT s.*, dep.departmentName, des.designationName FROM " . $this->tableName . " s 
+            JOIN " . Table::departmentTable . " dep  ON dep.id = s.departmentId 
+            JOIN " . Table::designationTable . " des ON des.id = s.designationId 
             WHERE s.status != 4 $condition ")->result_array();
 
 
-			$sendArr['employeeDetails'] = $d[0];
+        $sendArr['employeeDetails'] = $d[0];
 
-			$totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($id,$month,$year,$sessionId);
-
-
-			$totalPresentDays = $totalAttendanceArr['present'];
-            $totalAbsentDays = $totalAttendanceArr['absent'];
-            $totalHalfDays = $totalAttendanceArr['helfDay'];
-            $totalLeavesDays = $totalAttendanceArr['leaves'];
+        $totalAttendanceArr =  $this->CrudModel->getTotalAttendanceOfEmployeeCurrentMonth($id, $month, $year, $sessionId);
 
 
-			$sendArr['attendanceData'] = $totalAttendanceArr;
+        $totalPresentDays = $totalAttendanceArr['present'];
+        $totalAbsentDays = $totalAttendanceArr['absent'];
+        $totalHalfDays = $totalAttendanceArr['helfDay'];
+        $totalLeavesDays = $totalAttendanceArr['leaves'];
 
-            // check how many leaves allow in one month for employee
-            $totalLeavesAllowPerMonth = $d[0]['leavesPerMonth'];
 
-            // per day salary
-            $perDaySalary = $d[0]['basicSalaryDay'];
-            // per month salary
-            $perMonthSalary = $d[0]['basicSalaryMonth'];
+        $sendArr['attendanceData'] = $totalAttendanceArr;
 
-            // if absent How much deducat per day
-            $absentDeducation = $d[0]['lwp'];
+        // check how many leaves allow in one month for employee
+        $totalLeavesAllowPerMonth = $d[0]['leavesPerMonth'];
 
-            // half day deducation
-            $halfDayDeducation = $d[0]['ded_half_day'];
+        // per day salary
+        $perDaySalary = $d[0]['basicSalaryDay'];
+        // per month salary
+        $perMonthSalary = $d[0]['basicSalaryMonth'];
 
-           
+        // if absent How much deducat per day
+        $absentDeducation = $d[0]['lwp'];
 
-            
-            
-            // absent / leave Deducations days
-            if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
-                $lwpDeducationsDays = $t;
+        // half day deducation
+        $halfDayDeducation = $d[0]['ded_half_day'];
+
+
+
+
+
+        // absent / leave Deducations days
+        if (($t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth) > 0) {
+            $lwpDeducationsDays = $t;
+        } else {
+            $lwpDeducationsDays = 0;
+        }
+
+
+
+        // leave deducation amount
+
+        if ($lwpDeducationsDays > 0) {
+            $leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
+        } else {
+            $leaveDudutionAmt = 0;
+        }
+
+        $sendArr['leaves'] =  ['totalLeaves' => $lwpDeducationsDays, 'leaveAmountToDeducat' => $leaveDudutionAmt];
+
+        // half day deducations    
+
+        if ($totalHalfDays > 0) {
+            $halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
+        } else {
+            $halfDayDeducationAmt = 0;
+        }
+
+        $sendArr['halfDays'] =  ['totalHalfDays' => $totalHalfDays, 'halfDaysAmountToDeducat' => $halfDayDeducationAmt];
+
+        // total working days present days
+        $t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth;
+        if ($t > 0) {
+            $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
+        } else {
+            $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
+        }
+
+        $sendArr['totalWorkingDaysAspected'] =  $totalDaysExpectToPresentForMonthlySalary;
+
+        if ($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary) {
+            // salary per day
+            if ($totalPresentDays > 0) {
+                $salary0 = $totalPresentDays * $perDaySalary; // full day salary
             } else {
-                $lwpDeducationsDays = 0;
+                $salary0 = 0; // full day salary
             }
-
-
-         
-            // leave deducation amount
-
-            if ($lwpDeducationsDays > 0) {
-                $leaveDudutionAmt  =  $lwpDeducationsDays * $absentDeducation;
-            }else
-            {
-                $leaveDudutionAmt = 0;
-            }
-
-			$sendArr['leaves'] =  ['totalLeaves' => $lwpDeducationsDays, 'leaveAmountToDeducat' => $leaveDudutionAmt];
-
-            // half day deducations    
 
             if ($totalHalfDays > 0) {
-                $halfDayDeducationAmt  =  $totalHalfDays * $halfDayDeducation;
-            }else
-            {
-                $halfDayDeducationAmt = 0;
+                $salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
+            } else {
+                $salary1 = 0;
             }
 
-			$sendArr['halfDays'] =  ['totalHalfDays' => $totalHalfDays, 'halfDaysAmountToDeducat' => $halfDayDeducationAmt];
-
-            // total working days present days
-            $t = ($totalLeavesDays + $totalAbsentDays) - $totalLeavesAllowPerMonth ;
-            if($t > 0)
-            {
-                $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'] - $t;
-            }else
-            {
-                $totalDaysExpectToPresentForMonthlySalary = $totalWorkingDays['totalWorkingDays'];
-            }
-            
-			$sendArr['totalWorkingDaysAspected'] =  $totalDaysExpectToPresentForMonthlySalary;
-
-            if($totalPresentDays < $totalDaysExpectToPresentForMonthlySalary){
-                // salary per day
-                if($totalPresentDays > 0)
-                {
-                    $salary0 = $totalPresentDays * $perDaySalary; // full day salary
-                }else
-                {
-                    $salary0 = 0; // full day salary
-                }
-                
-                if($totalHalfDays > 0)
-                {
-                    $salary1 = $totalHalfDays * ($perDaySalary - $halfDayDeducation); // half day salary
-                }else
-                {
-                    $salary1 = 0;
-                }
-                
-                $ssalary = $salary0 + $salary1;
-            }else if($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary){
-                if($totalPresentDays > 0)
-                {
-                    // salary per month
-                    $salary0 = $perMonthSalary;
-                }else
-                {
-                    $salary0 = 0;
-                }
-               
-                $ssalary = $salary0;
+            $ssalary = $salary0 + $salary1;
+        } else if ($totalPresentDays == $totalDaysExpectToPresentForMonthlySalary) {
+            if ($totalPresentDays > 0) {
+                // salary per month
+                $salary0 = $perMonthSalary;
+            } else {
+                $salary0 = 0;
             }
 
-
-			$sendArr['basicPay'] = $ssalary;
-
-
+            $ssalary = $salary0;
+        }
 
 
-            $da0 = ($d[0]['dearnessAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['dearnessAll']) : 0;
-            $hra0 = ($d[0]['hra'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['hra'] ) : 0;
-            $ca0 = ($d[0]['conAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['conAll'] ) : 0;
-            $ma0 = ($d[0]['medicalAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['medicalAll'] ) : 0;
-            $sa0 = ($d[0]['specialAll'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['specialAll']) : 0;
-
-             // total allowances
-             $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
-
-			 $sendArr['allowances'] = ['da' => $da0, 'hra' => $hra0 , 'ca' => $ca0, 'ma' => $ma0, 'sa' => $sa0, 'total' => $totalAll];
-            
-            $ptpm0 = ($d[0]['professionalTaxPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['professionalTaxPerMonth']) : 0;
-            $pfm0 = ($d[0]['pfPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['pfPerMonth']) : 0;
-            $tds0 = ($d[0]['tdsPerMonth'] > 0) ?$this->CrudModel->calculatePercentageAmount($ssalary,$d[0]['tdsPerMonth']) : 0;
-
-            // total deducations
-            $totalDed = $ptpm0 + $pfm0 + $tds0;
-          
-
-			$sendArr['deducations'] = ['ptpm' => $ptpm0, 'pfpm' => $pfm0 , 'tds' => $tds0, 'total' => $totalDed];
-
-			// totalSalaryAfterDeduation basicpay + allownaces - deducations
-            $totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
-			$sendArr['actualSalary'] =  $totalSalaryAfterDeducation;
-			
-            // totalSalaryToPay
-            $totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
-            $totalAllowMonth = @$totalAll;
-
-            // total salary now basicpay + allowance - deducation
-            $ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
-
-			$sendArr['totalSalaryToPay'] =  $ssalaryAmount;
-
-			return $sendArr;
-			exit(0);
-		
-	}
+        $sendArr['basicPay'] = $ssalary;
 
 
 
-public function numberToWordsCurrency(float $number)
-{
 
-    $decimal = round($number - ($no = floor($number)), 2) * 100;
-    $hundred = null;
-    $digits_length = strlen($no);
-    $i = 0;
-    $str = array();
-    $words = array(0 => '', 1 => 'One', 2 => 'Two',
-        3 => 'Three', 4 => 'Four', 5 => 'Five', 6 => 'Six',
-        7 => 'Seven', 8 => 'Eight', 9 => 'Nine',
-        10 => 'Ten', 11 => 'Eleven', 12 => 'Twelve',
-        13 => 'Thirteen', 14 => 'Fourteen', 15 => 'Fifteen',
-        16 => 'Sixteen', 17 => 'Seventeen', 18 => 'Eighteen',
-        19 => 'Nineteen', 20 => 'Twenty', 30 => 'Thirty',
-        40 => 'Forty', 50 => 'Fifty', 60 => 'Sixty',
-        70 => 'Seventy', 80 => 'Eighty', 90 => 'Ninety');
-    $digits = array('', 'Hundred','Thousand','Lakh', 'Crore');
-    while( $i < $digits_length ) {
-        $divider = ($i == 2) ? 10 : 100;
-        $number = floor($no % $divider);
-        $no = floor($no / $divider);
-        $i += $divider == 10 ? 1 : 2;
-        if ($number) {
-            $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
-            $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
-            $str [] = ($number < 21) ? $words[$number].' '. $digits[$counter]. $plural.' '.$hundred:$words[floor($number / 10) * 10].' '.$words[$number % 10]. ' '.$digits[$counter].$plural.' '.$hundred;
-        } else $str[] = null;
+        $da0 = ($d[0]['dearnessAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['dearnessAll']) : 0;
+        $hra0 = ($d[0]['hra'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['hra']) : 0;
+        $ca0 = ($d[0]['conAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['conAll']) : 0;
+        $ma0 = ($d[0]['medicalAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['medicalAll']) : 0;
+        $sa0 = ($d[0]['specialAll'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['specialAll']) : 0;
+
+        // total allowances
+        $totalAll = $da0 + $hra0 + $ca0 +  $ma0 +  $sa0;
+
+        $sendArr['allowances'] = ['da' => $da0, 'hra' => $hra0, 'ca' => $ca0, 'ma' => $ma0, 'sa' => $sa0, 'total' => $totalAll];
+
+        $ptpm0 = ($d[0]['professionalTaxPerMonth'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['professionalTaxPerMonth']) : 0;
+        $pfm0 = ($d[0]['pfPerMonth'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['pfPerMonth']) : 0;
+        $tds0 = ($d[0]['tdsPerMonth'] > 0) ? $this->CrudModel->calculatePercentageAmount($ssalary, $d[0]['tdsPerMonth']) : 0;
+
+        // total deducations
+        $totalDed = $ptpm0 + $pfm0 + $tds0;
+
+
+        $sendArr['deducations'] = ['ptpm' => $ptpm0, 'pfpm' => $pfm0, 'tds' => $tds0, 'total' => $totalDed];
+
+        // totalSalaryAfterDeduation basicpay + allownaces - deducations
+        $totalSalaryAfterDeducation = ($perMonthSalary + $totalAll) - $totalDed;
+        $sendArr['actualSalary'] =  $totalSalaryAfterDeducation;
+
+        // totalSalaryToPay
+        $totalDeducationMonth = @$leaveDudutionAmt + @$halfDayDeducationAmt + @$totalDed;
+        $totalAllowMonth = @$totalAll;
+
+        // total salary now basicpay + allowance - deducation
+        $ssalaryAmount = (@$ssalary + @$totalAllowMonth) - @$totalDeducationMonth;
+
+        $sendArr['totalSalaryToPay'] =  $ssalaryAmount;
+
+        return $sendArr;
+        exit(0);
     }
-    $Rupees = implode('', array_reverse($str));
-    $paise = ($decimal > 0) ? "." . ($words[$decimal / 10] . " " . $words[$decimal % 10]) . ' Paise' : '';
-    return ($Rupees ? $Rupees . 'Rupees ' : '') . $paise;
-
-}
-
-public function dateToWords(float $number)
-{
-
-    $decimal = round($number - ($no = floor($number)), 2) * 100;
-    $hundred = null;
-    $digits_length = strlen($no);
-    $i = 0;
-    $str = array();
-    $words = array(0 => '', 1 => 'One', 2 => 'Two',
-        3 => 'Three', 4 => 'Four', 5 => 'Five', 6 => 'Six',
-        7 => 'Seven', 8 => 'Eight', 9 => 'Nine',
-        10 => 'Ten', 11 => 'Eleven', 12 => 'Twelve',
-        13 => 'Thirteen', 14 => 'Fourteen', 15 => 'Fifteen',
-        16 => 'Sixteen', 17 => 'Seventeen', 18 => 'Eighteen',
-        19 => 'Nineteen', 20 => 'Twenty', 30 => 'Thirty',
-        40 => 'Forty', 50 => 'Fifty', 60 => 'Sixty',
-        70 => 'Seventy', 80 => 'Eighty', 90 => 'Ninety');
-    $digits = array('', 'Hundred','Thousand','Lakh', 'Crore');
-    while( $i < $digits_length ) {
-        $divider = ($i == 2) ? 10 : 100;
-        $number = floor($no % $divider);
-        $no = floor($no / $divider);
-        $i += $divider == 10 ? 1 : 2;
-        if ($number) {
-            $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
-            $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
-            $str [] = ($number < 21) ? $words[$number].' '. $digits[$counter]. $plural.' '.$hundred:$words[floor($number / 10) * 10].' '.$words[$number % 10]. ' '.$digits[$counter].$plural.' '.$hundred;
-        } else $str[] = null;
-    }
-    $Rupees = implode('', array_reverse($str));
-    $paise = ($decimal > 0) ? "." . ($words[$decimal / 10] . " " . $words[$decimal % 10]) : '';
-    return ($Rupees ? $Rupees : '');
-
-}
 
 
-    public function getTotalAttendanceOfEmployeeCurrentMonth($id,$monthId = '', $yearId = '',$sessionId = '')
+
+    public function numberToWordsCurrency(float $number)
     {
-       
-        if($yearId == '')
-        {
+
+        $decimal = round($number - ($no = floor($number)), 2) * 100;
+        $hundred = null;
+        $digits_length = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array(
+            0 => '', 1 => 'One', 2 => 'Two',
+            3 => 'Three', 4 => 'Four', 5 => 'Five', 6 => 'Six',
+            7 => 'Seven', 8 => 'Eight', 9 => 'Nine',
+            10 => 'Ten', 11 => 'Eleven', 12 => 'Twelve',
+            13 => 'Thirteen', 14 => 'Fourteen', 15 => 'Fifteen',
+            16 => 'Sixteen', 17 => 'Seventeen', 18 => 'Eighteen',
+            19 => 'Nineteen', 20 => 'Twenty', 30 => 'Thirty',
+            40 => 'Forty', 50 => 'Fifty', 60 => 'Sixty',
+            70 => 'Seventy', 80 => 'Eighty', 90 => 'Ninety'
+        );
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_length) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += $divider == 10 ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                $str[] = ($number < 21) ? $words[$number] . ' ' . $digits[$counter] . $plural . ' ' . $hundred : $words[floor($number / 10) * 10] . ' ' . $words[$number % 10] . ' ' . $digits[$counter] . $plural . ' ' . $hundred;
+            } else $str[] = null;
+        }
+        $Rupees = implode('', array_reverse($str));
+        $paise = ($decimal > 0) ? "." . ($words[$decimal / 10] . " " . $words[$decimal % 10]) . ' Paise' : '';
+        return ($Rupees ? $Rupees . 'Rupees ' : '') . $paise;
+    }
+
+    public function dateToWords(float $number)
+    {
+
+        $decimal = round($number - ($no = floor($number)), 2) * 100;
+        $hundred = null;
+        $digits_length = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array(
+            0 => '', 1 => 'One', 2 => 'Two',
+            3 => 'Three', 4 => 'Four', 5 => 'Five', 6 => 'Six',
+            7 => 'Seven', 8 => 'Eight', 9 => 'Nine',
+            10 => 'Ten', 11 => 'Eleven', 12 => 'Twelve',
+            13 => 'Thirteen', 14 => 'Fourteen', 15 => 'Fifteen',
+            16 => 'Sixteen', 17 => 'Seventeen', 18 => 'Eighteen',
+            19 => 'Nineteen', 20 => 'Twenty', 30 => 'Thirty',
+            40 => 'Forty', 50 => 'Fifty', 60 => 'Sixty',
+            70 => 'Seventy', 80 => 'Eighty', 90 => 'Ninety'
+        );
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_length) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += $divider == 10 ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                $str[] = ($number < 21) ? $words[$number] . ' ' . $digits[$counter] . $plural . ' ' . $hundred : $words[floor($number / 10) * 10] . ' ' . $words[$number % 10] . ' ' . $digits[$counter] . $plural . ' ' . $hundred;
+            } else $str[] = null;
+        }
+        $Rupees = implode('', array_reverse($str));
+        $paise = ($decimal > 0) ? "." . ($words[$decimal / 10] . " " . $words[$decimal % 10]) : '';
+        return ($Rupees ? $Rupees : '');
+    }
+
+
+    public function getTotalAttendanceOfEmployeeCurrentMonth($id, $monthId = '', $yearId = '', $sessionId = '')
+    {
+
+        if ($yearId == '') {
             $currentYear = date('Y');
-        }else
-        {
+        } else {
             $currentYear = $yearId;
         }
 
-        if($monthId == '')
-        {
+        if ($monthId == '') {
             $currentMonth = date('m');
-        }else
-        {
+        } else {
             $currentMonth = $monthId;
         }
         $first_day = "01"; // first Days hardcoded
@@ -2564,13 +2654,11 @@ public function dateToWords(float $number)
         $endDate = date($currentYear . '-' . $currentMonth . '-' . $last_day);
 
         $condition = "";
-        if($sessionId != '')
-			{
-				$condition .= " AND schoolUniqueCode = '$sessionId' ";
-			}else
-			{
-				$condition .= " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
-			}
+        if ($sessionId != '') {
+            $condition .= " AND schoolUniqueCode = '$sessionId' ";
+        } else {
+            $condition .= " AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ";
+        }
         $totalPresents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE  status = '1' $condition  AND attendenceStatus = '2' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
 
         $totalAbsents = $this->db->query("SELECT count(1) as c FROM " . Table::staffattendanceTable . " WHERE status = '1' $condition AND  attendenceStatus = '1' AND employee_id = '$id' AND  att_date >= '$startDate' AND att_date <= '$endDate'")->result_array()[0]['c'];
@@ -2730,7 +2818,8 @@ public function dateToWords(float $number)
 
 
     // run query insert or update or delete
-    public function runQueryIUD($sql){
+    public function runQueryIUD($sql)
+    {
         return $this->db->query($sql);
     }
 
@@ -2854,7 +2943,7 @@ public function dateToWords(float $number)
 
 
     // student fees details via student Id
-    public function showStudentFeesViaIdClassAndSection($stuId,$classId, $sectionId,$schoolCode,$sessionId)
+    public function showStudentFeesViaIdClassAndSection($stuId, $classId, $sectionId, $schoolCode, $sessionId)
     {
         $sendArr = [];
         $dir = base_url() . HelperClass::studentImagePath;
@@ -2879,7 +2968,7 @@ public function dateToWords(float $number)
             'gdiscount' => $gdiscount,
             'gFineD' => $gFineD,
             'gPaid' => $gPaid,
-            'gBalance' =>$gBalance
+            'gBalance' => $gBalance
         ];
 
         $sendArr['deposits'] = [];
@@ -2890,8 +2979,7 @@ public function dateToWords(float $number)
         $b = 1;
 
 
-        foreach ($feesDetails as $f)
-         {
+        foreach ($feesDetails as $f) {
             $sqln = "SELECT nfm.id as fmtId, nfm.amount, nfm.fineType,nfm.finePercentage,nfm.fineFixAmount, nfm.dueDate,
             nft.id as nftId, nft.feeTypeName, nft.shortCode, nfg.id as nfgId, nfg.feeGroupName FROM
             " . Table::newfeemasterTable . " nfm 
@@ -2919,24 +3007,24 @@ public function dateToWords(float $number)
                 } else {
                     $fineAmount = 0.00;
                 }
-        
+
                 if ($fineAmount == 0) {
                     $fShow = false;
                 } else {
                     $fShow = true;
                 }
-        
-        
-        
+
+
+
                 $feesDeposits = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '$stuId' AND classId = '$classId' AND sectionId = '$sectionId' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1' AND session_table_id = '$sessionId'");
-        
-        
+
+
                 $depositAmt = 0.00;
                 $fineAmt = 0.00;
                 $discountAmt = 0.00;
                 if (!empty($feesDeposits)) {
-        
-        
+
+
                     foreach ($feesDeposits as $fd) {
                         $depositAmt = $depositAmt + $fd['depositAmount'];
                         $fineAmt = $fineAmt + $fd['fine'];
@@ -2944,21 +3032,20 @@ public function dateToWords(float $number)
                         $b++;
                     }
                 }
-        
+
                 $amountNow = $gwf['amount'] - $depositAmt;
 
                 $bstatusBalance = ($gwf['amount'] - $depositAmt) - $discountAmt;
 
                 $gAmount = $gAmount + $gwf['amount'];
                 $gFine = $gFine + $fineAmount;
-              
+
                 $gdiscount = $gdiscount + $discountAmt;
                 $gFineD = $gFineD + $fineAmt;
                 $gPaid = $gPaid + $depositAmt;
                 if ($amountNow > 0) {
                     $bblance = $amountNow - $discountAmt;
-                }else
-                {
+                } else {
                     $bblance = ($gwf['amount'] - $depositAmt) - $discountAmt;
                 }
 
@@ -2969,23 +3056,23 @@ public function dateToWords(float $number)
                 $discountAmt = 0.00;
                 $subArr = [];
                 if (!empty($feesDeposits)) {
-        
+
                     foreach ($feesDeposits as $fd) {
-        
-        
+
+
 
                         $depositAmt = @$depositAmt + $fd['depositAmount'];
                         $fineAmt = @$fineAmt + $fd['fine'];
                         $discountAmt = @$discountAmt + $fd['discount'];
 
-                        $paymentMode = ($fd['paymentMode']=='1') ? 'Offline' : 'Online'; 
-                 
-                    $depositDate =  date('d-m-y', strtotime($fd['depositDate']));
-                    $invoiceId = $fd['invoiceId'] ;
+                        $paymentMode = ($fd['paymentMode'] == '1') ? 'Offline' : 'Online';
 
-                    // $discount = $fd['discount'];
-                    // $fine = $fd['fine'];
-                    // $depositamount = $fd['depositAmount'];
+                        $depositDate =  date('d-m-y', strtotime($fd['depositDate']));
+                        $invoiceId = $fd['invoiceId'];
+
+                        // $discount = $fd['discount'];
+                        // $fine = $fd['fine'];
+                        // $depositamount = $fd['depositAmount'];
 
                         $subArr['depositAmount'] = $depositAmt;
                         $subArr['fine'] = $fineAmt;
@@ -2994,11 +3081,10 @@ public function dateToWords(float $number)
                         $subArr['depositDate'] = $depositDate;
                         $subArr['invoiceId'] = $invoiceId;
                         array_push($sendArr['deposits'], $subArr);
-                    
+                    }
                 }
-            } 
-    
-        $j++;
+
+                $j++;
             }
         }
         $sendArr['gAmount'] = $gAmount;
@@ -3006,252 +3092,242 @@ public function dateToWords(float $number)
         $sendArr['gdiscount'] = $gdiscount;
         $sendArr['gFineD'] = $gFineD;
         $sendArr['gPaid'] = $gPaid;
-        $sendArr['gBalance'] =$gBalance;
-        $sendArr['totalPaidIncludingDiscounts'] =$sendArr['gPaid'] + $sendArr['gdiscount'];
-        $sendArr['totalDueNow'] =$sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
+        $sendArr['gBalance'] = $gBalance;
+        $sendArr['totalPaidIncludingDiscounts'] = $sendArr['gPaid'] + $sendArr['gdiscount'];
+        $sendArr['totalDueNow'] = $sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
 
-        
+
 
         return $sendArr;
     }
 
-     // student fees details month wise via student Id
-     public function showStudentMonthWiseFeesViaIdClassAndSection($stuId,$classId, $sectionId,$schoolCode,$sessionId)
-     {
-         $sendArr = [];
-         $feesDuesMonths = [];
-         $dir = base_url() . HelperClass::studentImagePath;
- 
-         $studentData = @$this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
+    // student fees details month wise via student Id
+    public function showStudentMonthWiseFeesViaIdClassAndSection($stuId, $classId, $sectionId, $schoolCode, $sessionId)
+    {
+        $sendArr = [];
+        $feesDuesMonths = [];
+        $dir = base_url() . HelperClass::studentImagePath;
+
+        $studentData = @$this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
          JOIN " . Table::classTable . " cl ON cl.id = s.class_id
          JOIN " . Table::sectionTable . " se ON se.id = s.section_id
          WHERE s.status = '1' AND s.schoolUniqueCode = '$schoolCode' AND s.id = '$stuId'")->result_array()[0];
- 
-         $feesDetails = $this->db->query("SELECT DISTINCT(fee_group_id) FROM " . Table::newfeeclasswiseTable . " WHERE class_id = '$classId' AND section_id = '$sectionId' AND schoolUniqueCode = '$schoolCode' AND student_id = '$stuId'  GROUP BY fee_group_id")->result_array();
- 
-         $gAmount = 0.00;
-         $gFine = 0.00;
-         $gdiscount = 0.00;
-         $gFine = 0.00;
-         $gFineD = 0.00;
-         $gPaid = 0.00;
-         $gBalance = 0.00;
-         $sendArr = [
-             'gAmount' => $gAmount,
-             'gFine' =>  $gFine,
-             'gdiscount' => $gdiscount,
-             'gFineD' => $gFineD,
-             'gPaid' => $gPaid,
-             'gBalance' =>$gBalance
-         ];
- 
-         $sendArr['deposits'] = [];
-         $todayDate = date('Y-m-d');
- 
-         $j = 1;
-         $a = 1;
-         $b = 1;
- 
- 
-         $feesString = "'January Fees','February Fees','March Fees','April Fees','May Fees','June Fees','July Fees','August Fees','September Fees','October Fees','November Fees','December Fees'";
 
-         foreach ($feesDetails as $f)
-          {
-             $sqln = "SELECT nfm.id as fmtId, nfm.amount, nfm.fineType,nfm.finePercentage,nfm.fineFixAmount, nfm.dueDate,
+        $feesDetails = $this->db->query("SELECT DISTINCT(fee_group_id) FROM " . Table::newfeeclasswiseTable . " WHERE class_id = '$classId' AND section_id = '$sectionId' AND schoolUniqueCode = '$schoolCode' AND student_id = '$stuId'  GROUP BY fee_group_id")->result_array();
+
+        $gAmount = 0.00;
+        $gFine = 0.00;
+        $gdiscount = 0.00;
+        $gFine = 0.00;
+        $gFineD = 0.00;
+        $gPaid = 0.00;
+        $gBalance = 0.00;
+        $sendArr = [
+            'gAmount' => $gAmount,
+            'gFine' =>  $gFine,
+            'gdiscount' => $gdiscount,
+            'gFineD' => $gFineD,
+            'gPaid' => $gPaid,
+            'gBalance' => $gBalance
+        ];
+
+        $sendArr['deposits'] = [];
+        $todayDate = date('Y-m-d');
+
+        $j = 1;
+        $a = 1;
+        $b = 1;
+
+
+        $feesString = "'January Fees','February Fees','March Fees','April Fees','May Fees','June Fees','July Fees','August Fees','September Fees','October Fees','November Fees','December Fees'";
+
+        foreach ($feesDetails as $f) {
+            $sqln = "SELECT nfm.id as fmtId, nfm.amount, nfm.fineType,nfm.finePercentage,nfm.fineFixAmount, nfm.dueDate,
              nft.id as nftId, nft.feeTypeName, nft.shortCode, nfg.id as nfgId, nfg.feeGroupName FROM
              " . Table::newfeemasterTable . " nfm 
              JOIN " . Table::newfeestypesTable . " nft ON nft.id = nfm.newFeeType
              JOIN " . Table::newfeesgroupsTable . " nfg ON nfg.id = nfm.newFeeGroupId
              WHERE nfm.newFeeGroupId = '{$f['fee_group_id']}' AND nft.feeTypeName IN ($feesString)";
- 
-             $groupWiseFeeDetails = $this->db->query($sqln)->result_array();
-             $fGN = @$groupWiseFeeDetails[0]['feeGroupName'];
- 
- 
-             foreach ($groupWiseFeeDetails as $gwf) {
-                 // search student all depoists
-                 $fineAmount = 0.00;
-                 if ($todayDate > $gwf['dueDate']) {
-                     if ($gwf['fineType'] == '1') {
-                         $fineAmount = 0.00;
-                     } else if ($gwf['fineType'] == '2') {
-                         // percenrtage
-                         $fineAmount = ceil($gwf['amount'] * @$gwf['finePercentage'] / 100);
-                     } else if ($gwf['fineType'] == '3') {
-                         // fixed amount
-                         $fineAmount = @$gwf['fineFixAmount'];
-                     }
-                 } else {
-                     $fineAmount = 0.00;
-                 }
-         
-                 if ($fineAmount == 0) {
-                     $fShow = false;
-                 } else {
-                     $fShow = true;
-                 }
-         
-         
-         
-                 $feesDeposits = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '$stuId' AND classId = '$classId' AND sectionId = '$sectionId' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1' AND session_table_id = '$sessionId'");
-         
-         
-                 $depositAmt = 0.00;
-                 $fineAmt = 0.00;
-                 $discountAmt = 0.00;
-                
-                 if (!empty($feesDeposits)) {
-         
-         
-                     foreach ($feesDeposits as $fd) {
-                         $depositAmt = $depositAmt + $fd['depositAmount'];
-                         $fineAmt = $fineAmt + $fd['fine'];
-                         $discountAmt = $discountAmt + $fd['discount'];
-                         $b++;
-                     }
-                 }else{
-                    array_push($feesDuesMonths,$gwf['feeTypeName']);
-                 }
-         
-                 $amountNow = $gwf['amount'] - $depositAmt;
- 
-                 $bstatusBalance = ($gwf['amount'] - $depositAmt) - $discountAmt;
- 
-                 $gAmount = $gAmount + $gwf['amount'];
-                 $gFine = $gFine + $fineAmount;
-               
-                 $gdiscount = $gdiscount + $discountAmt;
-                 $gFineD = $gFineD + $fineAmt;
-                 $gPaid = $gPaid + $depositAmt;
-                 if ($amountNow > 0) {
-                     $bblance = $amountNow - $discountAmt;
-                 }else
-                 {
-                     $bblance = ($gwf['amount'] - $depositAmt) - $discountAmt;
-                 }
- 
- 
-                 $a = 1;
-                 $depositAmt = 0.00;
-                 $fineAmt = 0.00;
-                 $discountAmt = 0.00;
-                 $subArr = [];
-                 if (!empty($feesDeposits)) {
-         
-                     foreach ($feesDeposits as $fd) {
-         
-         
- 
-                         $depositAmt = @$depositAmt + $fd['depositAmount'];
-                         $fineAmt = @$fineAmt + $fd['fine'];
-                         $discountAmt = @$discountAmt + $fd['discount'];
- 
-                         $paymentMode = ($fd['paymentMode']=='1') ? 'Offline' : 'Online'; 
-                  
-                     $depositDate =  date('d-m-y', strtotime($fd['depositDate']));
-                     $invoiceId = $fd['invoiceId'] ;
- 
-                     // $discount = $fd['discount'];
-                     // $fine = $fd['fine'];
-                     // $depositamount = $fd['depositAmount'];
- 
-                         $subArr['depositAmount'] = $depositAmt;
-                         $subArr['fine'] = $fineAmt;
-                         $subArr['discount'] = $discountAmt;
-                         $subArr['paymentMode'] =  $paymentMode;
-                         $subArr['depositDate'] = $depositDate;
-                         $subArr['invoiceId'] = $invoiceId;
-                         array_push($sendArr['deposits'], $subArr);
-                     
-                 }
-             } 
-     
-         $j++;
-             }
-         }
-         $sendArr['gAmount'] = $gAmount;
-         $sendArr['gFine'] =  $gFine;
-         $sendArr['gdiscount'] = $gdiscount;
-         $sendArr['gFineD'] = $gFineD;
-         $sendArr['gPaid'] = $gPaid;
-         $sendArr['gBalance'] =$gBalance;
-         $sendArr['totalPaidIncludingDiscounts'] =$sendArr['gPaid'] + $sendArr['gdiscount'];
-         $sendArr['totalDueNow'] =$sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
-         $sendArr['feesDuesMonths'] = $feesDuesMonths;
 
-         
- 
-         return $sendArr;
-     }
+            $groupWiseFeeDetails = $this->db->query($sqln)->result_array();
+            $fGN = @$groupWiseFeeDetails[0]['feeGroupName'];
+
+
+            foreach ($groupWiseFeeDetails as $gwf) {
+                // search student all depoists
+                $fineAmount = 0.00;
+                if ($todayDate > $gwf['dueDate']) {
+                    if ($gwf['fineType'] == '1') {
+                        $fineAmount = 0.00;
+                    } else if ($gwf['fineType'] == '2') {
+                        // percenrtage
+                        $fineAmount = ceil($gwf['amount'] * @$gwf['finePercentage'] / 100);
+                    } else if ($gwf['fineType'] == '3') {
+                        // fixed amount
+                        $fineAmount = @$gwf['fineFixAmount'];
+                    }
+                } else {
+                    $fineAmount = 0.00;
+                }
+
+                if ($fineAmount == 0) {
+                    $fShow = false;
+                } else {
+                    $fShow = true;
+                }
+
+
+
+                $feesDeposits = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '$stuId' AND classId = '$classId' AND sectionId = '$sectionId' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1' AND session_table_id = '$sessionId'");
+
+
+                $depositAmt = 0.00;
+                $fineAmt = 0.00;
+                $discountAmt = 0.00;
+
+                if (!empty($feesDeposits)) {
+
+
+                    foreach ($feesDeposits as $fd) {
+                        $depositAmt = $depositAmt + $fd['depositAmount'];
+                        $fineAmt = $fineAmt + $fd['fine'];
+                        $discountAmt = $discountAmt + $fd['discount'];
+                        $b++;
+                    }
+                } else {
+                    array_push($feesDuesMonths, $gwf['feeTypeName']);
+                }
+
+                $amountNow = $gwf['amount'] - $depositAmt;
+
+                $bstatusBalance = ($gwf['amount'] - $depositAmt) - $discountAmt;
+
+                $gAmount = $gAmount + $gwf['amount'];
+                $gFine = $gFine + $fineAmount;
+
+                $gdiscount = $gdiscount + $discountAmt;
+                $gFineD = $gFineD + $fineAmt;
+                $gPaid = $gPaid + $depositAmt;
+                if ($amountNow > 0) {
+                    $bblance = $amountNow - $discountAmt;
+                } else {
+                    $bblance = ($gwf['amount'] - $depositAmt) - $discountAmt;
+                }
+
+
+                $a = 1;
+                $depositAmt = 0.00;
+                $fineAmt = 0.00;
+                $discountAmt = 0.00;
+                $subArr = [];
+                if (!empty($feesDeposits)) {
+
+                    foreach ($feesDeposits as $fd) {
+
+
+
+                        $depositAmt = @$depositAmt + $fd['depositAmount'];
+                        $fineAmt = @$fineAmt + $fd['fine'];
+                        $discountAmt = @$discountAmt + $fd['discount'];
+
+                        $paymentMode = ($fd['paymentMode'] == '1') ? 'Offline' : 'Online';
+
+                        $depositDate =  date('d-m-y', strtotime($fd['depositDate']));
+                        $invoiceId = $fd['invoiceId'];
+
+                        // $discount = $fd['discount'];
+                        // $fine = $fd['fine'];
+                        // $depositamount = $fd['depositAmount'];
+
+                        $subArr['depositAmount'] = $depositAmt;
+                        $subArr['fine'] = $fineAmt;
+                        $subArr['discount'] = $discountAmt;
+                        $subArr['paymentMode'] =  $paymentMode;
+                        $subArr['depositDate'] = $depositDate;
+                        $subArr['invoiceId'] = $invoiceId;
+                        array_push($sendArr['deposits'], $subArr);
+                    }
+                }
+
+                $j++;
+            }
+        }
+        $sendArr['gAmount'] = $gAmount;
+        $sendArr['gFine'] =  $gFine;
+        $sendArr['gdiscount'] = $gdiscount;
+        $sendArr['gFineD'] = $gFineD;
+        $sendArr['gPaid'] = $gPaid;
+        $sendArr['gBalance'] = $gBalance;
+        $sendArr['totalPaidIncludingDiscounts'] = $sendArr['gPaid'] + $sendArr['gdiscount'];
+        $sendArr['totalDueNow'] = $sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
+        $sendArr['feesDuesMonths'] = $feesDuesMonths;
+
+
+
+        return $sendArr;
+    }
 
     // show student old session fees details 
 
-    public function showStudentOldSessionFeesDetails($stuId){
+    public function showStudentOldSessionFeesDetails($stuId)
+    {
 
-       return $oldFeesDetails =  $this->db->query("SELECT sh.fees_due FROM ".Table::studentHistoryTable." sh 
-        JOIN ".Table::schoolSessionTable." ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
+        return $oldFeesDetails =  $this->db->query("SELECT sh.fees_due FROM " . Table::studentHistoryTable . " sh 
+        JOIN " . Table::schoolSessionTable . " ss ON ss.id = sh.old_session_id OR ss.id = sh.session_table_id
         WHERE sh.student_id = '$stuId' ORDER BY sh.id DESC LIMIT 1")->result_array();
     }
 
 
 
 
- // save attendence
- public function submitAttendence($stu_id)
- {
+    // save attendence
+    public function submitAttendence($stu_id)
+    {
 
 
-    $this->load->model('APIModel');
-    $currentDate = date_create()->format('Y-m-d');
+        $this->load->model('APIModel');
+        $currentDate = date_create()->format('Y-m-d');
 
-     $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
+        $d = $this->db->query("SELECT stu_id FROM " . Table::attendenceTable . " WHERE att_date = '$currentDate' AND stu_id = '$stu_id' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
 
-     if (!empty($d)) {
-       return;
-     }
+        if (!empty($d)) {
+            return;
+        }
 
-     $de = $this->db->query("SELECT c.className,sec.sectionName FROM " . Table::studentTable . " s 
-     JOIN ".Table::classTable." c ON c.id = s.class_id
-     JOIN ".Table::sectionTable." sec ON sec.id = s.section_id
+        $de = $this->db->query("SELECT c.className,sec.sectionName FROM " . Table::studentTable . " s 
+     JOIN " . Table::classTable . " c ON c.id = s.class_id
+     JOIN " . Table::sectionTable . " sec ON sec.id = s.section_id
       WHERE s.id = '$stu_id' AND s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' LIMIT 1")->result_array();
 
-     $insertArr = [
-       "schoolUniqueCode" =>$_SESSION['schoolUniqueCode'],
-       "stu_id" => $stu_id,
-       "stu_class" => $de[0]['className'],
-       "stu_section" => $de[0]['sectionName'],
-       "login_user_id" => '1',
-       "login_user_type" => 'Staff',
-       "attendenceStatus" => '1',
-       "dateTime" => date_create()->format('Y-m-d h:i:s'),
-       "att_date" => date_create()->format('Y-m-d'),
-       "session_table_id" => $_SESSION['currentSession']
-     ];
-     $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
-     if (!empty($insertId)) {
+        $insertArr = [
+            "schoolUniqueCode" => $_SESSION['schoolUniqueCode'],
+            "stu_id" => $stu_id,
+            "stu_class" => $de[0]['className'],
+            "stu_section" => $de[0]['sectionName'],
+            "login_user_id" => '1',
+            "login_user_type" => 'Staff',
+            "attendenceStatus" => '1',
+            "dateTime" => date_create()->format('Y-m-d h:i:s'),
+            "att_date" => date_create()->format('Y-m-d'),
+            "session_table_id" => $_SESSION['currentSession']
+        ];
+        $insertId = $this->CrudModel->insert(Table::attendenceTable, $insertArr);
+        if (!empty($insertId)) {
 
-       // check digiCoin is set for this attendence time for students
-       $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'], HelperClass::userType['Student'], $_SESSION['schoolUniqueCode']);
+            // check digiCoin is set for this attendence time for students
+            $digiCoinF =  $this->APIModel->checkIsDigiCoinIsSet(HelperClass::actionType['Attendence'], HelperClass::userType['Student'], $_SESSION['schoolUniqueCode']);
 
-       if ($digiCoinF) {
-         // insert the digicoin
-         $insertDigiCoin = $this->APIModel->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $_SESSION['schoolUniqueCode'],$insertId);
-         if ($insertDigiCoin) {
-           return true;
-         } else {
-           return;
-         }
-       }
+            if ($digiCoinF) {
+                // insert the digicoin
+                $insertDigiCoin = $this->APIModel->insertDigiCoin($stu_id, HelperClass::userTypeR['1'], HelperClass::actionType['Attendence'], $digiCoinF, $_SESSION['schoolUniqueCode'], $insertId);
+                if ($insertDigiCoin) {
+                    return true;
+                } else {
+                    return;
+                }
+            }
 
-       return true;
-     
-   }
- }
-
-
-
-
-
-
-
+            return true;
+        }
+    }
 }
