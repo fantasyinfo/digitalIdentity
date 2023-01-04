@@ -505,26 +505,26 @@ class CrudModel extends CI_Model
             LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
             LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
             LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
-            WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+            WHERE s.status != '5'  $condition ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
             $countSql = "SELECT count(s.id) as count  FROM " . $this->tableName . " s
             LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
             LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
             LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
-                WHERE s.status NOT IN ('3','4')  $condition ORDER BY s.id DESC";
+                WHERE s.status != '5'  $condition ORDER BY s.id DESC";
         } else {
             $d = $this->db->query("SELECT s.id,CONCAT('$dir',s.image) as image,s.status,s.regNo,s.regDate,s.address,s.stuName,s.mobile,s.dob,s.pincode,
             s.reg_fee,c.className,st.stateName,ct.cityName,s.schoolUniqueCode,s.father_name FROM " . $this->tableName . " s
            LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
            LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
            LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
-                WHERE s.status NOT IN ('3','4')  ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
+                WHERE s.status != '5'  ORDER BY s.id DESC LIMIT {$data['start']},{$data['length']}")->result_array();
 
             $countSql = "SELECT count(s.id) as count FROM " . $this->tableName . " s
             LEFT JOIN " . Table::classTable . " c ON c.id =  s.class
             LEFT JOIN " . Table::stateTable . " st ON st.id =  s.state
             LEFT JOIN " . Table::cityTable . " ct ON ct.id =  s.city
-                WHERE s.status NOT IN ('3','4')  ORDER BY s.id DESC";
+                WHERE s.status != '5'  ORDER BY s.id DESC";
         }
 
 
@@ -535,30 +535,24 @@ class CrudModel extends CI_Model
             $subArr = [];
 
             $subArr[] = ($j = $i + 1);
-            $subArr[] = $d[$i]['regNo'];
+            $subArr[] = HelperClass::regPrefix . $d[$i]['regNo'];
             $subArr[] = date('d F Y' ,strtotime($d[$i]['regDate']));
             $subArr[] = ucwords($d[$i]['stuName']);
             $subArr[] = $d[$i]['mobile'];
             // $subArr[] = date('d F Y' ,strtotime($d[$i]['dob']));
             $subArr[] = $d[$i]['className'];
             $subArr[] = $d[$i]['cityName'];
-            if ($d[$i]['status'] == '1') {
-                $ns =  '2';
-            } else {
-                $ns = '1';
-            }
 
+            $regArr = [
+                1 => 'Registation Success',
+                2 => 'Admission Success',
+                3 => 'Doubt',
+                4 => 'Not Intrested'
+              ];
 
-            if ($d[$i]['status'] == '1') {
-                $cclas = 'success';
-                $ssus = 'Active';
-            } else {
-                $cclas = 'danger';
-                $ssus = 'Inactive';
-            }
-
-            $subArr[] = "<a href='?action=status&edit_id=" . $d[$i]['id'] . "&status=" . $ns . " ' class='badge badge-" . $cclas . "'> " . $ssus . "</a>";
-
+              $subArr[] = $regArr[$d[$i]['status']];
+          
+          $subArr[] = "<a href='javascript:void(0)' class='btn btn-dark' onclick='changeStatus(".$d[$i]['id'].")'>Change Status</a>";
             if ($_SESSION['schoolUniqueCode'] == $d[$i]['schoolUniqueCode']) {
                 $subArr[] = '
                 <a href="newRegistration?stu_id=' . $d[$i]['id'] . '" class="btn btn-warning" ><i class="fas fa-edit"></i></a>';

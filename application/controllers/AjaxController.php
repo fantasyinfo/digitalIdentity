@@ -230,10 +230,10 @@ class AjaxController extends CI_Controller
 			$sendArr = '';
 			foreach ($questionsData as $c) {
 				$sendArr .= '<div class="leftSide card px-2 py-2 ">
-				<input type="hidden" name="q[]" value="'.$c['id'].'" />
-				<div class="card-header border-top-3">For '. ucwords($c['class_name']).' Class & '. ucwords($c['subject_name']).' Subject</div>
-				<div class="card-body"><b>Q.</b> '. html_entity_decode($c['question'], ENT_QUOTES).'</div>
-				<div class="card-footer">From The Book '. ucwords($c['book_name']).'</div>
+				<input type="hidden" name="q[]" value="' . $c['id'] . '" />
+				<div class="card-header border-top-3">For ' . ucwords($c['class_name']) . ' Class & ' . ucwords($c['subject_name']) . ' Subject</div>
+				<div class="card-body"><b>Q.</b> ' . html_entity_decode($c['question'], ENT_QUOTES) . '</div>
+				<div class="card-footer">From The Book ' . ucwords($c['book_name']) . '</div>
 			  </div>';
 			}
 
@@ -449,7 +449,7 @@ class AjaxController extends CI_Controller
 	public function showCityViaStateId()
 	{
 		if (isset($_POST['stateId'])) {
-			if (isset($_POST['alreadyCityId']) && $_POST['alreadyCityId'] != '') {
+			if (isset($_POST['alreadyCityId']) && $_POST['alreadyCityId'] != '' && $_POST['alreadyCityId'] != 0) {
 				$alreadyCityId = $_POST['alreadyCityId'];
 			} else {
 				$alreadyCityId = '';

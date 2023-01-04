@@ -1,9 +1,23 @@
+<?php
+if (isset($_POST['changeStatus'])) {
+  $status = $_POST['status'];
+  $id = $_POST['regId'];
+  $updateStatus = $this->db->query("UPDATE " . Table::registrationTable . " SET status = '$status' WHERE id = '$id' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
+}
+?>
+
+<style>
+  #admBox{
+    display: none;
+  }
+</style>
+
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
     <!-- Navbar -->
     <?php $this->load->view('adminPanel/pages/navbar.php');
 
- 
+
 
     ?>
     <!-- /.navbar -->
@@ -114,7 +128,7 @@
                         ?>
                       </select>
                     </div>
-                    
+
                     <div class="form-group col-md-2">
                       <label>Select Book </label>
                       <select id="book" class="form-control  select2 select2-dark" required data-dropdown-css-class="select2-dark" style="width: 100%;">
@@ -180,6 +194,7 @@
                           <th>Class</th>
                           <th>Address</th>
                           <th>Status</th>
+                          <th>Chnage Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -200,6 +215,76 @@
       </div>
       <!-- /.content-wrapper -->
 
+
+      <div class="modal" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+
+          <form method="POST">
+            <input type="hidden" name="regId" id="regId">
+            <div class="modal-content">
+              <div class="modal-header bg-warning">
+                <h5 class="modal-title text-dark ">Update Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <?php
+
+                $regArr = [
+                  1 => 'Registation Success',
+                  2 => 'Admission Success',
+                  3 => 'Doubt',
+                  4 => 'Not Intrested'
+                ];
+                ?>
+                <label>Change Status</label>
+                <select id='reg_from_id' class='form-control select2 select2-dark' name='status' onchange='showAdmission()'>
+                  <?php
+                  foreach ($regArr as $k => $v) { ?>
+                    <option value='<?= $k ?>'><?= $v ?></option>
+                  <?php } ?>
+                </select>
+
+                <?php
+
+
+                $classData = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE status ='1'   AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' ")->result_array();
+
+                $sectionData = $this->db->query("SELECT * FROM " . Table::sectionTable . " WHERE status = '1'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
+
+
+                ?>
+
+                <div id='admBox'>
+                  <label>Select Class</label>
+                  <select id='classId' class='form-control select2 select2-dark' name='class'>
+                    <?php
+                    foreach ($classData as $v) { ?>
+                      <option value='<?= $v['id'] ?>'><?= $v['className'] ?></option>
+                    <?php } ?>
+                  </select>
+                  <label>Select Section</label>
+                  <select id='sectionId' class='form-control select2 select2-dark' name='section'>
+                    <?php
+                    foreach ($sectionData as $v) { ?>
+                      <option value='<?= $v['id'] ?>'><?= $v['sectionName'] ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="submit" name="changeStatus" class="btn btn-dark btn-block">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
       <!-- /.control-sidebar -->
     </div>
     <?php $this->load->view("adminPanel/pages/footer-copyright.php"); ?>
@@ -216,8 +301,16 @@
         "responsive": true,
         "lengthChange": true,
         "autoWidth": true,
-        lengthMenu: [500, 1000, 2000, 5000, 10000, 50000, 100000],
-        pageLength: 100,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        dom: 'lBfrtip',
+        buttons: [
+          'copyHtml5',
+          'excelHtml5',
+          'csvHtml5',
+          'pdfHtml5'
+        ],
+        lengthMenu: [10, 50, 100, 500, 1000, 2000, 5000, 10000, 50000, 100000],
+        pageLength: 10,
         processing: true,
         serverSide: true,
         searching: false,
@@ -250,4 +343,25 @@
         $("#question_type").val()
       );
     });
+
+
+
+
+
+
+    function changeStatus(id) {
+      $("#regId").val(id);
+      $("#myModal").modal('show');
+
+    }
+
+    function showAdmission() {
+      if($("#reg_from_id").val() == 2){
+        $("#admBox").show();
+      }else{
+        $("#admBox").hide();
+      }
+      // $("#myModal").modal('show');
+
+    }
   </script>

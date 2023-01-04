@@ -1,33 +1,33 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 
- $route['default_controller'] = 'FrontController';
- $route['/'] = 'FrontController/index'; // login or studentview
- $route['register'] = 'FrontController/register'; // register
- $route['logout'] = 'FrontController/logout'; // logout
- $route['tc'] = 'FrontController/tc'; // tc verify
- $route['semResult'] = 'FrontController/semResult'; // semResult
- $route['downloadDateSheet'] = 'FrontController/downloadDateSheet'; // downloadDateSheet
- $route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
- $route['feesInvoiceAll'] = 'FrontController/feesInvoiceAll'; // feesInvoice
- $route['salarySlip'] = 'FrontController/salarySlip'; // salarySlip
- $route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
- $route['characterCertificate'] = 'FrontController/characterCertificate'; // characterCertificate
- $route['bonafideCertificate'] = 'FrontController/bonafideCertificate'; // characterCertificate
- $route['visitorEntry'] = 'FrontController/visitorEntry'; // characterCertificate
- $route['gatePass'] = 'FrontController/gatePass'; // characterCertificate
- $route['scanQR'] = 'FrontController/scanQR'; // scanQR
- $route['scholarRegisterCertificate'] = 'FrontController/scholarRegisterCertificate'; // srCertificate
- 
- // front-end routes
+$route['default_controller'] = 'FrontController';
+$route['/'] = 'FrontController/index'; // login or studentview
+$route['register'] = 'FrontController/register'; // register
+$route['logout'] = 'FrontController/logout'; // logout
+$route['tc'] = 'FrontController/tc'; // tc verify
+$route['semResult'] = 'FrontController/semResult'; // semResult
+$route['downloadDateSheet'] = 'FrontController/downloadDateSheet'; // downloadDateSheet
+$route['feesInvoice'] = 'FrontController/feesInvoice'; // feesInvoice
+$route['feesInvoiceAll'] = 'FrontController/feesInvoiceAll'; // feesInvoice
+$route['salarySlip'] = 'FrontController/salarySlip'; // salarySlip
+$route['experienceLetter'] = 'FrontController/experienceLetter'; // experienceLetter
+$route['characterCertificate'] = 'FrontController/characterCertificate'; // characterCertificate
+$route['bonafideCertificate'] = 'FrontController/bonafideCertificate'; // characterCertificate
+$route['visitorEntry'] = 'FrontController/visitorEntry'; // characterCertificate
+$route['gatePass'] = 'FrontController/gatePass'; // characterCertificate
+$route['scanQR'] = 'FrontController/scanQR'; // scanQR
+$route['scholarRegisterCertificate'] = 'FrontController/scholarRegisterCertificate'; // srCertificate
+
+// front-end routes
 
 
 
 
- // admin panel routes
- $route['adminPanel'] = 'AdminController/index';
- $route['adminPanel/menues'] = 'AdminController/newOptions';
+// admin panel routes
+$route['adminPanel'] = 'AdminController/index';
+$route['adminPanel/menues'] = 'AdminController/newOptions';
 
 
 
@@ -46,20 +46,19 @@ $studentRoutesArr = [
     'getBonafideCertificate',
     'srRegisterAdd',
     'srRegisterHistory',
-   
-   
+
+
 ];
 
-foreach($studentRoutesArr as $stRoute)
-{
-    $route[$baseStudent.$stRoute] = "StudentController"."/".$stRoute;
+foreach ($studentRoutesArr as $stRoute) {
+    $route[$baseStudent . $stRoute] = "StudentController" . "/" . $stRoute;
 }
 
 // get routes of student
 
-$route[$baseStudent."viewStudent/(:any)"] = "StudentController/viewStudent/$1";
-$route[$baseStudent."editStudent/(:any)"] = "StudentController/editStudent/$1";
-$route[$baseStudent."deleteStudent/(:any)"] = "StudentController/deleteStudent/$1";
+$route[$baseStudent . "viewStudent/(:any)"] = "StudentController/viewStudent/$1";
+$route[$baseStudent . "editStudent/(:any)"] = "StudentController/editStudent/$1";
+$route[$baseStudent . "deleteStudent/(:any)"] = "StudentController/deleteStudent/$1";
 
 
 
@@ -75,16 +74,15 @@ $teacherRoutesArr = [
     'attendance'
 ];
 
-foreach($teacherRoutesArr as $tRoute)
-{
-    $route[$baseTeacher.$tRoute] = "TeacherController"."/".$tRoute;
+foreach ($teacherRoutesArr as $tRoute) {
+    $route[$baseTeacher . $tRoute] = "TeacherController" . "/" . $tRoute;
 }
 
 // get routes of Teacher
 
-$route[$baseTeacher."viewTeacher/(:any)"] = "TeacherController/viewTeacher/$1";
-$route[$baseTeacher."editTeacher/(:any)"] = "TeacherController/editTeacher/$1";
-$route[$baseTeacher."deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$1";
+$route[$baseTeacher . "viewTeacher/(:any)"] = "TeacherController/viewTeacher/$1";
+$route[$baseTeacher . "editTeacher/(:any)"] = "TeacherController/editTeacher/$1";
+$route[$baseTeacher . "deleteTeacher/(:any)"] = "TeacherController/deleteTeacher/$1";
 
 
 
@@ -101,30 +99,28 @@ $driverRouteArr = [
     // 'teacherReviews',
 ];
 
-foreach($driverRouteArr as $driverRoute)
-{
-    $route[$baseDriver.$driverRoute] = "DriverController"."/".$driverRoute;
+foreach ($driverRouteArr as $driverRoute) {
+    $route[$baseDriver . $driverRoute] = "DriverController" . "/" . $driverRoute;
 }
 
 
 // get routes of driver
 
-$route[$baseDriver."viewDriver/(:any)"] = "DriverController/viewDriver/$1";
-$route[$baseDriver."editDriver/(:any)"] = "DriverController/editDriver/$1";
-$route[$baseDriver."deleteDriver/(:any)"] = "DriverController/deleteDriver/$1";
+$route[$baseDriver . "viewDriver/(:any)"] = "DriverController/viewDriver/$1";
+$route[$baseDriver . "editDriver/(:any)"] = "DriverController/editDriver/$1";
+$route[$baseDriver . "deleteDriver/(:any)"] = "DriverController/deleteDriver/$1";
 
 
 
 
 // school routs
- $baseSchool = "school/";
- $schoolRoutesArr = [
+$baseSchool = "school/";
+$schoolRoutesArr = [
     'schoolProfile'
 ];
 
-foreach($schoolRoutesArr as $schoolRoute)
-{
-    $route[$baseSchool.$schoolRoute] = "SchoolController"."/".$schoolRoute;
+foreach ($schoolRoutesArr as $schoolRoute) {
+    $route[$baseSchool . $schoolRoute] = "SchoolController" . "/" . $schoolRoute;
 }
 
 
@@ -164,18 +160,17 @@ $masterRoutesArr = [
     'checkSalary',
     'getExperienceLetter',
     'givePermissionMaster', // only for super Admin
-    'showTotalStudentsSchoolWise'// only for super Admin
-    
+    'showTotalStudentsSchoolWise' // only for super Admin
+
 ];
 
-foreach($masterRoutesArr as $masRoute)
-{
-    $route[$baseMaster.$masRoute] = "MasterController"."/".$masRoute;
+foreach ($masterRoutesArr as $masRoute) {
+    $route[$baseMaster . $masRoute] = "MasterController" . "/" . $masRoute;
 }
 
 // get routes of Teacher
 
-$route[$baseMaster."editPermission/(:any)/(:any)"] = "MasterController/editPermission/$1/$2"; // user_id / user_type
+$route[$baseMaster . "editPermission/(:any)/(:any)"] = "MasterController/editPermission/$1/$2"; // user_id / user_type
 
 
 
@@ -195,9 +190,8 @@ $digiCoinRoutesArr = [
     'leaderBoard'
 ];
 
-foreach($digiCoinRoutesArr as $digiRoute)
-{
-    $route[$baseDigiCoin.$digiRoute] = "DigiCoinController"."/".$digiRoute;
+foreach ($digiCoinRoutesArr as $digiRoute) {
+    $route[$baseDigiCoin . $digiRoute] = "DigiCoinController" . "/" . $digiRoute;
 }
 
 
@@ -212,9 +206,8 @@ $examRoutesArr = [
     'allResults',
 ];
 
-foreach($examRoutesArr as $examRoute)
-{
-    $route[$baseExam.$examRoute] = "ExamController"."/".$examRoute;
+foreach ($examRoutesArr as $examRoute) {
+    $route[$baseExam . $examRoute] = "ExamController" . "/" . $examRoute;
 }
 
 
@@ -225,9 +218,8 @@ $examRoutesArr = [
     'registrationLists'
 ];
 
-foreach($examRoutesArr as $examRoute)
-{
-    $route[$baseExam.$examRoute] = "RegistrationController"."/".$examRoute;
+foreach ($examRoutesArr as $examRoute) {
+    $route[$baseExam . $examRoute] = "RegistrationController" . "/" . $examRoute;
 }
 
 
@@ -244,9 +236,8 @@ $academicRoutesArr = [
     'holidayCalendar'
 ];
 
-foreach($academicRoutesArr as $aRoute)
-{
-    $route[$baseAcademic.$aRoute] = "AcademicController"."/".$aRoute;
+foreach ($academicRoutesArr as $aRoute) {
+    $route[$baseAcademic . $aRoute] = "AcademicController" . "/" . $aRoute;
 }
 
 // newfee System
@@ -266,9 +257,8 @@ $feeRoutes = [
     'defaultFeesTypes'
 ];
 
-foreach($feeRoutes as $aRoute)
-{
-    $route[$baseFeesManagement.$aRoute] = "FeesManagementController"."/".$aRoute;
+foreach ($feeRoutes as $aRoute) {
+    $route[$baseFeesManagement . $aRoute] = "FeesManagementController" . "/" . $aRoute;
 }
 
 
@@ -281,9 +271,8 @@ $questionRoutes = [
     'createQuestionPaper'
 ];
 
-foreach($questionRoutes as $aRoute)
-{
-    $route[$baseQuestionBank.$aRoute] = "QuestionBankController"."/".$aRoute;
+foreach ($questionRoutes as $aRoute) {
+    $route[$baseQuestionBank . $aRoute] = "QuestionBankController" . "/" . $aRoute;
 }
 
 // old database
@@ -293,9 +282,8 @@ $oldDataBaseRoutes = [
 
 ];
 
-foreach($oldDataBaseRoutes as $aRoute)
-{
-    $route[$oldDatabase.$aRoute] = "OldDataBaseController"."/".$aRoute;
+foreach ($oldDataBaseRoutes as $aRoute) {
+    $route[$oldDatabase . $aRoute] = "OldDataBaseController" . "/" . $aRoute;
 }
 
 
@@ -314,9 +302,8 @@ $semesterRoutesArr = [
     'showAllSemesterResults'
 ];
 
-foreach($semesterRoutesArr as $semRoute)
-{
-    $route[$semesterBase.$semRoute] = "SemesterController"."/".$semRoute;
+foreach ($semesterRoutesArr as $semRoute) {
+    $route[$semesterBase . $semRoute] = "SemesterController" . "/" . $semRoute;
 }
 
 
@@ -352,25 +339,24 @@ $ajaxRoutesArr = [
     'showDesignationsViaDepartmentId',
     'showSalaryDetails',
     'showEmployeesViaDepartmentId',
-   'showEmployeesViaDepartmentIdAndDesignationId',
-   'checkEmployeeSalaryById',
-   'showEmployeesViaDepAndDesId',
-   'showEmployeesDetailsViaDepAndDesId',
-   'showStudentViaClassAndSectionIdForCharacterCertificate',
-   'showStudentViaClassAndSectionAndStudentIdForCharacter',
-   'showStudentViaClassAndSectionAndStudentIdForBonefide',
-   'bookIdtoChapters',
-   'questionLists',
-   'showBooksViaSubject',
-   'loadQuestions',
-   'registrationLists'
-   
-    
+    'showEmployeesViaDepartmentIdAndDesignationId',
+    'checkEmployeeSalaryById',
+    'showEmployeesViaDepAndDesId',
+    'showEmployeesDetailsViaDepAndDesId',
+    'showStudentViaClassAndSectionIdForCharacterCertificate',
+    'showStudentViaClassAndSectionAndStudentIdForCharacter',
+    'showStudentViaClassAndSectionAndStudentIdForBonefide',
+    'bookIdtoChapters',
+    'questionLists',
+    'showBooksViaSubject',
+    'loadQuestions',
+    'registrationLists'
+
+
 ];
 
-foreach($ajaxRoutesArr as $ajRoute)
-{
-    $route[$baseAjax.$ajRoute] = "AjaxController"."/".$ajRoute;
+foreach ($ajaxRoutesArr as $ajRoute) {
+    $route[$baseAjax . $ajRoute] = "AjaxController" . "/" . $ajRoute;
 }
 
 
@@ -386,7 +372,7 @@ $route["downloadQR/(:any)/(:any)/(:any)"] = "AjaxController/downloadQR/$1/$2/$3"
 // api routes
 $baseAPI = 'api/v1/';
 $apiRoutesArr = [
-    'login', 
+    'login',
     'showStudentsForAttendence',
     'submitAttendence',
     'showSubmitAttendenceData',
@@ -436,9 +422,8 @@ $apiRoutesArr = [
     'markAttendance'
 ];
 
-foreach($apiRoutesArr as $apiRoute)
-{
-    $route[$baseAPI.$apiRoute] = "APIController"."/".$apiRoute;
+foreach ($apiRoutesArr as $apiRoute) {
+    $route[$baseAPI . $apiRoute] = "APIController" . "/" . $apiRoute;
 }
 
 
