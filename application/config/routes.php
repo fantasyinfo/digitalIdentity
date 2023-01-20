@@ -375,6 +375,7 @@ $apiRoutesArr = [
     'login',
     'showStudentsForAttendence',
     'submitAttendence',
+    'attendanceLists',
     'showSubmitAttendenceData',
     'allClasses',
     'allSections',

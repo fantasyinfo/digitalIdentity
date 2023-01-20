@@ -1,5 +1,6 @@
 <?php
 
+$regPrefix = 'REG/' . date('Y') . ' - ' . date('Y',strtotime('+one year', date('Y'))) . '/';
 if (isset($_GET['stu_id']) && !empty($_GET['stu_id'])) {
 
   $dir = base_url() . HelperClass::registrationImagePath;
@@ -226,7 +227,7 @@ if (isset($_POST['update'])) {
                         <div class="row">
                           <div class="form-group col-md-3">
                             <label for="admission_no">Registration Number</label>
-                            <input type="text" value="<?= isset($editData['regNo']) ? HelperClass::regPrefix . $editData['regNo'] : ""; ?>" disabled class="form-control" id="regNo" placeholder="Auto Generated">
+                            <input type="text" value="<?= isset($editData['regNo']) ? $regPrefix . $editData['regNo'] : ""; ?>" disabled class="form-control" id="regNo" placeholder="Auto Generated">
                           </div>
                           <div class="form-group col-md-3">
                             <label for="date_of_admission">Date of Registration</label>
@@ -360,7 +361,7 @@ if (isset($_POST['update'])) {
                                   }
 
                               ?>
-                                  <option <? $selectedState ?> value="<?= $state['id'] ?>"><?= $state['stateName'] ?></option>
+                                  <option <?= $selectedState ?> value="<?= $state['id'] ?>"><?= $state['stateName'] ?></option>
                               <?php }
                               }
                               ?>

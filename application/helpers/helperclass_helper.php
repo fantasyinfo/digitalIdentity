@@ -19,7 +19,7 @@ class HelperClass
     const tecPrefix = 'tec0000';
     const driverPrefix = 'dri0000';
     const schoolIDPrefix = 'sch0000';
-    const regPrefix = 'REG/' . '2022-2023' . '/';
+    // $regPrefix = 'REG/' . date('Y') . ' - ' . date('Y',strtotime('+one year', date('Y'))) . '/';
     const imgPrefix = 'img-';
     const uploadImgDir = 'assets/uploads/';
     const qrcodeUrl = 'https://qverify.in';

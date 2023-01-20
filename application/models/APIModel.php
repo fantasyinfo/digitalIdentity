@@ -478,6 +478,23 @@ class APIModel extends CI_Model
       return HelperClass::APIresponse(500, 'Today Attendence Data Not Found for class ' . $className . ' and section ' . $sectionName);
     }
   }
+  public function attendanceLists($className, $sectionName, $date, $schoolUniqueCode)
+  {
+
+
+    $dir = base_url() . HelperClass::studentImagePath;
+    $d = $this->db->query("SELECT at.id as attendenceId, if(at.attendenceStatus = '1' , 'Present', 'Absent') as attendenceStatus, stu.id as studentId, stu.name,CONCAT('$dir',stu.image) as image,cls.className,sec.sectionName FROM " . Table::attendenceTable . " at 
+      LEFT JOIN " . Table::studentTable . " stu ON at.stu_id = stu.id
+      LEFT JOIN " . Table::classTable . " cls ON stu.class_id = cls.id
+      LEFT JOIN " . Table::sectionTable . " sec ON stu.section_id = sec.id
+      WHERE at.att_date = '$date' AND at.stu_class = '$className' AND at.stu_section = '$sectionName' AND at.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
+    if (!empty($d)) {
+      return $d;
+    } else {
+      return HelperClass::APIresponse(500, 'Attendence Data Not Found for class ' . $className . ' and section ' . $sectionName);
+    }
+  }
 
   // save departure
   public function submitDeparture($stu_id, $attendenceId, $stu_class, $stu_section, $login_user_id, $login_user_type, $departureStatus, $schoolUniqueCode, $session_table_id)

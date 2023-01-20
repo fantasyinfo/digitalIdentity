@@ -233,6 +233,26 @@ class APIController extends CI_Controller
 
 		return HelperClass::APIresponse(200, 'Attendence Data For today date ' . $currentDateTime, $data);
 	}
+	// attendanceLists
+	public function attendanceLists()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if (empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']) || empty($apiData['date'])) {
+			return HelperClass::APIresponse(404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$className = $apiData['className'];
+		$sectionName = $apiData['sectionName'];
+		$date = $apiData['date'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode = $loginUser[0]['schoolUniqueCode'];
+		$currentDateTime = date('d-m-Y h:i:s');
+		$data = $this->APIModel->attendanceLists($className, $sectionName, $date, $schoolUniqueCode);
+
+		return HelperClass::APIresponse(200, 'Attendence Data For today date ' . $currentDateTime, $data);
+	}
 
 	// submit departure of students
 	public function submitDeparture()

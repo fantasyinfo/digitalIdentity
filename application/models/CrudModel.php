@@ -535,7 +535,7 @@ class CrudModel extends CI_Model
             $subArr = [];
 
             $subArr[] = ($j = $i + 1);
-            $subArr[] = HelperClass::regPrefix . $d[$i]['regNo'];
+            $subArr[] =  $d[$i]['regNo'];
             $subArr[] = date('d F Y' ,strtotime($d[$i]['regDate']));
             $subArr[] = ucwords($d[$i]['stuName']);
             $subArr[] = $d[$i]['mobile'];
@@ -3102,12 +3102,15 @@ class CrudModel extends CI_Model
         $feesDuesMonths = [];
         $dir = base_url() . HelperClass::studentImagePath;
 
-        $studentData = @$this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
+        $studentData = @$this->db->query($s1 = "SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
          JOIN " . Table::classTable . " cl ON cl.id = s.class_id
          JOIN " . Table::sectionTable . " se ON se.id = s.section_id
          WHERE s.status = '1' AND s.schoolUniqueCode = '$schoolCode' AND s.id = '$stuId'")->result_array()[0];
 
-        $feesDetails = $this->db->query("SELECT DISTINCT(fee_group_id) FROM " . Table::newfeeclasswiseTable . " WHERE class_id = '$classId' AND section_id = '$sectionId' AND schoolUniqueCode = '$schoolCode' AND student_id = '$stuId'  GROUP BY fee_group_id")->result_array();
+
+        $feesDetails = $this->db->query($s2 = "SELECT DISTINCT(fee_group_id) FROM " . Table::newfeeclasswiseTable . " WHERE class_id = '$classId' AND section_id = '$sectionId' AND schoolUniqueCode = '$schoolCode' AND student_id = '$stuId'  GROUP BY fee_group_id")->result_array();
+
+       
 
         $gAmount = 0.00;
         $gFine = 0.00;
@@ -3143,7 +3146,10 @@ class CrudModel extends CI_Model
              JOIN " . Table::newfeesgroupsTable . " nfg ON nfg.id = nfm.newFeeGroupId
              WHERE nfm.newFeeGroupId = '{$f['fee_group_id']}' AND nft.feeTypeName IN ($feesString)";
 
+            
+
             $groupWiseFeeDetails = $this->db->query($sqln)->result_array();
+
             $fGN = @$groupWiseFeeDetails[0]['feeGroupName'];
 
 
@@ -3257,6 +3263,7 @@ class CrudModel extends CI_Model
         $sendArr['feesDuesMonths'] = $feesDuesMonths;
 
 
+        
 
         return $sendArr;
     }

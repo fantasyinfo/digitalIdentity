@@ -55,7 +55,7 @@
       if (!empty($p)) {
         $sendArr = [];
         // current session due;
-        $stuArr = $db->query("SELECT s.*, 
+        $stuArr = $db->query($s = "SELECT s.*, 
         CONCAT(c.className , ' ( ' , ss.sectionName , ' ) ') as class, 
         CONCAT(s.address, ' - ' , ct.cityName, ' - ' , st.stateName , ' - ' , s.pincode) as address 
         FROM " . Table::studentTable . " s
@@ -68,12 +68,11 @@
         s.status = '1' AND 
         s.schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'")->result_array();
 
+        $t = count($stuArr);
 
-
-
-        for ($i = 0, $t = count($stuArr); $i < $t; $i++) {
+        for ($i = 0;  $i < $t; $i++) {
           $subArr = [];
-
+        
           $subArr['studentDetails'] = $stuArr[$i];
 
           $subArr['feesDetails'] = $cModal->showStudentMonthWiseFeesViaIdClassAndSection($stuArr[$i]['id'], $p['classId'], $p['sectionId'], $_SESSION['schoolUniqueCode'], $_SESSION['currentSession']);
@@ -83,6 +82,7 @@
           array_push($sendArr, $subArr);
         }
 
+     
         return $sendArr;
       }
     }
@@ -147,15 +147,21 @@
 
 
     }
+   
 
+    
 
 
     if (isset($_POST['submit_not'])) {
 
       // echo '<pre>';
-      // print_r($_POST['stuIds']);die();
+      // print_r($_POST['totalMonths']);die();
 
       $token = [];
+     
+
+      $schoolName = $this->db->query("SELECT school_name FROM ".Table::schoolMasterTable." WHERE unique_id = '{$_SESSION['schoolUniqueCode']}' ")->result_array()[0]['school_name'];
+
       foreach ($_POST['stuIds'] as $key => $value) {
         // fetch notification from db
         $notificationFromDB = $this->db->query("SELECT title, body FROM " . Table::setNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND for_what = '13' LIMIT 1")->result_array();
@@ -173,12 +179,25 @@
 
         // students token
         $tokens = [];
-        $tokens =  $this->db->query("SELECT fcm_token FROM " . Table::studentTable . " WHERE id = '{$key}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND status = '1' ")->result_array()[0]['fcm_token'];
+        $tokens =  $this->db->query("SELECT * FROM " . Table::studentTable . " WHERE id = '{$key}' AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'  AND status = '1' ")->result_array();
 
-        array_push($token, $tokens);
+
+
+        array_push($token, $tokens[0]['fcm_token']);
+
+        $this->load->model('MessageSMSModel');
+
+        $contactsToSendSMS = implode(',',$contact);
+        $studentName = implode(',',$studentName);
+        $studentName = 'Digitalfied Private Limited';
+        $schoolName;
+  
+        MessageSMSModel::feesDueNotice($tokens[0]['mobile'],$tokens[0]['name'], '+1 or More Months', $schoolName);
       }
 
       $sendPushSMS = $this->CrudModel->sendFireBaseNotificationWithDeviceId($token, $title, $body, $image, $sound);
+
+      
 
       if ($sendPushSMS) {
         $msgArr = [
@@ -393,7 +412,9 @@
                                 <td><?= number_format(@$cn['oldSessionDues'][0]['fees_due'], 2) ?></td>
                                 <td><?= number_format($cn['feesDetails']['totalDueNow'], 2) ?></td>
                                 <td><?php 
+
                                 if(isset($cn['feesDetails']['feesDuesMonths'])) {
+                                 
                                   foreach($cn['feesDetails']['feesDuesMonths'] as $f){ ?>
                                     <?= $f ?> ,
                                  <?php }

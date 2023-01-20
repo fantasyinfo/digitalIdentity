@@ -360,6 +360,20 @@
 
           </div>
 
+          <?php
+
+          //  $this->load->model('MessageSMSModel');
+
+          //  $contact = '9068590784';
+          //  $var1 = 'Digitalfied Private Limited';
+          //  $var2 = 'Global Public School, Baraut';
+
+          // MessageSMSModel::welcomeSMS($contact,$var1, $var2)
+
+         
+          
+          ?>
+
 
 
 
