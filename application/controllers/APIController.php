@@ -46,6 +46,7 @@ class APIController extends CI_Controller
 	}
 
 
+
 	// show list of students for attendence
 	public function showStudentsForAttendence()
 	{
@@ -213,6 +214,8 @@ class APIController extends CI_Controller
 		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime . ' and Notification Send Status ' . $isNotificationSend);
 	}
 
+
+
 	// showSubmitAttendenceData
 	public function showSubmitAttendenceData()
 	{
@@ -232,6 +235,110 @@ class APIController extends CI_Controller
 		$data = $this->APIModel->showSubmitAttendenceData($className, $sectionName,$schoolUniqueCode);
 
 		return HelperClass::APIresponse(200, 'Attendence Data For today date ' . $currentDateTime, $data);
+	}
+
+	// upate attendance data
+	public function submitUpdatedAttendanceData()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if (empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['className']) || empty($apiData['sectionName']) || empty($apiData['loginUserId']) || empty($apiData['attendenceData'])) {
+			return HelperClass::APIresponse(404, 'Please Enter All Parameters.');
+		}
+
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$className = $apiData['className'];
+		$sectionName = $apiData['sectionName'];
+		$attendenceData = $apiData['attendenceData'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode = $loginUser[0]['schoolUniqueCode'];
+		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		$session_table_id = $loginUser[0]['session_table_id'];
+
+		$currentDateTime = date('d-m-Y h:i:s');
+		$totalAttenData = count($attendenceData);
+
+
+		if ($totalAttenData == '0') {
+			$msg = "Please Mark All Students Attandance.";
+			$totalAttenData = 0;
+			return HelperClass::APIresponse(500, $msg);
+		}
+
+
+		// check if total student = total attendanceData
+		$totalStudentsInTheClass = $this->APIModel->countStudentViaClassAndSectionName($className, $sectionName, $schoolUniqueCode);
+
+		if ($totalStudentsInTheClass != $totalAttenData) {
+			$msg = "Please Mark All Students Attandance, Total Students in this Class $totalStudentsInTheClass and you have submitted only $totalAttenData students attendance.";
+			$totalAttenData = 0;
+			return HelperClass::APIresponse(500, $msg);
+		}
+
+		$studentIds = [];
+		for ($i = 0; $i < $totalAttenData; $i++) {
+			$stu_id = $attendenceData[$i]['stu_id'];
+			$attendenceStatus = $attendenceData[$i]['attendence'];
+			$updateId = $attendenceData[$i]['updateId'];
+
+			array_push($studentIds, $stu_id);
+			$insertAttendeceRecord = $this->APIModel->submitUpdatedAttendanceData($stu_id, $className, $sectionName, $loginUserIdFromDB, $loginuserType, $attendenceStatus, $schoolUniqueCode, $session_table_id, $updateId);
+			if (!$insertAttendeceRecord) {
+				return HelperClass::APIresponse(500, 'Attendence Not Updated Successfully beacuse ' . $this->db->last_query());
+			}
+		}
+
+		// send notification now
+		$studentIdsInString = implode("','", $studentIds);
+		$sql = "SELECT fcm_token FROM " . Table::studentTable . " WHERE id IN ('$studentIdsInString') AND schoolUniqueCode = '$schoolUniqueCode'  AND status = '1' ";
+		// die();
+		$tokensFromDB = $this->db->query($sql)->result_array();
+
+		// echo $this->db->last_query();
+		if (!empty($tokensFromDB)) {
+			$totalTokens = count($tokensFromDB);
+			$tokenArr = [];
+			if (!empty($tokensFromDB)) {
+				if ($totalTokens < 500) {
+					for ($i = 0; $i < $totalTokens; $i++) {
+						if (empty($tokensFromDB[$i]['fcm_token']) || $tokensFromDB[$i]['fcm_token'] == null) {
+							continue;
+						}
+						array_push($tokenArr, $tokensFromDB[$i]['fcm_token']);
+					}
+				}
+
+			}
+
+
+			// fetch notification from db
+			$notificationFromDB = $this->db->query("SELECT title, body FROM " . Table::setNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' AND for_what = '1' LIMIT 1")->result_array();
+
+			if (!empty($notificationFromDB)) {
+				$title = $this->CrudModel->replaceNotificationsWords((String) $notificationFromDB[0]['title']);
+				$body = $this->CrudModel->replaceNotificationsWords((String) $notificationFromDB[0]['body']);
+			} else {
+				$title = "Attendance Update ✅";
+				$body = "Hey 👋 Dear Parents, Our 🏫 School Attendance Updated, Please Check The App Now!!";
+			}
+
+
+			$image = null;
+			$sound = null;
+
+			$sendPushSMS = json_decode($this->CrudModel->sendFireBaseNotificationWithDeviceId($tokenArr, $title, $body, $image, $sound), TRUE);
+			$isNotificationSend = false;
+			if (!empty($sendPushSMS)) {
+				if ($sendPushSMS['success']) {
+					$isNotificationSend = true;
+				}
+			}
+
+		}
+
+
+		return HelperClass::APIresponse(200, 'Attendence Updated Successfully at ' . $currentDateTime . ' and Notification Send Status ' . $isNotificationSend);
 	}
 	// attendanceLists
 	public function attendanceLists()
@@ -1221,6 +1328,30 @@ public function updateHomeWork()
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 
 		$notificationsData = $this->APIModel->notificationsForParent($schoolUniqueCode);
+
+		if (!$notificationsData) {
+			return HelperClass::APIresponse(500, 'No New Notification Found. ' . $this->db->last_query());
+		}else
+		{
+			return HelperClass::APIresponse(200, 'All Notifications Data.', $notificationsData);
+		}
+	}
+
+	public function notificationsForAll()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+
+		$notificationsData = $this->APIModel->notificationsForAll($schoolUniqueCode);
 
 		if (!$notificationsData) {
 			return HelperClass::APIresponse(500, 'No New Notification Found. ' . $this->db->last_query());

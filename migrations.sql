@@ -14,6 +14,9 @@
 -- INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `img`, `position`, `status`, `created_at`) VALUES (NULL, 'Registration Lists', 'registration/registrationLists', NULL, '97', '0', '1', NULL, NULL, '1', '2022-08-29 09:25:52');
 
 
-ALTER TABLE `adm_registration` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '1 => Registration, 2 => Admission, 3 => Doubt';
+-- ALTER TABLE `adm_registration` CHANGE `status` `status` ENUM('1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '1 => Registration, 2 => Admission, 3 => Doubt';
 
-ALTER TABLE `adm_registration` CHANGE `status` `status` ENUM('1','2',"3","4") CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1';
+-- ALTER TABLE `adm_registration` CHANGE `status` `status` ENUM('1','2',"3","4") CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1';
+
+
+INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `img`, `position`, `status`, `created_at`) VALUES (NULL, 'Download Id Card', 'showDownloadIDCardTeacher', NULL, '12', '0', '1', NULL, NULL, '1', '2022-08-29 09:25:52')

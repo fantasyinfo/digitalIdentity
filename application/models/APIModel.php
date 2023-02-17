@@ -199,6 +199,23 @@ class APIModel extends CI_Model
     }
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // validate login
   public function validateLogin($authToken, $type)
   {
@@ -478,6 +495,69 @@ class APIModel extends CI_Model
       return HelperClass::APIresponse(500, 'Today Attendence Data Not Found for class ' . $className . ' and section ' . $sectionName);
     }
   }
+
+  // update attendance
+  public function submitUpdatedAttendanceData($stu_id, $stu_class, $stu_section, $login_user_id, $login_user_type, $attendenceStatus, $schoolUniqueCode, $session_table_id, $updateId)
+  {
+
+
+    $currentDate = date_create()->format('Y-m-d');
+
+
+
+    if (date('D') == 'Sun') {
+      return HelperClass::APIresponse(500, 'Today is Sunday. Please Try in Between Monday to Saturday');
+    }
+
+
+    //check if today is holiday
+
+
+    $holiday = $this->db->query("SELECT title FROM " . Table::holidayCalendarTable . " WHERE event_date = '$currentDate' AND schoolUniqueCode = '$schoolUniqueCode' LIMIT 1")->result_array();
+
+    if (!empty($holiday)) {
+      $h = (string) $holiday[0]['title'];
+      return HelperClass::APIresponse(500, "Today is $h Holiday. Try on School Working Days.");
+    }
+
+
+
+
+
+    if ($login_user_type == 'Teacher') {
+
+
+
+      $updateArr = [
+        "schoolUniqueCode" => $schoolUniqueCode,
+        "stu_id" => $stu_id,
+        "stu_class" => $stu_class,
+        "stu_section" => $stu_section,
+        "login_user_id" => $login_user_id,
+        "login_user_type" => $login_user_type,
+        "attendenceStatus" => $attendenceStatus,
+        "dateTime" => date_create()->format('Y-m-d h:i:s'),
+        "att_date" => date_create()->format('Y-m-d'),
+        "session_table_id" => $session_table_id
+      ];
+
+      $insertId = $this->CrudModel->update(Table::attendenceTable, $updateArr, $updateId);
+      if (!empty($insertId)) {
+
+
+        // return true if student is absent today do not enter there digicoins
+        if ($attendenceStatus == '0') {
+          return true;
+        }
+
+
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   public function attendanceLists($className, $sectionName, $date, $schoolUniqueCode)
   {
 
@@ -1709,6 +1789,10 @@ class APIModel extends CI_Model
   }
 
   public function notificationsForParent($schoolUniqueCode)
+  {
+    return $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC ")->result_array();
+  }
+  public function notificationsForAll($schoolUniqueCode)
   {
     return $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC ")->result_array();
   }

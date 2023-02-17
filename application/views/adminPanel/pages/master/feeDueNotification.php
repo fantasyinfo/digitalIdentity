@@ -187,8 +187,8 @@
 
         $this->load->model('MessageSMSModel');
 
-        $contactsToSendSMS = implode(',',$contact);
-        $studentName = implode(',',$studentName);
+        // $contactsToSendSMS = implode(',',$contact);
+        // $studentName = implode(',',$studentName);
         $studentName = 'Digitalfied Private Limited';
         $schoolName;
   

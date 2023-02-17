@@ -366,17 +366,20 @@ $route['listQR'] = 'AjaxController/listQR';
 $route['listQRCodeAjax'] = 'AjaxController/listQRCodeAjax';
 $route['showDownloadQR'] = 'AjaxController/showDownloadQR';
 $route['showDownloadIDCard'] = 'AjaxController/showDownloadIDCard';
+$route['showDownloadIDCardTeacher'] = 'AjaxController/showDownloadIDCardTeacher';
 $route['idcard'] = 'AjaxController/idcard';
 $route["downloadQR/(:any)/(:any)/(:any)"] = "AjaxController/downloadQR/$1/$2/$3"; // user_id / 
 
 // api routes
 $baseAPI = 'api/v1/';
 $apiRoutesArr = [
+
     'login',
     'showStudentsForAttendence',
     'submitAttendence',
     'attendanceLists',
     'showSubmitAttendenceData',
+    'submitUpdatedAttendanceData',
     'allClasses',
     'allSections',
     'allSubjects',
@@ -402,6 +405,7 @@ $apiRoutesArr = [
     'visitorEntry',
     'bannerForApp',
     'notificationsForParent',
+    'notificationsForAll',
     'studentDashboard',
     'showAllStudentsForSwitchProfile',
     'showAttendanceDataForStudentId',

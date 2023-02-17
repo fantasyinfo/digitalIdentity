@@ -681,6 +681,16 @@ class AjaxController extends CI_Controller
 		$this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
 		$this->load->view('adminPanel/pages/qrcode/download-id-card');
 	}
+	public function showDownloadIDCardTeacher()
+	{
+		$this->loginCheck();
+		$dataArr = [
+			'pageTitle' => 'Download Teacher ID Cards',
+			'adminPanelUrl' => $this->adminPanelURL,
+		];
+		$this->load->view('adminPanel/pages/header', ['data' => $dataArr]);
+		$this->load->view('adminPanel/pages/qrcode/download-id-card-teacher');
+	}
 
 	public function idcard()
 	{
