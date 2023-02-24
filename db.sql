@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7
+-- version 4.9.11
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 10, 2022 at 03:02 AM
--- Server version: 5.7.40
+-- Generation Time: Feb 24, 2023 at 10:59 AM
+-- Server version: 5.7.41
 -- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `digitalfied_dvmProject`
+-- Database: `digitalf_dvm`
 --
 
 -- --------------------------------------------------------
@@ -36,101 +36,144 @@ CREATE TABLE `admin_panel_menu` (
   `parent_id` int(11) DEFAULT '0',
   `is_parent` int(11) DEFAULT NULL,
   `is_child` int(11) DEFAULT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
   `status` enum('1','2') NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `admin_panel_menu`
 --
 
-INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `status`, `created_at`) VALUES
-(1, 'Dashboard', 'dashboard', 'fa-solid fa-gauge', 0, 1, 0, '1', '2022-08-29 03:55:52'),
-(2, 'Dashboard View', 'adminPanel', NULL, 1, 0, 1, '1', '2022-08-29 03:55:52'),
-(3, 'School Profile', 'school/schoolProfile', NULL, 1, 0, 1, '1', '2022-08-29 03:55:52'),
-(4, 'Students', 'students', 'fa-solid fa-graduation-cap', 0, 1, 0, '1', '2022-08-29 03:55:52'),
-(5, 'List Students', 'student/list', NULL, 4, 0, 1, '1', '2022-08-29 03:55:52'),
-(6, 'Add Student', 'student/addStudent', NULL, 4, 0, 1, '1', '2022-08-29 03:55:52'),
-(12, 'Teachers', 'teachers', 'fa-solid fa-chalkboard-user', 0, 1, 0, '1', '2022-08-29 03:55:52'),
-(13, 'List Teachers', 'teacher/list', NULL, 12, 0, 1, '1', '2022-08-29 03:55:52'),
-(14, 'Add Teacher', 'teacher/addTeacher', NULL, 12, 0, 1, '1', '2022-08-29 03:55:52'),
-(15, 'Masters', 'master', 'fa-solid fa-receipt', 0, 1, 0, '1', '2022-08-29 03:55:52'),
-(16, 'City Master', 'master/cityMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(17, 'State Master', 'master/stateMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(18, 'Class Master', 'master/classMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(19, 'Section Master', 'master/sectionMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(20, 'Subject Master', 'master/subjectMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(21, 'Week Master', 'master/weekMaster', NULL, 15, 0, 1, '2', '2022-08-29 03:55:52'),
-(22, 'Hour Master', 'master/hourMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(23, 'Teachers Subjects Master', 'master/teacherSubjectsMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(24, 'Time Table Master', 'master/timeTableSheduleMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(25, 'Panel User Master', 'master/panelUserMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(27, 'Staff', 'master', 'fa-solid fa-people-group', 0, 1, 0, '1', '2022-08-29 03:55:52'),
-(28, 'Notification', 'master/notificationMaster', NULL, 27, 0, 1, '1', '2022-08-29 03:55:52'),
-(29, 'Fees Master', 'master/feesMaster', NULL, 40, 0, 1, '1', '2022-08-29 03:55:52'),
-(30, 'Month Master', 'master/monthMaster', NULL, 15, 0, 1, '2', '2022-08-29 03:55:52'),
-(31, 'Fees Submit Master', 'master/submitFeesMaster', NULL, 40, 0, 1, '1', '2022-08-29 03:55:52'),
-(32, 'Set DigiCoin Master', 'digicoin/setDigiCoinMaster', NULL, 33, 0, 1, '1', '2022-09-02 03:12:09'),
-(33, 'DigiCoins', '#', 'fa-solid fa-coins', 0, 1, 0, '1', '2022-09-02 12:53:50'),
-(34, 'Students DigiCoins', 'digicoin/studentDigiCoin', NULL, 33, 0, 1, '1', '2022-09-02 12:54:53'),
-(35, 'Teachers DigiCoins', 'digicoin/teacherDigiCoin', NULL, 33, 0, 1, '1', '2022-09-02 12:54:53'),
-(36, 'Gift Master', 'digicoin/giftMaster', NULL, 33, 0, 1, '1', '2022-09-04 02:40:27'),
-(37, 'Gift Redeem Master', 'digicoin/giftRedeemMaster', NULL, 33, 0, 1, '1', '2022-09-06 02:33:05'),
-(38, 'LeaderBoard', 'digicoin/leaderBoard', NULL, 33, 0, 1, '1', '2022-09-06 02:33:05'),
-(39, 'Visitor Master', 'master/visitorMaster', NULL, 27, 0, 1, '1', '2022-09-07 03:18:48'),
-(40, 'Fees', '#', 'fa-solid fa-money-bill-wave', 0, 1, 0, '2', '2022-09-10 06:18:08'),
-(41, 'Fees Listing Master', 'master/feesListingMaster', NULL, 40, 0, 1, '1', '2022-09-10 06:18:08'),
-(42, 'Fees Invoice', 'master/feesInvoice', NULL, 40, 0, 1, '2', '2022-09-11 02:33:41'),
-(43, 'App Banner Master', 'master/bannerMaster', NULL, 27, 0, 1, '1', '2022-09-18 05:10:05'),
-(44, 'Exam', '#', 'fa-solid fa-square-poll-horizontal', 0, 1, 0, '1', '2022-09-10 05:10:10'),
-(45, 'All Exams', 'exam/allExams', NULL, 44, 0, 1, '1', '2022-09-20 03:46:49'),
-(46, 'All Results', 'exam/allResults', NULL, 44, 0, 1, '1', '2022-08-29 03:55:52'),
-(47, 'Teacher Reviews', 'teacher/teacherReviews', NULL, 12, 0, 1, '1', '2022-08-29 03:55:52'),
-(48, 'Transport', '', 'fa-solid fa-bus', 0, 1, 0, '1', '2022-09-23 14:01:08'),
-(49, 'Add Driver', 'driver/addDriver', NULL, 48, 0, 1, '1', '2022-09-23 14:03:11'),
-(50, 'List Driver', 'driver/list', NULL, 48, 0, 1, '1', '2022-09-23 14:03:41'),
-(51, 'Show Live Location', 'driver/showMap', NULL, 48, 0, 1, '1', '2022-08-29 03:55:52'),
-(52, 'Academic', '', 'fa-solid fa-people-roof', 0, 1, 0, '1', '2022-09-28 10:14:20'),
-(53, 'Attendance List', 'academic/allAttendance', NULL, 52, 0, 1, '1', '2022-09-28 10:14:57'),
-(54, 'Complaints List', 'academic/allComplaints', NULL, 52, 0, 1, '1', '2022-09-28 10:14:57'),
-(55, 'Teacher\'s Attendance', 'teacher/attendance', NULL, 12, 0, 1, '2', '2022-10-02 10:45:18'),
-(56, 'Teachers Attendance List', 'academic/allTeachersAttendance', NULL, 52, 0, 1, '1', '2022-09-28 10:14:57'),
-(57, 'Holiday Calendar', 'academic/holidayCalendar', NULL, 52, 0, 1, '1', '2022-09-28 10:14:57'),
-(58, 'Semester', '#', 'fa-duotone fa-clipboard', 0, 1, 0, '1', '2022-09-10 10:40:10'),
-(59, 'Semester Master', 'semester/semesterMaster', NULL, 58, 0, 1, '1', '2022-10-04 04:08:03'),
-(60, 'Date Sheet Master', 'semester/dateSheetMaster', NULL, 58, 0, 1, '1', '2022-10-04 04:08:03'),
-(61, 'Date Sheet List', 'semester/dateSheetList', NULL, 58, 0, 1, '1', '2022-10-04 04:08:03'),
-(62, 'Set Notification Master', 'master/setNotificationMaster', NULL, 15, 0, 1, '1', '2022-08-29 03:55:52'),
-(63, 'Fees Due Notification', 'master/feeDueNotification', NULL, 78, 0, 1, '1', '2022-08-29 03:55:52'),
-(64, 'Download Students QR Code', 'showDownloadQR', NULL, 4, 0, 1, '1', '2022-08-29 03:55:52'),
-(65, 'Session Master', 'master/sessionMaster', NULL, 1, 0, 1, '1', '2022-08-29 09:25:52'),
-(66, 'Permote Students', 'student/permoteStudent', NULL, 4, 0, 1, '1', '2022-08-29 09:25:52'),
-(67, 'Generate TC', 'student/generateTC', NULL, 4, 0, 1, '1', '2022-08-29 09:25:52'),
-(68, 'Semester Results', 'semester/showAllSemesterResults', NULL, 58, 0, 1, '1', '2022-10-04 04:08:03'),
-(69, 'Payroll', '#', 'fa-solid fa-money-bills', 0, 1, 0, '1', '2022-09-10 10:40:10'),
-(70, 'Department', 'master/department', NULL, 69, 0, 1, '1', '2022-08-29 09:25:52'),
-(71, 'Designation', 'master/designation', NULL, 69, 0, 1, '1', '2022-08-29 09:25:52'),
-(72, 'Salary Master', 'master/salaryMaster', NULL, 69, 0, 1, '1', '2022-08-29 09:25:52'),
-(73, 'Check Salary', 'master/checkSalary', NULL, 69, 0, 1, '1', '2022-08-29 09:25:52'),
-(74, 'Staff Attendance', 'master/staffAttendance', NULL, 69, 0, 1, '1', '2022-08-29 09:25:52'),
-(75, 'Student Id Cards', 'showDownloadIDCard', NULL, 4, 0, 1, '1', '2022-08-29 09:25:52'),
-(76, 'Experience Letter', 'master/getExperienceLetter', NULL, 69, 0, 1, '1', '2022-08-29 09:25:52'),
-(77, 'Character Certificate', 'student/getCharacterCertificate', NULL, 4, 0, 1, '1', '2022-08-29 09:25:52'),
-(78, 'New Fees Management', '#', 'fa-solid fa-money-bill-wave', 0, 1, 0, '1', '2022-09-10 10:40:10'),
-(79, 'Fees Type Master', 'feesManagement/feeTypeMaster', NULL, 78, 0, 1, '1', '2022-08-29 09:25:52'),
-(80, 'Fees Group Master', 'feesManagement/feeGroupMaster', NULL, 78, 0, 1, '1', '2022-08-29 09:25:52'),
-(81, 'Fees Discount Master', 'feesManagement/feeDisctountMaster', NULL, 78, 0, 1, '1', '2022-08-29 09:25:52'),
-(82, 'Main Fees Master', 'feesManagement/feeHeadMaster', NULL, 78, 0, 1, '1', '2022-08-29 09:25:52'),
-(83, 'Collect Fees', 'feesManagement/collectFee', NULL, 78, 0, 1, '1', '2022-08-29 09:25:52'),
-(84, 'Fees Carry Forward', 'feesManagement/carryForward', NULL, 78, 0, 1, '1', '2022-08-29 14:55:52'),
-(85, 'Old Database', '#', 'fa-solid fa-database', 0, 1, 0, '1', '2022-11-12 02:23:08'),
-(86, 'Students Lists', 'oldData/studentsLists', NULL, 85, 0, 1, '1', '2022-11-12 02:23:52'),
-(87, 'Attendance', 'scanQR', NULL, 27, 0, 1, '1', '2022-08-29 03:55:52'),
-(88, 'Bonafide Certificate', 'student/getBonafideCertificate', NULL, 4, 0, 1, '1', '2022-08-29 09:25:52'),
-(90, 'SR Register', 'student/srRegisterHistory', NULL, 4, 0, 1, '1', '2022-08-29 09:25:52'),
-(91, 'Question Bank', '#', 'fa-solid fa-database', 0, 1, 0, '1', '2022-09-10 16:10:10'),
-(92, 'Books Master', 'questionBank/booksMaster', NULL, 91, 0, 1, '1', '2022-08-29 09:25:52'),
-(93, 'Question Bank Master', 'questionBank/questionBankMaster', NULL, 91, 0, 1, '1', '2022-08-29 09:25:52');
+INSERT INTO `admin_panel_menu` (`id`, `name`, `link`, `icon`, `parent_id`, `is_parent`, `is_child`, `img`, `position`, `status`, `created_at`) VALUES
+(1, 'Dashboard', 'dashboard', 'fa-solid fa-gauge', 0, 1, 0, 'dashboard.png', 1, '1', '2022-08-29 03:55:52'),
+(2, 'Dashboard View', 'adminPanel', NULL, 1, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(3, 'School Profile', 'school/schoolProfile', NULL, 1, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(4, 'Students', 'students', 'fa-solid fa-graduation-cap', 0, 1, 0, 'students.png', 3, '1', '2022-08-29 03:55:52'),
+(5, 'List Students', 'student/list', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(6, 'Add Student', 'student/addStudent', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(12, 'Teachers', 'teachers', 'fa-solid fa-chalkboard-user', 0, 1, 0, 'teacher.png', 4, '1', '2022-08-29 03:55:52'),
+(13, 'List Teachers', 'teacher/list', NULL, 12, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(14, 'Add Teacher', 'teacher/addTeacher', NULL, 12, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(15, 'Setup', 'master', 'fa-solid fa-receipt', 0, 1, 0, 'settings.png', 2, '1', '2022-08-29 03:55:52'),
+(16, 'City Master', 'master/cityMaster', NULL, 15, 0, 1, 'city.png', NULL, '1', '2022-08-29 03:55:52'),
+(17, 'State Master', 'master/stateMaster', NULL, 15, 0, 1, 'state.png', NULL, '1', '2022-08-29 03:55:52'),
+(18, 'Class Master', 'master/classMaster', NULL, 15, 0, 1, 'class.png', NULL, '1', '2022-08-29 03:55:52'),
+(19, 'Section Master', 'master/sectionMaster', NULL, 15, 0, 1, 'section.png', NULL, '1', '2022-08-29 03:55:52'),
+(20, 'Subject Master', 'master/subjectMaster', NULL, 15, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(21, 'Week Master', 'master/weekMaster', NULL, 15, 0, 1, NULL, NULL, '2', '2022-08-29 03:55:52'),
+(22, 'Hour Master', 'master/hourMaster', NULL, 15, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(23, 'Teachers Subjects Master', 'master/teacherSubjectsMaster', NULL, 15, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(24, 'Time Table Master', 'master/timeTableSheduleMaster', NULL, 15, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(25, 'Panel User Master', 'master/panelUserMaster', NULL, 15, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(27, 'Staff', 'master', 'fa-solid fa-people-group', 0, 1, 0, 'people.png', 5, '1', '2022-08-29 03:55:52'),
+(28, 'Notification', 'master/notificationMaster', NULL, 27, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(29, 'Fees Master', 'master/feesMaster', NULL, 40, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(30, 'Month Master', 'master/monthMaster', NULL, 15, 0, 1, NULL, NULL, '2', '2022-08-29 03:55:52'),
+(31, 'Fees Submit Master', 'master/submitFeesMaster', NULL, 40, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(32, 'Set DigiCoin Master', 'digicoin/setDigiCoinMaster', NULL, 33, 0, 1, NULL, NULL, '1', '2022-09-02 03:12:09'),
+(33, 'DigiCoins', '#', 'fa-solid fa-coins', 0, 1, 0, 'coins.png', 6, '1', '2022-09-02 12:53:50'),
+(34, 'Students DigiCoins', 'digicoin/studentDigiCoin', NULL, 33, 0, 1, NULL, NULL, '1', '2022-09-02 12:54:53'),
+(35, 'Teachers DigiCoins', 'digicoin/teacherDigiCoin', NULL, 33, 0, 1, NULL, NULL, '1', '2022-09-02 12:54:53'),
+(36, 'Gift Master', 'digicoin/giftMaster', NULL, 33, 0, 1, NULL, NULL, '1', '2022-09-04 02:40:27'),
+(37, 'Gift Redeem Master', 'digicoin/giftRedeemMaster', NULL, 33, 0, 1, NULL, NULL, '1', '2022-09-06 02:33:05'),
+(38, 'LeaderBoard', 'digicoin/leaderBoard', NULL, 33, 0, 1, NULL, NULL, '1', '2022-09-06 02:33:05'),
+(39, 'Visitor Master', 'master/visitorMaster', NULL, 27, 0, 1, NULL, NULL, '1', '2022-09-07 03:18:48'),
+(40, 'Fees', '#', 'fa-solid fa-money-bill-wave', 0, 1, 0, NULL, NULL, '2', '2022-09-10 06:18:08'),
+(41, 'Fees Listing Master', 'master/feesListingMaster', NULL, 40, 0, 1, NULL, NULL, '1', '2022-09-10 06:18:08'),
+(42, 'Fees Invoice', 'master/feesInvoice', NULL, 40, 0, 1, NULL, NULL, '2', '2022-09-11 02:33:41'),
+(43, 'App Banner Master', 'master/bannerMaster', NULL, 27, 0, 1, NULL, NULL, '1', '2022-09-18 05:10:05'),
+(44, 'Test', '#', 'fa-solid fa-square-poll-horizontal', 0, 1, 0, 'test.png', 7, '1', '2022-09-10 05:10:10'),
+(45, 'All Exams', 'exam/allExams', NULL, 44, 0, 1, NULL, NULL, '1', '2022-09-20 03:46:49'),
+(46, 'All Results', 'exam/allResults', NULL, 44, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(47, 'Teacher Reviews', 'teacher/teacherReviews', NULL, 12, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(48, 'Transport', '', 'fa-solid fa-bus', 0, 1, 0, 'school-bus.png', 8, '1', '2022-09-23 14:01:08'),
+(49, 'Add Driver', 'driver/addDriver', NULL, 48, 0, 1, NULL, NULL, '1', '2022-09-23 14:03:11'),
+(50, 'List Driver', 'driver/list', NULL, 48, 0, 1, NULL, NULL, '1', '2022-09-23 14:03:41'),
+(51, 'Show Live Location', 'driver/showMap', NULL, 48, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(52, 'Academic', '', 'fa-solid fa-people-roof', 0, 1, 0, 'education.png', 9, '1', '2022-09-28 10:14:20'),
+(53, 'Attendance List', 'academic/allAttendance', NULL, 52, 0, 1, NULL, NULL, '1', '2022-09-28 10:14:57'),
+(54, 'Complaints List', 'academic/allComplaints', NULL, 52, 0, 1, NULL, NULL, '1', '2022-09-28 10:14:57'),
+(55, 'Teacher\'s Attendance', 'teacher/attendance', NULL, 12, 0, 1, NULL, NULL, '1', '2022-10-02 10:45:18'),
+(56, 'Teachers Attendance List', 'academic/allTeachersAttendance', NULL, 52, 0, 1, NULL, NULL, '1', '2022-09-28 10:14:57'),
+(57, 'Holiday Calendar', 'academic/holidayCalendar', NULL, 52, 0, 1, NULL, NULL, '1', '2022-09-28 10:14:57'),
+(58, 'Semester', '#', 'fa-duotone fa-clipboard', 0, 1, 0, 'examsDatesheet.png', 10, '1', '2022-09-10 10:40:10'),
+(59, 'Semester Master', 'semester/semesterMaster', NULL, 58, 0, 1, NULL, NULL, '1', '2022-10-04 04:08:03'),
+(60, 'Date Sheet Master', 'semester/dateSheetMaster', NULL, 58, 0, 1, NULL, NULL, '1', '2022-10-04 04:08:03'),
+(61, 'Date Sheet List', 'semester/dateSheetList', NULL, 58, 0, 1, NULL, NULL, '1', '2022-10-04 04:08:03'),
+(62, 'Set Notification Master', 'master/setNotificationMaster', NULL, 15, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(63, 'Fees Due Notification', 'master/feeDueNotification', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(64, 'Download Students QR Code', 'showDownloadQR', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(65, 'Session Master', 'master/sessionMaster', NULL, 1, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(66, 'Permote Students', 'student/permoteStudent', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(67, 'Generate TC', 'student/generateTC', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(68, 'Semester Results', 'semester/showAllSemesterResults', NULL, 58, 0, 1, NULL, NULL, '1', '2022-10-04 04:08:03'),
+(69, 'Payroll', '#', 'fa-solid fa-money-bills', 0, 1, 0, 'salary.png', 11, '1', '2022-09-10 10:40:10'),
+(70, 'Department', 'master/department', NULL, 69, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(71, 'Designation', 'master/designation', NULL, 69, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(72, 'Salary Master', 'master/salaryMaster', NULL, 69, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(73, 'Check Salary', 'master/checkSalary', NULL, 69, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(74, 'Staff Attendance', 'master/staffAttendance', NULL, 69, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(75, 'Student Id Cards', 'showDownloadIDCard', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(76, 'Experience Letter', 'master/getExperienceLetter', NULL, 69, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(77, 'Character Certificate', 'student/getCharacterCertificate', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(78, 'Feess', '#', 'fa-solid fa-money-bill-wave', 0, 1, 0, 'money (1).png', 12, '1', '2022-09-10 10:40:10'),
+(79, 'Fees Type Master', 'feesManagement/feeTypeMaster', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(80, 'Fees Group Master', 'feesManagement/feeGroupMaster', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(81, 'Fees Discount Master', 'feesManagement/feeDisctountMaster', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(82, 'Main Fees Master', 'feesManagement/feeHeadMaster', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(83, 'Collect Fees', 'feesManagement/collectFee', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(84, 'Old Database', '#', 'fa-solid fa-database', 0, 1, 0, 'database.png', 13, '1', '2022-09-10 10:40:10'),
+(85, 'Students Lists', 'oldData/studentsLists', NULL, 84, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(86, 'Fees Carry Forward', 'feesManagement/carryForward', NULL, 78, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(87, 'Attendance', 'scanQR', NULL, 27, 0, 1, NULL, NULL, '1', '2022-08-28 22:25:52'),
+(88, 'Bonafide Certificate', 'student/getBonafideCertificate', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(89, 'SR Register Add', 'student/srRegisterAdd', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(90, 'SR Register History', 'student/srRegisterHistory', NULL, 4, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(91, 'Question Bank', '#', 'fa-solid fa-database', 0, 1, 0, 'essay.png', 14, '1', '2022-09-10 10:40:10'),
+(92, 'Books Master', 'questionBank/booksMaster', NULL, 91, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(93, 'Chapter Master', 'questionBank/chapterMaster', NULL, 91, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(94, 'Question Bank Master', 'questionBank/questionBankMaster', NULL, 91, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(95, 'Question Lists', 'questionBank/questionsLists', NULL, 91, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(96, 'Create Question Paper', 'questionBank/createQuestionPaper', NULL, 91, 0, 1, NULL, NULL, '1', '2022-08-29 03:55:52'),
+(97, 'Registration', '#', 'fa-regular fa-notebook', 0, 1, 0, 'essay.png', 15, '1', '2022-09-10 16:10:10'),
+(98, 'Add New Registration', 'registration/newRegistration', NULL, 97, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52'),
+(99, 'Registration Lists', 'registration/registrationLists', NULL, 97, 0, 1, NULL, NULL, '1', '2022-08-29 09:25:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `adm_registration`
+--
+
+CREATE TABLE `adm_registration` (
+  `id` int(11) NOT NULL,
+  `schoolUniqueCode` varchar(100) NOT NULL,
+  `regNo` varchar(100) NOT NULL,
+  `regDate` date NOT NULL,
+  `stuName` varchar(100) NOT NULL,
+  `gender` int(11) NOT NULL,
+  `class` int(11) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `father_name` varchar(100) DEFAULT NULL,
+  `mother_name` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `mobile` varchar(100) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `state` int(11) NOT NULL,
+  `city` int(11) NOT NULL,
+  `pincode` int(10) NOT NULL,
+  `dob` date NOT NULL,
+  `father_occupation` varchar(100) DEFAULT NULL,
+  `last_school_name` varchar(255) DEFAULT NULL,
+  `last_class` varchar(100) DEFAULT NULL,
+  `reg_fee` varchar(100) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `session_table_id` int(11) NOT NULL,
+  `status` enum('1','2','3','4') NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1030,7 +1073,242 @@ INSERT INTO `attendence` (`id`, `schoolUniqueCode`, `stu_id`, `stu_class`, `stu_
 (946, '683611', 37, 'LKG', 'A', 9, 'Teacher', '1', '2022-12-02 11:41:35', '2022-12-02', '1', 1, '2022-12-02 18:11:35'),
 (947, '683611', 38, 'LKG', 'A', 1, 'Staff', '1', '2022-12-03 10:23:03', '2022-12-03', '1', 1, '2022-12-03 04:53:03'),
 (948, '683611', 38, 'LKG', 'A', 1, 'Staff', '1', '2022-12-07 12:52:13', '2022-12-07', '1', 1, '2022-12-07 07:22:13'),
-(949, '683611', 38, 'LKG', 'A', 1, 'Staff', '1', '2022-12-09 11:07:45', '2022-12-09', '1', 1, '2022-12-09 05:37:45');
+(949, '683611', 38, 'LKG', 'A', 1, 'Staff', '1', '2022-12-09 11:07:45', '2022-12-09', '1', 1, '2022-12-09 05:37:45'),
+(950, '683611', 169, '8th', 'A', 1, 'Staff', '1', '2022-12-10 06:57:31', '2022-12-10', '1', 1, '2022-12-10 13:27:31'),
+(951, '683611', 169, '8th', 'A', 1, 'Staff', '1', '2022-12-11 07:55:33', '2022-12-11', '1', 1, '2022-12-11 14:25:33'),
+(952, '683611', 169, '8th', 'A', 1, 'Staff', '1', '2022-12-12 10:20:43', '2022-12-12', '1', 1, '2022-12-12 04:50:43'),
+(953, '683611', 38, 'LKG', 'A', 1, 'Staff', '1', '2022-12-12 04:29:05', '2022-12-12', '1', 1, '2022-12-12 10:59:05'),
+(954, '683611', 39, 'LKG', 'A', 1, 'Staff', '1', '2022-12-12 04:30:06', '2022-12-12', '1', 1, '2022-12-12 11:00:06'),
+(955, '683611', 217, 'LKG', 'A', 1, 'Staff', '1', '2022-12-12 04:30:18', '2022-12-12', '1', 1, '2022-12-12 11:00:18'),
+(956, '683611', 37, 'LKG', 'A', 1, 'Staff', '1', '2022-12-12 05:29:28', '2022-12-12', '1', 1, '2022-12-12 11:59:28'),
+(957, '261027', 216, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(958, '261027', 222, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(959, '261027', 223, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(960, '261027', 224, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(961, '261027', 225, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(962, '261027', 226, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(963, '261027', 227, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(964, '261027', 228, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(965, '261027', 229, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(966, '261027', 230, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(967, '261027', 269, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(968, '261027', 270, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(969, '261027', 281, '4', 'A', 20, 'Teacher', '0', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(970, '261027', 282, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(971, '261027', 283, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(972, '261027', 284, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(973, '261027', 285, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(974, '261027', 286, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(975, '261027', 287, '4', 'A', 20, 'Teacher', '1', '2022-12-20 10:57:12', '2022-12-20', '1', 2, '2022-12-20 05:27:12'),
+(976, '683611', 155, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:06:59', '2023-01-02', '1', 1, '2023-01-02 07:36:59'),
+(977, '683611', 164, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:07:41', '2023-01-02', '1', 1, '2023-01-02 07:37:41'),
+(978, '683611', 160, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:07:44', '2023-01-02', '1', 1, '2023-01-02 07:37:44'),
+(979, '683611', 156, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:07:47', '2023-01-02', '1', 1, '2023-01-02 07:37:47'),
+(980, '683611', 163, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:07:52', '2023-01-02', '1', 1, '2023-01-02 07:37:52'),
+(981, '683611', 159, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:07:54', '2023-01-02', '1', 1, '2023-01-02 07:37:54'),
+(982, '683611', 166, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:08:10', '2023-01-02', '1', 1, '2023-01-02 07:38:10'),
+(983, '683611', 162, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:08:35', '2023-01-02', '1', 1, '2023-01-02 07:38:35'),
+(984, '683611', 161, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:08:39', '2023-01-02', '1', 1, '2023-01-02 07:38:39'),
+(985, '683611', 158, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:08:54', '2023-01-02', '1', 1, '2023-01-02 07:38:54'),
+(986, '683611', 157, '11th', 'Arts', 1, 'Staff', '1', '2023-01-02 01:09:01', '2023-01-02', '1', 1, '2023-01-02 07:39:01'),
+(987, '683611', 661, 'Nursery', 'A', 1, 'Staff', '1', '2023-01-18 01:45:00', '2023-01-18', '1', 1, '2023-01-18 08:15:00'),
+(988, '683611', 31, 'Nursery', 'A', 15, 'Teacher', '1', '2023-01-20 11:00:28', '2023-01-20', '1', 1, '2023-01-20 05:30:28'),
+(989, '683611', 33, 'Nursery', 'A', 15, 'Teacher', '1', '2023-01-20 11:00:28', '2023-01-20', '1', 1, '2023-01-20 05:30:28'),
+(990, '683611', 660, 'Nursery', 'A', 15, 'Teacher', '0', '2023-01-20 11:00:28', '2023-01-20', '1', 1, '2023-01-20 05:30:28'),
+(991, '683611', 661, 'Nursery', 'A', 15, 'Teacher', '0', '2023-01-20 11:00:28', '2023-01-20', '1', 1, '2023-01-20 05:30:28'),
+(992, '683611', 31, 'Nursery', 'A', 2, 'Teacher', '1', '2023-01-21 08:12:24', '2023-01-21', '1', 1, '2023-01-21 02:42:24'),
+(993, '683611', 33, 'Nursery', 'A', 2, 'Teacher', '1', '2023-01-21 08:12:24', '2023-01-21', '1', 1, '2023-01-21 02:42:24'),
+(994, '683611', 660, 'Nursery', 'A', 2, 'Teacher', '1', '2023-01-21 08:12:24', '2023-01-21', '1', 1, '2023-01-21 02:42:24'),
+(995, '683611', 661, 'Nursery', 'A', 2, 'Teacher', '0', '2023-01-21 08:12:24', '2023-01-21', '1', 1, '2023-01-21 02:42:24'),
+(996, '683611', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-15 00:58:55', '2023-02-15', '1', 1, '2023-02-15 06:05:24'),
+(997, '683611', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-15 00:58:55', '2023-02-15', '1', 1, '2023-02-15 06:05:24'),
+(998, '683611', 660, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-15 00:58:55', '2023-02-15', '1', 1, '2023-02-15 06:05:25'),
+(999, '683611', 1307, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-15 00:58:55', '2023-02-15', '1', 1, '2023-02-15 06:05:25'),
+(1000, '683611', 661, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-15 00:58:55', '2023-02-15', '1', 1, '2023-02-15 06:05:25'),
+(1001, '683611', 34, 'Nursery', 'B', 6, 'Teacher', '0', '2023-02-15 06:06:49', '2023-02-15', '1', 1, '2023-02-15 06:06:49'),
+(1002, '683611', 35, 'Nursery', 'B', 6, 'Teacher', '1', '2023-02-15 06:06:49', '2023-02-15', '1', 1, '2023-02-15 06:06:49'),
+(1003, '683611', 36, 'Nursery', 'B', 6, 'Teacher', '1', '2023-02-15 06:06:49', '2023-02-15', '1', 1, '2023-02-15 06:06:49'),
+(1004, '683611', 37, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-15 06:11:47', '2023-02-15', '1', 1, '2023-02-15 06:11:47'),
+(1005, '683611', 38, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-15 06:11:47', '2023-02-15', '1', 1, '2023-02-15 06:11:47'),
+(1006, '683611', 39, 'LKG', 'A', 6, 'Teacher', '0', '2023-02-15 06:11:47', '2023-02-15', '1', 1, '2023-02-15 06:11:47'),
+(1007, '683611', 217, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-15 06:11:47', '2023-02-15', '1', 1, '2023-02-15 06:11:47'),
+(1008, '683611', 40, 'LKG', 'B', 6, 'Teacher', '1', '2023-02-15 06:12:51', '2023-02-15', '1', 1, '2023-02-15 06:12:51'),
+(1009, '683611', 41, 'LKG', 'B', 6, 'Teacher', '1', '2023-02-15 06:12:51', '2023-02-15', '1', 1, '2023-02-15 06:12:51'),
+(1010, '683611', 42, 'LKG', 'B', 6, 'Teacher', '0', '2023-02-15 06:12:51', '2023-02-15', '1', 1, '2023-02-15 06:12:51'),
+(1011, '683611', 167, 'LKG', 'B', 6, 'Teacher', '1', '2023-02-15 06:12:51', '2023-02-15', '1', 1, '2023-02-15 06:12:51'),
+(1012, '683611', 43, 'UKG', 'A', 6, 'Teacher', '1', '2023-02-15 06:16:14', '2023-02-15', '1', 1, '2023-02-15 06:16:14'),
+(1013, '683611', 44, 'UKG', 'A', 6, 'Teacher', '1', '2023-02-15 06:16:14', '2023-02-15', '1', 1, '2023-02-15 06:16:14'),
+(1014, '683611', 45, 'UKG', 'A', 6, 'Teacher', '0', '2023-02-15 06:16:14', '2023-02-15', '1', 1, '2023-02-15 06:16:14'),
+(1015, '683611', 220, 'UKG', 'A', 6, 'Teacher', '1', '2023-02-15 06:16:14', '2023-02-15', '1', 1, '2023-02-15 06:16:14'),
+(1016, '683611', 50, '1st', 'A', 6, 'Teacher', '0', '2023-02-14 19:44:22', '2023-02-15', '1', 1, '2023-02-15 06:31:36'),
+(1017, '683611', 51, '1st', 'A', 6, 'Teacher', '1', '2023-02-14 19:44:22', '2023-02-15', '1', 1, '2023-02-15 06:31:36'),
+(1018, '683611', 58, '2nd', 'B', 6, 'Teacher', '1', '2023-02-14 21:34:48', '2023-02-15', '1', 1, '2023-02-15 09:34:48'),
+(1019, '683611', 59, '2nd', 'B', 6, 'Teacher', '1', '2023-02-14 21:34:48', '2023-02-15', '1', 1, '2023-02-15 09:34:48'),
+(1020, '683611', 60, '2nd', 'B', 6, 'Teacher', '0', '2023-02-14 21:34:48', '2023-02-15', '1', 1, '2023-02-15 09:34:48'),
+(1021, '683611', 149, '2nd', 'B', 6, 'Teacher', '1', '2023-02-14 21:34:48', '2023-02-15', '1', 1, '2023-02-15 09:34:48'),
+(1022, '683611', 61, '3rd', 'A', 6, 'Teacher', '1', '2023-02-14 23:32:37', '2023-02-15', '1', 1, '2023-02-15 11:32:37'),
+(1023, '683611', 62, '3rd', 'A', 6, 'Teacher', '1', '2023-02-14 23:32:37', '2023-02-15', '1', 1, '2023-02-15 11:32:37'),
+(1024, '683611', 63, '3rd', 'A', 6, 'Teacher', '0', '2023-02-14 23:32:37', '2023-02-15', '1', 1, '2023-02-15 11:32:37'),
+(1025, '683611', 16, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1026, '683611', 118, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1027, '683611', 120, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1028, '683611', 119, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1029, '683611', 134, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1030, '683611', 135, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1031, '683611', 136, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1032, '683611', 137, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1033, '683611', 139, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1034, '683611', 138, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1035, '683611', 140, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1036, '683611', 141, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1037, '683611', 142, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1038, '683611', 143, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1039, '683611', 145, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1040, '683611', 144, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1041, '683611', 146, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1042, '683611', 147, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1043, '683611', 148, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1044, '683611', 150, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1045, '683611', 151, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1046, '683611', 152, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1047, '683611', 153, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1048, '683611', 154, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1049, '683611', 155, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1050, '683611', 156, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1051, '683611', 157, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1052, '683611', 158, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1053, '683611', 159, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1054, '683611', 160, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1055, '683611', 162, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1056, '683611', 161, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1057, '683611', 163, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1058, '683611', 164, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1059, '683611', 166, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1060, '683611', 165, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-14 23:34:35', '2023-02-15', '1', 1, '2023-02-15 11:34:35'),
+(1061, '683611', 67, '4th', 'A', 6, 'Teacher', '1', '2023-02-14 23:43:48', '2023-02-15', '1', 1, '2023-02-15 11:43:48'),
+(1062, '683611', 68, '4th', 'A', 6, 'Teacher', '1', '2023-02-14 23:43:48', '2023-02-15', '1', 1, '2023-02-15 11:43:48'),
+(1063, '683611', 69, '4th', 'A', 6, 'Teacher', '0', '2023-02-14 23:43:48', '2023-02-15', '1', 1, '2023-02-15 11:43:48'),
+(1064, '683611', 70, '4th', 'B', 6, 'Teacher', '1', '2023-02-15 00:46:27', '2023-02-15', '1', 1, '2023-02-15 12:46:27'),
+(1065, '683611', 71, '4th', 'B', 6, 'Teacher', '1', '2023-02-15 00:46:27', '2023-02-15', '1', 1, '2023-02-15 12:46:27'),
+(1066, '683611', 72, '4th', 'B', 6, 'Teacher', '0', '2023-02-15 00:46:27', '2023-02-15', '1', 1, '2023-02-15 12:46:27'),
+(1067, '683611', 13, '5th', 'B', 6, 'Teacher', '1', '2023-02-15 00:49:45', '2023-02-15', '1', 1, '2023-02-15 12:49:45'),
+(1068, '683611', 76, '5th', 'B', 6, 'Teacher', '1', '2023-02-15 00:49:45', '2023-02-15', '1', 1, '2023-02-15 12:49:45'),
+(1069, '683611', 77, '5th', 'B', 6, 'Teacher', '0', '2023-02-15 00:49:45', '2023-02-15', '1', 1, '2023-02-15 12:49:45'),
+(1070, '683611', 78, '5th', 'B', 6, 'Teacher', '0', '2023-02-15 00:49:45', '2023-02-15', '1', 1, '2023-02-15 12:49:45'),
+(1071, '683611', 73, '5th', 'A', 6, 'Teacher', '1', '2023-02-15 00:51:19', '2023-02-15', '1', 1, '2023-02-15 12:51:19'),
+(1072, '683611', 74, '5th', 'A', 6, 'Teacher', '1', '2023-02-15 00:51:19', '2023-02-15', '1', 1, '2023-02-15 12:51:19'),
+(1073, '683611', 75, '5th', 'A', 6, 'Teacher', '0', '2023-02-15 00:51:19', '2023-02-15', '1', 1, '2023-02-15 12:51:19'),
+(1074, '683611', 206, '5th', 'A', 6, 'Teacher', '0', '2023-02-15 00:51:19', '2023-02-15', '1', 1, '2023-02-15 12:51:19'),
+(1075, '683611', 79, '6th', 'A', 6, 'Teacher', '1', '2023-02-15 00:53:13', '2023-02-15', '1', 1, '2023-02-15 12:53:13'),
+(1076, '683611', 80, '6th', 'A', 6, 'Teacher', '0', '2023-02-15 00:53:13', '2023-02-15', '1', 1, '2023-02-15 12:53:13'),
+(1077, '683611', 81, '6th', 'A', 6, 'Teacher', '1', '2023-02-15 00:53:13', '2023-02-15', '1', 1, '2023-02-15 12:53:13'),
+(1078, '683611', 97, '9th', 'A', 6, 'Teacher', '1', '2023-02-15 01:11:52', '2023-02-15', '1', 1, '2023-02-15 13:11:52'),
+(1079, '683611', 98, '9th', 'A', 6, 'Teacher', '1', '2023-02-15 01:11:52', '2023-02-15', '1', 1, '2023-02-15 13:11:52'),
+(1080, '683611', 99, '9th', 'A', 6, 'Teacher', '0', '2023-02-15 01:11:52', '2023-02-15', '1', 1, '2023-02-15 13:11:52'),
+(1081, '683611', 103, '10th', 'A', 6, 'Teacher', '1', '2023-02-15 01:15:18', '2023-02-15', '1', 1, '2023-02-15 13:15:18'),
+(1082, '683611', 104, '10th', 'A', 6, 'Teacher', '1', '2023-02-15 01:15:18', '2023-02-15', '1', 1, '2023-02-15 13:15:18'),
+(1083, '683611', 105, '10th', 'A', 6, 'Teacher', '0', '2023-02-15 01:15:18', '2023-02-15', '1', 1, '2023-02-15 13:15:18'),
+(1084, '683611', 16, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1085, '683611', 118, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1086, '683611', 119, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1087, '683611', 120, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1088, '683611', 134, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1089, '683611', 135, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1090, '683611', 139, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1091, '683611', 140, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1092, '683611', 141, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1093, '683611', 142, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1094, '683611', 143, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1095, '683611', 144, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1096, '683611', 145, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1097, '683611', 146, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1098, '683611', 147, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1099, '683611', 136, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1100, '683611', 137, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1101, '683611', 138, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1102, '683611', 148, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1103, '683611', 150, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1104, '683611', 151, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1105, '683611', 152, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1106, '683611', 153, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1107, '683611', 154, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1108, '683611', 155, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1109, '683611', 156, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1110, '683611', 158, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1111, '683611', 159, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1112, '683611', 160, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1113, '683611', 161, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1114, '683611', 162, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1115, '683611', 163, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1116, '683611', 164, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1117, '683611', 165, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1118, '683611', 166, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1119, '683611', 157, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-16 01:12:59', '2023-02-16', '1', 1, '2023-02-16 01:12:59'),
+(1120, '683611', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 04:41:54', '2023-02-16', '1', 1, '2023-02-16 03:48:14'),
+(1121, '683611', 33, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-16 04:41:54', '2023-02-16', '1', 1, '2023-02-16 03:48:14'),
+(1122, '683611', 660, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-16 04:41:54', '2023-02-16', '1', 1, '2023-02-16 03:48:14'),
+(1123, '683611', 661, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-16 04:41:54', '2023-02-16', '1', 1, '2023-02-16 03:48:14'),
+(1124, '683611', 1307, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-16 04:41:54', '2023-02-16', '1', 1, '2023-02-16 03:48:14'),
+(1125, '683611', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 22:38:03', '2023-02-17', '1', 1, '2023-02-17 10:38:03'),
+(1126, '683611', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 22:38:04', '2023-02-17', '1', 1, '2023-02-17 10:38:04'),
+(1127, '683611', 660, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-16 22:38:04', '2023-02-17', '1', 1, '2023-02-17 10:38:04'),
+(1128, '683611', 661, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 22:38:04', '2023-02-17', '1', 1, '2023-02-17 10:38:04'),
+(1129, '683611', 1307, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 22:38:04', '2023-02-17', '1', 1, '2023-02-17 10:38:04'),
+(1130, '683611', 37, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-16 22:41:11', '2023-02-17', '1', 1, '2023-02-17 10:41:11'),
+(1131, '683611', 38, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-16 22:41:11', '2023-02-17', '1', 1, '2023-02-17 10:41:11'),
+(1132, '683611', 39, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-16 22:41:11', '2023-02-17', '1', 1, '2023-02-17 10:41:11'),
+(1133, '683611', 217, 'LKG', 'A', 6, 'Teacher', '0', '2023-02-16 22:41:11', '2023-02-17', '1', 1, '2023-02-17 10:41:11'),
+(1134, '683611', 16, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1135, '683611', 118, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1136, '683611', 119, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1137, '683611', 120, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1138, '683611', 134, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1139, '683611', 135, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1140, '683611', 136, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1141, '683611', 137, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1142, '683611', 138, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1143, '683611', 139, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1144, '683611', 140, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1145, '683611', 141, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1146, '683611', 142, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1147, '683611', 143, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1148, '683611', 144, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1149, '683611', 145, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1150, '683611', 146, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1151, '683611', 147, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1152, '683611', 148, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1153, '683611', 150, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1154, '683611', 151, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1155, '683611', 152, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1156, '683611', 166, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1157, '683611', 165, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1158, '683611', 164, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1159, '683611', 163, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1160, '683611', 162, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1161, '683611', 160, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1162, '683611', 159, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1163, '683611', 158, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1164, '683611', 157, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1165, '683611', 156, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1166, '683611', 155, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1167, '683611', 154, '11th', 'Arts', 6, 'Teacher', '0', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1168, '683611', 153, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1169, '683611', 161, '11th', 'Arts', 6, 'Teacher', '1', '2023-02-18 04:34:07', '2023-02-18', '1', 1, '2023-02-18 16:34:07'),
+(1170, '683611', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-19 22:16:52', '2023-02-20', '1', 1, '2023-02-20 10:16:52'),
+(1171, '683611', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-19 22:16:55', '2023-02-20', '1', 1, '2023-02-20 10:16:55'),
+(1172, '683611', 660, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-19 22:16:55', '2023-02-20', '1', 1, '2023-02-20 10:16:55'),
+(1173, '683611', 661, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-19 22:16:55', '2023-02-20', '1', 1, '2023-02-20 10:16:55'),
+(1174, '683611', 1307, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-19 22:16:55', '2023-02-20', '1', 1, '2023-02-20 10:16:55'),
+(1175, '683611', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-20 23:06:22', '2023-02-21', '1', 1, '2023-02-21 11:06:22'),
+(1176, '683611', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-20 23:06:22', '2023-02-21', '1', 1, '2023-02-21 11:06:22'),
+(1177, '683611', 660, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-20 23:06:22', '2023-02-21', '1', 1, '2023-02-21 11:06:22'),
+(1178, '683611', 661, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-20 23:06:22', '2023-02-21', '1', 1, '2023-02-21 11:06:22'),
+(1179, '683611', 1307, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-20 23:06:22', '2023-02-21', '1', 1, '2023-02-21 11:06:22'),
+(1180, '683611', 31, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-22 02:43:16', '2023-02-22', '1', 1, '2023-02-22 02:43:16'),
+(1181, '683611', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-22 02:43:16', '2023-02-22', '1', 1, '2023-02-22 02:43:16'),
+(1182, '683611', 660, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-22 02:43:16', '2023-02-22', '1', 1, '2023-02-22 02:43:16'),
+(1183, '683611', 661, 'Nursery', 'A', 6, 'Teacher', '0', '2023-02-22 02:43:16', '2023-02-22', '1', 1, '2023-02-22 02:43:16'),
+(1184, '683611', 1307, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-22 02:43:16', '2023-02-22', '1', 1, '2023-02-22 02:43:16');
 
 -- --------------------------------------------------------
 
@@ -1307,7 +1585,19 @@ INSERT INTO `city` (`id`, `schoolUniqueCode`, `cityName`, `stateId`, `status`, `
 (60, '975691', 'Barawad', 45, '1', '2022-11-28 14:04:32'),
 (61, '452206', 'Baraut', 46, '1', '2022-11-29 06:15:38'),
 (62, '975691', 'Gurana', 45, '1', '2022-11-30 15:00:38'),
-(63, '623659', 'Baraut', 47, '1', '2022-12-02 04:26:18');
+(63, '623659', 'Baraut', 47, '1', '2022-12-02 04:26:18'),
+(64, '623659', 'jind', 48, '2', '2022-12-15 04:26:19'),
+(66, '683611', 'Kathmandp', 33, '1', '2023-01-01 04:24:07'),
+(67, '683611', 'sattu', 33, '1', '2023-01-01 04:29:21'),
+(68, '683611', 'Panji', 33, '1', '2023-01-01 04:40:42'),
+(69, '683611', 'alo b', 33, '1', '2023-01-01 04:45:23'),
+(70, '683611', 'allo', 33, '1', '2023-01-01 04:46:20'),
+(71, '683611', 'balo', 33, '1', '2023-01-01 04:48:51'),
+(72, '683611', 'Lallu', 33, '1', '2023-01-01 06:20:35'),
+(73, '683611', 'Ballu', 33, '1', '2023-01-01 07:06:20'),
+(74, '683611', 'sdfg', 33, '1', '2023-01-02 03:32:31'),
+(75, '683611', 'sggadfgadfg', 33, '1', '2023-01-02 03:50:55'),
+(76, '683611', 'l', 33, '1', '2023-01-02 03:50:56');
 
 -- --------------------------------------------------------
 
@@ -1454,7 +1744,8 @@ INSERT INTO `class` (`id`, `schoolUniqueCode`, `className`, `status`, `created_a
 (125, '623659', '1st', '1', '2022-12-02 04:26:18'),
 (126, '623659', '2nd', '1', '2022-12-02 04:26:18'),
 (127, '623659', '3rd', '1', '2022-12-02 04:26:18'),
-(128, '623659', '4th', '1', '2022-12-02 04:26:18');
+(128, '623659', '4th', '1', '2022-12-02 04:26:18'),
+(129, '975691', 'No Class', '1', '2022-12-18 04:28:29');
 
 -- --------------------------------------------------------
 
@@ -1489,7 +1780,7 @@ INSERT INTO `classshedule` (`id`, `schoolUniqueCode`, `class_id`, `section_id`, 
 (11, '683611', '5', '1', '[{\"time\": \"10\", \"subject\": \"11\", \"teacher\": \"11\"}, {\"time\": \"11\", \"subject\": \"10\", \"teacher\": \"4\"}, {\"time\": \"15\", \"subject\": \"4\", \"teacher\": \"3\"}]', '1', '2022-10-02 14:59:26'),
 (12, '261027', '23', '21', '[{\"time\": \"19\", \"subject\": \"16\", \"teacher\": \"13\"}, {\"time\": \"20\", \"subject\": \"17\", \"teacher\": \"13\"}]', '1', '2022-10-14 07:37:19'),
 (13, '683611', '2', '1', '[{\"time\": \"10\", \"subject\": \"1\", \"teacher\": \"15\"}, {\"time\": \"11\", \"subject\": \"2\", \"teacher\": \"12\"}, {\"time\": \"15\", \"subject\": \"3\", \"teacher\": \"9\"}, {\"time\": \"21\", \"subject\": \"4\", \"teacher\": \"12\"}]', '1', '2022-10-16 12:51:00'),
-(14, '683611', '13', '1', '[{\"time\": \"10\", \"subject\": \"10\", \"teacher\": \"15\"}, {\"time\": \"11\", \"subject\": \"9\", \"teacher\": \"12\"}, {\"time\": \"15\", \"subject\": \"6\", \"teacher\": \"9\"}, {\"time\": \"21\", \"subject\": \"3\", \"teacher\": \"2\"}]', '1', '2022-10-26 02:41:37');
+(14, '683611', '13', '1', '[{\"time\": \"10\", \"subject\": \"10\", \"teacher\": \"15\"}, {\"time\": \"11\", \"subject\": \"9\", \"teacher\": \"12\"}, {\"time\": \"15\", \"subject\": \"6\", \"teacher\": \"9\"}, {\"time\": \"21\", \"subject\": \"3\", \"teacher\": \"2\"}, {\"time\": \"23\", \"subject\": \"10\", \"teacher\": \"12\"}, {\"time\": \"24\", \"subject\": \"9\", \"teacher\": \"11\"}, {\"time\": \"25\", \"subject\": \"8\", \"teacher\": \"9\"}, {\"time\": \"26\", \"subject\": \"7\", \"teacher\": \"11\"}, {\"time\": \"27\", \"subject\": \"8\", \"teacher\": \"9\"}]', '1', '2022-10-26 02:41:37');
 
 -- --------------------------------------------------------
 
@@ -1754,7 +2045,25 @@ INSERT INTO `departure` (`id`, `schoolUniqueCode`, `attendence_id`, `stu_id`, `s
 (172, '683611', '925', 91, '8th', 'A', 6, 'Teacher', '1', '2022-11-19 09:13:04', '2022-11-19', '1', 1, '2022-11-19 03:43:04'),
 (173, '683611', '926', 92, '8th', 'A', 6, 'Teacher', '1', '2022-11-19 09:13:04', '2022-11-19', '1', 1, '2022-11-19 03:43:04'),
 (174, '683611', '927', 93, '8th', 'A', 6, 'Teacher', '1', '2022-11-19 09:13:04', '2022-11-19', '1', 1, '2022-11-19 03:43:04'),
-(175, '683611', '928', 169, '8th', 'A', 6, 'Teacher', '1', '2022-11-19 09:13:04', '2022-11-19', '1', 1, '2022-11-19 03:43:04');
+(175, '683611', '928', 169, '8th', 'A', 6, 'Teacher', '1', '2022-11-19 09:13:04', '2022-11-19', '1', 1, '2022-11-19 03:43:04'),
+(176, '683611', '', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-14 21:18:26', '2023-02-15', '1', 1, '2023-02-15 09:18:26'),
+(177, '683611', '', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-14 21:18:26', '2023-02-15', '1', 1, '2023-02-15 09:18:26'),
+(178, '683611', '', 660, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-14 21:18:26', '2023-02-15', '1', 1, '2023-02-15 09:18:26'),
+(179, '683611', '', 1307, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-14 21:18:26', '2023-02-15', '1', 1, '2023-02-15 09:18:26'),
+(180, '683611', '1002', 35, 'Nursery', 'B', 6, 'Teacher', '1', '2023-02-14 21:24:04', '2023-02-15', '1', 1, '2023-02-15 09:24:04'),
+(181, '683611', '1003', 36, 'Nursery', 'B', 6, 'Teacher', '1', '2023-02-14 21:24:04', '2023-02-15', '1', 1, '2023-02-15 09:24:04'),
+(182, '683611', '1004', 37, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-14 21:24:52', '2023-02-15', '1', 1, '2023-02-15 09:24:52'),
+(183, '683611', '1005', 38, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-14 21:24:52', '2023-02-15', '1', 1, '2023-02-15 09:24:52'),
+(184, '683611', '1007', 217, 'LKG', 'A', 6, 'Teacher', '1', '2023-02-14 21:24:52', '2023-02-15', '1', 1, '2023-02-15 09:24:52'),
+(185, '683611', '1008', 40, 'LKG', 'B', 6, 'Teacher', '1', '2023-02-14 21:26:35', '2023-02-15', '1', 1, '2023-02-15 09:26:35'),
+(186, '683611', '1009', 41, 'LKG', 'B', 6, 'Teacher', '1', '2023-02-14 21:26:35', '2023-02-15', '1', 1, '2023-02-15 09:26:35'),
+(187, '683611', '1011', 167, 'LKG', 'B', 6, 'Teacher', '1', '2023-02-14 21:26:35', '2023-02-15', '1', 1, '2023-02-15 09:26:35'),
+(188, '683611', '1018', 58, '2nd', 'B', 6, 'Teacher', '1', '2023-02-14 21:35:26', '2023-02-15', '1', 1, '2023-02-15 09:35:26'),
+(189, '683611', '1019', 59, '2nd', 'B', 6, 'Teacher', '1', '2023-02-14 21:35:26', '2023-02-15', '1', 1, '2023-02-15 09:35:26'),
+(190, '683611', '1021', 149, '2nd', 'B', 6, 'Teacher', '1', '2023-02-14 21:35:26', '2023-02-15', '1', 1, '2023-02-15 09:35:26'),
+(191, '683611', '1120', 31, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 04:41:30', '2023-02-16', '1', 1, '2023-02-16 04:41:30'),
+(192, '683611', '1121', 33, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 04:41:30', '2023-02-16', '1', 1, '2023-02-16 04:41:30'),
+(193, '683611', '1122', 660, 'Nursery', 'A', 6, 'Teacher', '1', '2023-02-16 04:41:30', '2023-02-16', '1', 1, '2023-02-16 04:41:30');
 
 -- --------------------------------------------------------
 
@@ -1818,7 +2127,7 @@ CREATE TABLE `driver` (
 --
 
 INSERT INTO `driver` (`id`, `schoolUniqueCode`, `name`, `mobile`, `email`, `address`, `state_id`, `city_id`, `pincode`, `u_qr_id`, `user_id`, `password`, `vechicle_type`, `vechicle_no`, `total_seats`, `auth_token`, `fcm_token`, `lat`, `lng`, `image`, `status`, `created_at`) VALUES
-(1, '683611', 'Arvind Bhai', '9638527415', 'arvind@gmail.com', 'pani puri wali gali', 1, 1, 654251, '1', 'dri00001', 'K8F2Rg', 1, 'UP172528', 40, 'QitpOuDFz18R5Xh80A7V53cW6NmLC069oT4Bb5P7', 'dANvFQLRRvyfA0XJf8RLJM:APA91bFd_MLbL3f91J89qiA88RqMbhy-cfpY6ek9gZOBOiAftXgEueez2GcErukkTG6UIyiioNel7eyIu1WU7LjB85C2hgZkKthc4WOYCkDWgARNR9fHNW-kO-QCzTKerS9BnqVnYAS6', '29.1040685', '77.2575918', 'img-dri00001-1663942103download (1).jpg', '1', '2022-09-23 14:08:23'),
+(1, '683611', 'Arvind Bhai', '9638527415', 'arvind@gmail.com', 'pani puri wali gali', 1, 1, 654251, '1', 'dri00001', 'K8F2Rg', 1, 'UP172528', 40, 'BQNIPRiTZWJDcF1kE2U71xu0Y9L0MXHzjlqK5fp7', 'd1kDuDFbS-iU8mKlbBsj4c:APA91bEJnryFpQLWY0i9m39ns2iocxFyyQ_teI8kQeMwbJV0KGFv1IfnexNU6xUylhAwGPHmjf6fWay38I0oxFMxfnjwVAxLo_QrIooAvf-aQ-jCxfTM--9xFeW5McM6QLYXgUzlhiqF', '29.1040685', '77.2575918', 'img-dri00001-1663942103download (1).jpg', '1', '2022-09-23 14:08:23'),
 (2, '683611', 'Gaurav Sharma', '6397520223', 'gs2739@gmail.com', '12-190 gali maliyan patti chaudran', 1, 1, 250611, '2', 'dri00002', 'iwg3et', 1, 'H07855', 60, 'C8GeYgQRmEy1fpt9rblahIq63041O6kD3UzJ2LTK', 'cshrEuu7SJWv_fTbUiA8Ye:APA91bHtRbnnixE6ZUJM3pwUHcOJnZxbDGQg4asLdNGTQGfCOxwm2oHOX4oqq2xEZKoDjK8jrrH8DdfjENLE03sZjT2ZTKskTES2nbFwLbDY0KfmyKeWih_O3RCrPYxz9VxJXXbhtI7S', '29.1040481', '77.2576097', '', '1', '2022-09-25 10:45:32'),
 (3, '683611', 'Gaurav Jain Shab', '9045308073', 'gg@gmail.com', 'bada jain mandir', 1, 1, 147254, '3', 'dri00003', 'ZloOxj', 3, 'UP17 ANCD1144', 6, 'eE6bqIT2J0u394pkL2mirw6cR5n7tjOlF18GdQyY', 'dzNMm4IzRMa-2PMQEvESUu:APA91bHPHZ6nyNvCBbQwh4LeP8nwp46sL-uB8YSnkOYFAtn-_PeK6Z0fBg8vs6ZpRqHejA-OGZqRHnKRc1vkPGgHgH_49fFq1wckYxjZ2MBBwZ86AQaAp6KAvgc55rOhO_p2eAJngMtB', '28.6922083', '77.2748964', '', '1', '2022-09-25 12:05:30'),
 (4, '683611', 'Saurav Bhai Motercycle ', '9638525252', 'sau@email.com', 'Btt', 1, 1, 789065, '4', 'dri00004', '77oef4', 1, 'Njiuhb', 5, '', '', '', '', '', '1', '2022-09-25 14:27:05'),
@@ -1827,7 +2136,7 @@ INSERT INTO `driver` (`id`, `schoolUniqueCode`, `name`, `mobile`, `email`, `addr
 (7, '683611', 'Mera Gift', '2147483647', 'gaurav@genuinemark.org', 'adfasdf', 1, 1, 141414, '', 'dri00004', 'dIsvGg', 1, '01', 6, NULL, NULL, NULL, NULL, '', ':4', '2022-09-26 01:53:08'),
 (8, '683611', 'Gaurav Sharma', '2147483647', 'gs27349@gmail.com', '12-190 gali maliyan patti chaudran', 1, 1, 250611, '7', 'dri00005', 'H4I0bl', 1, 'Bbh', 40, NULL, NULL, NULL, NULL, '', ':4', '2022-09-26 01:53:50'),
 (9, '683611', 'Abc', '6352455051', 'abc@gmail.com', 'Abcdef', 1, 2, 627272, '8', 'dri00006', 'lIUYe9', 1, 'Njiuhb', 60, 'UJGfsWj8vd785F0Vbcw3kLiqxEN9zO1ZugQmRX8B', 'cshrEuu7SJWv_fTbUiA8Ye:APA91bHthnzPaQdM-0grNJedMxnP1-ygDprcq1RXM_kk7Kc5uQPFTrkUfcaCwdiTqONE3PLbsvbodVW7X_7M9ZFxQCn8CnFyH__zWKD0OxNLyIrdG2dcZiixR7fG0GAQ40KuHqlS8uV1', '29.102821', '77.2738075', '', '1', '2022-09-26 01:55:18'),
-(10, '683611', 'Sat', '9638527415', 'sat@email.com', 'samundar par', 1, 1, 963852, '9', 'dri00007', 'q5osON', 1, 'llo', 2, '9u5TMf8EyxC7js68GgSNXHB5FwkonYpthvUIaerR', 'eidkrXA0TLy0EkHSfkVPv7:APA91bEFEWl7-V12ApNP5NkgU9O575IOP942gVOkWNi1TTVl0vQsHRgE2f6_yggxMgFG18ifX-fxm_eUwDIv-EWtZ_0aU3wVX2F5O4IozOs55gUE0Woc1x_A6C24W3nOwGUM67k5_YTG', '28.5801756', '77.3138619', '', '1', '2022-09-27 15:39:05'),
+(10, '683611', 'Sat', '9638527415', 'sat@email.com', 'samundar par', 1, 1, 963852, '9', 'dri00007', 'q5osON', 1, 'llo', 2, 'oh1nMK790VOmJ1Iag915r60UYdxZ4v6EtT5pR83c', 'cq3KGA8sSiiQuIcw4ch2Us:APA91bFwX31W6lM6DsNsnO1stjdBFHCUMejOmf5JqCb-vb1znbdw9ZP406C4aSqYCi1iaLTGmWafC29wbJxo4x5pp6sQxIilkhLq7H2VLVfhp4QDMsAGK8_Zhp3dLmHSs7Sq22p8RItv', '53.2760883', '-6.217054', '', '1', '2022-09-27 15:39:05'),
 (11, '261027', 'Ankit Kumar', '8979982560', 'dgabaraut@gmail.com', 'Kakor Kalan', 36, 24, 250611, '10', 'dri00008', 'V42mho', 3, 'HR16Q 4272', 10, NULL, NULL, NULL, NULL, 'img-dri00008-1665978124ankit.png', '1', '2022-10-14 07:27:23'),
 (12, '261027', 'Deepak', '8923914598', 'dgabaraut@gmail.com', 'Malakpur', 36, 24, 250611, '11', 'dri00009', 'C6QME3', 3, 'DL 1CAA 6113', 5, NULL, NULL, NULL, NULL, '', '1', '2022-10-17 03:33:56'),
 (13, '261027', 'HARBIR SINGH', '9927429079', 'dgabaraut@gmail.com', 'Paldi route Daha', 36, 24, 250611, '12', 'dri000010', 'xVTG58', 3, 'DL 9C Y 9913', 5, NULL, NULL, NULL, NULL, '', '1', '2022-10-17 03:44:54'),
@@ -4356,7 +4665,363 @@ INSERT INTO `get_digi_coin` (`id`, `schoolUniqueCode`, `user_type`, `user_id`, `
 (2228, '623659', 'Student', 1169, 0, 0, 10, '1', '2022-12-07 02:47:03'),
 (2229, '683611', 'Student', 38, 1, 948, 10, '1', '2022-12-07 07:22:13'),
 (2230, '623659', 'Teacher', 56, 0, 0, 10, '1', '2022-12-07 11:02:09'),
-(2231, '683611', 'Student', 38, 1, 949, 10, '1', '2022-12-09 05:37:45');
+(2231, '683611', 'Student', 38, 1, 949, 10, '1', '2022-12-09 05:37:45'),
+(2232, '683611', 'Student', 169, 1, 950, 10, '1', '2022-12-10 13:27:31'),
+(2233, '683611', 'Student', 169, 1, 951, 10, '1', '2022-12-11 14:25:33'),
+(2234, '683611', 'Student', 169, 1, 952, 10, '1', '2022-12-12 04:50:43'),
+(2235, '178621', 'Student', 1170, 0, 0, 10, '1', '2022-12-12 06:23:11'),
+(2236, '178621', 'Student', 1171, 0, 0, 10, '1', '2022-12-12 06:30:00'),
+(2237, '178621', 'Student', 1172, 0, 0, 10, '1', '2022-12-12 06:36:48'),
+(2238, '178621', 'Student', 1173, 0, 0, 10, '1', '2022-12-12 06:40:40'),
+(2239, '178621', 'Student', 1174, 0, 0, 10, '1', '2022-12-12 06:44:25'),
+(2240, '178621', 'Student', 1175, 0, 0, 10, '1', '2022-12-12 06:47:37'),
+(2241, '178621', 'Student', 1176, 0, 0, 10, '1', '2022-12-12 06:53:36'),
+(2242, '683611', 'Student', 38, 1, 953, 10, '1', '2022-12-12 10:59:05'),
+(2243, '683611', 'Student', 39, 1, 954, 10, '1', '2022-12-12 11:00:06'),
+(2244, '683611', 'Student', 217, 1, 955, 10, '1', '2022-12-12 11:00:18'),
+(2245, '683611', 'Student', 37, 1, 956, 10, '1', '2022-12-12 11:59:28'),
+(2246, '975691', 'Student', 1177, 0, 0, 10, '1', '2022-12-12 12:10:33'),
+(2247, '975691', 'Student', 1178, 0, 0, 10, '1', '2022-12-12 12:13:43'),
+(2248, '975691', 'Student', 1179, 0, 0, 10, '1', '2022-12-12 12:16:03'),
+(2249, '975691', 'Student', 1180, 0, 0, 10, '1', '2022-12-12 12:17:49'),
+(2250, '975691', 'Student', 1181, 0, 0, 10, '1', '2022-12-12 12:19:34'),
+(2251, '975691', 'Student', 1182, 0, 0, 10, '1', '2022-12-12 12:23:24'),
+(2252, '975691', 'Student', 1183, 0, 0, 10, '1', '2022-12-12 12:25:25'),
+(2253, '975691', 'Student', 1184, 0, 0, 10, '1', '2022-12-12 12:30:17'),
+(2254, '975691', 'Student', 1185, 0, 0, 10, '1', '2022-12-12 12:34:47'),
+(2255, '975691', 'Student', 1186, 0, 0, 10, '1', '2022-12-12 12:37:24'),
+(2256, '975691', 'Student', 1187, 0, 0, 10, '1', '2022-12-12 12:40:21'),
+(2257, '975691', 'Student', 1188, 0, 0, 10, '1', '2022-12-13 03:06:36'),
+(2258, '975691', 'Student', 1189, 0, 0, 10, '1', '2022-12-13 03:08:41'),
+(2259, '691309', 'Student', 1190, 0, 0, 10, '1', '2022-12-13 03:37:02'),
+(2260, '691309', 'Student', 1191, 0, 0, 10, '1', '2022-12-13 03:38:56'),
+(2261, '691309', 'Student', 1192, 0, 0, 10, '1', '2022-12-13 03:55:46'),
+(2262, '975691', 'Student', 1193, 0, 0, 10, '1', '2022-12-14 03:49:28'),
+(2263, '975691', 'Student', 1194, 0, 0, 10, '1', '2022-12-14 03:50:41'),
+(2264, '975691', 'Student', 1195, 0, 0, 10, '1', '2022-12-14 03:52:27'),
+(2265, '975691', 'Student', 1196, 0, 0, 10, '1', '2022-12-14 03:54:07'),
+(2266, '975691', 'Student', 1197, 0, 0, 10, '1', '2022-12-14 03:55:29'),
+(2267, '975691', 'Student', 1198, 0, 0, 10, '1', '2022-12-14 03:59:05'),
+(2268, '975691', 'Student', 1199, 0, 0, 10, '1', '2022-12-14 04:00:49'),
+(2269, '975691', 'Student', 1200, 0, 0, 10, '1', '2022-12-14 04:02:59'),
+(2270, '691309', 'Student', 1201, 0, 0, 10, '1', '2022-12-14 04:47:46'),
+(2271, '691309', 'Student', 1202, 0, 0, 10, '1', '2022-12-14 04:50:16'),
+(2272, '691309', 'Student', 1203, 0, 0, 10, '1', '2022-12-14 04:52:10'),
+(2273, '691309', 'Student', 1204, 0, 0, 10, '1', '2022-12-14 04:57:01'),
+(2274, '691309', 'Student', 1205, 0, 0, 10, '1', '2022-12-14 04:59:41'),
+(2275, '691309', 'Student', 1206, 0, 0, 10, '1', '2022-12-14 05:01:52'),
+(2276, '178621', 'Student', 1207, 0, 0, 10, '1', '2022-12-14 06:12:26'),
+(2277, '178621', 'Student', 1208, 0, 0, 10, '1', '2022-12-14 06:23:32'),
+(2278, '178621', 'Student', 1209, 0, 0, 10, '1', '2022-12-14 06:29:52'),
+(2279, '178621', 'Student', 1210, 0, 0, 10, '1', '2022-12-14 06:41:05'),
+(2280, '178621', 'Student', 1211, 0, 0, 10, '1', '2022-12-14 06:49:34'),
+(2281, '178621', 'Student', 1212, 0, 0, 10, '1', '2022-12-14 07:21:55'),
+(2282, '178621', 'Student', 1213, 0, 0, 10, '1', '2022-12-14 07:28:02'),
+(2283, '178621', 'Student', 1214, 0, 0, 10, '1', '2022-12-14 07:32:59'),
+(2284, '178621', 'Student', 1215, 0, 0, 10, '1', '2022-12-16 06:43:20'),
+(2285, '178621', 'Student', 1216, 0, 0, 10, '1', '2022-12-16 06:59:05'),
+(2286, '178621', 'Student', 1217, 0, 0, 10, '1', '2022-12-16 07:07:42'),
+(2287, '178621', 'Student', 1218, 0, 0, 10, '1', '2022-12-16 07:28:26'),
+(2288, '178621', 'Student', 1219, 0, 0, 10, '1', '2022-12-16 07:35:32'),
+(2289, '178621', 'Student', 1220, 0, 0, 10, '1', '2022-12-16 07:43:50'),
+(2290, '691309', 'Student', 1221, 0, 0, 10, '1', '2022-12-17 02:30:53'),
+(2291, '691309', 'Student', 1222, 0, 0, 10, '1', '2022-12-17 02:33:01'),
+(2292, '691309', 'Student', 1223, 0, 0, 10, '1', '2022-12-17 02:36:28'),
+(2293, '691309', 'Student', 1224, 0, 0, 10, '1', '2022-12-17 02:39:53'),
+(2294, '691309', 'Student', 1225, 0, 0, 10, '1', '2022-12-17 02:42:04'),
+(2295, '691309', 'Student', 1226, 0, 0, 10, '1', '2022-12-17 02:45:22'),
+(2296, '691309', 'Student', 1227, 0, 0, 10, '1', '2022-12-17 02:47:42'),
+(2297, '691309', 'Student', 1228, 0, 0, 10, '1', '2022-12-17 02:51:47'),
+(2298, '691309', 'Student', 1229, 0, 0, 10, '1', '2022-12-17 02:57:23'),
+(2299, '691309', 'Student', 1230, 0, 0, 10, '1', '2022-12-17 03:01:10'),
+(2300, '178621', 'Student', 1231, 0, 0, 10, '1', '2022-12-17 03:54:56'),
+(2301, '178621', 'Student', 1232, 0, 0, 10, '1', '2022-12-17 03:57:45'),
+(2302, '178621', 'Student', 1233, 0, 0, 10, '1', '2022-12-17 04:07:30'),
+(2303, '691309', 'Student', 1234, 0, 0, 10, '1', '2022-12-17 04:38:32'),
+(2304, '691309', 'Student', 1235, 0, 0, 10, '1', '2022-12-17 04:57:31'),
+(2305, '691309', 'Student', 1236, 0, 0, 10, '1', '2022-12-17 04:59:25'),
+(2306, '691309', 'Student', 1237, 0, 0, 10, '1', '2022-12-17 05:02:59'),
+(2307, '691309', 'Student', 1238, 0, 0, 10, '1', '2022-12-17 05:06:35'),
+(2308, '178621', 'Student', 1239, 0, 0, 10, '1', '2022-12-17 05:08:25'),
+(2309, '178621', 'Student', 1240, 0, 0, 10, '1', '2022-12-17 05:11:05'),
+(2310, '691309', 'Student', 1241, 0, 0, 10, '1', '2022-12-17 05:12:03'),
+(2311, '178621', 'Student', 1242, 0, 0, 10, '1', '2022-12-17 05:14:30'),
+(2312, '691309', 'Student', 1243, 0, 0, 10, '1', '2022-12-17 05:15:23'),
+(2313, '691309', 'Student', 1244, 0, 0, 10, '1', '2022-12-17 05:18:41'),
+(2314, '691309', 'Student', 1245, 0, 0, 10, '1', '2022-12-17 05:20:56'),
+(2315, '691309', 'Student', 1246, 0, 0, 10, '1', '2022-12-17 05:23:05'),
+(2316, '975691', 'Teacher', 57, 0, 0, 10, '1', '2022-12-18 04:27:52'),
+(2317, '975691', 'Teacher', 58, 0, 0, 10, '1', '2022-12-18 04:31:42'),
+(2318, '975691', 'Teacher', 59, 0, 0, 10, '1', '2022-12-18 04:35:00'),
+(2319, '975691', 'Teacher', 60, 0, 0, 10, '1', '2022-12-18 04:36:57'),
+(2320, '975691', 'Teacher', 61, 0, 0, 10, '1', '2022-12-18 04:39:32'),
+(2321, '975691', 'Teacher', 62, 0, 0, 10, '1', '2022-12-18 04:42:48'),
+(2322, '975691', 'Teacher', 63, 0, 0, 10, '1', '2022-12-18 04:46:17'),
+(2323, '975691', 'Teacher', 64, 0, 0, 10, '1', '2022-12-18 04:48:27'),
+(2324, '975691', 'Teacher', 65, 0, 0, 10, '1', '2022-12-18 04:57:30'),
+(2325, '975691', 'Teacher', 66, 0, 0, 10, '1', '2022-12-18 04:59:15'),
+(2326, '975691', 'Teacher', 67, 0, 0, 10, '1', '2022-12-18 05:00:21'),
+(2327, '178621', 'Student', 1247, 0, 0, 10, '1', '2022-12-19 04:00:05'),
+(2328, '178621', 'Student', 1248, 0, 0, 10, '1', '2022-12-19 04:04:29'),
+(2329, '178621', 'Student', 1249, 0, 0, 10, '1', '2022-12-19 04:09:22'),
+(2330, '178621', 'Student', 1250, 0, 0, 10, '1', '2022-12-19 04:12:43'),
+(2331, '178621', 'Student', 1251, 0, 0, 10, '1', '2022-12-19 04:15:56'),
+(2332, '178621', 'Student', 1252, 0, 0, 10, '1', '2022-12-19 04:20:25'),
+(2333, '178621', 'Student', 1253, 0, 0, 10, '1', '2022-12-19 04:24:52'),
+(2334, '178621', 'Student', 1254, 0, 0, 10, '1', '2022-12-19 04:27:12'),
+(2335, '178621', 'Student', 1255, 0, 0, 10, '1', '2022-12-19 04:36:39'),
+(2336, '178621', 'Student', 1256, 0, 0, 10, '1', '2022-12-19 04:54:20'),
+(2337, '178621', 'Student', 1257, 0, 0, 10, '1', '2022-12-19 04:57:45'),
+(2338, '178621', 'Student', 1258, 0, 0, 10, '1', '2022-12-19 05:00:59'),
+(2339, '691309', 'Student', 1259, 0, 0, 10, '1', '2022-12-19 05:22:41'),
+(2340, '691309', 'Student', 1260, 0, 0, 10, '1', '2022-12-19 05:26:42'),
+(2341, '691309', 'Student', 1261, 0, 0, 10, '1', '2022-12-19 05:29:09'),
+(2342, '691309', 'Student', 1262, 0, 0, 10, '1', '2022-12-19 05:37:26'),
+(2343, '691309', 'Student', 1263, 0, 0, 10, '1', '2022-12-19 05:45:04'),
+(2344, '691309', 'Student', 1264, 0, 0, 10, '1', '2022-12-19 05:47:58'),
+(2345, '691309', 'Student', 1265, 0, 0, 10, '1', '2022-12-19 06:01:42'),
+(2346, '691309', 'Student', 1266, 0, 0, 10, '1', '2022-12-19 06:05:47'),
+(2347, '691309', 'Student', 1267, 0, 0, 10, '1', '2022-12-19 06:10:17'),
+(2348, '178621', 'Student', 1268, 0, 0, 10, '1', '2022-12-19 06:13:08'),
+(2349, '691309', 'Student', 1269, 0, 0, 10, '1', '2022-12-19 06:16:57'),
+(2350, '178621', 'Student', 1270, 0, 0, 10, '1', '2022-12-19 06:34:34'),
+(2351, '178621', 'Student', 1271, 0, 0, 10, '1', '2022-12-19 06:37:16'),
+(2352, '178621', 'Student', 1272, 0, 0, 10, '1', '2022-12-19 06:46:35'),
+(2353, '178621', 'Student', 1273, 0, 0, 10, '1', '2022-12-19 06:50:58'),
+(2354, '178621', 'Student', 1274, 0, 0, 10, '1', '2022-12-19 06:56:38'),
+(2355, '691309', 'Student', 1275, 0, 0, 10, '1', '2022-12-19 06:58:43'),
+(2356, '178621', 'Student', 1276, 0, 0, 10, '1', '2022-12-19 07:00:14'),
+(2357, '178621', 'Student', 1277, 0, 0, 10, '1', '2022-12-19 07:05:38'),
+(2358, '691309', 'Student', 1278, 0, 0, 10, '1', '2022-12-19 07:07:20'),
+(2359, '691309', 'Student', 1279, 0, 0, 10, '1', '2022-12-19 07:09:53'),
+(2360, '178621', 'Student', 1280, 0, 0, 10, '1', '2022-12-19 07:10:15'),
+(2361, '691309', 'Student', 1281, 0, 0, 10, '1', '2022-12-19 07:11:48'),
+(2362, '178621', 'Student', 1282, 0, 0, 10, '1', '2022-12-19 07:13:29'),
+(2363, '691309', 'Student', 1283, 0, 0, 10, '1', '2022-12-19 07:14:31'),
+(2364, '691309', 'Student', 1284, 0, 0, 10, '1', '2022-12-19 07:16:12'),
+(2365, '178621', 'Student', 1285, 0, 0, 10, '1', '2022-12-19 07:20:46'),
+(2366, '178621', 'Student', 1286, 0, 0, 10, '1', '2022-12-19 07:22:47'),
+(2367, '178621', 'Student', 1287, 0, 0, 10, '1', '2022-12-19 07:25:08'),
+(2368, '691309', 'Student', 1288, 0, 0, 10, '1', '2022-12-19 07:46:16'),
+(2369, '691309', 'Student', 1289, 0, 0, 10, '1', '2022-12-19 07:47:57'),
+(2370, '691309', 'Student', 1290, 0, 0, 10, '1', '2022-12-19 07:49:15'),
+(2371, '691309', 'Student', 1291, 0, 0, 10, '1', '2022-12-19 07:50:42'),
+(2372, '691309', 'Student', 1292, 0, 0, 10, '1', '2022-12-19 07:53:01'),
+(2373, '691309', 'Student', 1293, 0, 0, 10, '1', '2022-12-19 07:58:52'),
+(2374, '691309', 'Student', 1294, 0, 0, 10, '1', '2022-12-19 08:08:20'),
+(2375, '261027', 'Student', 216, 1, 957, 10, '1', '2022-12-20 05:27:12'),
+(2376, '261027', 'Student', 222, 1, 958, 10, '1', '2022-12-20 05:27:12'),
+(2377, '261027', 'Student', 223, 1, 959, 10, '1', '2022-12-20 05:27:12'),
+(2378, '261027', 'Student', 224, 1, 960, 10, '1', '2022-12-20 05:27:12'),
+(2379, '261027', 'Student', 225, 1, 961, 10, '1', '2022-12-20 05:27:12'),
+(2380, '261027', 'Student', 226, 1, 962, 10, '1', '2022-12-20 05:27:12'),
+(2381, '261027', 'Student', 227, 1, 963, 10, '1', '2022-12-20 05:27:12'),
+(2382, '261027', 'Student', 228, 1, 964, 10, '1', '2022-12-20 05:27:12'),
+(2383, '261027', 'Student', 229, 1, 965, 10, '1', '2022-12-20 05:27:12'),
+(2384, '261027', 'Student', 230, 1, 966, 10, '1', '2022-12-20 05:27:12'),
+(2385, '261027', 'Student', 269, 1, 967, 10, '1', '2022-12-20 05:27:12'),
+(2386, '261027', 'Student', 270, 1, 968, 10, '1', '2022-12-20 05:27:12'),
+(2387, '261027', 'Student', 282, 1, 970, 10, '1', '2022-12-20 05:27:12'),
+(2388, '261027', 'Student', 283, 1, 971, 10, '1', '2022-12-20 05:27:12'),
+(2389, '261027', 'Student', 284, 1, 972, 10, '1', '2022-12-20 05:27:12'),
+(2390, '261027', 'Student', 285, 1, 973, 10, '1', '2022-12-20 05:27:12'),
+(2391, '261027', 'Student', 286, 1, 974, 10, '1', '2022-12-20 05:27:12'),
+(2392, '261027', 'Student', 287, 1, 975, 10, '1', '2022-12-20 05:27:12'),
+(2393, '261027', 'Teacher', 20, 1, 0, 10, '1', '2022-12-20 05:27:12'),
+(2394, '178621', 'Student', 1295, 0, 0, 10, '1', '2022-12-20 07:30:24'),
+(2395, '178621', 'Student', 1296, 0, 0, 10, '1', '2022-12-20 07:33:40'),
+(2396, '178621', 'Student', 1297, 0, 0, 10, '1', '2022-12-20 07:38:53'),
+(2397, '178621', 'Student', 1298, 0, 0, 10, '1', '2022-12-20 07:44:01'),
+(2398, '178621', 'Student', 1299, 0, 0, 10, '1', '2022-12-20 07:48:27'),
+(2399, '683611', 'Student', 155, 1, 976, 10, '1', '2023-01-02 07:36:59'),
+(2400, '683611', 'Student', 164, 1, 977, 10, '1', '2023-01-02 07:37:41'),
+(2401, '683611', 'Student', 160, 1, 978, 10, '1', '2023-01-02 07:37:44'),
+(2402, '683611', 'Student', 156, 1, 979, 10, '1', '2023-01-02 07:37:47'),
+(2403, '683611', 'Student', 163, 1, 980, 10, '1', '2023-01-02 07:37:52'),
+(2404, '683611', 'Student', 159, 1, 981, 10, '1', '2023-01-02 07:37:54'),
+(2405, '683611', 'Student', 166, 1, 982, 10, '1', '2023-01-02 07:38:10'),
+(2406, '683611', 'Student', 162, 1, 983, 10, '1', '2023-01-02 07:38:35'),
+(2407, '683611', 'Student', 161, 1, 984, 10, '1', '2023-01-02 07:38:39'),
+(2408, '683611', 'Student', 158, 1, 985, 10, '1', '2023-01-02 07:38:54'),
+(2409, '683611', 'Student', 157, 1, 986, 10, '1', '2023-01-02 07:39:01'),
+(2410, '683611', 'Student', 661, 1, 987, 10, '1', '2023-01-18 08:15:00'),
+(2411, '683611', 'Student', 31, 1, 988, 10, '1', '2023-01-20 05:30:28'),
+(2412, '683611', 'Student', 33, 1, 989, 10, '1', '2023-01-20 05:30:28'),
+(2413, '683611', 'Teacher', 15, 1, 0, 10, '1', '2023-01-20 05:30:28'),
+(2414, '683611', 'Student', 31, 1, 992, 10, '1', '2023-01-21 02:42:24'),
+(2415, '683611', 'Student', 33, 1, 993, 10, '1', '2023-01-21 02:42:24'),
+(2416, '683611', 'Student', 660, 1, 994, 10, '1', '2023-01-21 02:42:24'),
+(2417, '683611', 'Teacher', 2, 1, 0, 10, '1', '2023-01-21 02:42:24'),
+(2418, '178621', 'Student', 1300, 0, 0, 10, '1', '2023-01-21 04:39:53'),
+(2419, '178621', 'Student', 1301, 0, 0, 10, '1', '2023-01-21 04:43:03'),
+(2420, '178621', 'Student', 1302, 0, 0, 10, '1', '2023-01-21 04:49:51'),
+(2421, '178621', 'Student', 1303, 0, 0, 10, '1', '2023-01-21 05:13:15'),
+(2422, '178621', 'Student', 1304, 0, 0, 10, '1', '2023-01-21 05:20:16'),
+(2423, '178621', 'Student', 1305, 0, 0, 10, '1', '2023-01-21 05:23:41'),
+(2424, '178621', 'Student', 1306, 0, 0, 10, '1', '2023-01-21 06:05:09'),
+(2425, '683611', 'Student', 1307, 0, 0, 10, '1', '2023-01-21 06:25:45'),
+(2426, '178621', 'Student', 1308, 0, 0, 10, '1', '2023-01-21 06:32:59'),
+(2427, '178621', 'Student', 1309, 0, 0, 10, '1', '2023-01-21 06:39:37'),
+(2428, '178621', 'Student', 1310, 0, 0, 10, '1', '2023-01-21 06:42:29'),
+(2429, '178621', 'Student', 1311, 0, 0, 10, '1', '2023-01-21 07:01:00'),
+(2430, '178621', 'Student', 1312, 0, 0, 10, '1', '2023-01-21 07:05:07'),
+(2431, '178621', 'Student', 1313, 0, 0, 10, '1', '2023-01-21 07:08:23'),
+(2432, '178621', 'Student', 1314, 0, 0, 10, '1', '2023-01-21 07:12:59'),
+(2433, '178621', 'Student', 1315, 0, 0, 10, '1', '2023-01-21 07:15:38'),
+(2434, '178621', 'Student', 1316, 0, 0, 10, '1', '2023-01-21 07:17:59'),
+(2435, '178621', 'Student', 1317, 0, 0, 10, '1', '2023-01-21 07:21:36'),
+(2436, '178621', 'Student', 1318, 0, 0, 10, '1', '2023-02-01 04:38:39'),
+(2437, '683611', 'Student', 33, 1, 997, 10, '1', '2023-02-15 06:05:24'),
+(2438, '683611', 'Student', 660, 1, 998, 10, '1', '2023-02-15 06:05:25'),
+(2439, '683611', 'Student', 1307, 1, 999, 10, '1', '2023-02-15 06:05:25'),
+(2440, '683611', 'Student', 661, 1, 1000, 10, '1', '2023-02-15 06:05:25'),
+(2441, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 06:05:25'),
+(2442, '683611', 'Student', 35, 1, 1002, 10, '1', '2023-02-15 06:06:49'),
+(2443, '683611', 'Student', 36, 1, 1003, 10, '1', '2023-02-15 06:06:49'),
+(2444, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 06:06:49'),
+(2445, '683611', 'Student', 37, 1, 1004, 10, '1', '2023-02-15 06:11:47'),
+(2446, '683611', 'Student', 38, 1, 1005, 10, '1', '2023-02-15 06:11:47'),
+(2447, '683611', 'Student', 217, 1, 1007, 10, '1', '2023-02-15 06:11:47'),
+(2448, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 06:11:48'),
+(2449, '683611', 'Student', 40, 1, 1008, 10, '1', '2023-02-15 06:12:51'),
+(2450, '683611', 'Student', 41, 1, 1009, 10, '1', '2023-02-15 06:12:51'),
+(2451, '683611', 'Student', 167, 1, 1011, 10, '1', '2023-02-15 06:12:51'),
+(2452, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 06:12:51'),
+(2453, '683611', 'Student', 43, 1, 1012, 10, '1', '2023-02-15 06:16:14'),
+(2454, '683611', 'Student', 44, 1, 1013, 10, '1', '2023-02-15 06:16:14'),
+(2455, '683611', 'Student', 220, 1, 1015, 10, '1', '2023-02-15 06:16:14'),
+(2456, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 06:16:20'),
+(2457, '683611', 'Student', 50, 1, 1016, 10, '1', '2023-02-15 06:31:36'),
+(2458, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 06:31:36'),
+(2459, '683611', 'Student', 58, 1, 1018, 10, '1', '2023-02-15 09:34:48'),
+(2460, '683611', 'Student', 59, 1, 1019, 10, '1', '2023-02-15 09:34:48'),
+(2461, '683611', 'Student', 149, 1, 1021, 10, '1', '2023-02-15 09:34:48'),
+(2462, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 09:34:48'),
+(2463, '683611', 'Student', 61, 1, 1022, 10, '1', '2023-02-15 11:32:37'),
+(2464, '683611', 'Student', 62, 1, 1023, 10, '1', '2023-02-15 11:32:37'),
+(2465, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 11:32:38'),
+(2466, '683611', 'Student', 16, 1, 1025, 10, '1', '2023-02-15 11:34:35'),
+(2467, '683611', 'Student', 118, 1, 1026, 10, '1', '2023-02-15 11:34:35'),
+(2468, '683611', 'Student', 119, 1, 1028, 10, '1', '2023-02-15 11:34:35'),
+(2469, '683611', 'Student', 134, 1, 1029, 10, '1', '2023-02-15 11:34:35'),
+(2470, '683611', 'Student', 135, 1, 1030, 10, '1', '2023-02-15 11:34:35'),
+(2471, '683611', 'Student', 136, 1, 1031, 10, '1', '2023-02-15 11:34:35'),
+(2472, '683611', 'Student', 139, 1, 1033, 10, '1', '2023-02-15 11:34:35'),
+(2473, '683611', 'Student', 140, 1, 1035, 10, '1', '2023-02-15 11:34:35'),
+(2474, '683611', 'Student', 141, 1, 1036, 10, '1', '2023-02-15 11:34:35'),
+(2475, '683611', 'Student', 142, 1, 1037, 10, '1', '2023-02-15 11:34:35'),
+(2476, '683611', 'Student', 143, 1, 1038, 10, '1', '2023-02-15 11:34:35'),
+(2477, '683611', 'Student', 159, 1, 1053, 10, '1', '2023-02-15 11:34:35'),
+(2478, '683611', 'Student', 160, 1, 1054, 10, '1', '2023-02-15 11:34:35'),
+(2479, '683611', 'Student', 162, 1, 1055, 10, '1', '2023-02-15 11:34:35'),
+(2480, '683611', 'Student', 161, 1, 1056, 10, '1', '2023-02-15 11:34:35'),
+(2481, '683611', 'Student', 166, 1, 1059, 10, '1', '2023-02-15 11:34:35'),
+(2482, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 11:34:35'),
+(2483, '683611', 'Student', 67, 1, 1061, 10, '1', '2023-02-15 11:43:48'),
+(2484, '683611', 'Student', 68, 1, 1062, 10, '1', '2023-02-15 11:43:48'),
+(2485, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 11:43:49'),
+(2486, '683611', 'Student', 70, 1, 1064, 10, '1', '2023-02-15 12:46:27'),
+(2487, '683611', 'Student', 71, 1, 1065, 10, '1', '2023-02-15 12:46:27'),
+(2488, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 12:46:27'),
+(2489, '683611', 'Student', 13, 1, 1067, 10, '1', '2023-02-15 12:49:45'),
+(2490, '683611', 'Student', 76, 1, 1068, 10, '1', '2023-02-15 12:49:45'),
+(2491, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 12:49:45'),
+(2492, '683611', 'Student', 73, 1, 1071, 10, '1', '2023-02-15 12:51:19'),
+(2493, '683611', 'Student', 74, 1, 1072, 10, '1', '2023-02-15 12:51:19'),
+(2494, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 12:51:19'),
+(2495, '683611', 'Student', 79, 1, 1075, 10, '1', '2023-02-15 12:53:13'),
+(2496, '683611', 'Student', 81, 1, 1077, 10, '1', '2023-02-15 12:53:13'),
+(2497, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 12:53:13'),
+(2498, '683611', 'Student', 97, 1, 1078, 10, '1', '2023-02-15 13:11:52'),
+(2499, '683611', 'Student', 98, 1, 1079, 10, '1', '2023-02-15 13:11:52'),
+(2500, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 13:11:52'),
+(2501, '683611', 'Student', 103, 1, 1081, 10, '1', '2023-02-15 13:15:18'),
+(2502, '683611', 'Student', 104, 1, 1082, 10, '1', '2023-02-15 13:15:18'),
+(2503, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-15 13:15:19'),
+(2504, '683611', 'Student', 16, 1, 1084, 10, '1', '2023-02-16 01:12:59'),
+(2505, '683611', 'Student', 119, 1, 1086, 10, '1', '2023-02-16 01:12:59'),
+(2506, '683611', 'Student', 120, 1, 1087, 10, '1', '2023-02-16 01:12:59'),
+(2507, '683611', 'Student', 134, 1, 1088, 10, '1', '2023-02-16 01:12:59'),
+(2508, '683611', 'Student', 135, 1, 1089, 10, '1', '2023-02-16 01:12:59'),
+(2509, '683611', 'Student', 139, 1, 1090, 10, '1', '2023-02-16 01:12:59'),
+(2510, '683611', 'Student', 140, 1, 1091, 10, '1', '2023-02-16 01:12:59'),
+(2511, '683611', 'Student', 142, 1, 1093, 10, '1', '2023-02-16 01:12:59'),
+(2512, '683611', 'Student', 143, 1, 1094, 10, '1', '2023-02-16 01:12:59'),
+(2513, '683611', 'Student', 144, 1, 1095, 10, '1', '2023-02-16 01:12:59'),
+(2514, '683611', 'Student', 147, 1, 1098, 10, '1', '2023-02-16 01:12:59'),
+(2515, '683611', 'Student', 136, 1, 1099, 10, '1', '2023-02-16 01:12:59'),
+(2516, '683611', 'Student', 137, 1, 1100, 10, '1', '2023-02-16 01:12:59'),
+(2517, '683611', 'Student', 148, 1, 1102, 10, '1', '2023-02-16 01:12:59'),
+(2518, '683611', 'Student', 150, 1, 1103, 10, '1', '2023-02-16 01:12:59'),
+(2519, '683611', 'Student', 154, 1, 1107, 10, '1', '2023-02-16 01:12:59'),
+(2520, '683611', 'Student', 155, 1, 1108, 10, '1', '2023-02-16 01:12:59'),
+(2521, '683611', 'Student', 156, 1, 1109, 10, '1', '2023-02-16 01:12:59'),
+(2522, '683611', 'Student', 158, 1, 1110, 10, '1', '2023-02-16 01:12:59'),
+(2523, '683611', 'Student', 159, 1, 1111, 10, '1', '2023-02-16 01:12:59'),
+(2524, '683611', 'Student', 160, 1, 1112, 10, '1', '2023-02-16 01:12:59'),
+(2525, '683611', 'Student', 161, 1, 1113, 10, '1', '2023-02-16 01:12:59'),
+(2526, '683611', 'Student', 163, 1, 1115, 10, '1', '2023-02-16 01:12:59'),
+(2527, '683611', 'Student', 164, 1, 1116, 10, '1', '2023-02-16 01:12:59'),
+(2528, '683611', 'Student', 165, 1, 1117, 10, '1', '2023-02-16 01:12:59'),
+(2529, '683611', 'Student', 166, 1, 1118, 10, '1', '2023-02-16 01:12:59'),
+(2530, '683611', 'Student', 157, 1, 1119, 10, '1', '2023-02-16 01:12:59'),
+(2531, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-16 01:12:59'),
+(2532, '683611', 'Student', 31, 1, 1120, 10, '1', '2023-02-16 03:48:14'),
+(2533, '683611', 'Student', 33, 1, 1121, 10, '1', '2023-02-16 03:48:14'),
+(2534, '683611', 'Student', 660, 1, 1122, 10, '1', '2023-02-16 03:48:14'),
+(2535, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-16 03:48:15'),
+(2536, '683611', 'Student', 31, 1, 1125, 10, '1', '2023-02-17 10:38:04'),
+(2537, '683611', 'Student', 33, 1, 1126, 10, '1', '2023-02-17 10:38:04'),
+(2538, '683611', 'Student', 661, 1, 1128, 10, '1', '2023-02-17 10:38:04'),
+(2539, '683611', 'Student', 1307, 1, 1129, 10, '1', '2023-02-17 10:38:04'),
+(2540, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-17 10:38:04'),
+(2541, '683611', 'Student', 37, 1, 1130, 10, '1', '2023-02-17 10:41:11'),
+(2542, '683611', 'Student', 38, 1, 1131, 10, '1', '2023-02-17 10:41:11'),
+(2543, '683611', 'Student', 39, 1, 1132, 10, '1', '2023-02-17 10:41:11'),
+(2544, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-17 10:41:11'),
+(2545, '683611', 'Student', 16, 1, 1134, 10, '1', '2023-02-18 16:34:07'),
+(2546, '683611', 'Student', 118, 1, 1135, 10, '1', '2023-02-18 16:34:07'),
+(2547, '683611', 'Student', 119, 1, 1136, 10, '1', '2023-02-18 16:34:07'),
+(2548, '683611', 'Student', 134, 1, 1138, 10, '1', '2023-02-18 16:34:07'),
+(2549, '683611', 'Student', 135, 1, 1139, 10, '1', '2023-02-18 16:34:07'),
+(2550, '683611', 'Student', 136, 1, 1140, 10, '1', '2023-02-18 16:34:07'),
+(2551, '683611', 'Student', 137, 1, 1141, 10, '1', '2023-02-18 16:34:07'),
+(2552, '683611', 'Student', 138, 1, 1142, 10, '1', '2023-02-18 16:34:07'),
+(2553, '683611', 'Student', 139, 1, 1143, 10, '1', '2023-02-18 16:34:07'),
+(2554, '683611', 'Student', 140, 1, 1144, 10, '1', '2023-02-18 16:34:07'),
+(2555, '683611', 'Student', 144, 1, 1148, 10, '1', '2023-02-18 16:34:07'),
+(2556, '683611', 'Student', 146, 1, 1150, 10, '1', '2023-02-18 16:34:07'),
+(2557, '683611', 'Student', 147, 1, 1151, 10, '1', '2023-02-18 16:34:07'),
+(2558, '683611', 'Student', 148, 1, 1152, 10, '1', '2023-02-18 16:34:07'),
+(2559, '683611', 'Student', 150, 1, 1153, 10, '1', '2023-02-18 16:34:07'),
+(2560, '683611', 'Student', 152, 1, 1155, 10, '1', '2023-02-18 16:34:07'),
+(2561, '683611', 'Student', 166, 1, 1156, 10, '1', '2023-02-18 16:34:07'),
+(2562, '683611', 'Student', 165, 1, 1157, 10, '1', '2023-02-18 16:34:07'),
+(2563, '683611', 'Student', 164, 1, 1158, 10, '1', '2023-02-18 16:34:07'),
+(2564, '683611', 'Student', 162, 1, 1160, 10, '1', '2023-02-18 16:34:07'),
+(2565, '683611', 'Student', 160, 1, 1161, 10, '1', '2023-02-18 16:34:07'),
+(2566, '683611', 'Student', 159, 1, 1162, 10, '1', '2023-02-18 16:34:07'),
+(2567, '683611', 'Student', 158, 1, 1163, 10, '1', '2023-02-18 16:34:07'),
+(2568, '683611', 'Student', 157, 1, 1164, 10, '1', '2023-02-18 16:34:07'),
+(2569, '683611', 'Student', 156, 1, 1165, 10, '1', '2023-02-18 16:34:07'),
+(2570, '683611', 'Student', 155, 1, 1166, 10, '1', '2023-02-18 16:34:07'),
+(2571, '683611', 'Student', 153, 1, 1168, 10, '1', '2023-02-18 16:34:07'),
+(2572, '683611', 'Student', 161, 1, 1169, 10, '1', '2023-02-18 16:34:07'),
+(2573, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-18 16:34:07'),
+(2574, '683611', 'Student', 31, 1, 1170, 10, '1', '2023-02-20 10:16:52'),
+(2575, '683611', 'Student', 33, 1, 1171, 10, '1', '2023-02-20 10:16:55'),
+(2576, '683611', 'Student', 660, 1, 1172, 10, '1', '2023-02-20 10:16:55'),
+(2577, '683611', 'Student', 661, 1, 1173, 10, '1', '2023-02-20 10:16:55'),
+(2578, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-20 10:16:55'),
+(2579, '683611', 'Student', 31, 1, 1175, 10, '1', '2023-02-21 11:06:22'),
+(2580, '683611', 'Student', 33, 1, 1176, 10, '1', '2023-02-21 11:06:22'),
+(2581, '683611', 'Student', 660, 1, 1177, 10, '1', '2023-02-21 11:06:22'),
+(2582, '683611', 'Student', 661, 1, 1178, 10, '1', '2023-02-21 11:06:22'),
+(2583, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-21 11:06:22'),
+(2584, '683611', 'Student', 33, 1, 1181, 10, '1', '2023-02-22 02:43:16'),
+(2585, '683611', 'Student', 660, 1, 1182, 10, '1', '2023-02-22 02:43:16'),
+(2586, '683611', 'Student', 1307, 1, 1184, 10, '1', '2023-02-22 02:43:16'),
+(2587, '683611', 'Teacher', 6, 1, 0, 10, '1', '2023-02-22 02:43:16');
 
 -- --------------------------------------------------------
 
@@ -4603,7 +5268,17 @@ INSERT INTO `home_work` (`id`, `schoolUniqueCode`, `login_user_id`, `login_user_
 (45, '683611', 6, 'Teacher', 2, 1, 2, 'English h', '2022-11-16', '2022-11-18', 'homework_img1668584912.png', '1', '2022-11-16 07:48:32'),
 (46, '683611', 6, 'Teacher', 1, 1, 1, 'hikvfh', '2022-11-16', '2022-11-17', 'homework_img1668599699.png', '1', '2022-11-16 11:54:59'),
 (47, '683611', 6, 'Teacher', 11, 1, 1, 'home remedies learn', '2022-11-16', '2022-11-17', 'homework_img1668606151.png', '1', '2022-11-16 13:42:31'),
-(48, '683611', 6, 'Teacher', 11, 2, 4, 'goog', '2022-11-19', '2022-11-20', '', '1', '2022-11-19 03:59:14');
+(48, '683611', 6, 'Teacher', 11, 2, 4, 'goog', '2022-11-19', '2022-11-20', '', '1', '2022-11-19 03:59:14'),
+(49, '683611', 6, 'Teacher', 9, 2, 9, 'Learn the chapter 5 in english', '2022-09-03', '2022-09-05', '', '1', '2023-02-23 13:55:18'),
+(50, '683611', 6, 'Teacher', 1, 1, 1, 'Yellow', '2023-02-23', '2023-02-23', 'homework_img1677164761.png', '1', '2023-02-23 15:06:01'),
+(51, '683611', 6, 'Teacher', 11, 2, 4, 'Learn Chapter 7th All MCQ', '2023-02-23', '2023-02-25', '', '1', '2023-02-23 15:16:47'),
+(52, '683611', 6, 'Teacher', 11, 2, 3, 'Learn All Things', '2023-02-23', '2023-02-24', 'homework_img1677165476.png', '1', '2023-02-23 15:17:56'),
+(53, '683611', 6, 'Teacher', 3, 1, 2, 'English learn', '2023-02-23', '2023-02-24', 'homework_img1677166210.png', '1', '2023-02-23 15:30:10'),
+(54, '683611', 6, 'Teacher', 15, 10, 1, 'Learn in Hindi bhai', '2023-02-23', '2023-02-24', 'homework_img1677166491.png', '1', '2023-02-23 15:34:51'),
+(55, '683611', 6, 'Teacher', 1, 1, 2, 'Solve all the question in english chapter 5', '2023-02-24', '2023-02-25', 'homework_img1677203060.png', '1', '2023-02-24 01:44:20'),
+(56, '683611', 6, 'Teacher', 1, 1, 2, 'Kaam kar llyu', '2023-02-24', '2023-02-25', 'homework_img1677209424.png', '1', '2023-02-24 03:30:24'),
+(57, '683611', 6, 'Teacher', 1, 1, 1, 'We have fix all homework', '2023-02-24', '2023-02-25', '', '1', '2023-02-24 05:24:57'),
+(58, '683611', 6, 'Teacher', 1, 1, 4, 'Testing for 25 feb', '2023-02-25', '2023-02-27', '', '1', '2023-02-24 05:27:05');
 
 -- --------------------------------------------------------
 
@@ -4686,31 +5361,6 @@ INSERT INTO `newfeeclasswise` (`id`, `schoolUniqueCode`, `student_id`, `class_id
 (24, '683611', 38, 2, 1, 3, 8, 1, '1', '2022-11-12 02:33:05'),
 (25, '683611', 39, 2, 1, 3, 8, 1, '1', '2022-11-12 02:33:05'),
 (26, '683611', 217, 2, 1, 3, 8, 1, '1', '2022-11-12 02:33:05'),
-(27, '683611', 22, 2, 1, 2, 2, 1, '1', '2022-11-12 02:33:13'),
-(28, '683611', 22, 2, 1, 2, 3, 1, '1', '2022-11-12 02:33:13'),
-(29, '683611', 22, 2, 1, 2, 4, 1, '1', '2022-11-12 02:33:13'),
-(30, '683611', 22, 2, 1, 2, 5, 1, '1', '2022-11-12 02:33:13'),
-(31, '683611', 22, 2, 1, 2, 6, 1, '1', '2022-11-12 02:33:13'),
-(32, '683611', 37, 2, 1, 2, 2, 1, '1', '2022-11-12 02:33:13'),
-(33, '683611', 37, 2, 1, 2, 3, 1, '1', '2022-11-12 02:33:13'),
-(34, '683611', 37, 2, 1, 2, 4, 1, '1', '2022-11-12 02:33:13'),
-(35, '683611', 37, 2, 1, 2, 5, 1, '1', '2022-11-12 02:33:13'),
-(36, '683611', 37, 2, 1, 2, 6, 1, '1', '2022-11-12 02:33:13'),
-(37, '683611', 38, 2, 1, 2, 2, 1, '1', '2022-11-12 02:33:13'),
-(38, '683611', 38, 2, 1, 2, 3, 1, '1', '2022-11-12 02:33:13'),
-(39, '683611', 38, 2, 1, 2, 4, 1, '1', '2022-11-12 02:33:13'),
-(40, '683611', 38, 2, 1, 2, 5, 1, '1', '2022-11-12 02:33:13'),
-(41, '683611', 38, 2, 1, 2, 6, 1, '1', '2022-11-12 02:33:13'),
-(42, '683611', 39, 2, 1, 2, 2, 1, '1', '2022-11-12 02:33:13'),
-(43, '683611', 39, 2, 1, 2, 3, 1, '1', '2022-11-12 02:33:13'),
-(44, '683611', 39, 2, 1, 2, 4, 1, '1', '2022-11-12 02:33:13'),
-(45, '683611', 39, 2, 1, 2, 5, 1, '1', '2022-11-12 02:33:13'),
-(46, '683611', 39, 2, 1, 2, 6, 1, '1', '2022-11-12 02:33:13'),
-(47, '683611', 217, 2, 1, 2, 2, 1, '1', '2022-11-12 02:33:13'),
-(48, '683611', 217, 2, 1, 2, 3, 1, '1', '2022-11-12 02:33:13'),
-(49, '683611', 217, 2, 1, 2, 4, 1, '1', '2022-11-12 02:33:13'),
-(50, '683611', 217, 2, 1, 2, 5, 1, '1', '2022-11-12 02:33:13'),
-(51, '683611', 217, 2, 1, 2, 6, 1, '1', '2022-11-12 02:33:13'),
 (52, '683611', 22, 2, 1, 1, 11, 1, '1', '2022-11-12 02:33:21'),
 (53, '683611', 22, 2, 1, 1, 10, 1, '1', '2022-11-12 02:33:21'),
 (54, '683611', 22, 2, 1, 1, 7, 1, '1', '2022-11-12 02:33:21'),
@@ -4731,31 +5381,6 @@ INSERT INTO `newfeeclasswise` (`id`, `schoolUniqueCode`, `student_id`, `class_id
 (69, '683611', 217, 2, 1, 1, 10, 1, '1', '2022-11-12 02:33:21'),
 (70, '683611', 217, 2, 1, 1, 7, 1, '1', '2022-11-12 02:33:21'),
 (71, '683611', 217, 2, 1, 1, 1, 1, '1', '2022-11-12 02:33:21'),
-(72, '683611', 121, 15, 10, 2, 2, 1, '1', '2022-11-12 02:37:04'),
-(73, '683611', 121, 15, 10, 2, 3, 1, '1', '2022-11-12 02:37:04'),
-(74, '683611', 121, 15, 10, 2, 4, 1, '1', '2022-11-12 02:37:04'),
-(75, '683611', 121, 15, 10, 2, 5, 1, '1', '2022-11-12 02:37:04'),
-(76, '683611', 121, 15, 10, 2, 6, 1, '1', '2022-11-12 02:37:04'),
-(77, '683611', 122, 15, 10, 2, 2, 1, '1', '2022-11-12 02:37:04'),
-(78, '683611', 122, 15, 10, 2, 3, 1, '1', '2022-11-12 02:37:04'),
-(79, '683611', 122, 15, 10, 2, 4, 1, '1', '2022-11-12 02:37:04'),
-(80, '683611', 122, 15, 10, 2, 5, 1, '1', '2022-11-12 02:37:04'),
-(81, '683611', 122, 15, 10, 2, 6, 1, '1', '2022-11-12 02:37:04'),
-(82, '683611', 123, 15, 10, 2, 2, 1, '1', '2022-11-12 02:37:04'),
-(83, '683611', 123, 15, 10, 2, 3, 1, '1', '2022-11-12 02:37:04'),
-(84, '683611', 123, 15, 10, 2, 4, 1, '1', '2022-11-12 02:37:04'),
-(85, '683611', 123, 15, 10, 2, 5, 1, '1', '2022-11-12 02:37:04'),
-(86, '683611', 123, 15, 10, 2, 6, 1, '1', '2022-11-12 02:37:04'),
-(87, '683611', 131, 15, 10, 2, 2, 1, '1', '2022-11-12 02:37:04'),
-(88, '683611', 131, 15, 10, 2, 3, 1, '1', '2022-11-12 02:37:04'),
-(89, '683611', 131, 15, 10, 2, 4, 1, '1', '2022-11-12 02:37:04'),
-(90, '683611', 131, 15, 10, 2, 5, 1, '1', '2022-11-12 02:37:04'),
-(91, '683611', 131, 15, 10, 2, 6, 1, '1', '2022-11-12 02:37:04'),
-(92, '683611', 355, 15, 10, 2, 2, 1, '1', '2022-11-12 02:37:04'),
-(93, '683611', 355, 15, 10, 2, 3, 1, '1', '2022-11-12 02:37:04'),
-(94, '683611', 355, 15, 10, 2, 4, 1, '1', '2022-11-12 02:37:04'),
-(95, '683611', 355, 15, 10, 2, 5, 1, '1', '2022-11-12 02:37:04'),
-(96, '683611', 355, 15, 10, 2, 6, 1, '1', '2022-11-12 02:37:04'),
 (97, '893133', 657, 56, 25, 4, 14, 0, '1', '2022-11-21 07:10:06'),
 (98, '178621', 659, 74, 26, 5, 15, 0, '1', '2022-11-22 08:33:15'),
 (102, '683611', 31, 1, 1, 2, 2, 1, '1', '2022-11-24 02:19:24'),
@@ -4964,24 +5589,6 @@ CREATE TABLE `newfeemaster` (
 --
 
 INSERT INTO `newfeemaster` (`id`, `schoolUniqueCode`, `newFeeGroupId`, `newFeeType`, `dueDate`, `amount`, `fineType`, `finePercentage`, `fineFixAmount`, `session_table_id`, `status`, `created_at`) VALUES
-(1, '683611', 3, 8, '0000-00-00', 1200, '1', 0, 0, 1, '1', '2022-11-07 12:16:27'),
-(2, '683611', 2, 2, '2022-07-01', 2200, '3', 0, 200, 1, '1', '2022-11-07 12:17:02'),
-(3, '683611', 2, 3, '2022-07-07', 2200, '1', 0, 0, 1, '1', '2022-11-07 12:17:29'),
-(4, '683611', 2, 4, '2022-11-07', 2200, '3', 0, 100, 1, '1', '2022-11-07 12:17:53'),
-(5, '683611', 2, 5, '2022-11-07', 2200, '1', 0, 0, 1, '1', '2022-11-07 12:18:11'),
-(6, '683611', 2, 6, '2023-01-07', 2200, '1', 0, 0, 1, '1', '2022-11-07 12:18:37'),
-(7, '683611', 1, 11, '0000-00-00', 3000, '1', 0, 0, 1, '1', '2022-11-07 12:18:53'),
-(8, '683611', 1, 10, '0000-00-00', 1100, '1', 0, 0, 1, '1', '2022-11-07 12:19:11'),
-(9, '683611', 1, 7, '0000-00-00', 350, '1', 0, 0, 1, '1', '2022-11-07 12:19:25'),
-(10, '683611', 1, 1, '0000-00-00', 10000, '1', 0, 0, 1, '1', '2022-11-07 12:19:40'),
-(11, '893133', 4, 14, '0000-00-00', 2000, '1', 0, 0, 0, '1', '2022-11-21 07:09:46'),
-(13, '683611', 9, 11, '0000-00-00', 500, '1', 0, 0, 1, '1', '2022-11-23 02:27:24'),
-(14, '683611', 53, 1, '0000-00-00', 1500, '1', 0, 0, 1, '1', '2022-12-04 08:11:25'),
-(15, '683611', 53, 2, '0000-00-00', 1500, '1', 0, 0, 1, '1', '2022-12-04 08:11:25'),
-(16, '683611', 53, 3, '0000-00-00', 1500, '1', 0, 0, 1, '1', '2022-12-04 08:11:25'),
-(17, '683611', 53, 4, '0000-00-00', 1500, '1', 0, 0, 1, '1', '2022-12-04 08:11:25'),
-(18, '683611', 53, 5, '0000-00-00', 1500, '1', 0, 0, 1, '1', '2022-12-04 08:11:25'),
-(19, '683611', 53, 6, '0000-00-00', 1500, '1', 0, 0, 1, '1', '2022-12-04 08:11:25'),
 (20, '178621', 54, 17, '0000-00-00', 380, '1', 0, 0, 8, '1', '2022-12-05 04:45:34'),
 (21, '178621', 54, 18, '0000-00-00', 380, '1', 0, 0, 8, '1', '2022-12-05 04:45:34'),
 (22, '178621', 54, 19, '0000-00-00', 380, '1', 0, 0, 8, '1', '2022-12-05 04:45:34'),
@@ -5003,7 +5610,21 @@ INSERT INTO `newfeemaster` (`id`, `schoolUniqueCode`, `newFeeGroupId`, `newFeeTy
 (38, '623659', 45, 37, '0000-00-00', 500, '1', 0, 0, 16, '1', '2022-12-07 02:40:08'),
 (39, '623659', 45, 38, '0000-00-00', 500, '1', 0, 0, 16, '1', '2022-12-07 02:40:08'),
 (40, '623659', 45, 39, '0000-00-00', 500, '1', 0, 0, 16, '1', '2022-12-07 02:40:08'),
-(41, '623659', 45, 41, '0000-00-00', 200, '1', 0, 0, 16, '1', '2022-12-07 02:40:34');
+(41, '623659', 45, 41, '0000-00-00', 200, '1', 0, 0, 16, '1', '2022-12-07 02:40:34'),
+(42, '683611', 1, 63, '0000-00-00', 15000, '1', 0, 0, 1, '1', '2023-01-20 08:16:59'),
+(43, '683611', 2, 51, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(44, '683611', 2, 52, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(45, '683611', 2, 53, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(46, '683611', 2, 54, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(47, '683611', 2, 55, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(48, '683611', 2, 56, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(49, '683611', 2, 57, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(50, '683611', 2, 58, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(51, '683611', 2, 59, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(52, '683611', 2, 60, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(53, '683611', 2, 61, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(54, '683611', 2, 62, '2023-06-23', 200, '2', 2, 0, 1, '1', '2023-01-20 08:18:13'),
+(55, '683611', 1, 73, '0000-00-00', 200000, '1', 0, 0, 1, '1', '2023-02-21 07:02:38');
 
 -- --------------------------------------------------------
 
@@ -5106,7 +5727,8 @@ INSERT INTO `newfeesgroups` (`id`, `schoolUniqueCode`, `feeGroupName`, `shortCod
 (51, '623659', '3rd Class', NULL, NULL, 16, '1', '2022-12-02 04:26:18'),
 (52, '623659', '4th Class', NULL, NULL, 16, '1', '2022-12-02 04:26:18'),
 (53, '683611', '1st Class', NULL, NULL, 1, '1', '2022-12-04 08:06:56'),
-(54, '178621', 'Play', NULL, NULL, 8, '1', '2022-12-05 04:40:37');
+(54, '178621', 'Play', NULL, NULL, 8, '1', '2022-12-05 04:40:37'),
+(55, '975691', 'No Class Class', NULL, NULL, 15, '1', '2022-12-18 04:28:29');
 
 -- --------------------------------------------------------
 
@@ -5182,7 +5804,12 @@ INSERT INTO `newfeessubmitmaster` (`id`, `schoolUniqueCode`, `stuId`, `classId`,
 (35, '683611', 206, 8, 1, 17, 4, 53, 1500, '34', '2022-12-04', '2', 0, 0, 10700, 'Honny Bhai', 'Baraut', '', 1, '1', '2022-12-04 08:18:08', '', 'token=e2xFcbVWmyqM4T2pHL1IAXf7gNOv5Zro07un086w'),
 (36, '683611', 206, 8, 1, 18, 5, 53, 1500, '35', '2022-12-04', '2', 0, 0, 10700, 'Honny Bhai', 'Baraut', '', 1, '1', '2022-12-04 08:18:08', '', 'token=udU800IwpMsEaV93kJTfH2Sc9ltROZWKgY2GQjN0'),
 (37, '683611', 206, 8, 1, 19, 6, 53, 1500, '36', '2022-12-04', '2', 0, 0, 10700, 'Honny Bhai', 'Baraut', '', 1, '1', '2022-12-04 08:18:08', '', 'token=1Ru67DAvgk2S1MCra29jWnETVl4QcoGdY54O7t2H'),
-(38, '623659', 1167, 0, 0, 960, 0, 0, 1500, '37', '2022-12-07', '', 0, 0, 1500, '0', '0', '0', 16, '1', '2022-12-07 02:49:38', 'Old Session Due Deposits', 'token=5dRz19fniZC9xbvFcNm3DGPIq0WBtQaghpJHSs4T');
+(38, '623659', 1167, 0, 0, 960, 0, 0, 1500, '37', '2022-12-07', '', 0, 0, 1500, '0', '0', '0', 16, '1', '2022-12-07 02:49:38', 'Old Session Due Deposits', 'token=5dRz19fniZC9xbvFcNm3DGPIq0WBtQaghpJHSs4T'),
+(39, '683611', 660, 1, 1, 44, 52, 2, 100, '38', '2023-01-20', '2', 100, 0, 200, 'Jain Shab', 'Baraut', '0120120120', 1, '1', '2023-01-20 08:26:42', '', 'token=e58Uio817p4OZj0Tt3SaysdCMXI23uGBYc9Lrnfm'),
+(40, '683611', 31, 1, 1, 43, 51, 2, 100, '39', '2023-02-20', '2', 100, 0, 200, 'Jain Shab', 'India', '0000000000', 1, '1', '2023-02-20 07:12:43', '', 'token=l15IvSqB0gnL7bhfRV8xFoN2E60ZDa3pOeUkcH4Y'),
+(41, '683611', 31, 1, 1, 42, 63, 1, 15000, '40', '2023-02-21', '1', 0, 0, 15400, 'sf', 'asf', '', 1, '1', '2023-02-21 06:36:44', 'Fees Deposits Today.', 'token=8RysKiU3Lj4DqAYlw1TGvMtQCoNZg8SJx06Fr48u'),
+(42, '683611', 31, 1, 1, 44, 52, 2, 200, '41', '2023-02-21', '1', 0, 0, 15400, 'sf', 'asf', '', 1, '1', '2023-02-21 06:36:44', 'Fees Deposits Today.', 'token=4VwKSkT2Yzl9h30vo6U7Z989x8itnDsL0IrXm1pG'),
+(43, '683611', 31, 1, 1, 54, 62, 2, 200, '42', '2023-02-21', '1', 0, 0, 15400, 'sf', 'asf', '', 1, '1', '2023-02-21 06:36:44', 'Fees Deposits Today.', 'token=5FU5aMglYDE8Twt9bJGVKZf06RIuc4zoA3SiPQ1N');
 
 -- --------------------------------------------------------
 
@@ -5207,17 +5834,6 @@ CREATE TABLE `newfeestypes` (
 --
 
 INSERT INTO `newfeestypes` (`id`, `schoolUniqueCode`, `feeTypeName`, `shortCode`, `description`, `durationType`, `session_table_id`, `status`, `created_at`) VALUES
-(1, '683611', 'Admission Fees', 'adm-fees', 'Admission Fees', NULL, 1, '1', '2022-11-07 12:12:00'),
-(2, '683611', 'April Month Fees', 'April Month Fees', 'April Month Fees', NULL, 1, '1', '2022-11-07 12:12:15'),
-(3, '683611', 'May Month Fees', 'May Month Fees', 'May Month Fees', NULL, 1, '1', '2022-11-07 12:12:26'),
-(4, '683611', 'June Month Fees', 'June Month Fees', 'June Month Fees', NULL, 1, '1', '2022-11-07 12:12:38'),
-(5, '683611', 'July Month Fees', 'July Month Fees', 'July Month Fees', NULL, 1, '1', '2022-11-07 12:12:48'),
-(6, '683611', 'August Month Fees', 'August Month Fees', 'August Month Fees', NULL, 1, '1', '2022-11-07 12:13:01'),
-(7, '683611', 'Id Card Fees', 'Id Card Fees', 'Id Card Fees', NULL, 1, '1', '2022-11-07 12:13:10'),
-(8, '683611', 'Board Fees', 'Board Fees', 'Board Fees', NULL, 1, '1', '2022-11-07 12:13:23'),
-(9, '683611', 'Exam Fees', 'Exam Fees', 'Exam Fees', NULL, 1, '1', '2022-11-07 12:13:32'),
-(10, '683611', 'Uniform Fees', 'Uniform Fees', 'Uniform Fees', NULL, 1, '1', '2022-11-07 12:13:52'),
-(11, '683611', 'Annual Function Fees', 'Annual Function Fees', 'Annual Function Fees', NULL, 1, '1', '2022-11-07 12:14:05'),
 (12, '893133', 'Admission Fees', 'Admission Fees', '', NULL, 0, '1', '2022-11-21 07:06:45'),
 (13, '893133', 'April Month', 'April Month', '', NULL, 0, '1', '2022-11-21 07:07:04'),
 (14, '893133', 'Annual Fees', 'Annual Fees', '', NULL, 0, '1', '2022-11-21 07:07:25'),
@@ -5256,7 +5872,30 @@ INSERT INTO `newfeestypes` (`id`, `schoolUniqueCode`, `feeTypeName`, `shortCode`
 (47, '623659', 'Tution Fees', NULL, NULL, NULL, 16, '1', '2022-12-07 02:39:20'),
 (48, '623659', 'Exam Fees', NULL, NULL, NULL, 16, '1', '2022-12-07 02:39:20'),
 (49, '623659', 'Board Fees', NULL, NULL, NULL, 16, '1', '2022-12-07 02:39:20'),
-(50, '623659', 'Digital Software Fees', NULL, NULL, NULL, 16, '1', '2022-12-07 02:39:20');
+(50, '623659', 'Digital Software Fees', NULL, NULL, NULL, 16, '1', '2022-12-07 02:39:20'),
+(51, '683611', 'January Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(52, '683611', 'February Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(53, '683611', 'March Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(54, '683611', 'April Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(55, '683611', 'May Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(56, '683611', 'June Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(57, '683611', 'July Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(58, '683611', 'August Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(59, '683611', 'September Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(60, '683611', 'October Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(61, '683611', 'November Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(62, '683611', 'December Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(63, '683611', 'Annaul Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(64, '683611', 'Id Card Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(65, '683611', 'Building Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(66, '683611', 'Transport Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(67, '683611', 'Tie Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(68, '683611', 'Belt Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(69, '683611', 'Dress Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(70, '683611', 'Tution Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(71, '683611', 'Exam Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(72, '683611', 'Board Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07'),
+(73, '683611', 'Digital Software Fees', NULL, NULL, NULL, 1, '1', '2023-01-20 08:15:07');
 
 -- --------------------------------------------------------
 
@@ -5572,7 +6211,7 @@ INSERT INTO `panel_menu_permission` (`id`, `schoolUniqueCode`, `user_id`, `user_
 (5, '', 8, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', NULL, '1', '2022-08-24 13:09:33'),
 (6, '', 9, 'Admin', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', NULL, '1', '2022-08-25 02:33:46'),
 (7, '', 10, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', NULL, '1', '2022-08-25 02:33:58'),
-(8, '', 14, 'Principal', '[\"2\", \"3\", \"5\", \"6\", \"64\", \"66\", \"67\", \"75\", \"77\", \"88\", \"90\", \"13\", \"14\", \"47\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"65\", \"28\", \"39\", \"43\", \"87\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\", \"68\", \"70\", \"71\", \"72\", \"73\", \"74\", \"76\", \"63\", \"79\", \"80\", \"81\", \"82\", \"83\", \"84\", \"86\"]', NULL, '1', '2022-08-25 02:51:10'),
+(8, '', 14, 'Principal', '[\"2\", \"3\", \"65\", \"5\", \"6\", \"64\", \"66\", \"67\", \"75\", \"77\", \"88\", \"90\", \"13\", \"14\", \"47\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"87\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\", \"68\", \"70\", \"71\", \"72\", \"73\", \"74\", \"76\", \"63\", \"79\", \"80\", \"81\", \"82\", \"83\", \"86\", \"85\", \"92\", \"93\", \"94\", \"95\", \"96\", \"98\", \"99\"]', NULL, '1', '2022-08-25 02:51:10'),
 (9, '973713', 0, 'Admin', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', '1', '1', '2022-08-28 08:40:33'),
 (10, '973713', 0, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', '1', '1', '2022-08-28 08:40:33'),
 (11, '973713', 0, 'Principal', '[\"2\", \"3\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"13\", \"14\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"30\", \"31\", \"28\", \"29\"]', '1', '1', '2022-08-28 08:40:33'),
@@ -5701,7 +6340,11 @@ INSERT INTO `panel_menu_permission` (`id`, `schoolUniqueCode`, `user_id`, `user_
 (147, '623659', 152, 'Admin', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', '1', '1', '2022-12-02 04:24:11'),
 (148, '623659', 153, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', '1', '1', '2022-12-02 04:24:11'),
 (149, '623659', 154, 'Principal', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', '1', '1', '2022-12-02 04:24:11'),
-(150, '623659', 155, 'Admin', '[\"2\", \"3\", \"65\", \"5\", \"6\", \"64\", \"66\", \"67\", \"75\", \"77\", \"88\", \"90\", \"13\", \"14\", \"47\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\", \"68\", \"70\", \"71\", \"72\", \"73\", \"74\", \"76\", \"63\", \"79\", \"80\", \"81\", \"82\", \"83\", \"84\", \"86\"]', NULL, '1', '2022-12-02 04:24:11');
+(150, '623659', 155, 'Admin', '[\"2\", \"3\", \"65\", \"5\", \"6\", \"64\", \"66\", \"67\", \"75\", \"77\", \"88\", \"90\", \"13\", \"14\", \"47\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\", \"68\", \"70\", \"71\", \"72\", \"73\", \"74\", \"76\", \"63\", \"79\", \"80\", \"81\", \"82\", \"83\", \"84\", \"86\"]', NULL, '1', '2022-12-02 04:24:11'),
+(151, '893133', 156, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', NULL, '1', '2023-01-17 06:47:31'),
+(152, '893133', 157, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"87\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', NULL, '1', '2023-01-17 06:48:55'),
+(153, '893133', 158, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', NULL, '1', '2023-01-17 07:33:21'),
+(154, '893133', 159, 'Staff', '[\"2\", \"3\", \"5\", \"6\", \"13\", \"14\", \"47\", \"55\", \"16\", \"17\", \"18\", \"19\", \"20\", \"22\", \"23\", \"24\", \"25\", \"62\", \"28\", \"39\", \"43\", \"32\", \"34\", \"35\", \"36\", \"37\", \"38\", \"29\", \"31\", \"41\", \"45\", \"46\", \"49\", \"50\", \"51\", \"53\", \"54\", \"56\", \"57\", \"59\", \"60\", \"61\"]', NULL, '1', '2023-01-17 07:38:48');
 
 -- --------------------------------------------------------
 
@@ -5768,7 +6411,14 @@ INSERT INTO `push_notification` (`id`, `schoolUniqueCode`, `title`, `body`, `dev
 (51, '683611', 'Hey 👋, Students Greetings From School 🏫, Your Exam 📝 Result Has Been Published Today. Check The App 📱 For Result Status.', 'Exam Id: 65  </br>\r\n         Exam Name: hindi me story add Date: 2022-11-19 Exam Id: 4189  </br>\r\n         Class & Section : 6th   B</br>\r\n         Exam Subject: Maths  </br>\r\n         Exam Created By: babita sharama  </br>\r\n         Marks Obtained: 0  </br>\r\n         Result Status: Fail  </br>', 'CRON', 'ResultAlert', NULL, '1', '2022-11-19 17:00:32'),
 (52, '683611', 'Hey 👋, Students Greetings From School 🏫, Your Exam 📝 Result Has Been Published Today. Check The App 📱 For Result Status.', 'Exam Id: 65  </br>\r\n         Exam Name: hindi me story add Date: 2022-11-19 Exam Id: 4189  </br>\r\n         Class & Section : 6th   B</br>\r\n         Exam Subject: Maths  </br>\r\n         Exam Created By: babita sharama  </br>\r\n         Marks Obtained: 0  </br>\r\n         Result Status: Fail  </br>', 'CRON', 'ResultAlert', NULL, '1', '2022-11-19 17:00:32'),
 (53, '683611', 'Testing Bhai', 'Testing Bhai', 'Web', NULL, '', '1', '2022-11-27 08:08:37'),
-(54, '683611', 'Hey, Mr What are you doing', 'Hey, Mr What are you doing', 'Web', NULL, '', '1', '2022-11-27 08:37:22');
+(54, '683611', 'Hey, Mr What are you doing', 'Hey, Mr What are you doing', 'Web', NULL, '', '1', '2022-11-27 08:37:22'),
+(55, '683611', 'hey we are testing', 'hello we are testng our holiday system', 'Web', NULL, '', '1', '2023-01-20 08:12:59'),
+(56, '683611', 'Hi, From Panel', 'we are testing this guys', 'Web', NULL, '', '1', '2023-02-17 03:42:28'),
+(57, '683611', 'Testng Again', 'this is a test', 'Web', NULL, '', '1', '2023-02-17 04:12:30'),
+(58, '683611', 'test for paretns', 'asdf', 'Web', NULL, '', '1', '2023-02-17 04:16:08'),
+(59, '683611', 'asdfasdf', 'pp[', 'Web', NULL, '', '1', '2023-02-17 04:34:40'),
+(60, '683611', 'This is my title', 'This is my body', 'Web', NULL, '', '1', '2023-02-17 04:40:05'),
+(61, '683611', 'Hey, Good morining', 'Happy Sunday!!', 'Web', NULL, '', '1', '2023-02-19 01:58:23');
 
 -- --------------------------------------------------------
 
@@ -7051,7 +7701,157 @@ INSERT INTO `qrcode_students` (`id`, `schoolUniqueCode`, `qrcodeUrl`, `uniqueVal
 (1160, '975691', 'https://qverify.in?stuid=dvm-stu00001152', 'stu00001152', NULL, '1', '1166', '1', '2022-12-06 10:09:45'),
 (1161, '623659', 'https://qverify.in?stuid=dvm-stu00001153', 'stu00001153', NULL, '1', '1167', '1', '2022-12-07 02:42:17'),
 (1162, '623659', 'https://qverify.in?stuid=dvm-stu00001154', 'stu00001154', NULL, '1', '1168', '1', '2022-12-07 02:44:38'),
-(1163, '623659', 'https://qverify.in?stuid=dvm-stu00001155', 'stu00001155', NULL, '1', '1169', '1', '2022-12-07 02:47:03');
+(1163, '623659', 'https://qverify.in?stuid=dvm-stu00001155', 'stu00001155', NULL, '1', '1169', '1', '2022-12-07 02:47:03'),
+(1164, '178621', 'https://qverify.in?stuid=dvm-stu00001156', 'stu00001156', NULL, '1', '1170', '1', '2022-12-12 06:23:11'),
+(1165, '178621', 'https://qverify.in?stuid=dvm-stu00001157', 'stu00001157', NULL, '1', '1171', '1', '2022-12-12 06:30:00'),
+(1166, '178621', 'https://qverify.in?stuid=dvm-stu00001158', 'stu00001158', NULL, '1', '1172', '1', '2022-12-12 06:36:48'),
+(1167, '178621', 'https://qverify.in?stuid=dvm-stu00001159', 'stu00001159', NULL, '1', '1173', '1', '2022-12-12 06:40:40'),
+(1168, '178621', 'https://qverify.in?stuid=dvm-stu00001160', 'stu00001160', NULL, '1', '1174', '1', '2022-12-12 06:44:25'),
+(1169, '178621', 'https://qverify.in?stuid=dvm-stu00001161', 'stu00001161', NULL, '1', '1175', '1', '2022-12-12 06:47:37'),
+(1170, '178621', 'https://qverify.in?stuid=dvm-stu00001162', 'stu00001162', NULL, '1', '1176', '1', '2022-12-12 06:53:36'),
+(1171, '975691', 'https://qverify.in?stuid=dvm-stu00001163', 'stu00001163', NULL, '1', '1177', '1', '2022-12-12 12:10:33'),
+(1172, '975691', 'https://qverify.in?stuid=dvm-stu00001164', 'stu00001164', NULL, '1', '1178', '1', '2022-12-12 12:13:43'),
+(1173, '975691', 'https://qverify.in?stuid=dvm-stu00001165', 'stu00001165', NULL, '1', '1179', '1', '2022-12-12 12:16:03'),
+(1174, '975691', 'https://qverify.in?stuid=dvm-stu00001166', 'stu00001166', NULL, '1', '1180', '1', '2022-12-12 12:17:49'),
+(1175, '975691', 'https://qverify.in?stuid=dvm-stu00001167', 'stu00001167', NULL, '1', '1181', '1', '2022-12-12 12:19:34'),
+(1176, '975691', 'https://qverify.in?stuid=dvm-stu00001168', 'stu00001168', NULL, '1', '1182', '1', '2022-12-12 12:23:24'),
+(1177, '975691', 'https://qverify.in?stuid=dvm-stu00001169', 'stu00001169', NULL, '1', '1183', '1', '2022-12-12 12:25:25'),
+(1178, '975691', 'https://qverify.in?stuid=dvm-stu00001170', 'stu00001170', NULL, '1', '1184', '1', '2022-12-12 12:30:17'),
+(1179, '975691', 'https://qverify.in?stuid=dvm-stu00001171', 'stu00001171', NULL, '1', '1185', '1', '2022-12-12 12:34:47'),
+(1180, '975691', 'https://qverify.in?stuid=dvm-stu00001172', 'stu00001172', NULL, '1', '1186', '1', '2022-12-12 12:37:24'),
+(1181, '975691', 'https://qverify.in?stuid=dvm-stu00001173', 'stu00001173', NULL, '1', '1187', '1', '2022-12-12 12:40:21'),
+(1182, '975691', 'https://qverify.in?stuid=dvm-stu00001174', 'stu00001174', NULL, '1', '1188', '1', '2022-12-13 03:06:36'),
+(1183, '975691', 'https://qverify.in?stuid=dvm-stu00001175', 'stu00001175', NULL, '1', '1189', '1', '2022-12-13 03:08:41'),
+(1184, '691309', 'https://qverify.in?stuid=dvm-stu00001176', 'stu00001176', NULL, '1', '1190', '1', '2022-12-13 03:37:02'),
+(1185, '691309', 'https://qverify.in?stuid=dvm-stu00001177', 'stu00001177', NULL, '1', '1191', '1', '2022-12-13 03:38:56'),
+(1186, '691309', 'https://qverify.in?stuid=dvm-stu00001178', 'stu00001178', NULL, '1', '1192', '1', '2022-12-13 03:55:46'),
+(1187, '975691', 'https://qverify.in?stuid=dvm-stu00001179', 'stu00001179', NULL, '1', '1193', '1', '2022-12-14 03:49:28'),
+(1188, '975691', 'https://qverify.in?stuid=dvm-stu00001180', 'stu00001180', NULL, '1', '1194', '1', '2022-12-14 03:50:41'),
+(1189, '975691', 'https://qverify.in?stuid=dvm-stu00001181', 'stu00001181', NULL, '1', '1195', '1', '2022-12-14 03:52:27'),
+(1190, '975691', 'https://qverify.in?stuid=dvm-stu00001182', 'stu00001182', NULL, '1', '1196', '1', '2022-12-14 03:54:07'),
+(1191, '975691', 'https://qverify.in?stuid=dvm-stu00001183', 'stu00001183', NULL, '1', '1197', '1', '2022-12-14 03:55:29'),
+(1192, '975691', 'https://qverify.in?stuid=dvm-stu00001184', 'stu00001184', NULL, '1', '1198', '1', '2022-12-14 03:59:05'),
+(1193, '975691', 'https://qverify.in?stuid=dvm-stu00001185', 'stu00001185', NULL, '1', '1199', '1', '2022-12-14 04:00:49'),
+(1194, '975691', 'https://qverify.in?stuid=dvm-stu00001186', 'stu00001186', NULL, '1', '1200', '1', '2022-12-14 04:02:59'),
+(1195, '691309', 'https://qverify.in?stuid=dvm-stu00001187', 'stu00001187', NULL, '1', '1201', '1', '2022-12-14 04:47:46'),
+(1196, '691309', 'https://qverify.in?stuid=dvm-stu00001188', 'stu00001188', NULL, '1', '1202', '1', '2022-12-14 04:50:16'),
+(1197, '691309', 'https://qverify.in?stuid=dvm-stu00001189', 'stu00001189', NULL, '1', '1203', '1', '2022-12-14 04:52:10'),
+(1198, '691309', 'https://qverify.in?stuid=dvm-stu00001190', 'stu00001190', NULL, '1', '1204', '1', '2022-12-14 04:57:01'),
+(1199, '691309', 'https://qverify.in?stuid=dvm-stu00001191', 'stu00001191', NULL, '1', '1205', '1', '2022-12-14 04:59:41'),
+(1200, '691309', 'https://qverify.in?stuid=dvm-stu00001192', 'stu00001192', NULL, '1', '1206', '1', '2022-12-14 05:01:52'),
+(1201, '178621', 'https://qverify.in?stuid=dvm-stu00001193', 'stu00001193', NULL, '1', '1207', '1', '2022-12-14 06:12:26'),
+(1202, '178621', 'https://qverify.in?stuid=dvm-stu00001194', 'stu00001194', NULL, '1', '1208', '1', '2022-12-14 06:23:32'),
+(1203, '178621', 'https://qverify.in?stuid=dvm-stu00001195', 'stu00001195', NULL, '1', '1209', '1', '2022-12-14 06:29:52'),
+(1204, '178621', 'https://qverify.in?stuid=dvm-stu00001196', 'stu00001196', NULL, '1', '1210', '1', '2022-12-14 06:41:05'),
+(1205, '178621', 'https://qverify.in?stuid=dvm-stu00001197', 'stu00001197', NULL, '1', '1211', '1', '2022-12-14 06:49:34'),
+(1206, '178621', 'https://qverify.in?stuid=dvm-stu00001198', 'stu00001198', NULL, '1', '1212', '1', '2022-12-14 07:21:55'),
+(1207, '178621', 'https://qverify.in?stuid=dvm-stu00001199', 'stu00001199', NULL, '1', '1213', '1', '2022-12-14 07:28:02'),
+(1208, '178621', 'https://qverify.in?stuid=dvm-stu00001200', 'stu00001200', NULL, '1', '1214', '1', '2022-12-14 07:32:59'),
+(1209, '178621', 'https://qverify.in?stuid=dvm-stu00001201', 'stu00001201', NULL, '1', '1215', '1', '2022-12-16 06:43:20'),
+(1210, '178621', 'https://qverify.in?stuid=dvm-stu00001202', 'stu00001202', NULL, '1', '1216', '1', '2022-12-16 06:59:05'),
+(1211, '178621', 'https://qverify.in?stuid=dvm-stu00001203', 'stu00001203', NULL, '1', '1217', '1', '2022-12-16 07:07:42'),
+(1212, '178621', 'https://qverify.in?stuid=dvm-stu00001204', 'stu00001204', NULL, '1', '1218', '1', '2022-12-16 07:28:26'),
+(1213, '178621', 'https://qverify.in?stuid=dvm-stu00001205', 'stu00001205', NULL, '1', '1219', '1', '2022-12-16 07:35:32'),
+(1214, '178621', 'https://qverify.in?stuid=dvm-stu00001206', 'stu00001206', NULL, '1', '1220', '1', '2022-12-16 07:43:50'),
+(1215, '691309', 'https://qverify.in?stuid=dvm-stu00001207', 'stu00001207', NULL, '1', '1221', '1', '2022-12-17 02:30:53'),
+(1216, '691309', 'https://qverify.in?stuid=dvm-stu00001208', 'stu00001208', NULL, '1', '1222', '1', '2022-12-17 02:33:01'),
+(1217, '691309', 'https://qverify.in?stuid=dvm-stu00001209', 'stu00001209', NULL, '1', '1223', '1', '2022-12-17 02:36:28'),
+(1218, '691309', 'https://qverify.in?stuid=dvm-stu00001210', 'stu00001210', NULL, '1', '1224', '1', '2022-12-17 02:39:53'),
+(1219, '691309', 'https://qverify.in?stuid=dvm-stu00001211', 'stu00001211', NULL, '1', '1225', '1', '2022-12-17 02:42:04'),
+(1220, '691309', 'https://qverify.in?stuid=dvm-stu00001212', 'stu00001212', NULL, '1', '1226', '1', '2022-12-17 02:45:22'),
+(1221, '691309', 'https://qverify.in?stuid=dvm-stu00001213', 'stu00001213', NULL, '1', '1227', '1', '2022-12-17 02:47:42'),
+(1222, '691309', 'https://qverify.in?stuid=dvm-stu00001214', 'stu00001214', NULL, '1', '1228', '1', '2022-12-17 02:51:47'),
+(1223, '691309', 'https://qverify.in?stuid=dvm-stu00001215', 'stu00001215', NULL, '1', '1229', '1', '2022-12-17 02:57:23'),
+(1224, '691309', 'https://qverify.in?stuid=dvm-stu00001216', 'stu00001216', NULL, '1', '1230', '1', '2022-12-17 03:01:10'),
+(1225, '178621', 'https://qverify.in?stuid=dvm-stu00001217', 'stu00001217', NULL, '1', '1231', '1', '2022-12-17 03:54:56'),
+(1226, '178621', 'https://qverify.in?stuid=dvm-stu00001218', 'stu00001218', NULL, '1', '1232', '1', '2022-12-17 03:57:45'),
+(1227, '178621', 'https://qverify.in?stuid=dvm-stu00001219', 'stu00001219', NULL, '1', '1233', '1', '2022-12-17 04:07:30'),
+(1228, '691309', 'https://qverify.in?stuid=dvm-stu00001220', 'stu00001220', NULL, '1', '1234', '1', '2022-12-17 04:38:32'),
+(1229, '691309', 'https://qverify.in?stuid=dvm-stu00001221', 'stu00001221', NULL, '1', '1235', '1', '2022-12-17 04:57:31'),
+(1230, '691309', 'https://qverify.in?stuid=dvm-stu00001222', 'stu00001222', NULL, '1', '1236', '1', '2022-12-17 04:59:25'),
+(1231, '691309', 'https://qverify.in?stuid=dvm-stu00001223', 'stu00001223', NULL, '1', '1237', '1', '2022-12-17 05:02:59'),
+(1232, '691309', 'https://qverify.in?stuid=dvm-stu00001224', 'stu00001224', NULL, '1', '1238', '1', '2022-12-17 05:06:35'),
+(1233, '178621', 'https://qverify.in?stuid=dvm-stu00001225', 'stu00001225', NULL, '1', '1239', '1', '2022-12-17 05:08:25'),
+(1234, '178621', 'https://qverify.in?stuid=dvm-stu00001226', 'stu00001226', NULL, '1', '1240', '1', '2022-12-17 05:11:05'),
+(1235, '691309', 'https://qverify.in?stuid=dvm-stu00001227', 'stu00001227', NULL, '1', '1241', '1', '2022-12-17 05:12:03'),
+(1236, '178621', 'https://qverify.in?stuid=dvm-stu00001228', 'stu00001228', NULL, '1', '1242', '1', '2022-12-17 05:14:30'),
+(1237, '691309', 'https://qverify.in?stuid=dvm-stu00001229', 'stu00001229', NULL, '1', '1243', '1', '2022-12-17 05:15:23'),
+(1238, '691309', 'https://qverify.in?stuid=dvm-stu00001230', 'stu00001230', NULL, '1', '1244', '1', '2022-12-17 05:18:41'),
+(1239, '691309', 'https://qverify.in?stuid=dvm-stu00001231', 'stu00001231', NULL, '1', '1245', '1', '2022-12-17 05:20:56'),
+(1240, '691309', 'https://qverify.in?stuid=dvm-stu00001232', 'stu00001232', NULL, '1', '1246', '1', '2022-12-17 05:23:05'),
+(1241, '178621', 'https://qverify.in?stuid=dvm-stu00001233', 'stu00001233', NULL, '1', '1247', '1', '2022-12-19 04:00:05'),
+(1242, '178621', 'https://qverify.in?stuid=dvm-stu00001234', 'stu00001234', NULL, '1', '1248', '1', '2022-12-19 04:04:29'),
+(1243, '178621', 'https://qverify.in?stuid=dvm-stu00001235', 'stu00001235', NULL, '1', '1249', '1', '2022-12-19 04:09:22'),
+(1244, '178621', 'https://qverify.in?stuid=dvm-stu00001236', 'stu00001236', NULL, '1', '1250', '1', '2022-12-19 04:12:43'),
+(1245, '178621', 'https://qverify.in?stuid=dvm-stu00001237', 'stu00001237', NULL, '1', '1251', '1', '2022-12-19 04:15:56'),
+(1246, '178621', 'https://qverify.in?stuid=dvm-stu00001238', 'stu00001238', NULL, '1', '1252', '1', '2022-12-19 04:20:25'),
+(1247, '178621', 'https://qverify.in?stuid=dvm-stu00001239', 'stu00001239', NULL, '1', '1253', '1', '2022-12-19 04:24:52'),
+(1248, '178621', 'https://qverify.in?stuid=dvm-stu00001240', 'stu00001240', NULL, '1', '1254', '1', '2022-12-19 04:27:12'),
+(1249, '178621', 'https://qverify.in?stuid=dvm-stu00001241', 'stu00001241', NULL, '1', '1255', '1', '2022-12-19 04:36:39'),
+(1250, '178621', 'https://qverify.in?stuid=dvm-stu00001242', 'stu00001242', NULL, '1', '1256', '1', '2022-12-19 04:54:20'),
+(1251, '178621', 'https://qverify.in?stuid=dvm-stu00001243', 'stu00001243', NULL, '1', '1257', '1', '2022-12-19 04:57:45'),
+(1252, '178621', 'https://qverify.in?stuid=dvm-stu00001244', 'stu00001244', NULL, '1', '1258', '1', '2022-12-19 05:00:59'),
+(1253, '691309', 'https://qverify.in?stuid=dvm-stu00001245', 'stu00001245', NULL, '1', '1259', '1', '2022-12-19 05:22:41'),
+(1254, '691309', 'https://qverify.in?stuid=dvm-stu00001246', 'stu00001246', NULL, '1', '1260', '1', '2022-12-19 05:26:42'),
+(1255, '691309', 'https://qverify.in?stuid=dvm-stu00001247', 'stu00001247', NULL, '1', '1261', '1', '2022-12-19 05:29:09'),
+(1256, '691309', 'https://qverify.in?stuid=dvm-stu00001248', 'stu00001248', NULL, '1', '1262', '1', '2022-12-19 05:37:26'),
+(1257, '691309', 'https://qverify.in?stuid=dvm-stu00001249', 'stu00001249', NULL, '1', '1263', '1', '2022-12-19 05:45:04'),
+(1258, '691309', 'https://qverify.in?stuid=dvm-stu00001250', 'stu00001250', NULL, '1', '1264', '1', '2022-12-19 05:47:58'),
+(1259, '691309', 'https://qverify.in?stuid=dvm-stu00001251', 'stu00001251', NULL, '1', '1265', '1', '2022-12-19 06:01:42'),
+(1260, '691309', 'https://qverify.in?stuid=dvm-stu00001252', 'stu00001252', NULL, '1', '1266', '1', '2022-12-19 06:05:47'),
+(1261, '691309', 'https://qverify.in?stuid=dvm-stu00001253', 'stu00001253', NULL, '1', '1267', '1', '2022-12-19 06:10:17'),
+(1262, '178621', 'https://qverify.in?stuid=dvm-stu00001254', 'stu00001254', NULL, '1', '1268', '1', '2022-12-19 06:13:08'),
+(1263, '691309', 'https://qverify.in?stuid=dvm-stu00001255', 'stu00001255', NULL, '1', '1269', '1', '2022-12-19 06:16:57'),
+(1264, '178621', 'https://qverify.in?stuid=dvm-stu00001256', 'stu00001256', NULL, '1', '1270', '1', '2022-12-19 06:34:34'),
+(1265, '178621', 'https://qverify.in?stuid=dvm-stu00001257', 'stu00001257', NULL, '1', '1271', '1', '2022-12-19 06:37:16'),
+(1266, '178621', 'https://qverify.in?stuid=dvm-stu00001258', 'stu00001258', NULL, '1', '1272', '1', '2022-12-19 06:46:35'),
+(1267, '178621', 'https://qverify.in?stuid=dvm-stu00001259', 'stu00001259', NULL, '1', '1273', '1', '2022-12-19 06:50:58'),
+(1268, '178621', 'https://qverify.in?stuid=dvm-stu00001260', 'stu00001260', NULL, '1', '1274', '1', '2022-12-19 06:56:38');
+INSERT INTO `qrcode_students` (`id`, `schoolUniqueCode`, `qrcodeUrl`, `uniqueValue`, `qrcodeJson`, `type`, `user_id`, `status`, `created_at`) VALUES
+(1269, '691309', 'https://qverify.in?stuid=dvm-stu00001261', 'stu00001261', NULL, '1', '1275', '1', '2022-12-19 06:58:43'),
+(1270, '178621', 'https://qverify.in?stuid=dvm-stu00001262', 'stu00001262', NULL, '1', '1276', '1', '2022-12-19 07:00:14'),
+(1271, '178621', 'https://qverify.in?stuid=dvm-stu00001263', 'stu00001263', NULL, '1', '1277', '1', '2022-12-19 07:05:38'),
+(1272, '691309', 'https://qverify.in?stuid=dvm-stu00001264', 'stu00001264', NULL, '1', '1278', '1', '2022-12-19 07:07:20'),
+(1273, '691309', 'https://qverify.in?stuid=dvm-stu00001265', 'stu00001265', NULL, '1', '1279', '1', '2022-12-19 07:09:53'),
+(1274, '178621', 'https://qverify.in?stuid=dvm-stu00001266', 'stu00001266', NULL, '1', '1280', '1', '2022-12-19 07:10:15'),
+(1275, '691309', 'https://qverify.in?stuid=dvm-stu00001267', 'stu00001267', NULL, '1', '1281', '1', '2022-12-19 07:11:48'),
+(1276, '178621', 'https://qverify.in?stuid=dvm-stu00001268', 'stu00001268', NULL, '1', '1282', '1', '2022-12-19 07:13:29'),
+(1277, '691309', 'https://qverify.in?stuid=dvm-stu00001269', 'stu00001269', NULL, '1', '1283', '1', '2022-12-19 07:14:31'),
+(1278, '691309', 'https://qverify.in?stuid=dvm-stu00001270', 'stu00001270', NULL, '1', '1284', '1', '2022-12-19 07:16:12'),
+(1279, '178621', 'https://qverify.in?stuid=dvm-stu00001271', 'stu00001271', NULL, '1', '1285', '1', '2022-12-19 07:20:46'),
+(1280, '178621', 'https://qverify.in?stuid=dvm-stu00001272', 'stu00001272', NULL, '1', '1286', '1', '2022-12-19 07:22:47'),
+(1281, '178621', 'https://qverify.in?stuid=dvm-stu00001273', 'stu00001273', NULL, '1', '1287', '1', '2022-12-19 07:25:08'),
+(1282, '691309', 'https://qverify.in?stuid=dvm-stu00001274', 'stu00001274', NULL, '1', '1288', '1', '2022-12-19 07:46:16'),
+(1283, '691309', 'https://qverify.in?stuid=dvm-stu00001275', 'stu00001275', NULL, '1', '1289', '1', '2022-12-19 07:47:57'),
+(1284, '691309', 'https://qverify.in?stuid=dvm-stu00001276', 'stu00001276', NULL, '1', '1290', '1', '2022-12-19 07:49:15'),
+(1285, '691309', 'https://qverify.in?stuid=dvm-stu00001277', 'stu00001277', NULL, '1', '1291', '1', '2022-12-19 07:50:42'),
+(1286, '691309', 'https://qverify.in?stuid=dvm-stu00001278', 'stu00001278', NULL, '1', '1292', '1', '2022-12-19 07:53:01'),
+(1287, '691309', 'https://qverify.in?stuid=dvm-stu00001279', 'stu00001279', NULL, '1', '1293', '1', '2022-12-19 07:58:52'),
+(1288, '691309', 'https://qverify.in?stuid=dvm-stu00001280', 'stu00001280', NULL, '1', '1294', '1', '2022-12-19 08:08:20'),
+(1289, '178621', 'https://qverify.in?stuid=dvm-stu00001281', 'stu00001281', NULL, '1', '1295', '1', '2022-12-20 07:30:24'),
+(1290, '178621', 'https://qverify.in?stuid=dvm-stu00001282', 'stu00001282', NULL, '1', '1296', '1', '2022-12-20 07:33:40'),
+(1291, '178621', 'https://qverify.in?stuid=dvm-stu00001283', 'stu00001283', NULL, '1', '1297', '1', '2022-12-20 07:38:53'),
+(1292, '178621', 'https://qverify.in?stuid=dvm-stu00001284', 'stu00001284', NULL, '1', '1298', '1', '2022-12-20 07:44:01'),
+(1293, '178621', 'https://qverify.in?stuid=dvm-stu00001285', 'stu00001285', NULL, '1', '1299', '1', '2022-12-20 07:48:27'),
+(1294, '178621', 'https://qverify.in?stuid=dvm-stu00001286', 'stu00001286', NULL, '1', '1300', '1', '2023-01-21 04:39:53'),
+(1295, '178621', 'https://qverify.in?stuid=dvm-stu00001287', 'stu00001287', NULL, '1', '1301', '1', '2023-01-21 04:43:03'),
+(1296, '178621', 'https://qverify.in?stuid=dvm-stu00001288', 'stu00001288', NULL, '1', '1302', '1', '2023-01-21 04:49:51'),
+(1297, '178621', 'https://qverify.in?stuid=dvm-stu00001289', 'stu00001289', NULL, '1', '1303', '1', '2023-01-21 05:13:15'),
+(1298, '178621', 'https://qverify.in?stuid=dvm-stu00001290', 'stu00001290', NULL, '1', '1304', '1', '2023-01-21 05:20:16'),
+(1299, '178621', 'https://qverify.in?stuid=dvm-stu00001291', 'stu00001291', NULL, '1', '1305', '1', '2023-01-21 05:23:41'),
+(1300, '178621', 'https://qverify.in?stuid=dvm-stu00001292', 'stu00001292', NULL, '1', '1306', '1', '2023-01-21 06:05:09'),
+(1301, '683611', 'https://qverify.in?stuid=dvm-stu00001293', 'stu00001293', NULL, '1', '1307', '1', '2023-01-21 06:25:45'),
+(1302, '178621', 'https://qverify.in?stuid=dvm-stu00001294', 'stu00001294', NULL, '1', '1308', '1', '2023-01-21 06:32:59'),
+(1303, '178621', 'https://qverify.in?stuid=dvm-stu00001295', 'stu00001295', NULL, '1', '1309', '1', '2023-01-21 06:39:37'),
+(1304, '178621', 'https://qverify.in?stuid=dvm-stu00001296', 'stu00001296', NULL, '1', '1310', '1', '2023-01-21 06:42:29'),
+(1305, '178621', 'https://qverify.in?stuid=dvm-stu00001297', 'stu00001297', NULL, '1', '1311', '1', '2023-01-21 07:01:00'),
+(1306, '178621', 'https://qverify.in?stuid=dvm-stu00001298', 'stu00001298', NULL, '1', '1312', '1', '2023-01-21 07:05:07'),
+(1307, '178621', 'https://qverify.in?stuid=dvm-stu00001299', 'stu00001299', NULL, '1', '1313', '1', '2023-01-21 07:08:23'),
+(1308, '178621', 'https://qverify.in?stuid=dvm-stu00001300', 'stu00001300', NULL, '1', '1314', '1', '2023-01-21 07:12:59'),
+(1309, '178621', 'https://qverify.in?stuid=dvm-stu00001301', 'stu00001301', NULL, '1', '1315', '1', '2023-01-21 07:15:38'),
+(1310, '178621', 'https://qverify.in?stuid=dvm-stu00001302', 'stu00001302', NULL, '1', '1316', '1', '2023-01-21 07:17:59'),
+(1311, '178621', 'https://qverify.in?stuid=dvm-stu00001303', 'stu00001303', NULL, '1', '1317', '1', '2023-01-21 07:21:36'),
+(1312, '178621', 'https://qverify.in?stuid=dvm-stu00001304', 'stu00001304', NULL, '1', '1318', '1', '2023-02-01 04:38:39');
 
 -- --------------------------------------------------------
 
@@ -7128,7 +7928,18 @@ INSERT INTO `qrcode_teachers` (`id`, `schoolUniqueCode`, `qrcodeUrl`, `uniqueVal
 (64, '625028', 'https://qverify.in?tecid=dvm-tec000053', 'tec000053', NULL, '2', '53', '1', '2022-11-29 03:12:31'),
 (65, '625028', 'https://qverify.in?tecid=dvm-tec000054', 'tec000054', NULL, '2', '54', '1', '2022-11-29 03:13:39'),
 (66, '625028', 'https://qverify.in?tecid=dvm-tec000055', 'tec000055', NULL, '2', '55', '1', '2022-11-29 03:14:59'),
-(67, '623659', 'https://qverify.in?tecid=dvm-tec000056', 'tec000056', NULL, '2', '56', '1', '2022-12-07 11:02:09');
+(67, '623659', 'https://qverify.in?tecid=dvm-tec000056', 'tec000056', NULL, '2', '56', '1', '2022-12-07 11:02:09'),
+(68, '975691', 'https://qverify.in?tecid=dvm-tec000057', 'tec000057', NULL, '2', '57', '1', '2022-12-18 04:27:52'),
+(69, '975691', 'https://qverify.in?tecid=dvm-tec000058', 'tec000058', NULL, '2', '58', '1', '2022-12-18 04:31:42'),
+(70, '975691', 'https://qverify.in?tecid=dvm-tec000059', 'tec000059', NULL, '2', '59', '1', '2022-12-18 04:35:00'),
+(71, '975691', 'https://qverify.in?tecid=dvm-tec000060', 'tec000060', NULL, '2', '60', '1', '2022-12-18 04:36:57'),
+(72, '975691', 'https://qverify.in?tecid=dvm-tec000061', 'tec000061', NULL, '2', '61', '1', '2022-12-18 04:39:32'),
+(73, '975691', 'https://qverify.in?tecid=dvm-tec000062', 'tec000062', NULL, '2', '62', '1', '2022-12-18 04:42:48'),
+(74, '975691', 'https://qverify.in?tecid=dvm-tec000063', 'tec000063', NULL, '2', '63', '1', '2022-12-18 04:46:17'),
+(75, '975691', 'https://qverify.in?tecid=dvm-tec000064', 'tec000064', NULL, '2', '64', '1', '2022-12-18 04:48:27'),
+(76, '975691', 'https://qverify.in?tecid=dvm-tec000065', 'tec000065', NULL, '2', '65', '1', '2022-12-18 04:57:30'),
+(77, '975691', 'https://qverify.in?tecid=dvm-tec000066', 'tec000066', NULL, '2', '66', '1', '2022-12-18 04:59:15'),
+(78, '975691', 'https://qverify.in?tecid=dvm-tec000067', 'tec000067', NULL, '2', '67', '1', '2022-12-18 05:00:21');
 
 -- --------------------------------------------------------
 
@@ -7207,7 +8018,26 @@ INSERT INTO `qrscanhistory` (`id`, `schoolUniqueCode`, `qrcode`, `user_id`, `use
 (55, '683611', 'https://qverify.in?stuid=dvm-stu000024', 38, 1, '2022-12-07 07:22:32'),
 (56, '683611', 'https://qverify.in?stuid=dvm-stu000024', 38, 1, '2022-12-09 05:37:45'),
 (57, '683611', 'https://qverify.in?stuid=dvm-stu000024', 38, 1, '2022-12-09 06:33:16'),
-(58, '683611', 'https://qverify.in?stuid=dvm-stu000024', 38, 1, '2022-12-09 06:34:32');
+(58, '683611', 'https://qverify.in?stuid=dvm-stu000024', 38, 1, '2022-12-09 06:34:32'),
+(59, '683611', 'https://qverify.in?stuid=dvm-stu0000155', 169, 1, '2022-12-10 13:27:31'),
+(60, '683611', 'https://qverify.in?stuid=dvm-stu0000155', 169, 1, '2022-12-11 14:25:33'),
+(61, '683611', 'https://qverify.in?stuid=dvm-stu0000155', 169, 1, '2022-12-12 04:50:43'),
+(62, '683611', 'https://qverify.in?stuid=dvm-stu000024', 38, 1, '2022-12-12 10:59:05'),
+(63, '683611', 'https://qverify.in?stuid=dvm-stu000025', 39, 1, '2022-12-12 11:00:06'),
+(64, '683611', 'https://qverify.in?stuid=dvm-stu0000203', 217, 1, '2022-12-12 11:00:18'),
+(65, '683611', 'https://qverify.in?stuid=dvm-stu000023', 37, 1, '2022-12-12 11:59:28'),
+(66, '683611', 'https://qverify.in?stuid=dvm-stu0000141', 155, 1, '2023-01-02 07:36:59'),
+(67, '683611', 'https://qverify.in?stuid=dvm-stu0000150', 164, 1, '2023-01-02 07:37:41'),
+(68, '683611', 'https://qverify.in?stuid=dvm-stu0000146', 160, 1, '2023-01-02 07:37:44'),
+(69, '683611', 'https://qverify.in?stuid=dvm-stu0000142', 156, 1, '2023-01-02 07:37:47'),
+(70, '683611', 'https://qverify.in?stuid=dvm-stu0000149', 163, 1, '2023-01-02 07:37:52'),
+(71, '683611', 'https://qverify.in?stuid=dvm-stu0000145', 159, 1, '2023-01-02 07:37:54'),
+(72, '683611', 'https://qverify.in?stuid=dvm-stu0000152', 166, 1, '2023-01-02 07:38:10'),
+(73, '683611', 'https://qverify.in?stuid=dvm-stu0000148', 162, 1, '2023-01-02 07:38:35'),
+(74, '683611', 'https://qverify.in?stuid=dvm-stu0000147', 161, 1, '2023-01-02 07:38:39'),
+(75, '683611', 'https://qverify.in?stuid=dvm-stu0000144', 158, 1, '2023-01-02 07:38:54'),
+(76, '683611', 'https://qverify.in?stuid=dvm-stu0000143', 157, 1, '2023-01-02 07:39:01'),
+(77, '683611', 'https://qverify.in?stuid=dvm-stu0000647', 661, 1, '2023-01-18 08:15:00');
 
 -- --------------------------------------------------------
 
@@ -7302,7 +8132,8 @@ CREATE TABLE `redeem_gifts` (
 --
 
 INSERT INTO `redeem_gifts` (`id`, `schoolUniqueCode`, `login_user_id`, `login_user_type`, `gift_id`, `digiCoin_used`, `status`, `created_at`) VALUES
-(1, '683611', 6, 2, 32, 4999, '1', '2022-11-21 03:17:00');
+(1, '683611', 6, 2, 32, 4999, '1', '2022-11-21 03:17:00'),
+(2, '683611', 6, 2, 32, 4999, '1', '2023-02-18 02:24:38');
 
 -- --------------------------------------------------------
 
@@ -7571,6 +8402,20 @@ INSERT INTO `schoolmaster` (`id`, `unique_id`, `u_qr_id`, `user_id`, `school_nam
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `schoolmodules`
+--
+
+CREATE TABLE `schoolmodules` (
+  `id` int(11) NOT NULL,
+  `schoolUniqueCode` varchar(100) NOT NULL,
+  `modules` json NOT NULL,
+  `status` enum('1','2') NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `school_sessions`
 --
 
@@ -7605,7 +8450,8 @@ INSERT INTO `school_sessions` (`id`, `schoolUniqueCode`, `session_start_year`, `
 (13, '452206', 2022, 'April', 2023, 'March', '1', '2022-11-29 06:15:11'),
 (14, '452206', 2023, 'April', 2024, 'March', '1', '2022-11-29 06:22:55'),
 (15, '975691', 2022, 'April', 2023, 'March', '1', '2022-11-30 09:13:08'),
-(16, '623659', 2022, 'April', 2023, 'March', '1', '2022-12-02 04:26:18');
+(16, '623659', 2022, 'April', 2023, 'March', '1', '2022-12-02 04:26:18'),
+(17, '623659', 2022, 'January', 2022, 'December', '1', '2022-12-15 04:24:32');
 
 -- --------------------------------------------------------
 
@@ -7749,7 +8595,8 @@ INSERT INTO `sem_exam` (`id`, `schoolUniqueCode`, `sem_exam_name`, `exam_year`, 
 (1, '683611', 'Half Yearly', '2022', '2022-10-10', '2022-10-30', '4', NULL, '2022-10-04 04:10:02'),
 (2, '261027', 'Half yearly exam', '2022', '2022-12-10', '2022-02-11', '1', NULL, '2022-10-14 07:55:04'),
 (3, '683611', 'Quarterly Exam', '2022', '2022-10-16', '2022-10-31', '4', NULL, '2022-10-16 13:05:11'),
-(4, '683611', 'Half Yearly', '2022', '2022-10-22', '2022-11-05', '1', 1, '2022-10-22 03:09:30');
+(4, '683611', 'Half Yearly', '2022', '2022-10-22', '2022-11-05', '1', 1, '2022-10-22 03:09:30'),
+(5, '351496', 'iv', '2022', '2023-01-16', '2023-01-18', '1', 10, '2023-01-18 03:44:30');
 
 -- --------------------------------------------------------
 
@@ -8009,7 +8856,8 @@ INSERT INTO `state` (`id`, `schoolUniqueCode`, `stateName`, `status`, `created_a
 (44, '475467', 'Uttar Pradesh', '1', '2022-11-28 09:03:38'),
 (45, '975691', 'Uttar Pradesh', '1', '2022-11-28 09:40:47'),
 (46, '452206', 'Uttar Pradesh', '1', '2022-11-29 06:15:25'),
-(47, '623659', 'Uttar Pradesh', '1', '2022-12-02 04:26:18');
+(47, '623659', 'Uttar Pradesh', '1', '2022-12-02 04:26:18'),
+(48, '623659', 'haryana', '1', '2022-12-15 04:25:43');
 
 -- --------------------------------------------------------
 
@@ -8126,7 +8974,7 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (21, '951166', '16', 'Rahul Tiwari', 'stu00007', '8', '3', '34', '1', '', 'Ramesh', '1234567891', 'zuzu@mumu.com', '2022-08-19', 'reredfvergve', '2', '2', 400065, '', NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-28 13:58:18'),
 (22, '965316', '17', 'nitish', 'stu00008', '2', '1', '10', '1', 'maharani', 'janardan', '8700671965', 'ni30.dev@gmail.com', '2007-07-28', 'E165 , 3rd floor', '2', '4', 110059, 'img-stu00008-Screenshot from 2022-08-26 20-06-52.png', NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-28 14:25:22'),
 (23, '965316', '18', 'nisha', 'stu00009', '5', '4', '11', '2', 'maharani', 'ram', '7836928080', 'nguptani30@gmail.com', '2016-07-12', 'D65 , 3rd floor', '5', '5', 110059, 'img-stu00009-Screenshot from 2022-08-18 14-10-53.png', NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-28 14:27:05'),
-(24, '683611', '19', 'Jaddu', 'stu000010', '3', '2', '11', '1', 'mohter name aayaga', 'baap hai', '5542378612', 'maa@baap.com', '2022-08-03', 'abc building', '1', '1', 250611, 'img-stu000010-630-07071784en_Masterfile.jpg', 's4MlvP', '1', 'seIY607JLWN426dtuDUhBgf1TGHyQSbqKakARp39', 'dlJT-aCDQPWpjaeDGzJc6z:APA91bHeLo6vSQpaEfgVyw927RvUaqy-rl6vIQMCmTpfhTcgs8qJZi3AmtHXevs0gQRi2PSfUUGlK_oYs_tgpurgmKQAhYk75XAhXrqWYkBwh6UYm4AKlyQ1DzwieG8w6K2fBYXVaYht', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-29 12:41:18'),
+(24, '683611', '19', 'Jaddu', 'stu000010', '3', '2', '11', '1', 'mohter name aayaga', 'baap hai', '5542378612', 'maa@baap.com', '2022-08-03', 'abc building', '1', '1', 250611, 'img-stu000010-630-07071784en_Masterfile.jpg', 's4MlvP', '1', 'a4VL48l4NCkncJt6mGZ59W1qU61IKwX7FPMYdrQE', 'f0OgqL-URzKEIg8Ask2O1x:APA91bGHq1yVo-K9X2gZwuIr8ETnDvjdPzkI-pHnzjDPh0mdr7loz3FcO1DNXyQFzSTSCY1oaPTQxKn1zp9wkp3Qs34iSTOjGAtFvDwnOXF2aQBao9BYLm6cdRo826H76g5NTjomsHG3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-08-29 12:41:18'),
 (25, '724212', '20', 'Ridhi Jain', 'stu000011', '17', '18', '12', '2', 'Gunjan Jain', 'Pankaj Jain', '9876543215', 'ridhi@email.com', '06/01/2004', 'Bada Jain Mandir', '34', '19', 250611, 'img-stu000011-WhatsApp Image 2022-09-03 at 19.21.47.jpeg', NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-03 14:13:45'),
 (26, '724212', '21', 'Atisya Jain', 'stu000012', '18', '18', '10', '1', 'Rubi Jain', 'Rajiv Jain', '7899878548', 'atisya@email.com', '05/14/2007', 'Bada Jain Mandir', '34', '19', 250611, 'img-stu000012-WhatsApp Image 2022-09-03 at 19.21.46.jpeg', NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-03 14:16:53'),
 (27, '683611', '22', 'Ujjwal ', 'stu000013', '1', '1', '1', '1', 'Madu Devi', 'Manbir', '7060643952', 'ujjwal@goon.com', '06/04/2003', 'Goon', '1', '1', 250611, 'img-stu000013-630-01491566en_Masterfile.jpg', 'uaFq2f', '3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-07 02:35:54'),
@@ -8140,9 +8988,9 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (35, '683611', '30', 'Lucian Daniel', 'stu000021', '1', '2', '157', '3', 'Linda Sullivan', 'Olivia Evans', '2867354512', 'dadyj@mailinator.com', '04-Jun-2001', 'Enim dolore nemo ill', '27', '16', 147258, '', 'c7IqtK', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:04:16'),
 (36, '683611', '31', 'Orla Puckett', 'stu000022', '1', '2', '636', '3', 'Beau Woodward', 'Eagan Best', '7235482516', 'dibyvog@mailinator.com', '20-Nov-2016', 'Veritatis exercitati', '26', '14', 369258, '', '80EOev', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:04:38'),
 (37, '683611', '32', 'Gareth Ingram', 'stu000023', '2', '1', '575', '1', 'Isadora Allison', 'Dexter Page', '2355216874', 'sobaj@mailinator.com', '29-Jan-2017', 'Doloremque facere la', '16', '7', 235521, '', 'C3R0yA', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:05:08'),
-(38, '683611', '33', 'Angela Gilbert', 'stu000024', '2', '1', '245183', '2', 'Magee Hoffman', 'Kieran Mason', '2451836572', 'zugi@mailinator.com', '25-Jul-2021', 'Aliquip elit ullam ', '1', '1', 245183, 'img-stu000024-1669004621doreamon teddy.jpg', 'kSBDe9', '1', 'KIik2nMN8jxJSCD3oyRhcBE6uTlY3eU4XvW7ArPd', 'dANvFQLRRvyfA0XJf8RLJM:APA91bFd_MLbL3f91J89qiA88RqMbhy-cfpY6ek9gZOBOiAftXgEueez2GcErukkTG6UIyiioNel7eyIu1WU7LjB85C2hgZkKthc4WOYCkDWgARNR9fHNW-kO-QCzTKerS9BnqVnYAS6', 1, 1, '', '1', '', '', NULL, NULL, NULL, NULL, '2022-09-15 07:05:35'),
-(39, '683611', '34', 'Phoebe Powers', 'stu000025', '2', '1', '775', '3', 'Ignacia Rios', 'Knox Pickett', '5542378612', 'xacico@mailinator.com', '10-Mar-2006', 'In cupidatat quis re', '10', '5', 554237, '', 's4MlvP', '1', 'seIY607JLWN426dtuDUhBgf1TGHyQSbqKakARp39', 'dlJT-aCDQPWpjaeDGzJc6z:APA91bHeLo6vSQpaEfgVyw927RvUaqy-rl6vIQMCmTpfhTcgs8qJZi3AmtHXevs0gQRi2PSfUUGlK_oYs_tgpurgmKQAhYk75XAhXrqWYkBwh6UYm4AKlyQ1DzwieG8w6K2fBYXVaYht', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:07:10'),
-(40, '683611', '35', 'Donna Atkinson', 'stu000026', '2', '2', '278', '2', 'Lance Thornton', 'Darius Mann', '5542378612', 'cebaxoc@mailinator.com', '21-Apr-2014', 'In veniam ea itaque', '15', '17', 357224, '', 's4MlvP', '1', 'seIY607JLWN426dtuDUhBgf1TGHyQSbqKakARp39', 'dlJT-aCDQPWpjaeDGzJc6z:APA91bHeLo6vSQpaEfgVyw927RvUaqy-rl6vIQMCmTpfhTcgs8qJZi3AmtHXevs0gQRi2PSfUUGlK_oYs_tgpurgmKQAhYk75XAhXrqWYkBwh6UYm4AKlyQ1DzwieG8w6K2fBYXVaYht', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:07:31'),
+(38, '683611', '33', 'Angela Gilbert', 'stu000024', '2', '1', '245183', '2', 'Magee Hoffman', 'Kieran Mason', '2451836572', 'zugi@mailinator.com', '25-Jul-2021', 'Aliquip elit ullam ', '1', '1', 245183, 'img-stu000024-1669004621doreamon teddy.jpg', 'kSBDe9', '1', 'P5Y08E4rKe3Q1TJnl6B5mfDouiSx9Xjdw52Z7VyU', 'dANvFQLRRvyfA0XJf8RLJM:APA91bHbXcZHjwlIjcA67-Xt3f8zyt-IcqGpahFkWDWoogOFeWmv-AGdG97A2GEFKnZw7rZCNtHAGjaWEtB1lOpjnuqkdSmtN14qUshlnA4l_g6az3Zc8v3_l3s38rMILxyfvc06aJn1', 1, 1, '', '1', '', '', NULL, NULL, NULL, NULL, '2022-09-15 07:05:35'),
+(39, '683611', '34', 'Phoebe Powers', 'stu000025', '2', '1', '775', '3', 'Ignacia Rios', 'Knox Pickett', '5542378612', 'xacico@mailinator.com', '10-Mar-2006', 'In cupidatat quis re', '10', '5', 554237, '', 's4MlvP', '1', 'a4VL48l4NCkncJt6mGZ59W1qU61IKwX7FPMYdrQE', 'f0OgqL-URzKEIg8Ask2O1x:APA91bGHq1yVo-K9X2gZwuIr8ETnDvjdPzkI-pHnzjDPh0mdr7loz3FcO1DNXyQFzSTSCY1oaPTQxKn1zp9wkp3Qs34iSTOjGAtFvDwnOXF2aQBao9BYLm6cdRo826H76g5NTjomsHG3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:07:10'),
+(40, '683611', '35', 'Donna Atkinson', 'stu000026', '2', '2', '278', '2', 'Lance Thornton', 'Darius Mann', '5542378612', 'cebaxoc@mailinator.com', '21-Apr-2014', 'In veniam ea itaque', '15', '17', 357224, '', 's4MlvP', '1', 'a4VL48l4NCkncJt6mGZ59W1qU61IKwX7FPMYdrQE', 'f0OgqL-URzKEIg8Ask2O1x:APA91bGHq1yVo-K9X2gZwuIr8ETnDvjdPzkI-pHnzjDPh0mdr7loz3FcO1DNXyQFzSTSCY1oaPTQxKn1zp9wkp3Qs34iSTOjGAtFvDwnOXF2aQBao9BYLm6cdRo826H76g5NTjomsHG3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:07:31'),
 (41, '683611', '36', 'Indira Garcia', 'stu000027', '2', '2', '455', '2', 'Tatyana Bray', 'Leroy Merrill', '5281673254', 'qijop@mailinator.com', '16-Nov-1995', 'Debitis consequuntur', '18', '13', 528167, '', 'z76yj7', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:07:48'),
 (42, '683611', '37', 'Aretha Gamble', 'stu000028', '2', '2', '8', '3', 'Brody Day', 'Tucker Morton', '5537422618', 'tykiba@mailinator.com', '13-Jul-1983', 'Ratione illum ut do', '22', '6', 553742, '', '6kbMBT', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:08:46'),
 (43, '683611', '38', 'Edward Keith', 'stu000029', '3', '1', '94', '3', 'Hannah Compton', 'Callie Sutton', '5234157268', 'liheqimibu@mailinator.com', '15-May-1971', 'Sed dolor est volup', '25', '2', 523415, '', 'vi7nJd', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:09:13'),
@@ -8157,7 +9005,7 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (52, '683611', '47', 'Upton Farmer', 'stu000038', '4', '2', '36', '3', 'Xerxes Wood', 'Tate Rios', '1567235842', 'qubopuvec@mailinator.com', '05-Jul-1972', 'Veniam doloribus to', '20', '3', 369258, '', 'm4oRhn', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:12:18'),
 (53, '683611', '48', 'Riley Wyatt', 'stu000039', '4', '2', '646', '3', 'Luke Mendoza', 'Price Sampson', '2384726155', 'nuget@mailinator.com', '26-May-1992', 'Deserunt sed dolore ', '8', '13', 258142, '', 'qDvY3U', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:12:37'),
 (54, '683611', '49', 'Danielle Franco', 'stu000040', '4', '2', '626', '2', 'Valentine Ward', 'Neville Sutton', '2234167855', 'venoqynuh@mailinator.com', '24-Dec-2014', 'Illum excepteur vel', '29', '9', 654214, '', '23rf1T', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:12:57'),
-(55, '683611', '50', 'Shoshana Padilla', 'stu000041', '5', '1', '84', '2', 'Unity James', 'Callie Walter', '5542378612', 'humuf@mailinator.com', '20-Feb-1981', 'Voluptatem Incididu', '1', '1', 250611, 'student/', 's4MlvP', '1', 'seIY607JLWN426dtuDUhBgf1TGHyQSbqKakARp39', 'dlJT-aCDQPWpjaeDGzJc6z:APA91bHeLo6vSQpaEfgVyw927RvUaqy-rl6vIQMCmTpfhTcgs8qJZi3AmtHXevs0gQRi2PSfUUGlK_oYs_tgpurgmKQAhYk75XAhXrqWYkBwh6UYm4AKlyQ1DzwieG8w6K2fBYXVaYht', 1, 1, '158', '1', '04/01/2021', '158', 'Business', 'Play School', '147258369521', 'By Birth', '2022-09-15 07:13:15'),
+(55, '683611', '50', 'Shoshana Padilla', 'stu000041', '5', '1', '84', '2', 'Unity James', 'Callie Walter', '5542378612', 'humuf@mailinator.com', '20-Feb-1981', 'Voluptatem Incididu', '1', '1', 250611, 'student/', 's4MlvP', '1', 'a4VL48l4NCkncJt6mGZ59W1qU61IKwX7FPMYdrQE', 'f0OgqL-URzKEIg8Ask2O1x:APA91bGHq1yVo-K9X2gZwuIr8ETnDvjdPzkI-pHnzjDPh0mdr7loz3FcO1DNXyQFzSTSCY1oaPTQxKn1zp9wkp3Qs34iSTOjGAtFvDwnOXF2aQBao9BYLm6cdRo826H76g5NTjomsHG3', 1, 1, '158', '1', '04/01/2021', '158', 'Business', 'Play School', '147258369521', 'By Birth', '2022-09-15 07:13:15'),
 (56, '683611', '51', 'Riley James', 'stu000042', '5', '1', '801', '1', 'Rooney Horne', 'India House', '4685275231', 'xajezip@mailinator.com', '26-Apr-1999', 'A quae aspernatur et', '1', '17', 369521, '', 'r4e7Hf', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:13:35'),
 (57, '683611', '52', 'Jason Shelton', 'stu000043', '5', '1', '564', '2', 'Phoebe Roach', 'Akeem Head', '5812467523', 'cazifipugy@mailinator.com', '15-Oct-1982', 'Error suscipit adipi', '23', '17', 366251, '', '5xMnLs', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:13:52'),
 (58, '683611', '53', 'Dennis Cardenas', 'stu000044', '5', '2', '376', '2', 'Linus Gordon', 'Katell Melendez', '4216538725', 'nywydy@mailinator.com', '25-Apr-1997', 'Culpa aute molestias', '27', '3', 541251, '', 'IU0z38', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 07:14:09'),
@@ -8262,7 +9110,7 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (157, '683611', '152', 'Aline Carey', 'stu0000143', '14', '13', '6', '2', 'Kim Preston', 'Baxter Pennington', '5482361795', 'nanin@mailinator.com', '25-Dec-1992', 'Ipsa est laboriosam', '11', '16', 548236, '', '831jbC', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-09-15 10:07:40'),
 (158, '683611', '153', 'Tasha Gaines', 'stu0000144', '14', '13', '801', '3', 'Dennis Weeks', 'Venus Leblanc', '4638152957', 'vyfuqihy@mailinator.com', '05-Jun-1991', 'Quia anim excepteur ', '19', '16', 463815, 'img-stu0000144-1666874211630-01491566en_Masterfile.jpg', 'xMgEh7', '1', NULL, NULL, NULL, NULL, '', '1', '0000-00-00', '', NULL, NULL, NULL, NULL, '2022-09-15 10:08:01'),
 (159, '683611', '154', 'Jonas Downs', 'stu0000145', '14', '13', '663', '1', 'Colleen Bolton', 'Sheila Burt', '8621547359', 'mawadakulu@mailinator.com', '15-Mar-1993', 'Blanditiis esse nemo', '1', '1', 862154, 'img-stu0000145-1666874158283-2839124_school-indian-student-png-transparent-png.png', 'jPXvL9', '1', NULL, NULL, NULL, NULL, '', '1', '0000-00-00', '', NULL, NULL, NULL, NULL, '2022-09-15 10:10:53'),
-(160, '683611', '155', 'Yasir Mullen', 'stu0000146', '14', '13', '388', '1', 'Kathleen Cooke', 'Isabella Yates', '2451836572', 'ladu@mailinator.com', '10-Sep-1984', 'Ducimus quis animi', '2', '4', 562431, 'img-stu0000146-1666874148360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', 'kSBDe9', '1', 'KIik2nMN8jxJSCD3oyRhcBE6uTlY3eU4XvW7ArPd', 'dANvFQLRRvyfA0XJf8RLJM:APA91bFd_MLbL3f91J89qiA88RqMbhy-cfpY6ek9gZOBOiAftXgEueez2GcErukkTG6UIyiioNel7eyIu1WU7LjB85C2hgZkKthc4WOYCkDWgARNR9fHNW-kO-QCzTKerS9BnqVnYAS6', NULL, NULL, '', '1', '0000-00-00', '', NULL, NULL, NULL, NULL, '2022-09-15 10:11:09'),
+(160, '683611', '155', 'Yasir Mullen', 'stu0000146', '14', '13', '388', '1', 'Kathleen Cooke', 'Isabella Yates', '2451836572', 'ladu@mailinator.com', '10-Sep-1984', 'Ducimus quis animi', '2', '4', 562431, 'img-stu0000146-1666874148360_F_410166561_bZLl3qZRt68JCK9JDkgauSDiABqsrK4I.jpg', 'kSBDe9', '1', 'P5Y08E4rKe3Q1TJnl6B5mfDouiSx9Xjdw52Z7VyU', 'dANvFQLRRvyfA0XJf8RLJM:APA91bHbXcZHjwlIjcA67-Xt3f8zyt-IcqGpahFkWDWoogOFeWmv-AGdG97A2GEFKnZw7rZCNtHAGjaWEtB1lOpjnuqkdSmtN14qUshlnA4l_g6az3Zc8v3_l3s38rMILxyfvc06aJn1', NULL, NULL, '', '1', '0000-00-00', '', NULL, NULL, NULL, NULL, '2022-09-15 10:11:09'),
 (161, '683611', '156', 'Fulton Olson', 'stu0000147', '14', '13', '419', '1', 'Jolene Summers', 'Talon Parker', '8951275436', 'hilurofo@mailinator.com', '11-Dec-1999', 'Ipsam libero eiusmod', '1', '1', 895127, 'img-stu0000147-16668741421-indian-girl-school-student-standing-EFDF0R.jpg', 'FTwt80', '1', NULL, NULL, NULL, NULL, '', '1', '0000-00-00', '', NULL, NULL, NULL, NULL, '2022-09-15 10:11:24');
 INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `sr_number`, `cast_category`, `date_of_admission`, `admission_no`, `occupation`, `last_schoool_name`, `aadhar_no`, `residence_in_india_since`, `created_at`) VALUES
 (162, '683611', '157', 'Devin Turner', 'stu0000148', '14', '13', '552', '3', 'Cameran Santana', 'Jameson Buchanan', '3197552684', 'popenuxeky@mailinator.com', '21-Apr-2014', 'Velit consequatur a', '2', '4', 319755, 'img-stu0000148-1666874132360_F_270188580_YDUEwBmDIxBMvCQxkcunmEkm93VqOgqm.jpg', 'r7BT8o', '1', NULL, NULL, NULL, NULL, '', '1', '0000-00-00', '', NULL, NULL, NULL, NULL, '2022-09-15 10:11:39'),
@@ -8764,10 +9612,10 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (656, '261027', '650', 'YUG TOMAR', 'stu0000642', '30', '21', '26', '1', 'NEETU ', 'VIKAS TOMAR', '9927069231', 'dgabaraut@gmail.com', '11/30/2010', 'MALAKPUR', '36', '24', 250611, '', 'F4Z53f', '1', NULL, NULL, NULL, NULL, '14', '2', '04/02/2018', '14', NULL, NULL, NULL, NULL, '2022-11-21 03:45:40'),
 (657, '893133', '651', 'Priyank', 'stu0000643', '56', '25', '1', '1', 'Kavita', 'Amit Kumar', '9897167934', 'amitkumar87951994@gmail.com', '02/01/2018', 'Azad Nagar', '40', '35', 250611, '', 'Pjpyb1', '4', 'IaU3gDJH4KlF4Twc0uLhPfA867WC4y66SOGdj43N', 'fz-ECFMGTXusRGxo8pMPN1:APA91bFvEUGnx-yBRR9kAM5HI1ykA7p1bOK1i1ML8a0sklJZu8dlt7PdiMUDfvu5Bbu4y3LNYqtVDwZSCFI-kPtQYC-q4vebLeneJTcYtxzQKjiCqPwCK2Z7ACo-EPSlFsRuQ2tBhpdb', NULL, NULL, '01', '2', '04/01/2022', '01', NULL, NULL, NULL, NULL, '2022-11-21 07:04:07'),
 (658, '893133', '652', 'AKANKSHA', 'stu0000644', '71', '25', '1', '2', 'SHASHI', 'RAVIPAL', '7302696797', '', '01/01/2011', 'AZADNAGAR BARAUT', '40', '35', 250611, 'img-stu0000644-1669183871IMG_20221123_114013.jpg', 'BrX25K', '1', NULL, NULL, NULL, NULL, '355', '3', '09/11/2021', '355', NULL, NULL, NULL, NULL, '2022-11-22 08:06:18'),
-(659, '178621', '653', 'Saniya', 'stu0000645', '74', '26', '11', '2', '', 'Intezar', '8937868832', 'sachinbhardwajbpt@gmail.com', '02/28/2019', 'Rashid Colony', '41', '36', 250609, 'student/img-stu0000645-1669177831WhatsApp Image 2022-11-23 at 9.54.02 AM.jpeg', 'T0Ch50', '1', NULL, NULL, NULL, NULL, '2', '2', '04/01/2022', '11', NULL, NULL, NULL, NULL, '2022-11-22 08:16:24'),
-(660, '683611', '654', 'saurav', 'stu0000646', '1', '1', '144', '1', 'kaita', 'ram', '7300941454', 'saurav@gmail.com', '2054-08-05', 'Baraut', '1', '1', 250611, 'img-stu0000646-1669778417doreamon teddy.jpg', 'Rl0F12', '1', NULL, NULL, NULL, NULL, '133', '1', '', '133', '', '', '', '', '2022-11-23 04:34:01'),
-(661, '683611', '655', 'gaurav', 'stu0000647', '1', '1', '145', '1', 'Kavita', 'ram', '7300941454', 'saurav@gmail.com', '2018-04-01', 'Baraut', '1', '1', 250611, 'student/img-stu0000647-1669778385user (1).png', 'Rl0F12', '1', NULL, NULL, NULL, NULL, '134', '1', '', '134', '', '', '', '', '2022-11-23 04:36:48'),
-(662, '178621', '656', 'Aahil', 'stu0000648', '74', '26', '02', '1', 'Rabiya', 'Sahil', '8383027711', '', '01/15/2019', 'Rashid Colony', '41', '36', 250609, 'img-stu0000648-1669264910WhatsApp Image 2022-11-24 at 10.09.09 AM.jpeg', 'yTbZ99', '1', NULL, NULL, NULL, NULL, '78', '2', '09/14/2022', '02', NULL, NULL, NULL, NULL, '2022-11-23 05:21:30'),
+(659, '178621', '653', 'Saniya', 'stu0000645', '74', '26', '11', '2', '', 'Intezar', '8937868832', 'sachinbhardwajbpt@gmail.com', '2019-02-28', 'Rashid Colony', '41', '36', 250609, 'student/student/img-stu0000645-1669177831WhatsApp Image 2022-11-23 at 9.54.02 AM.jpeg', 'T0Ch50', '1', NULL, NULL, NULL, NULL, '2', '2', '2022-04-01', '18', '', '', '', '', '2022-11-22 08:16:24'),
+(660, '683611', '654', 'saurav', 'stu0000646', '1', '1', '144', '1', 'kaita', 'ram', '6397520221', 'saurav@gmail.com', '2054-08-05', 'Baraut', '1', '1', 250611, 'student/img-stu0000646-1669778417doreamon teddy.jpg', 'Rl0F12', '1', 'i56hX1FbOqnASYV67Ur3yBaTo8GCEHRvt0sJPxLk', 'd5YzFl3kRASyfLvbXg0Zkl:APA91bEDvG6AigwtICNtraWa-hpFGdlp4oKhpd96r2IGkB7heJoTM8SBDvgtphcpvpmLa-PZnRdXjQNIzyq-YZVWwR40maQj3RxjPCCbuifVVJHL3AGfhVQEUZriXtC_coRTsz9eB7Bb', NULL, NULL, '133', '1', '1970-01-01', '133', '', '', '', '', '2022-11-23 04:34:01'),
+(661, '683611', '655', 'gaurav', 'stu0000647', '1', '1', '145', '1', 'Kavita', 'ram', '7300941454', 'saurav@gmail.com', '2018-04-01', 'Baraut', '1', '1', 250611, 'student/img-stu0000647-1669778385user (1).png', 'Rl0F12', '1', 'vj3r6ket6yD9wSNK25mx1X0a16Go4EFWqQz4gC5Y', 'd5YzFl3kRASyfLvbXg0Zkl:APA91bEDvG6AigwtICNtraWa-hpFGdlp4oKhpd96r2IGkB7heJoTM8SBDvgtphcpvpmLa-PZnRdXjQNIzyq-YZVWwR40maQj3RxjPCCbuifVVJHL3AGfhVQEUZriXtC_coRTsz9eB7Bb', NULL, NULL, '134', '1', '', '134', '', '', '', '', '2022-11-23 04:36:48'),
+(662, '178621', '656', 'Aahil', 'stu0000648', '74', '26', '02', '1', 'Rabiya', 'Sahil', '8383027711', '', '2019-01-15', 'Rashid Colony', '41', '36', 250609, 'student/img-stu0000648-1669264910WhatsApp Image 2022-11-24 at 10.09.09 AM.jpeg', 'yTbZ99', '1', NULL, NULL, NULL, NULL, '78', '2', '2022-09-14', '9', '', '', '', '', '2022-11-23 05:21:30'),
 (663, '893133', '657', 'ARCHNA', 'stu0000649', '71', '25', '02', '2', 'Reena', 'Jaipal', '9557423372', '', '05/22/2012', 'AZADNAGAR BARAUT', '40', '35', 250611, 'img-stu0000649-1669186397IMG_20221123_114245.jpg', 'Aov7e6', '1', NULL, NULL, NULL, NULL, '', '3', '04/08/2022', '', NULL, NULL, NULL, NULL, '2022-11-23 06:53:17'),
 (664, '893133', '658', 'Bhawna', 'stu0000650', '71', '25', '03', '2', 'Geeta', 'Kiranpal', '07302696797', '', '07/13/2011', 'AZADNAGAR BARAUT', '40', '35', 250611, 'img-stu0000650-1669216115IMG_20221123_203749.jpg', 'eNRt4r', '1', NULL, NULL, NULL, NULL, '354', '3', '09/04/2021', '354', NULL, NULL, NULL, NULL, '2022-11-23 06:56:04'),
 (665, '893133', '659', 'Chhavi', 'stu0000651', '71', '25', '04', '2', 'Alka', 'Neeraj Ruhela', '8864850133', 'tanishtomar99@gmail.com', '02/16/2013', 'AZADNAGAR BARAUT', '40', '35', 250611, 'img-stu0000651-1669186774IMG_20221123_114533.jpg', 'gcYL1y', '1', NULL, NULL, NULL, NULL, '90', '2', '04/23/2018', '90', NULL, NULL, NULL, NULL, '2022-11-23 06:59:34'),
@@ -8805,31 +9653,31 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (697, '893133', '691', 'Shantanu', 'stu0000683', '59', '25', '14', '1', 'Reena', 'Devendra ', '9045864102', '', '11/16/2010', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'ecOFyk', '1', NULL, NULL, NULL, NULL, '108', '3', '04/02/2018', '108', NULL, NULL, NULL, NULL, '2022-11-23 15:00:57'),
 (698, '893133', '692', 'Vansh1', 'stu0000684', '59', '25', '15', '1', 'Kavita', 'Manoj ', '8650509395', '', '09/16/2011', 'Azad Nagar Barut', '40', '35', 250611, '', 'zyT0wU', '1', NULL, NULL, NULL, NULL, '109', '2', '04/02/2018', '109', NULL, NULL, NULL, NULL, '2022-11-23 15:03:51'),
 (699, '893133', '693', 'Vansh 2', 'stu0000685', '59', '25', '16', '1', 'Rekha', 'Manoj', '8273209362', '', '10/16/2011', 'Azad Nagar Baraut ', '40', '35', 250611, '', '1q0e5H', '1', NULL, NULL, NULL, NULL, '', '2', '07/15/2022', '', NULL, NULL, NULL, NULL, '2022-11-23 15:06:38'),
-(700, '178621', '694', 'Ahmad', 'stu0000686', '74', '26', '1', '1', 'Sahin ', 'Yunus Malik ', '7818857640', 'sachinbhardwajbpt@gmail.com', '2017-05-18', 'Mugalpura Nai Basti ', '41', '36', 250609, 'student/img-stu0000686-16692639501.jpeg', 'I9qW4Y', '1', NULL, NULL, NULL, NULL, '', '1', '2021-10-06', '3', '', '', '', '', '2022-11-24 03:38:44'),
-(701, '178621', '695', 'Avni ', 'stu0000687', '74', '26', '3', '2', 'Laxmi ', 'Sanjeev ', '6395097797', '', '2019-01-17', 'Mahaveer wali gali ', '41', '36', 250609, 'img-stu0000687-1669781638WhatsApp Image 2022-11-24 at 10.02.36 AM.jpeg', '1rcitI', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-01', '4', '', '', '', '', '2022-11-24 03:53:17'),
+(700, '178621', '694', 'Ahmad', 'stu0000686', '74', '26', '1', '1', 'Sahin ', 'Yunus Malik ', '7818857640', 'sachinbhardwajbpt@gmail.com', '2017-05-18', 'Mugalpura Nai Basti ', '41', '36', 250609, 'student/student/img-stu0000686-16692639501.jpeg', 'I9qW4Y', '1', NULL, NULL, NULL, NULL, '', '1', '2021-10-06', '8', '', '', '', '', '2022-11-24 03:38:44'),
+(701, '178621', '695', 'Avni ', 'stu0000687', '74', '26', '3', '2', 'Laxmi ', 'Sanjeev ', '6395097797', '', '2019-01-17', 'Mahaveer wali gali ', '41', '36', 250609, 'student/img-stu0000687-1669781638WhatsApp Image 2022-11-24 at 10.02.36 AM.jpeg', '1rcitI', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-01', '10', '', '', '', '', '2022-11-24 03:53:17'),
 (702, '893133', '696', 'Akshu', 'stu0000688', '57', '25', '01', '2', 'Priyanka Baliyan ', 'Himanshu Baliyan', '8077513919', '', '11/30/2019', 'Azad Nagar Baraut ', '40', '35', 280611, '', 'T9XG17', '1', NULL, NULL, NULL, NULL, '321', '2', '03/09/2022', '321', NULL, NULL, NULL, NULL, '2022-11-24 04:06:28'),
 (703, '893133', '697', 'Arushi R', 'stu0000689', '57', '25', '02', '2', 'Indu Malik', 'Ramesh', '9084913081', '', '11/28/2018', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'RsTNX3', '1', NULL, NULL, NULL, NULL, '310', '2', '09/08/2021', '310', NULL, NULL, NULL, NULL, '2022-11-24 04:10:42'),
 (704, '893133', '698', 'Arushi P', 'stu0000690', '57', '25', '03', '2', 'Deepa', 'Pankaj Sharma ', '9997224783', '', '06/15/2018', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'k5alB8', '1', NULL, NULL, NULL, NULL, '315', '1', '09/21/2021', '315', NULL, NULL, NULL, NULL, '2022-11-24 04:23:22'),
 (705, '893133', '699', 'Avni', 'stu0000691', '57', '25', '04', '2', 'Priya', 'Pramod Kumar ', '9058280687', '', '06/25/2018', 'Azad Nagar Baraut ', '40', '35', 250611, '', '2IQTMr', '1', NULL, NULL, NULL, NULL, '312', '2', '10/04/2021', '312', NULL, NULL, NULL, NULL, '2022-11-24 04:27:33'),
 (706, '893133', '700', 'Chanchal', 'stu0000692', '57', '25', '05', '2', 'Reeta', 'Sonu Kumar', '7338479292', '', '08/03/2019', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'en72is', '1', NULL, NULL, NULL, NULL, '308', '3', '09/02/2021', '308', NULL, NULL, NULL, NULL, '2022-11-24 04:35:39'),
 (707, '893133', '701', 'Divya', 'stu0000693', '57', '25', '06', '2', 'Reena', 'Manish Gupta', '9634139567', '', '05/15/2018', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'ZuG7D3', '1', NULL, NULL, NULL, NULL, '306', '1', '09/01/2021', '306', NULL, NULL, NULL, NULL, '2022-11-24 04:40:10'),
-(708, '178621', '702', 'Asim Umar ', 'stu0000694', '74', '26', '4', '1', 'Masheena ', 'Shahzad ', '7417129877', '', '01/15/2018', 'Gayatri Puram Baghpat ', '41', '36', 250609, 'img-stu0000694-1669273979WhatsApp Image 2022-11-24 at 12.07.20 PM.jpeg', 'JGs80v', '1', NULL, NULL, NULL, NULL, '', '1', '10/01/2022', '4', NULL, NULL, NULL, NULL, '2022-11-24 04:45:35'),
+(708, '178621', '702', 'Asim Umar ', 'stu0000694', '74', '26', '4', '1', 'Masheena ', 'Shahzad ', '7417129877', '', '2018-01-15', 'Gayatri Puram Baghpat ', '41', '36', 250609, 'student/img-stu0000694-1669273979WhatsApp Image 2022-11-24 at 12.07.20 PM.jpeg', 'JGs80v', '1', NULL, NULL, NULL, NULL, '', '1', '2022-10-01', '11', '', '', '', '', '2022-11-24 04:45:35'),
 (709, '893133', '703', 'Elish Tomar', 'stu0000695', '57', '25', '07', '2', 'Shivani', 'Arvind Tomar', '6396980831', '', '01/14/2018', 'Gurana Baraut Baghpat', '40', '35', 250611, '', 'bAByMP', '1', NULL, NULL, NULL, NULL, '', '2', '05/02/2022', '', NULL, NULL, NULL, NULL, '2022-11-24 04:49:49'),
 (710, '893133', '704', 'Kanika', 'stu0000696', '57', '25', '08', '2', 'Alka Ruhela', 'Neeraj Ruhela', '8864850133', '', '10/13/2018', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'gcYL1y', '1', NULL, NULL, NULL, NULL, '', '2', '11/07/2011', '', NULL, NULL, NULL, NULL, '2022-11-24 05:26:54'),
-(711, '178621', '705', 'Aamin ', 'stu0000697', '74', '26', '5', '1', 'Baby ', 'Saddan ', '8071867987', '', '07/05/2016', 'rashid colony ', '41', '36', 250609, 'img-stu0000697-1669274201WhatsApp Image 2022-11-24 at 12.45.29 PM.jpeg', 'JeI87V', '1', NULL, NULL, NULL, NULL, '', '2', '05/09/2022', '5', NULL, NULL, NULL, NULL, '2022-11-24 07:04:19'),
-(712, '178621', '706', 'Gauri ', 'stu0000698', '74', '26', '6', '2', 'sangita', 'Rahul ', '9536423397', '', '11/09/2017', 'gayatri puram baghpat ', '41', '36', 250609, 'img-stu0000698-1669274032WhatsApp Image 2022-11-24 at 12.07.25 PM.jpeg', '2JSETq', '1', NULL, NULL, NULL, NULL, '', '4', '04/01/2022', '6', NULL, NULL, NULL, NULL, '2022-11-24 07:11:41'),
-(713, '178621', '707', 'Naviya ', 'stu0000699', '74', '26', '7', '2', 'Koosar ', 'Naresh ', '9520028025', '', '06/18/2017', 'Gayatri puram baghpat ', '41', '36', 250609, 'img-stu0000699-1669356633WhatsApp Image 2022-11-25 at 11.36.44 AM.jpeg', '1EKw2X', '1', NULL, NULL, NULL, NULL, '', '1', '04/01/2022', '7', NULL, NULL, NULL, NULL, '2022-11-24 07:22:13'),
+(711, '178621', '705', 'Aamin ', 'stu0000697', '74', '26', '5', '1', 'Baby ', 'Saddan ', '8071867987', '', '2016-07-05', 'rashid colony ', '41', '36', 250609, 'student/img-stu0000697-1669274201WhatsApp Image 2022-11-24 at 12.45.29 PM.jpeg', 'JeI87V', '1', NULL, NULL, NULL, NULL, '', '2', '2022-05-09', '12', '', '', '', '', '2022-11-24 07:04:19'),
+(712, '178621', '706', 'Gauri ', 'stu0000698', '74', '26', '6', '2', 'sangita', 'Rahul ', '9536423397', '', '2017-11-09', 'gayatri puram baghpat ', '41', '36', 250609, 'student/img-stu0000698-1669274032WhatsApp Image 2022-11-24 at 12.07.25 PM.jpeg', '2JSETq', '1', NULL, NULL, NULL, NULL, '', '4', '2022-04-01', '13', '', '', '', '', '2022-11-24 07:11:41'),
+(713, '178621', '707', 'Naviya ', 'stu0000699', '74', '26', '7', '2', 'Koosar ', 'Naresh ', '9520028025', '', '2017-06-18', 'Gayatri puram baghpat ', '41', '36', 250609, 'student/img-stu0000699-1669356633WhatsApp Image 2022-11-25 at 11.36.44 AM.jpeg', '1EKw2X', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '14', '', '', '', '', '2022-11-24 07:22:13'),
 (714, '893133', '708', 'NAINA', 'stu0000700', '57', '25', '09', '2', 'PREETI', 'RAVINDRA SINGH', '9639129375', '', '05/03/2017', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', '82IqeB', '1', NULL, NULL, NULL, NULL, '', '2', '04/01/2021', '303', NULL, NULL, NULL, NULL, '2022-11-24 07:24:50'),
-(715, '178621', '709', 'chetan', 'stu0000701', '74', '26', '8', '1', 'Mohini ', 'Manoj ', '8445999522', '', '12/28/2018', 'barout road baghpat  near guest house', '41', '36', 250609, 'img-stu0000701-1669356686WhatsApp Image 2022-11-25 at 11.38.47 AM.jpeg', 'Dmw1bV', '1', NULL, NULL, NULL, NULL, '', '1', '04/01/2022', '8', NULL, NULL, NULL, NULL, '2022-11-24 07:28:24'),
+(715, '178621', '709', 'chetan', 'stu0000701', '74', '26', '8', '1', 'Mohini ', 'Manoj ', '8445999522', '', '2018-12-28', 'barout road baghpat  near guest house', '41', '36', 250609, 'student/img-stu0000701-1669356686WhatsApp Image 2022-11-25 at 11.38.47 AM.jpeg', 'Dmw1bV', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '15', '', '', '', '', '2022-11-24 07:28:24'),
 (716, '893133', '710', 'RIYA', 'stu0000702', '57', '25', '10', '2', 'MONIKA JAIN', 'ANUJ JAIN', '9927733972', '', '04/28/2018', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', 'FjoNGR', '1', NULL, NULL, NULL, NULL, '320', '1', '11/20/2021', '320', NULL, NULL, NULL, NULL, '2022-11-24 07:29:31'),
-(717, '178621', '711', 'Inaya ', 'stu0000703', '74', '26', '9', '2', 'Mrs.Shahin ', 'Imraan ', '7037920650', '', '08/07/2017', 'Rashid Colony ', '41', '36', 250609, 'img-stu0000703-1669357305WhatsApp Image 2022-11-25 at 11.46.36 AM.jpeg', 'xB2Hya', '1', NULL, NULL, NULL, NULL, '', '2', '04/01/2022', '9', NULL, NULL, NULL, NULL, '2022-11-24 07:31:46'),
+(717, '178621', '711', 'Inaya ', 'stu0000703', '74', '26', '9', '2', 'Mrs.Shahin ', 'Imraan ', '7037920650', '', '2017-08-07', 'Rashid Colony ', '41', '36', 250609, 'student/img-stu0000703-1669357305WhatsApp Image 2022-11-25 at 11.46.36 AM.jpeg', 'xB2Hya', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '16', '', '', '', '', '2022-11-24 07:31:46'),
 (718, '893133', '712', 'TANIYA', 'stu0000704', '57', '25', '11', '2', 'POONAM', 'GABBAR NISHAD', '6387417134', '', '06/01/2017', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', 'q3UfYe', '1', NULL, NULL, NULL, NULL, '', '2', '04/04/2022', '', NULL, NULL, NULL, NULL, '2022-11-24 07:32:08'),
 (719, '893133', '713', 'ARPIT', 'stu0000705', '57', '25', '12', '1', 'RITU', 'HARIOM KUMAR', '7017790137', '', '10/25/2016', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', '37yFQ8', '1', NULL, NULL, NULL, NULL, '309', '2', '09/07/2021', '309', NULL, NULL, NULL, NULL, '2022-11-24 07:35:36'),
-(720, '178621', '714', 'sumayya', 'stu0000706', '74', '26', '10', '2', 'Farheen ', 'Najim', '8273738831', '', '2017-12-18', 'Rashid colony baghpat ', '41', '36', 250609, 'img-stu0000706-1669697262WhatsApp Image 2022-11-29 at 9.33.35 AM.jpeg', '6L501v', '1', NULL, NULL, NULL, NULL, '', '2', '', '10', '', '', '', '', '2022-11-24 07:36:17'),
+(720, '178621', '714', 'sumayya', 'stu0000706', '74', '26', '10', '2', 'Farheen ', 'Najim', '8273738831', '', '2017-12-18', 'Rashid colony baghpat ', '41', '36', 250609, 'student/student/img-stu0000706-1669697262WhatsApp Image 2022-11-29 at 9.33.35 AM.jpeg', '6L501v', '1', NULL, NULL, NULL, NULL, '', '2', '1970-01-01', '17', '', '', '', '', '2022-11-24 07:36:17'),
 (721, '893133', '715', 'DEV', 'stu0000707', '57', '25', '13', '1', 'SANTOSH', 'SUNIL', '7037402102', '', '08/07/2017', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', 'L9t1Vq', '1', NULL, NULL, NULL, NULL, '', '2', '04/09/2022', '', NULL, NULL, NULL, NULL, '2022-11-24 07:38:29'),
 (722, '893133', '716', 'KANAK', 'stu0000708', '56', '25', '14', '1', 'MADHULATA', 'RAM KUMAR', '9634649486', '', '09/03/2019', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', '3bZQIM', '1', NULL, NULL, NULL, NULL, '305', '2', '', 'KANAK', NULL, NULL, NULL, NULL, '2022-11-24 07:40:57'),
 (723, '893133', '717', 'KUNAL', 'stu0000709', '56', '25', '15', '1', 'ANSHU', 'KULDEEP KUMAR', '8477959584', '', '09/15/2019', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', 'kVL8Eu', '1', NULL, NULL, NULL, NULL, '', '1', '04/07/2022', '', NULL, NULL, NULL, NULL, '2022-11-24 07:53:06'),
-(724, '178621', '718', 'fiza', 'stu0000710', '74', '26', '12', '2', 'Mobina', 'Jamsed', '7536825828', '', '03/17/2018', 'rashid colony ', '41', '36', 250609, 'img-stu0000710-1669357344WhatsApp Image 2022-11-25 at 11.48.29 AM.jpeg', 'S830gz', '1', NULL, NULL, NULL, NULL, '', '2', '04/01/2022', '12', NULL, NULL, NULL, NULL, '2022-11-24 07:55:05'),
+(724, '178621', '718', 'fiza', 'stu0000710', '74', '26', '12', '2', 'Mobina', 'Jamsed', '7536825828', '', '2018-03-17', 'rashid colony ', '41', '36', 250609, 'student/img-stu0000710-1669357344WhatsApp Image 2022-11-25 at 11.48.29 AM.jpeg', 'S830gz', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '19', '', '', '', '', '2022-11-24 07:55:05'),
 (725, '893133', '719', 'NAMAN TANDAN', 'stu0000711', '57', '25', '16', '1', 'YOGESH', 'NAVEEN KUMAR', '9756118947', '', '02/07/2018', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', 'ZAj88q', '1', NULL, NULL, NULL, NULL, '', '3', '05/09/2022', '', NULL, NULL, NULL, NULL, '2022-11-24 07:56:22'),
 (726, '893133', '720', 'RUDRA PRATAP SAINI', 'stu0000712', '57', '25', '17', '1', 'REENA SAINI', 'MUKESH SAINI', '9536840295', '', '08/02/2018', 'AZAD NAGAR BARAUT', '40', '35', 250611, '', 'vbpXi6', '1', NULL, NULL, NULL, NULL, '316', '2', '10/20/2021', '316', NULL, NULL, NULL, NULL, '2022-11-24 07:59:44'),
 (727, '691309', '721', 'Gaurav Sharma', 'stu0000713', '86', '27', '01', '1', 'Kavita Sharma', 'Ram Sharma', '9879879875', 'mdis.nangla@gmail.com', '04/06/2018', 'Baraut', '42', '37', 250611, '', 'C3oW1c', '4', NULL, NULL, NULL, NULL, '01', '1', '04/01/2020', '01', NULL, NULL, NULL, NULL, '2022-11-24 08:07:43'),
@@ -8899,30 +9747,30 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (791, '893133', '785', 'Manshi', 'stu0000777', '60', '25', '04', '2', 'Parmila', 'Manoj Kumar ', '9412192224', '', '2012-10-25', 'Azad Nagar Baraut ', '40', '35', 250611, 'img-stu0000777-1669781340IMG_20221130_085001.jpg', '8d59RC', '1', NULL, NULL, NULL, NULL, '115', '3', '2018-04-02', '115', 'Wages ', 'Royal Public School Baraut Baghpat ', '261952702653', 'Since Birth', '2022-11-25 04:48:21'),
 (792, '893133', '786', 'Prachi', 'stu0000778', '60', '25', '05', '2', 'Rajwati', 'Sohan Pal', '90453330241', '', '2010-07-07', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/', 'CXINhm', '1', NULL, NULL, NULL, NULL, '117', '2', '2018-04-02', '117', 'Govt.Job', 'Royal Public School Baraut Baghpat ', '342609580559', '', '2022-11-25 04:50:39'),
 (793, '691309', '787', 'Mayank Sharma', 'stu0000779', '98', '27', '14', '1', 'Kusum Sharma', 'Vinod Kumar Sharma', '9634103657', '', '07/08/2008', 'Sinauli', '42', '39', 250611, '', '582iak', '1', NULL, NULL, NULL, NULL, '', '1', '10/04/2014', '0394', NULL, NULL, NULL, NULL, '2022-11-25 04:51:36'),
-(794, '178621', '788', 'farhan khan ', 'stu0000780', '74', '26', '13', '1', 'shama ', 'parvej khan ', '8630247674', '', '2018-07-01', 'rashid colony ', '41', '36', 250609, 'img-stu0000780-1669697767WhatsApp Image 2022-11-29 at 9.33.56 AM.jpeg', 'qAiE1O', '1', NULL, NULL, NULL, NULL, '', '2', '', '13', '', '', '', '', '2022-11-25 04:53:22'),
+(794, '178621', '788', 'farhan khan ', 'stu0000780', '74', '26', '13', '1', 'shama ', 'parvej khan ', '8630247674', '', '2018-07-01', 'rashid colony ', '41', '36', 250609, 'student/img-stu0000780-1669697767WhatsApp Image 2022-11-29 at 9.33.56 AM.jpeg', 'qAiE1O', '1', NULL, NULL, NULL, NULL, '', '2', '1970-01-01', '20', '', '', '', '', '2022-11-25 04:53:22'),
 (795, '893133', '789', 'Preeti', 'stu0000781', '60', '25', '06', '2', 'Kamlesh', 'Suresh', '9927475846', '', '2010-08-25', 'Azad Nagar Baraut ', '40', '35', 250611, 'img-stu0000781-1669781607IMG_20221130_085120.jpg', 'eVP7Q7', '1', NULL, NULL, NULL, NULL, '365', '2', '2021-09-10', '365', 'Labour', 'Private', '956349415660', 'Since Birth', '2022-11-25 04:54:10'),
 (796, '893133', '790', 'Priya', 'stu0000782', '60', '25', '07', '2', '', 'Manoj Kumar', '7455001375', '', '10/20/2011', 'Gurana Road BARAUT ', '40', '35', 258611, '', 'E772Dr', '1', NULL, NULL, NULL, NULL, '', '2', '08/13/2022', '00', NULL, NULL, NULL, NULL, '2022-11-25 04:56:17'),
 (797, '691309', '791', 'Nishant Khokhar', 'stu0000783', '98', '27', '15', '1', 'Kusum Devi', 'Manoj Kumar', '9627271644', '', '11/10/2007', 'Rathora', '42', '49', 250617, '', 'yqeOgS', '1', NULL, NULL, NULL, NULL, '', '2', '06/04/2019', '0909', NULL, NULL, NULL, NULL, '2022-11-25 04:56:52'),
-(798, '178621', '792', 'Rukayat ', 'stu0000784', '74', '26', '14', '2', 'Noorjaha', 'Nhajad', '9149264885', '', '10/19/2018', 'Rashid colony ', '41', '36', 250609, 'img-stu0000784-1669357885WhatsApp Image 2022-11-25 at 11.57.44 AM.jpeg', '9Kq9dV', '1', NULL, NULL, NULL, NULL, '', '2', '07/16/2022', '14', NULL, NULL, NULL, NULL, '2022-11-25 04:57:21'),
+(798, '178621', '792', 'Rukayat ', 'stu0000784', '74', '26', '14', '2', 'Noorjaha', 'Nhajad', '9149264885', '', '2018-10-19', 'Rashid colony ', '41', '36', 250609, 'student/img-stu0000784-1669357885WhatsApp Image 2022-11-25 at 11.57.44 AM.jpeg', '9Kq9dV', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-16', '21', '', '', '', '', '2022-11-25 04:57:21'),
 (799, '893133', '793', 'Riya', 'stu0000785', '60', '25', '08', '2', 'Rekha', 'Sushil ', '9012549796', '', '2011-01-02', 'Azad Nagar Baraut ', '40', '35', 250611, 'img-stu0000785-1669781691IMG_20221130_085137.jpg', 'jD1mNh', '1', NULL, NULL, NULL, NULL, '118', '2', '2018-04-02', '118', 'Wages ', 'Royal Public School Baraut Baghpat ', '605542338786', 'Since Birth', '2022-11-25 04:59:25'),
 (800, '691309', '794', 'Shubham Saroha', 'stu0000786', '86', '27', '16', '1', 'Neeraj Devi', 'Shobir Singh', '6395532053', '', '07/15/2008', 'Luhara', '42', '52', 250611, '', 'wnoN1L', '1', NULL, NULL, NULL, NULL, '', '2', '04/04/2015', '0468', NULL, NULL, NULL, NULL, '2022-11-25 05:00:39'),
-(801, '178621', '795', 'Mantsha', 'stu0000787', '74', '26', '15 ', '2', 'Samreen ', 'Jan Mohammad ', '8449067024', '', '11/07/2016', 'Chamrawal road Baghpat ', '41', '36', 250609, 'img-stu0000787-1669357935WhatsApp Image 2022-11-25 at 11.58.17 AM.jpeg', 'WwuyEq', '1', NULL, NULL, NULL, NULL, '', '2', '11/25/2022', '15', NULL, NULL, NULL, NULL, '2022-11-25 05:00:49'),
+(801, '178621', '795', 'Mantsha', 'stu0000787', '74', '26', '15 ', '2', 'Samreen ', 'Jan Mohammad ', '8449067024', '', '2016-11-07', 'Chamrawal road Baghpat ', '41', '36', 250609, 'student/img-stu0000787-1669357935WhatsApp Image 2022-11-25 at 11.58.17 AM.jpeg', 'WwuyEq', '1', NULL, NULL, NULL, NULL, '', '2', '2022-11-25', '22', '', '', '', '', '2022-11-25 05:00:49'),
 (802, '893133', '796', 'Tania', 'stu0000788', '59', '25', '09', '2', 'Rajwati', 'Sohan Pal', '9045330241', '', '2011-09-08', 'Azad Nagar Baraut ', '40', '35', 250611, 'img-stu0000788-1669782193IMG_20221130_095027.jpg', '0LGhVH', '1', NULL, NULL, NULL, NULL, '119', '2', '2018-04-02', '119', 'Govt.Job', 'Royal Public School Baraut Baghpat ', '958727293453', 'Since Birth', '2022-11-25 05:02:00'),
-(803, '178621', '797', 'Yashra ', 'stu0000789', '74', '26', '16', '2', 'Nisha ', 'Salim ', '7248808782', '', '01/05/2018', 'Rashid colony ', '41', '36', 250609, 'img-stu0000789-1669357973WhatsApp Image 2022-11-25 at 11.57.59 AM.jpeg', 'MwS7xm', '1', NULL, NULL, NULL, NULL, '', '2', '07/29/2022', '16', NULL, NULL, NULL, NULL, '2022-11-25 05:04:21'),
+(803, '178621', '797', 'Yashra ', 'stu0000789', '74', '26', '16', '2', 'Nisha ', 'Salim ', '7248808782', '', '2018-01-05', 'Rashid colony ', '41', '36', 250609, 'student/img-stu0000789-1669357973WhatsApp Image 2022-11-25 at 11.57.59 AM.jpeg', 'MwS7xm', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-29', '23', '', '', '', '', '2022-11-25 05:04:21'),
 (804, '893133', '798', 'Vidhi', 'stu0000790', '60', '25', '10', '2', 'Anuradha ', 'Vikas Kumar ', '9690523801', '', '2010-08-24', 'AZADNAGAR BARAUT ', '40', '35', 250611, 'img-stu0000790-1669782418IMG_20221130_085156.jpg', '3AiWrD', '1', NULL, NULL, NULL, NULL, '120', '2', '2018-04-02', '120', 'Pvt.Job', 'Royal Public School Baraut Baghpat ', '300401398308', 'Since Birth', '2022-11-25 05:06:35'),
-(805, '178621', '799', 'Rihan ', 'stu0000791', '74', '26', '17 ', '1', 'Musrat ', 'Noor Mohmmad ', '7060435923', '', '2017-11-05', 'Mugul Pura Baghpat ', '41', '36', 250609, 'img-stu0000791-1669697852WhatsApp Image 2022-11-29 at 9.33.36 AM.jpeg', 'K1G2vh', '1', NULL, NULL, NULL, NULL, '', '2', '', '17', '', '', '', '', '2022-11-25 05:07:41'),
+(805, '178621', '799', 'Rihan ', 'stu0000791', '74', '26', '17 ', '1', 'Musrat ', 'Noor Mohmmad ', '7060435923', '', '2017-11-05', 'Mugul Pura Baghpat ', '41', '36', 250609, 'student/img-stu0000791-1669697852WhatsApp Image 2022-11-29 at 9.33.36 AM.jpeg', 'K1G2vh', '1', NULL, NULL, NULL, NULL, '', '2', '1970-01-01', '24', '', '', '', '', '2022-11-25 05:07:41'),
 (806, '893133', '800', 'Aman', 'stu0000792', '60', '25', '11', '1', 'Madhu', 'Sanju Panchal', '7351605490', '', '2008-03-31', 'Azad Nagar Baraut ', '40', '35', 250611, 'student/', 'Bsha6w', '1', NULL, NULL, NULL, NULL, '122', '2', '2018-04-02', '122', 'Pvt.job', 'Royal Public School Baraut Baghpat ', '971092509126', 'Since Birth', '2022-11-25 05:08:39'),
 (807, '893133', '801', 'Anmol', 'stu0000793', '60', '25', '12', '1', 'Priyanka ', 'Sanjay', '08881671686', 'avni19102010@mail.com', '2013-01-23', 'Azad Nagar Baraut', '40', '35', 250611, 'student/', 'iR3P0C', '1', NULL, NULL, NULL, NULL, '366', '2', '2021-11-10', '366', 'Pvt.Job', 'Private', '000000001185', 'Since Birth', '2022-11-25 05:12:22'),
-(808, '178621', '802', 'Khatija ', 'stu0000794', '74', '26', '18 ', '1', 'Khusnuma ', 'Irshad ', '9136704854', '', '08/11/2017', 'Old Town ', '41', '36', 250609, 'img-stu0000794-1669359018WhatsApp Image 2022-11-25 at 12.17.01 PM.jpeg', '86NoGy', '1', NULL, NULL, NULL, NULL, '', '2', '', '18', NULL, NULL, NULL, NULL, '2022-11-25 05:14:38'),
+(808, '178621', '802', 'Khatija ', 'stu0000794', '74', '26', '18 ', '1', 'Khusnuma ', 'Irshad ', '9136704854', '', '2017-08-11', 'Old Town ', '41', '36', 250609, 'student/img-stu0000794-1669359018WhatsApp Image 2022-11-25 at 12.17.01 PM.jpeg', '86NoGy', '1', NULL, NULL, NULL, NULL, '', '2', '1970-01-01', '25', '', '', '', '', '2022-11-25 05:14:38'),
 (809, '893133', '803', 'Anurag ', 'stu0000795', '60', '25', '13', '1', 'Neelam', 'Anuj', '8755971408', '', '2011-01-12', 'Azad Nagar Baraut ', '40', '35', 250611, 'img-stu0000795-1669782852IMG_20221130_085255.jpg', 'S06Y6U', '1', NULL, NULL, NULL, NULL, '131', '2', '2018-04-02', '121', 'Wages ', 'Royal Public School Baraut Baghpat ', '643901519519', 'Since Birth', '2022-11-25 05:14:52'),
-(810, '893133', '804', 'Ayush', 'stu0000796', '60', '25', '14', '1', 'Pinki ', 'Parveen ', '9015260989', '', '06/15/2010', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 's8ghAv', '1', NULL, NULL, NULL, NULL, '130', '1', '04/06/2018', '130', NULL, NULL, NULL, NULL, '2022-11-25 05:17:41'),
-(811, '893133', '805', 'Gopal', 'stu0000797', '60', '25', '15', '1', 'Rakhi Sharma ', 'Sonu Sharma ', '9012724953', '', '2012-11-27', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'img-stu0000797-1669783067IMG_20221130_100721.jpg', '7m57e9', '1', NULL, NULL, NULL, NULL, '124', '1', '2018-04-02', '125', 'Wages', 'Royal Public School Baraut Baghpat ', '780847418725', 'Since Birth', '2022-11-25 05:21:39'),
-(812, '178621', '806', 'Sahil ', 'stu0000798', '74', '26', '19 ', '1', 'Rukiya ', 'Momin ', '8439738677', '', '01/04/2018', 'Rashid colony ', '41', '36', 250609, 'img-stu0000798-1669620532WhatsApp Image 2022-11-28 at 12.57.55 PM.jpeg', 'Mt6wb3', '1', NULL, NULL, NULL, NULL, '', '2', '03/18/2021', '19', '', '', '', '', '2022-11-25 05:29:24');
+(810, '893133', '804', 'Ayush', 'stu0000796', '60', '25', '14', '1', 'Pinki ', 'Parveen ', '9015260989', '', '06/15/2010', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 's8ghAv', '1', NULL, NULL, NULL, NULL, '130', '1', '04/06/2018', '130', NULL, NULL, NULL, NULL, '2022-11-25 05:17:41');
 INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `sr_number`, `cast_category`, `date_of_admission`, `admission_no`, `occupation`, `last_schoool_name`, `aadhar_no`, `residence_in_india_since`, `created_at`) VALUES
+(811, '893133', '805', 'Gopal', 'stu0000797', '60', '25', '15', '1', 'Rakhi Sharma ', 'Sonu Sharma ', '9012724953', '', '2012-11-27', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'img-stu0000797-1669783067IMG_20221130_100721.jpg', '7m57e9', '1', NULL, NULL, NULL, NULL, '124', '1', '2018-04-02', '125', 'Wages', 'Royal Public School Baraut Baghpat ', '780847418725', 'Since Birth', '2022-11-25 05:21:39'),
+(812, '178621', '806', 'Sahil ', 'stu0000798', '74', '26', '19 ', '1', 'Rukiya ', 'Momin ', '8439738677', '', '2018-01-04', 'Rashid colony ', '41', '36', 250609, 'student/student/student/img-stu0000798-1669620532WhatsApp Image 2022-11-28 at 12.57.55 PM.jpeg', 'Mt6wb3', '1', NULL, NULL, NULL, NULL, '', '2', '2021-03-18', '26', '', '', '', '', '2022-11-25 05:29:24'),
 (813, '893133', '807', 'Prince 1', 'stu0000799', '60', '25', '15', '1', 'Kusum Devi ', 'Sanjeev Kumar', '7534946208', '', '2009-02-12', 'Azad Nagar Baraut ', '40', '35', 250611, 'img-stu0000799-1669783145IMG_20221130_085358.jpg', '12zEPQ', '1', NULL, NULL, NULL, NULL, '128', '2', '2018-04-02', '128', 'Wages', 'Royal Public School Baraut Baghpat ', '362249101895', 'Since Birth', '2022-11-25 05:29:24'),
 (814, '893133', '808', 'Prince 2', 'stu0000800', '60', '25', '17', '1', 'Seema Devi', 'Amit Kumar ', '7088524043', '', '2009-10-15', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'img-stu0000800-1669783319IMG_20221130_101128.jpg', '81EKcW', '1', NULL, NULL, NULL, NULL, '129', '2', '2018-04-02', '129', 'Wages ', 'Royal Public School Baraut Baghpat ', '288211494251', 'Since Birth', '2022-11-25 05:31:42'),
 (815, '893133', '809', 'Rishabh', 'stu0000801', '60', '25', '18', '1', 'Pinki', 'Kapil Kumar ', '8708962249', '', '12/13/2010', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'ybC7wn', '1', NULL, NULL, NULL, NULL, '000', '2', '04/08/2022', '00', NULL, NULL, NULL, NULL, '2022-11-25 05:33:42'),
-(816, '178621', '810', 'Zaid ', 'stu0000802', '74', '26', '20 ', '1', 'Ruby ', 'Javed', '8218366700', '', '2018-11-19', 'Rashid Colony ', '41', '36', 250609, 'img-stu0000802-1669697149WhatsApp Image 2022-11-29 at 10.13.57 AM.jpeg', 'X5mMV5', '1', NULL, NULL, NULL, NULL, '', '2', '', '20', '', '', '288367976513', '', '2022-11-25 05:34:57'),
+(816, '178621', '810', 'Zaid ', 'stu0000802', '74', '26', '20 ', '1', 'Ruby ', 'Javed', '8218366700', '', '2018-11-19', 'Rashid Colony ', '41', '36', 250609, 'student/img-stu0000802-1669697149WhatsApp Image 2022-11-29 at 10.13.57 AM.jpeg', 'X5mMV5', '1', NULL, NULL, NULL, NULL, '', '2', '1970-01-01', '27', '', '', '288367976513', '', '2022-11-25 05:34:57'),
 (817, '893133', '811', 'Avni', 'stu0000803', '61', '25', '1', '2', 'Reetu', 'Monu ', '7088649839', '', '10/10/2017', 'Azad Nagar baraut Baghpat ', '40', '35', 250611, '', 'Y0z4Zv', '1', NULL, NULL, NULL, NULL, '286', '2', '03/09/2021', '286', NULL, NULL, NULL, NULL, '2022-11-25 05:39:15'),
 (818, '893133', '812', 'Jivika', 'stu0000804', '70', '25', '01', '2', 'Reema Saini', 'Mukesh Saini ', '9536840295', '', '01/24/2013', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'vbpXi6', '1', NULL, NULL, NULL, NULL, '53', '3', '04/02/2018', '53', NULL, NULL, NULL, NULL, '2022-11-25 05:48:22'),
 (819, '893133', '813', 'Kashish', 'stu0000805', '72', '25', '02', '2', 'Babli', 'Kashish', '9536310083', '', '05/14/2014', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'RFJ8I9', '1', NULL, NULL, NULL, NULL, '353', '2', '10/20/2021', '353', NULL, NULL, NULL, NULL, '2022-11-25 05:52:49'),
@@ -9001,24 +9849,24 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (892, '691309', '886', 'Rajan', 'stu0000878', '100', '29', '10', '1', 'Kavita ', 'Puspendra', '9719952665', '', '01/01/2007', 'Nangla', '42', '40', 250617, '', 'V0K9Sg', '1', NULL, NULL, NULL, NULL, '', '1', '12/08/2021', '1204', NULL, NULL, NULL, NULL, '2022-11-26 06:02:36'),
 (893, '893133', '887', 'Vivek Kumar', 'stu0000879', '68', '25', '14', '1', 'Pramila Devi', 'Vedpal Singh', '7017984540', 'vkofficial70179845@gmail.com', '10/08/2006', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'CyIzHp', '1', NULL, NULL, NULL, NULL, '7624', '2', '07/01/2020', '7624', NULL, NULL, NULL, NULL, '2022-11-26 06:02:40'),
 (894, '893133', '888', 'Priyanshu', 'stu0000880', '68', '25', '15', '1', 'Sonu', 'Ram Kumar', '7248392158', 'swamipriyanshu11@gmail.com', '05/28/2008', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'N8bGO5', '1', NULL, NULL, NULL, NULL, '00', '2', '00', '00', NULL, NULL, NULL, NULL, '2022-11-26 06:05:57'),
-(895, '178621', '889', 'Mahin ', 'stu0000881', '74', '26', '21', '2', 'Sahima ', 'Rashid ', '6395102293', '', '11/25/2017', 'Rashid colony ', '41', '36', 250609, 'img-stu0000881-1669620377WhatsApp Image 2022-11-28 at 12.25.39 PM.jpeg', 'RhzWop', '1', NULL, NULL, NULL, NULL, '', '2', '09/01/2022', '21', '', '', '', '', '2022-11-26 06:21:13'),
+(895, '178621', '889', 'Mahin ', 'stu0000881', '74', '26', '21', '2', 'Sahima ', 'Rashid ', '6395102293', '', '2017-11-25', 'Rashid colony ', '41', '36', 250609, 'student/img-stu0000881-1669620377WhatsApp Image 2022-11-28 at 12.25.39 PM.jpeg', 'RhzWop', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-01', '28', '', '', '', '', '2022-11-26 06:21:13'),
 (896, '893133', '890', 'Avni', 'stu0000882', '64', '25', '01', '2', 'Priyanka Devi', 'Sanjay', '08865821676', 'avni19102010@mail.com', '2010-11-19', 'Azad Nagar Baraut', '40', '35', 250611, 'student/student/img-stu0000882-1669449857IMG_20221126_132653.jpg', 'ldu806', '1', NULL, NULL, NULL, NULL, '177', '2', '2022-07-04', '177', 'Pvt.Job', 'Royal Public School Baraut Baghpat ', '762582445154', 'Since Birth', '2022-11-26 06:28:56'),
-(897, '178621', '891', 'Abutalha ', 'stu0000883', '73', '26', '2', '1', 'Sahin ', 'Naved ', '8218857976', '', '08/25/2016', 'Old Town ', '41', '36', 250609, 'img-stu0000883-1669619309WhatsApp Image 2022-11-28 at 12.24.43 PM.jpeg', 'MDHqs6', '1', NULL, NULL, NULL, NULL, '', '2', '09/01/2022', '23', '', '', '', '', '2022-11-26 06:29:36'),
+(897, '178621', '891', 'Abutalha ', 'stu0000883', '73', '26', '2', '1', 'Sahin ', 'Naved ', '8218857976', '', '2016-08-25', 'Old Town ', '41', '36', 250609, 'student/img-stu0000883-1669619309WhatsApp Image 2022-11-28 at 12.24.43 PM.jpeg', 'MDHqs6', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-01', '2', '', '', '', '', '2022-11-26 06:29:36'),
 (898, '893133', '892', 'HARSHITA RANA', 'stu0000884', '64', '25', '02', '2', 'Sonia Rana', 'Ravindra Rana', '9758202869', 'harshitarana064@gmail.com', '2007-12-10', 'Azad Nagar Baraut ', '40', '35', 250611, 'student/img-stu0000884-1669450085IMG_20221126_132738.jpg', 'qOK9Cu', '1', NULL, NULL, NULL, NULL, '178', '2', '2022-07-20', '178', 'Wages', 'Royal Public School Baraut Baghpat ', '501994582333', 'Since Birth', '2022-11-26 06:32:23'),
 (899, '893133', '893', 'Khushi', 'stu0000885', '64', '25', '03', '2', 'Pinki Malik', 'Naresh Mslik', '9917040903', 'khushimalik5898@gmail.com', '2009-01-22', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/img-stu0000885-1669450139IMG_20221126_132801.jpg', 'flBT8E', '1', NULL, NULL, NULL, NULL, '179', '2', '2009-04-01', '179', 'Labour', 'Royal Public School Baraut Baghpat ', '526145461919', 'Since Birth', '2022-11-26 06:35:10'),
 (900, '691309', '894', 'Sakasham Arya', 'stu0000886', '100', '28', '11', '1', 'Pavitra Devi', 'Kuvarpal Sastiri', '9045100514', '', '08/20/2005', 'Luhara', '42', '52', 250617, '', 'zqx5L1', '1', NULL, NULL, NULL, NULL, '', '2', '03/04/2019', '0879', NULL, NULL, NULL, NULL, '2022-11-26 06:36:24'),
-(901, '178621', '895', 'Hamna ', 'stu0000887', '73', '26', '3', '2', 'nagma ', 'shahnawaj ', '7906171686', '', '01/01/2019', 'Old Town ', '41', '36', 250609, 'img-stu0000887-1669619778WhatsApp Image 2022-11-28 at 12.43.23 PM.jpeg', 'n6A7av', '1', NULL, NULL, NULL, NULL, '', '1', '08/25/2022', '24', '', '', '', '', '2022-11-26 06:38:17'),
+(901, '178621', '895', 'Hamna ', 'stu0000887', '73', '26', '3', '2', 'nagma ', 'shahnawaj ', '7906171686', '', '2019-01-01', 'Old Town ', '41', '36', 250609, 'student/img-stu0000887-1669619778WhatsApp Image 2022-11-28 at 12.43.23 PM.jpeg', 'n6A7av', '1', NULL, NULL, NULL, NULL, '', '1', '2022-08-25', '3', '', '', '', '', '2022-11-26 06:38:17'),
 (902, '893133', '896', 'Nishita', 'stu0000888', '64', '25', '04', '2', 'Seema Devi', 'Kapil Kumar ', '7060225089', 'n24104884@gmail.com', '2009-03-02', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/student/img-stu0000888-1669450184IMG_20221126_132828.jpg', 'zJQ1jM', '1', NULL, NULL, NULL, NULL, '180', '3', '2022-04-11', '180', 'Wages', 'Royal Public School Baraut Baghpat ', '589703478289', 'Since Birth', '2022-11-26 06:38:58'),
 (903, '691309', '897', 'Shubham Khokhar', 'stu0000889', '100', '28', '12', '1', 'Mamta Devi', 'Satender Kumar', '8010285004', '', '07/13/2006', 'Baraut', '42', '42', 250611, '', 'I3its1', '1', NULL, NULL, NULL, NULL, '', '2', '02/04/2019', '0842', NULL, NULL, NULL, NULL, '2022-11-26 06:40:32'),
 (904, '893133', '898', 'Saloni', 'stu0000890', '64', '25', '05', '2', 'Madhu', 'Mahesh Kumar ', '8755831542', 'saloni072009@gmail.com', '2009-07-03', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/img-stu0000890-1669450220IMG_20221126_132853.jpg', '0JtaK3', '1', NULL, NULL, NULL, NULL, '181', '2', '2022-04-06', '181', 'Pvt.Job', 'Royal Public School Baraut Baghpat ', '398545820238', 'Since Birth', '2022-11-26 06:42:55'),
 (905, '893133', '899', 'Suhani', 'stu0000891', '56', '25', '06', '2', 'Kavita', 'Manoj Kumar', '9012880981', 'suhanibaraut2004@gmail.com', '2008-09-01', 'Gurana Road Baraut ', '40', '35', 250611, 'student/img-stu0000891-1669450252IMG_20221126_132918.jpg', 'bpBfu3', '1', NULL, NULL, NULL, NULL, '181', '2', '2022-08-13', '181', 'Pvt.Job', 'Indian public school Baraut ', '440316371895', 'Since Birth', '2022-11-26 06:45:33'),
 (906, '893133', '900', 'Ashvani', 'stu0000892', '64', '25', '07', '1', 'Guddi', 'Sunil Kumar ', '9012880981', 'ashwani14102004@gmail.com', '2010-07-14', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/img-stu0000892-1669450285IMG_20221126_132951.jpg', 'bpBfu3', '1', NULL, NULL, NULL, NULL, '182', '2', '2022-07-08', '182', 'Labour', 'Royal Public School Baraut Baghpat ', '232614639986', 'Since Birth', '2022-11-26 06:48:15'),
-(907, '178621', '901', 'Mahira ', 'stu0000893', '73', '26', '4', '2', 'Anjum ', 'Irshad ', '8279558223', '', '08/02/2018', 'Mugalpura ', '41', '36', 250609, 'img-stu0000893-1669620341WhatsApp Image 2022-11-28 at 12.54.42 PM.jpeg', '1gdthC', '1', NULL, NULL, NULL, NULL, '', '1', '07/02/2022', '25', '', '', '', '', '2022-11-26 06:49:29'),
+(907, '178621', '901', 'Mahira ', 'stu0000893', '73', '26', '4', '2', 'Anjum ', 'Irshad ', '8279558223', '', '2018-08-02', 'Mugalpura ', '41', '36', 250609, 'student/img-stu0000893-1669620341WhatsApp Image 2022-11-28 at 12.54.42 PM.jpeg', '1gdthC', '1', NULL, NULL, NULL, NULL, '', '1', '2022-07-02', '4', '', '', '', '', '2022-11-26 06:49:29'),
 (908, '893133', '902', 'Deepanshu Panchal', 'stu0000894', '64', '25', '08', '1', 'Komal', 'Sushil Kumar ', '8445281703', 'deepanshupanchal16@gmail.com', '2009-11-08', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/img-stu0000894-1669450327IMG_20221126_133048.jpg', 'AGyhT5', '1', NULL, NULL, NULL, NULL, '183', '2', '2022-04-01', '183', 'Wages', 'Royal Public School Baraut Baghpat ', '440249395069', 'Since Birth', '2022-11-26 06:51:36'),
-(909, '178621', '903', 'Sameer ', 'stu0000895', '73', '26', '5', '1', 'Reshma ', 'Mustakeem ', '7455963194', '', '08/22/2018', 'Rashid Colony ', '41', '36', 250609, 'img-stu0000895-1669619734WhatsApp Image 2022-11-28 at 12.41.12 PM.jpeg', 'tDCyIq', '1', NULL, NULL, NULL, NULL, '', '2', '08/16/2022', '26', '', '', '', '', '2022-11-26 06:56:02'),
-(910, '178621', '904', 'uvesh ', 'stu0000896', '73', '26', '6', '1', 'Guddo ', 'Aabed ', '6368805425', '', '02/05/2017', 'Old Town ', '41', '36', 250609, 'img-stu0000896-1669619982WhatsApp Image 2022-11-28 at 12.47.48 PM.jpeg', '4suXJx', '1', NULL, NULL, NULL, NULL, '', '2', '09/01/2022', '27', '', '', '', '', '2022-11-26 07:00:29'),
+(909, '178621', '903', 'Sameer ', 'stu0000895', '73', '26', '5', '1', 'Reshma ', 'Mustakeem ', '7455963194', '', '2018-08-22', 'Rashid Colony ', '41', '36', 250609, 'student/img-stu0000895-1669619734WhatsApp Image 2022-11-28 at 12.41.12 PM.jpeg', 'tDCyIq', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-16', '5', '', '', '', '', '2022-11-26 06:56:02'),
+(910, '178621', '904', 'uvesh ', 'stu0000896', '73', '26', '6', '1', 'Guddo ', 'Aabed ', '6368805425', '', '2017-02-05', 'Old Town ', '41', '36', 250609, 'student/img-stu0000896-1669619982WhatsApp Image 2022-11-28 at 12.47.48 PM.jpeg', '4suXJx', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-01', '6', '', '', '', '', '2022-11-26 07:00:29'),
 (911, '893133', '905', 'Kapil Kumar', 'stu0000897', '64', '25', '09', '2', 'Kusum Devi', 'Vinod Kumar', '7599522163', 'coowonx@gmail.com', '2009-08-01', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, 'student/img-stu0000897-1669450418IMG_20221126_133111.jpg', '5m4P9S', '1', NULL, NULL, NULL, NULL, '184', '2', '2022-08-03', '184', 'Wages', 'Royal Public School Baraut Baghpat ', '394256433257', 'Since Birth', '2022-11-26 07:03:18'),
-(912, '178621', '906', 'Hasan ', 'stu0000898', '73', '26', '7', '1', 'Aaysha ', 'Noshad ', '9548754122', '', '02/16/2019', 'Old Town ', '41', '36', 250609, 'img-stu0000898-1669619950WhatsApp Image 2022-11-28 at 12.48.11 PM (1).jpeg', 'wZ4GsM', '1', NULL, NULL, NULL, NULL, '', '2', '07/18/2022', '28', '', '', '', '', '2022-11-26 07:03:33'),
+(912, '178621', '906', 'Hasan ', 'stu0000898', '73', '26', '7', '1', 'Aaysha ', 'Noshad ', '9548754122', '', '2019-02-16', 'Old Town ', '41', '36', 250609, 'student/img-stu0000898-1669619950WhatsApp Image 2022-11-28 at 12.48.11 PM (1).jpeg', 'wZ4GsM', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-18', '7', '', '', '', '', '2022-11-26 07:03:33'),
 (913, '893133', '907', 'Naitik Rana', 'stu0000899', '64', '25', '10', '1', 'Monika Rana', 'Pramod Rana', '9058212916', 'natikrana061@gmail.com', '2007-08-10', 'Azad Nagar Baraut ', '40', '35', 250611, 'student/img-stu0000899-1669701758IMG_20221129_112634.jpg', 'Ts1BrZ', '1', NULL, NULL, NULL, NULL, '185', '2', '2022-07-02', '185', 'Wages', 'Royal Public School Baraut Baghpat ', '324887456005', 'Since Birth', '2022-11-26 07:09:13'),
 (914, '893133', '908', 'Sourabh', 'stu0000900', '64', '25', '11', '1', 'Pinki', 'Rambir', '9389623963', 'jayantgaurav443@gmail.com', '2009-08-28', 'Gurana Road Baraut ', '40', '35', 250611, 'student/img-stu0000900-1669450515IMG_20221126_133144.jpg', 'Ag389f', '1', NULL, NULL, NULL, NULL, '186', '3', '2022-04-04', '186', 'Wages', 'Royal Public School Baraut Baghpat ', '711260652036', 'Since Birth', '2022-11-26 07:13:00'),
 (915, '893133', '909', 'Vansh Kumar ', 'stu0000901', '64', '25', '12', '1', 'Umaa Devi', 'Praveen Kumar ', '8923125155', 'vanshkumarmeghlan@gmail.com', '2009-10-02', 'AZADNAGAR BARAUT BAGHPAT ', '40', '35', 250611, 'student/img-stu0000901-1669450594IMG_20221126_133215.jpg', 'CEJGb3', '1', NULL, NULL, NULL, NULL, '187', '2', '2022-04-21', '187', 'Wages', 'Royal Public School Baraut Baghpat ', '713310872147', 'Since Birth', '2022-11-26 07:17:28'),
@@ -9068,11 +9916,11 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (959, '893133', '953', 'Aryan', 'stu0000945', '65', '25', '13', '1', 'Lokesh', 'Vikash Kumar ', '8430990198', '', '12/15/2013', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 'XvWjh4', '1', NULL, NULL, NULL, NULL, '341', '2', '09/13/2023', '341', 'Wages', '', '', 'Since Birth', '2022-11-27 13:57:45'),
 (960, '893133', '954', 'Chirag Dahiya', 'stu0000946', '65', '25', '14', '1', 'Meenakshi', 'Rishipal Dahiya', '9012078421', '', '03/03/2015', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 'UnYo8I', '1', NULL, NULL, NULL, NULL, '37', '3', '04/02/2018', '37', 'Wages', '', '', 'Since Birth', '2022-11-27 14:00:53'),
 (961, '893133', '955', 'Devansh', 'stu0000947', '65', '25', '15', '1', 'Suman', 'Manish Kumar ', '9411023487', '', '05/09/2015', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 'gxBXHC', '1', NULL, NULL, NULL, NULL, '38', '2', '04/02/2018', '38', '', '', '', 'Since Birth', '2022-11-27 14:04:07'),
-(962, '893133', '956', 'Kartik', 'stu0000948', '65', '25', '16', '1', 'Babli', 'Sanjeev Kumar ', '9528674197', '', '09/15/2011', 'Azad Nagar Baraut ', '40', '35', 250611, '', '6lA5BP', '1', NULL, NULL, NULL, NULL, '343', '2', '09/15/2021', '343', 'Wages', '', '', 'Since Birth', '2022-11-27 14:06:47'),
+(962, '893133', '956', 'Kartik', 'stu0000948', '65', '25', '16', '1', 'Babli', 'Sanjeev Kumar ', '9528674197', '', '09/15/2011', 'Azad Nagar Baraut ', '40', '35', 250611, '', '6lA5BP', '1', NULL, NULL, NULL, NULL, '343', '2', '09/15/2021', '343', 'Wages', '', '', 'Since Birth', '2022-11-27 14:06:47');
+INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `sr_number`, `cast_category`, `date_of_admission`, `admission_no`, `occupation`, `last_schoool_name`, `aadhar_no`, `residence_in_india_since`, `created_at`) VALUES
 (963, '893133', '957', 'Kartik Sharma ', 'stu0000949', '65', '25', '17', '1', 'Malti Devi', 'Vinod Sharma ', '9045914975', '', '02/17/2015', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 'fOg524', '1', NULL, NULL, NULL, NULL, '40', '1', '04/02/2018', '40', 'Priest', '', '', 'Since Birth', '2022-11-27 14:09:28'),
 (964, '893133', '958', 'Krishna', 'stu0000950', '56', '25', '18', '1', 'Sangita', 'Sanjay', '9917141148', '', '08/20/2013', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 'hA8N56', '1', NULL, NULL, NULL, NULL, '49', '2', '04/23/2018', '49', 'Wages', 'Royal Public School Baraut Baghpat ', '', 'Since Birth', '2022-11-27 14:12:07'),
-(965, '893133', '959', 'Kunaal', 'stu0000951', '65', '25', '19', '1', 'Meera', 'Sanjay', '9068166684', '', '04/25/2013', 'Gurana Road Baraut', '40', '35', 250611, '', 'JYGU2A', '1', NULL, NULL, NULL, NULL, '346', '2', '02/25/2022', '346', 'Wages', 'Private', '', 'Since Birth', '2022-11-27 14:14:33');
-INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `sr_number`, `cast_category`, `date_of_admission`, `admission_no`, `occupation`, `last_schoool_name`, `aadhar_no`, `residence_in_india_since`, `created_at`) VALUES
+(965, '893133', '959', 'Kunaal', 'stu0000951', '65', '25', '19', '1', 'Meera', 'Sanjay', '9068166684', '', '04/25/2013', 'Gurana Road Baraut', '40', '35', 250611, '', 'JYGU2A', '1', NULL, NULL, NULL, NULL, '346', '2', '02/25/2022', '346', 'Wages', 'Private', '', 'Since Birth', '2022-11-27 14:14:33'),
 (966, '893133', '960', 'Naitik', 'stu0000952', '65', '25', '20', '1', 'Pooja', 'Shiv Kumar ', '9888888888', '', '11/03/2014', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', 'zgux66', '1', NULL, NULL, NULL, NULL, '0001', '2', '04/05/2022', '0001', 'Wages', '', '', 'Since Birth', '2022-11-27 14:17:49'),
 (967, '893133', '961', 'Parth Panwar ', 'stu0000953', '65', '25', '21', '1', 'Sunita', 'Rahul Panwar', '9756103243', '', '08/15/2017', 'Azad Nagar Baraut ', '40', '35', 250611, '', 'aKW4t4', '1', NULL, NULL, NULL, NULL, '41', '2', '04/02/2018', '41', 'Business ', '', '', 'Since Birth', '2022-11-27 14:19:58'),
 (968, '893133', '962', 'Praneet Khiwal', 'stu0000954', '65', '25', '22', '1', 'Priyanka ', 'Vikash Khiwal ', '90127559835', '', '04/30/2014', 'Azad Nagar Baraut Baghpat ', '40', '35', 250611, '', '7m0QB3', '1', NULL, NULL, NULL, NULL, '42', '1', '04/02/2018', '42', 'Wages', '', '', 'Since Birth', '2022-11-27 14:22:10'),
@@ -9105,8 +9953,8 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (995, '893133', '989', 'Swet Kumar', 'stu0000981', '66', '25', '25', '1', 'Surekha Devi ', 'Sanjay Kumar ', '7819901374', '', '10/09/2005', 'AZADNAGAR BARAUT BAGHPAT ', '40', '35', 250611, '', 'rJu0i5', '1', NULL, NULL, NULL, NULL, '7623', '3', '09/01/2021', '7623', 'Wages', 'Royal Public School Baraut Baghpat ', '280337044995', 'Since Birth', '2022-11-28 06:11:42'),
 (996, '893133', '990', 'Vikas Kumar', 'stu0000982', '66', '25', '26', '1', 'Ramesho Devi', 'Omkar Singh', '9058583044', '', '07/08/2004', 'Azad Nagar Baraut ', '40', '35', 250611, '', '2rL2UA', '1', NULL, NULL, NULL, NULL, '6138', '3', '07/08/2014', '6138', 'Wages', 'Royal Public School Baraut Baghpat ', '889728823542', 'Since Birth', '2022-11-28 06:14:57'),
 (997, '351496', '991', 'Vadhika', 'stu0000983', '101', '31', '1', '2', 'Pooja', 'Sonu', '9898989898', 'adarshshikshamandir1@gmail.com', '10/31/2015', 'Kishanpur baral', '43', '53', 250623, 'student/', '5N2gCZ', '4', NULL, NULL, NULL, NULL, '4382', '2', '02/01/2020', '4382', '', '', '', 'By Birth', '2022-11-28 06:23:27'),
-(998, '178621', '992', 'Aayat', 'stu0000984', '73', '26', '1', '2', 'Musrat', 'Noor Mohmand', '7060435923', '', '2018-10-10', 'Mugalpura Baghpat', '41', '36', 250609, 'img-stu0000984-1669782518WhatsApp Image 2022-11-28 at 12.14.52 PM.jpeg', 'K1G2vh', '1', NULL, NULL, NULL, NULL, 'UPS, Board-78 ', '2', '2022-08-24', '29', '', '', '', '', '2022-11-28 06:36:43'),
-(999, '351496', '993', 'DEV', 'stu0000985', '101', '31', '3', '1', 'RAKHI', 'SONU', '09149311598', 'VIPINSWAMI087@GMAIL.COM', '12/12/2016', 'RAMALA', '43', '53', 250623, '', 'P9NB6A', '1', NULL, NULL, NULL, NULL, '4338', '2', '04/01/2021', 'DEV', '', '', '', '', '2022-11-28 07:26:10'),
+(998, '178621', '992', 'Aayat', 'stu0000984', '73', '26', '1', '2', 'Musrat', 'Noor Mohmand', '7060435923', '', '2018-10-10', 'Mugalpura Baghpat', '41', '36', 250609, 'student/img-stu0000984-1669782518WhatsApp Image 2022-11-28 at 12.14.52 PM.jpeg', 'K1G2vh', '1', NULL, NULL, NULL, NULL, 'UPS, Board-78 ', '2', '2022-08-24', '1', '', '', '', '', '2022-11-28 06:36:43'),
+(999, '351496', '993', 'DEV', 'stu0000985', '101', '31', '3', '1', 'RAKHI', 'SONU', '09149311598', 'VIPINSWAMI087@GMAIL.COM', '12/12/2016', 'RAMALA', '43', '53', 250623, '', 'P9NB6A', '4', NULL, NULL, NULL, NULL, '4338', '2', '04/01/2021', 'DEV', '', '', '', '', '2022-11-28 07:26:10'),
 (1000, '475467', '994', 'Sonu Unique', 'stu0000986', '104', '35', '17', '1', 'Soniya', 'Monu', '9639639636', 'sonu@unique.info', '10/31/2018', 'Nehru Road', '44', '55', 250611, '', 'T7tJuX', '1', NULL, NULL, NULL, NULL, '00112255', '1', '04/01/2022', '00112255', 'Job', 'Digitalfied', '1472583695', 'By Birth', '2022-11-28 09:06:29'),
 (1001, '975691', '995', 'Shivansh', 'stu0000987', '106', '37', '1', '1', 'bhawana chauhan', 'Gourav chouhan', '8851848199', 'pridekids2018@gmail.com', '12/07/2018', 'KantaPati  House no 256', '45', '58', 250611, 'student/', 'XtLUDK', '1', NULL, NULL, NULL, NULL, '', '1', '03/28/2022', '', '', '', '', '', '2022-11-28 09:51:05'),
 (1002, '975691', '996', 'Gaurang garg', 'stu0000988', '106', '37', '2', '1', 'Priya garg', 'shivam garg', '9719580170', 'pridekids2018@gmail.com', '10/21/2019', 'gali no-2 shanti puram Nehru road ', '45', '57', 250611, '', 'NTpESZ', '1', NULL, NULL, NULL, NULL, '', '1', '03/28/2022', '', '', '', '', '', '2022-11-28 09:56:04'),
@@ -9114,10 +9962,10 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1004, '975691', '998', 'Riya', 'stu0000990', '113', '37', '2', '2', 'lalita', 'Deepak', '9837476874', 'pridekids2018@gmail.com', '11/28/2022', 'Ajanta genrel Store Binali road', '45', '57', 250611, '', 'D80bjR', '1', NULL, NULL, NULL, NULL, '', '1', '03/29/2022', '', '', '', '', '', '2022-11-28 10:03:14'),
 (1005, '975691', '999', 'Harsh Rathi', 'stu0000991', '113', '37', '3', '1', 'Sonu', 'Sandeep Rathi', '7017037671', 'pridekids2018@gmail.com', '2022-07-20', 'Ram bagh Colony', '45', '57', 250611, '', '92rwN1', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-28', '', '', '', '', '', '2022-11-28 10:06:05'),
 (1006, '975691', '1000', 'Akshat jain', 'stu0000992', '108', '37', '1', '1', 'Paridhi jain', 'Anuj jain', '9997853585', 'pridekids2018@gmail.com', '2018-03-27', 'Gandhi Road ', '45', '57', 250611, '', 'ZylVpf', '1', NULL, NULL, NULL, NULL, '', '1', '2022-07-19', '', '', '', '', '', '2022-11-28 10:09:47'),
-(1007, '975691', '1001', 'Prashak jain', 'stu0000993', '106', '37', '2', '1', 'Paridhi jain', 'Anuj jain', '9997853585', 'pridekids2018@gmail.com', '2016-11-10', 'Gandhi Road ', '45', '57', 250611, '', 'ZylVpf', '1', NULL, NULL, NULL, NULL, '', '1', '2022-07-19', '', '', '', '', '', '2022-11-28 10:13:16'),
+(1007, '975691', '1001', 'Prashak jain', 'stu0000993', '109', '37', '2', '1', 'Paridhi jain', 'Anuj jain', '9997853585', 'pridekids2018@gmail.com', '2016-11-10', 'Gandhi Road ', '45', '57', 250611, 'student/', 'ZylVpf', '1', NULL, NULL, NULL, NULL, '', '1', '2022-07-19', '', '', '', '', '', '2022-11-28 10:13:16'),
 (1008, '975691', '1002', 'Yash Saini', 'stu0000994', '107', '37', '1', '1', 'Ruby Saini', 'Vinod Saini', '9897592349', 'pridekids2018@gmail.com', '2017-05-16', 'Gali No-7 Azad nagar', '45', '57', 250611, '', 'WVT7Md', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-31', '', '', '', '', '', '2022-11-28 10:15:56'),
-(1009, '975691', '1003', 'Vanshi Tomar', 'stu0000995', '109', '37', '1', '2', 'Aditi Tomer', 'Rohit Tomer', '8650555552', 'pridekids2018@gmail.com', '2022-11-28', '4/166 gali No-5 Azad nagar ', '45', '57', 250611, '', 'm848I9', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-01', '', '', '', '', '', '2022-11-28 10:18:53'),
-(1010, '975691', '1004', 'Arodhya', 'stu0000996', '106', '37', '4', '2', 'Puja Rani', 'Neraj Kumar', '9410646259', 'pridekids2018@gmail.com', '2019-01-11', 'Gurana Road Khisi Mohalla', '45', '57', 250611, '', '80zhC0', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-28', '', '', '', '', '', '2022-11-28 10:22:02'),
+(1009, '975691', '1003', 'Vamshi Tomar', 'stu0000995', '106', '37', '1', '2', 'Aditi Tomer', 'Rohit Tomer', '8650555552', 'pridekids2018@gmail.com', '2022-11-28', '4/166 gali No-5 Azad nagar ', '45', '57', 250611, 'student/', 'm848I9', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-01', '', '', '', '', '', '2022-11-28 10:18:53'),
+(1010, '975691', '1004', 'Aradhya', 'stu0000996', '106', '37', '4', '2', 'Puja Rani', 'Neraj Kumar', '9410646259', 'pridekids2018@gmail.com', '2019-01-11', 'Gurana Road Khisi Mohalla', '45', '57', 250611, 'student/', '80zhC0', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-28', '', '', '', '', '', '2022-11-28 10:22:02'),
 (1011, '975691', '1005', 'Prapti jain', 'stu0000997', '106', '37', '5', '2', 'neha Jain', 'ankur Jain', '9557212188', 'pridekids2018@gmail.com', '2019-12-31', 'Vakilpura Gandi Raod', '45', '57', 250611, '', 'l0HT7L', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-29', '', '', '', '', '', '2022-11-28 10:24:20'),
 (1012, '975691', '1006', 'Veer Dangi', 'stu0000998', '106', '37', '6', '1', 'Pooja', 'Manish Kumar', '9927124499', 'pridekids2018@gmail.com', '2020-04-30', 'Shanti Puram Gali No-03 Nehru Road ', '45', '57', 250611, '', '5BIlvr', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-04', '', '', '', '', '', '2022-11-28 10:26:52'),
 (1013, '975691', '1007', 'Saachi jain', 'stu0000999', '106', '37', '7', '2', 'payal jain', 'Tushar jain', '8923241155', 'pridekids2018@gmail.com', '2019-12-05', 'In front of bank Of Baroda Gandi road', '45', '57', 250611, '', 'wtg73v', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-01', '', '', '', '', '', '2022-11-28 10:34:33'),
@@ -9127,11 +9975,11 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1017, '975691', '1011', 'kayra  jain', 'stu00001003', '106', '37', '10', '2', 'Aarchi Jain', 'Gaurav Jain', '8810080196', 'pridekids2018@gmail.com', '2019-07-19', 'gali No-18 Malgodam Road ', '45', '57', 250611, '', 'NTbv9u', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-12', '', '', '', '', '', '2022-11-28 10:51:10'),
 (1018, '975691', '1012', 'Mayra Jain', 'stu00001004', '106', '37', '11', '2', 'Aarchi Jain', 'Gaurav Jain', '8810080196', 'pridekids2018@gmail.com', '2019-07-19', 'gali No-18 Malgodam Road ', '45', '57', 250611, '', 'NTbv9u', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-12', '', '', '', '', '', '2022-11-28 10:53:13'),
 (1019, '975691', '1013', 'Ritvi jain', 'stu00001005', '106', '37', '12', '2', 'Sakshi jain', 'Mohit Jain', '9193045650', 'pridekids2018@gmail.com', '2019-05-14', 'Gandhi Road ', '45', '57', 250611, '', 'e3yYxf', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-30', '', '', '', '', '', '2022-11-28 10:58:40'),
-(1020, '975691', '1014', 'Advik Panwar', 'stu00001006', '106', '37', '13', '1', 'Soniya', 'Deepak panwar', '8532900093', 'pridekids2018@gmail.com', '2018-09-03', '7/552 gali No.3 Shanti puram Nehru Road', '45', '57', 250611, '', 'B57YUh', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-05', '', '', '', '', '', '2022-11-28 11:01:47'),
+(1020, '975691', '1014', 'Advik Panwar', 'stu00001006', '106', '37', '13', '1', 'Soniya', 'Deepak panwar', '8532900093', 'pridekids2018@gmail.com', '2018-09-03', '7/552 gali No.3 Shanti puram Nehru Road', '45', '57', 250611, '', 'B57YUh', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-05', '', '', '', '', '', '2022-11-28 11:01:47'),
 (1021, '975691', '1015', 'Kyara', 'stu00001007', '106', '37', '14', '2', 'Geeta', 'Gaurav Antal', '8057840028', 'pridekids2018@gmail.com', '2019-03-21', 'RailWay Mall Godam Road ', '45', '57', 250611, '', 'aIudg2', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-09', '', '', '', '', '', '2022-11-28 11:03:39'),
 (1022, '975691', '1016', 'Rudraksh Sharma', 'stu00001008', '107', '37', '2', '1', 'Parul Sharma', 'Pravesh Sharma', '7456951990', 'pridekids2018@gmail.com', '2018-12-16', 'Gurana Road Gali no-06', '45', '57', 250611, '', '3T96xi', '1', NULL, NULL, NULL, NULL, '', '1', '2022-02-21', '', '', '', '', '', '2022-11-28 11:05:43'),
 (1023, '975691', '1017', 'Ritul Jain', 'stu00001009', '107', '37', '3', '1', 'priyanka', 'Amit Kumar', '8630811815', 'pridekids2018@gmail.com', '2018-01-19', 'Gandhi Road ', '45', '57', 250611, '', 'D0GBSo', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-19', '', '', '', '', '', '2022-11-28 11:08:38'),
-(1024, '975691', '1018', 'Aatishi Tomar', 'stu00001010', '107', '37', '4', '1', 'Sarita Tomar', 'Ankit Tomar', '9368196868', 'pridekids2018@gmail.com', '2018-09-09', 'Vpo Gurana ', '45', '57', 250611, '', 't67Bb1', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-30', '', '', '', '', '', '2022-11-28 11:11:16'),
+(1024, '975691', '1018', 'Aatishi Tomar', 'stu00001010', '107', '37', '4', '1', 'Sarita Tomar', 'Ankit Tomar', '9368196868', 'pridekids2018@gmail.com', '2018-09-09', 'Vpo Gurana ', '45', '57', 250611, '', 't67Bb1', '4', NULL, NULL, NULL, NULL, '', '2', '2022-03-30', '', '', '', '', '', '2022-11-28 11:11:16'),
 (1025, '975691', '1019', 'Kaira', 'stu00001011', '107', '37', '3', '2', 'Anshita Jain', 'Himanshu jain', '70177920180', 'pridekids2018@gmail.com', '2018-01-02', 'Hathi Kahana ', '45', '57', 250611, '', '3vFsiB', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-09', '', '', '', '', '', '2022-11-28 11:16:30'),
 (1026, '975691', '1020', 'Divinge Jain', 'stu00001012', '107', '37', '4', '1', '', 'Rabin Jain', '8979987656', 'pridekids2018@gmail.com', '2022-03-28', 'Bada mardir', '45', '57', 250611, '', 'lY6nBC', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-28', '', '', '', '', '', '2022-11-28 11:19:16'),
 (1027, '975691', '1021', 'Prayya Jain', 'stu00001013', '107', '37', '5', '2', 'Monika jain', 'Pravin Kumar jain', '8630267200', 'pridekids2018@gmail.com', '2018-12-08', 'nehru Road ', '45', '57', 250611, '', 'snVa7f', '1', NULL, NULL, NULL, NULL, '', '2', '2022-02-24', '', '', '', '', '', '2022-11-28 11:23:40'),
@@ -9142,7 +9990,7 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1032, '975691', '1026', 'Raghav Verma', 'stu00001018', '107', '37', '9', '1', 'soniya verma', 'Ankit Verma', '9719657361', 'pridekids2018@gmail.com', '2018-06-05', 'Gandhi Road ', '45', '57', 250611, '', 'sP7q4b', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-02', '', '', '', '', '', '2022-11-28 11:44:15'),
 (1033, '975691', '1027', 'Aarush Verma', 'stu00001019', '107', '37', '10', '1', 'Trividha', 'Monu verma', '8800190976', 'pridekids2018@gmail.com', '2019-01-15', 'vpo', '45', '58', 250611, '', '0m0ywU', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-07', '', '', '', '', '', '2022-11-28 11:47:50'),
 (1034, '975691', '1028', 'Aviral chikara', 'stu00001020', '107', '37', '12', '1', 'Richa Chikara', 'Anuj Chikara', '8077231660', 'pridekids2018@gmail.com', '2018-12-26', 'Barawad', '45', '60', 250611, 'student/', 'VOC5DY', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-21', '', '', '', '', '', '2022-11-28 14:04:20'),
-(1035, '975691', '1029', 'Avika panwar', 'stu00001021', '108', '37', '2', '2', 'Jyoti', 'Amit Kumar', '9917487008', 'pridekids2018@gmail.com', '2018-05-04', 'Gurana road Gali-no-08', '45', '57', 250611, '', '8y17i0', '1', NULL, NULL, NULL, NULL, '', '3', '2022-03-07', '', '', '', '', '', '2022-11-28 14:07:37'),
+(1035, '975691', '1029', 'Avika panwar', 'stu00001021', '108', '37', '2', '2', 'Jyoti', 'Amit Kumar', '9917487008', 'pridekids2018@gmail.com', '2018-05-04', 'Gurana road Gali-no-08', '45', '57', 250611, '', '8y17i0', '4', NULL, NULL, NULL, NULL, '', '3', '2022-03-07', '', '', '', '', '', '2022-11-28 14:07:37'),
 (1036, '975691', '1030', 'Wise', 'stu00001022', '112', '37', '01', '1', 'Sonya', 'Mahbub', '9548111090', 'pridekids2018@gmail.com', '2012-10-01', 'Chhaprali Choungi', '45', '57', 250611, '', '1FmH6U', '1', NULL, NULL, NULL, NULL, '', '2', '2022-05-13', '', '', '', '', '', '2022-11-28 14:10:56'),
 (1037, '975691', '1031', 'Tejasw Panwar', 'stu00001023', '108', '37', '3', '1', 'Dimpal Tomar', 'Vimal Kumar Panwar', '9968925867', 'pridekids2018@gmail.com', '2018-09-27', 'Saket Colony binoli Road ', '45', '57', 250611, '', 'T6qLZF', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-19', '', '', '', '', '', '2022-11-28 14:24:48'),
 (1038, '975691', '1032', 'Aavishi Jain', 'stu00001024', '110', '37', '1', '2', 'Shikha jain ', 'Abhilash Kumar Jain', '8800170094', 'pridekids2018@gmail.com', '2017-03-22', '21-565 gali no-03 Mansaravar Colony Canal Road ', '45', '57', 250611, '', 'g0ZFTU', '1', NULL, NULL, NULL, NULL, '', '1', '2022-07-11', '', '', '', '', '', '2022-11-28 14:27:26'),
@@ -9151,39 +9999,39 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1041, '975691', '1035', 'Aviyukt Bhardwaj', 'stu00001027', '108', '37', '5', '1', 'Anshu Sharma', 'kamal kant bhardwaj', '9808924023', 'pridekids2018@gmail.com', '2018-03-09', '25-412 rama Colony nehru Road', '45', '57', 250611, '', 'x3w6gb', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-04', '', '', '', '', '', '2022-11-28 14:33:49'),
 (1042, '975691', '1036', 'Aaradhy Sharma', 'stu00001028', '110', '37', '5', '1', 'babita', 'Vijay Sharma', '8923333770', 'pridekids2018@gmail.com', '2014-11-15', 'Mansarovra Colony Gali No-01', '45', '57', 250611, '', 'c4v0dM', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-28 14:35:34'),
 (1043, '975691', '1037', 'Vidushi chikara', 'stu00001029', '113', '37', '1', '2', 'Richa Chikara', 'Anuj Chikara', '8077231660', 'pridekids2018@gmail.com', '2013-11-14', 'Barawad', '45', '60', 250611, '', 'VOC5DY', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-21', '', '', '', '', '', '2022-11-28 14:37:58'),
-(1044, '975691', '1038', 'kriyamsh Kuladiya', 'stu00001030', '109', '37', '5', '1', 'poonam', 'Bablu Kuladiya', '6396213910', 'pridekids2018@gmail.com', '2018-02-10', 'Ajad nagar gali No-08', '45', '57', 250611, '', 'yX4LKB', '1', NULL, NULL, NULL, NULL, '', '3', '2022-03-15', '', '', '', '', '', '2022-11-28 14:39:54'),
+(1044, '975691', '1038', 'kriyansh Kuladiya', 'stu00001030', '109', '37', '5', '1', 'poonam', 'Bablu Kuladiya', '6396213910', 'pridekids2018@gmail.com', '2018-02-10', 'Ajad nagar gali No-08', '45', '57', 250611, 'student/', 'yX4LKB', '1', NULL, NULL, NULL, NULL, '', '3', '2022-03-15', '', '', '', '', '', '2022-11-28 14:39:54'),
 (1045, '975691', '1039', 'Mokshi Jain', 'stu00001031', '113', '37', '6', '2', 'Shivani jain', 'Mohit Jain', '9119009446', 'pridekids2018@gmail.com', '2012-11-15', 'Gandhi Road ', '45', '57', 250611, '', 'KbnqRO', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-02', '', '', '', '', '', '2022-11-28 14:42:16'),
 (1046, '975691', '1040', ' Saanvi Jain', 'stu00001032', '109', '37', '8', '2', 'Nidhi Jain', 'Abhishek jain', '9916079395', '', '2017-05-25', '25-100 gandhi Road ', '45', '57', 250611, '', 'jglpO2', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-12', '', '', '', '', '', '2022-11-28 14:44:40'),
 (1047, '691309', '1041', 'Anuushka Chauhan', 'stu00001033', '97', '27', '01', '2', 'Alka', 'Anuj', '8006994444', '', '2010-04-28', 'Bacchor', '42', '45', 250617, '', 'x6g6D3', '1', NULL, NULL, NULL, NULL, '', '2', '', '0626', '', '', '', '', '2022-11-29 02:52:26'),
 (1048, '691309', '1042', 'Navya', 'stu00001034', '97', '27', '02', '2', 'Alka', 'Devendra Maan', '8534803734', '', '2010-06-05', 'Sinauli', '42', '39', 250611, '', 'iIl4Yd', '1', NULL, NULL, NULL, NULL, '', '2', '', '0338', '', '', '', '', '2022-11-29 02:58:29'),
 (1049, '625028', '1043', 'Shaif', 'stu00001035', '49', '24', '24', '1', 'Saiba', 'Imran', '8791204749', 'ruchiahlawat0@gmail.com', '2017-11-11', 'Baraut', '39', '33', 250611, '', 'm4gCAl', '1', NULL, NULL, NULL, NULL, '469', '1', '', '469', '', '', '', '', '2022-11-29 03:01:59'),
-(1050, '178621', '1044', 'Aaysha', 'stu00001036', '75', '26', '1', '2', 'Moomina', 'Aabid Malik', '6395923299', '', '2016-06-25', 'Ekta colony ', '41', '36', 250609, 'student/student/student/', 'cyoY8A', '1', NULL, NULL, NULL, NULL, '', '2', '2021-04-01', '30', '', '', '', '', '2022-11-29 05:05:03'),
-(1051, '178621', '1045', 'Aaysha', 'stu00001037', '75', '26', '2', '1', '', 'Shahid ', '9528225572', '', '2017-02-12', 'mugal pura ', '41', '36', 250609, 'student/', 'M6aHqo', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '31', '', '', '281352051330', '', '2022-11-29 05:24:09'),
+(1050, '178621', '1044', 'Aaysha', 'stu00001036', '75', '26', '1', '2', 'Moomina', 'Aabid Malik', '6395923299', '', '2016-06-25', 'Ekta colony ', '41', '36', 250609, 'student/student/student/student/', 'cyoY8A', '1', NULL, NULL, NULL, NULL, '', '2', '2021-04-01', '29', '', '', '', '', '2022-11-29 05:05:03'),
+(1051, '178621', '1045', 'Aaysha', 'stu00001037', '75', '26', '2', '1', '', 'Shahid ', '9528225572', '', '2017-02-12', 'mugal pura ', '41', '36', 250609, 'student/student/', 'M6aHqo', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '30', '', '', '281352051330', '', '2022-11-29 05:24:09'),
 (1052, '178621', '1046', 'Aaysha', 'stu00001038', '75', '26', '2', '1', 'kehkasha', 'Shahid ', '9528225572', '', '2017-02-12', 'mugal pura ', '41', '36', 250609, '', 'M6aHqo', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '30', '', '', '281352051330', '', '2022-11-29 05:25:54'),
 (1053, '351496', '1047', 'MANVI', 'stu00001039', '102', '31', '3', '2', '', 'VIKASH', '09149311598', 'ADARSHSHIKSHAMANDIR1@GMAIL.COM', '2015-06-01', 'KISHANPUR BARAL', '43', '53', 250623, '', 'P9NB6A', '1', NULL, NULL, NULL, NULL, '', '1', '2021-08-09', 'MANVI', '', '', '', '', '2022-11-29 06:17:54'),
 (1054, '452206', '1048', 'Gaurav Sharma', 'stu00001040', '120', '38', '2', '1', 'Kavita', 'Ram Sharma', '9999999999', 'abc@gmail.com', '1996-03-07', 'Baraut', '46', '61', 250611, '', 'f26WP5', '1', NULL, NULL, NULL, NULL, '1', '1', '2022-01-04', '1', 'Job', '', '', '', '2022-11-29 06:19:30'),
-(1055, '178621', '1049', 'Fiza', 'stu00001041', '75', '26', '4', '2', 'Rabiya', 'Sahil', '8383027434', '', '2018-02-21', 'Delhi road baghpat', '41', '36', 250609, 'student/', 'gINmZv', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-14', '32', '', '', '', '', '2022-11-29 06:20:39'),
+(1055, '178621', '1049', 'Fiza', 'stu00001041', '75', '26', '4', '2', 'Rabiya', 'Sahil', '8383027434', '', '2018-02-21', 'Delhi road baghpat', '41', '36', 250609, 'student/student/', 'gINmZv', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-14', '32', '', '', '', '', '2022-11-29 06:20:39'),
 (1056, '351496', '1050', 'VINEET ', 'stu00001042', '102', '31', '4', '1', '', 'CHANDERVEER', '09149311598', 'VIPINSWAMI087@GMAIL.COM', '2012-03-18', 'KISHANPUR BARAL', '43', '53', 250623, '', 'P9NB6A', '1', NULL, NULL, NULL, NULL, '4321', '2', '2021-08-09', '4321', '', '', '', '', '2022-11-29 06:26:39'),
 (1057, '351496', '1051', 'AYUSH TOMAR', 'stu00001043', '102', '31', '5', '1', 'NEELAM ', 'TEJENDRA', '09149311598', 'ADARSHSHIKSHAMANDIR1@GMIL.COM', '2015-01-21', 'RAMALA', '43', '53', 250623, '', 'P9NB6A', '1', NULL, NULL, NULL, NULL, '4303', '2', '2021-08-09', '4303', '', '', '', '', '2022-11-29 06:32:22'),
-(1058, '178621', '1052', 'Namra', 'stu00001044', '75', '26', '5', '2', 'Sakila', 'Savez', '9149259657', '', '2016-10-19', 'Rashid  Colony baghpat', '41', '36', 250609, '', 'qspMxj', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '32', '', '', '', '', '2022-11-29 07:36:37'),
-(1059, '178621', '1053', 'Shaayan', 'stu00001045', '75', '26', '6', '1', 'Heena', 'Irfaan', '7357100896', '', '2017-05-28', 'Ghanshyam dass road', '41', '36', 250609, '', 'nDs41b', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '33', '', '', '', '', '2022-11-29 07:46:25'),
-(1060, '178621', '1054', 'Ziya ', 'stu00001046', '75', '26', '8', '2', 'Rubeena', 'nadeem', '9639274183', '', '2017-01-06', 'Rashid colony ', '41', '36', 250609, '', 'iraYxN', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '34 ', '', '', '', '', '2022-11-29 08:16:44'),
-(1061, '178621', '1055', 'Khushi ', 'stu00001047', '75', '26', '9', '2', 'Rekha ', 'Kaleeram ', '8279783435', '', '2011-08-04', 'devi chawk ', '41', '36', 250609, 'student/', 'Y06aI2', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '35', '', '', '', '', '2022-11-29 08:22:11'),
-(1062, '178621', '1056', 'Dev ', 'stu00001048', '75', '26', '10', '1', 'Kranti', 'Subhash', '8279508225', '', '2015-10-24', 'Arjun puram Baghpat ', '41', '36', 250609, 'student/', '9b1xcp', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-20', '35', '', '', '', '', '2022-11-29 08:28:46'),
-(1063, '178621', '1057', 'Subhan ', 'stu00001049', '75', '26', '11', '1', 'Baby', 'Saddan ', '8077987186', '', '2013-08-25', 'Rashid colony ', '41', '36', 250609, '', 'Pj7zgD', '1', NULL, NULL, NULL, NULL, '', '2', '2022-05-09', '36', '', '', '', '', '2022-11-29 08:35:03'),
-(1064, '178621', '1058', 'Jainab ', 'stu00001050', '75', '26', '12', '2', 'AMIRBANE ', 'AALAM ', '9368072407', '', '2016-12-22', 'CHAMRAWAL ROAD ', '41', '36', 250609, '', 'zSkF93', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-12', '37', '', '', '', '', '2022-11-29 08:39:35'),
+(1058, '178621', '1052', 'Namra', 'stu00001044', '75', '26', '5', '2', 'Sakila', 'Savez', '9149259657', '', '2016-10-19', 'Rashid  Colony baghpat', '41', '36', 250609, 'student/', 'qspMxj', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '33', '', '', '', '', '2022-11-29 07:36:37'),
+(1059, '178621', '1053', 'Shaayan', 'stu00001045', '75', '26', '6', '1', 'Heena', 'Irfaan', '7357100896', '', '2017-05-28', 'Ghanshyam dass road', '41', '36', 250609, 'student/', 'nDs41b', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '34', '', '', '', '', '2022-11-29 07:46:25'),
+(1060, '178621', '1054', 'Ziya ', 'stu00001046', '75', '26', '8', '2', 'Rubeena', 'nadeem', '9639274183', '', '2017-01-06', 'Rashid colony ', '41', '36', 250609, 'student/', 'iraYxN', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '36', '', '', '', '', '2022-11-29 08:16:44'),
+(1061, '178621', '1055', 'Khushi ', 'stu00001047', '75', '26', '9', '2', 'Rekha ', 'Kaleeram ', '8279783435', '', '2011-08-04', 'devi chawk ', '41', '36', 250609, 'student/student/', 'Y06aI2', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '37', '', '', '', '', '2022-11-29 08:22:11'),
+(1062, '178621', '1056', 'Dev ', 'stu00001048', '75', '26', '10', '1', 'Kranti', 'Subhash', '8279508225', '', '2015-10-24', 'Arjun puram Baghpat ', '41', '36', 250609, 'student/student/', '9b1xcp', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-20', '38', '', '', '', '', '2022-11-29 08:28:46'),
+(1063, '178621', '1057', 'Subhan ', 'stu00001049', '75', '26', '11', '1', 'Baby', 'Saddan ', '8077987186', '', '2013-08-25', 'Rashid colony ', '41', '36', 250609, 'student/', 'Pj7zgD', '1', NULL, NULL, NULL, NULL, '', '2', '2022-05-09', '39', '', '', '', '', '2022-11-29 08:35:03'),
+(1064, '178621', '1058', 'Jainab ', 'stu00001050', '75', '26', '12', '2', 'AMIRBANE ', 'AALAM ', '9368072407', '', '2016-12-22', 'CHAMRAWAL ROAD ', '41', '36', 250609, 'student/', 'zSkF93', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-12', '40', '', '', '', '', '2022-11-29 08:39:35'),
 (1065, '975691', '1059', 'Riddhi sharma', 'stu00001051', '109', '37', '5', '2', 'Meenu', 'Naveen Kumar Sharma', '9027297533', 'pridekids2018@gmail.com', '2017-04-13', '11/723 gali No-07 gurana Road vijay nagar', '45', '57', 250611, '', 'b8Gtgr', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-07', '', '', '', '', '', '2022-11-29 08:56:12'),
 (1066, '975691', '1060', 'Anika Chauhan', 'stu00001052', '109', '37', '6', '2', 'Anju', 'Anuj Kumar', '79020009187', 'pridekids2018@gmail.com', '2017-04-21', 'nehru Road ', '45', '57', 250611, '', 'oeVjQ7', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '', '', '', '', '', '2022-11-29 08:58:52'),
 (1067, '975691', '1061', 'yugal Kishore', 'stu00001053', '112', '37', '7', '1', 'Meenaakshi Devi', 'Sushil Kumar', '8923907344', 'pridekids2018@gmail.com', '2012-03-16', '10-327 Khirni Mohalla Gali No-02 gurana Road', '45', '57', 250611, '', 'Ick607', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-26', '', '', '', '', '', '2022-11-29 09:04:02'),
 (1068, '975691', '1062', 'Priya ', 'stu00001054', '114', '37', '5', '2', 'Meenaakshi', 'Sushil Kumar', '8923907344', 'pridekids2018@gmail.com', '2010-05-25', '11-723 gali No-07 Gurana road ', '45', '57', 250611, '', 'Ick607', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-23', '', '', '', '', '', '2022-11-29 09:07:26'),
 (1069, '975691', '1063', 'Ayansh Dhiran', 'stu00001055', '109', '37', '10', '1', 'manju', 'Deepak kumar', '9983780455', 'pridekids2018@gmail.com', '2017-07-14', 'Gali No -02 Azad nagar Near Govt TubeWell', '45', '57', 250611, '', 'MVREFy', '1', NULL, NULL, NULL, NULL, '', '3', '2022-03-22', '', '', '', '', '', '2022-11-29 09:10:55'),
-(1070, '975691', '1064', 'Tanushka Dhiran', 'stu00001056', '113', '37', '5', '2', 'manju', 'Deepak kumar', '9983780455', 'pridekids2018@gmail.com', '2011-11-20', 'Gali No -02 Azad nagar Near Govt TubeWell', '45', '57', 250611, '', 'MVREFy', '1', NULL, NULL, NULL, NULL, '', '3', '2022-03-22', '', '', '', '', '', '2022-11-29 09:12:30'),
+(1070, '975691', '1064', 'Tanushka Dhiran', 'stu00001056', '115', '37', '5', '2', 'manju', 'Deepak kumar', '9983780455', 'pridekids2018@gmail.com', '2011-11-20', 'Gali No -02 Azad nagar Near Govt TubeWell', '45', '57', 250611, 'student/', 'MVREFy', '1', NULL, NULL, NULL, NULL, '', '3', '2022-03-22', '', '', '', '', '', '2022-11-29 09:12:30'),
 (1071, '975691', '1065', 'Sarthak jain', 'stu00001057', '114', '37', '5', '1', 'Prachi Jain', 'Ajay jain', '7817847559', 'pridekids2018@gmail.com', '2011-12-15', 'Gali No-03 Mansaraver Colony Canal road ', '45', '57', 250611, '', 'C6UkLf', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-11', '', '', '', '', '', '2022-11-29 09:14:33'),
 (1072, '975691', '1066', 'Sanskriti', 'stu00001058', '114', '37', '5', '2', 'Lalita', 'Deepak', '9837476874', '', '2011-12-02', 'Ajanta genrel Store Binali road', '45', '57', 250611, 'student/', 'D80bjR', '1', NULL, NULL, NULL, NULL, '', '2', '2022-03-29', '', '', '', '', '', '2022-11-29 09:16:24'),
-(1073, '975691', '1067', 'nairdesh jain', 'stu00001059', '114', '37', '6', '1', 'Chandni jain', 'Lavit Jain', '8445721290', 'pridekids2018@gmail.com', '2012-11-18', 'Near Sai Mandir Rambag Colony', '45', '57', 250611, '', 'BMWS80', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-12', '', '', '', '', '', '2022-11-29 09:18:34'),
+(1073, '975691', '1067', 'nirdesh jain', 'stu00001059', '114', '37', '6', '1', 'Chandni jain', 'Lavit Jain', '8445721290', 'pridekids2018@gmail.com', '2012-11-18', 'Near Sai Mandir Rambag Colony', '45', '57', 250611, 'student/', 'BMWS80', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-12', '', '', '', '', '', '2022-11-29 09:18:34'),
 (1074, '975691', '1068', 'Avni Gupta', 'stu00001060', '109', '37', '6', '2', 'Plak Gupta', 'Vashu Gupta', '8077056924', 'pridekids2018@gmail.com', '2017-01-07', 'Shiv Vihar Colony Railway Binoli Raod', '45', '57', 250611, '', '8oMcgR', '1', NULL, NULL, NULL, NULL, '', '1', '2022-03-09', '', '', '', '', '', '2022-11-29 09:21:09'),
 (1075, '975691', '1069', 'Apeksha Jain', 'stu00001061', '110', '37', '1', '2', '', 'Ayush jain', '9634387768', 'pridekids2018@gmail.com', '2016-07-14', 'Arya nagar ', '45', '57', 250611, '', 'ao4i0p', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 01:58:12'),
-(1076, '975691', '1070', 'Mokashi Jain', 'stu00001062', '109', '37', '1', '2', '', 'Ayus Jain', '9634387768', 'pridekids2018@gmail.com', '2018-01-18', 'Arya nagar ', '45', '57', 250611, '', 'ao4i0p', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 01:59:58'),
+(1076, '975691', '1070', 'Mokashi Jain', 'stu00001062', '109', '37', '1', '2', '', 'Ayus Jain', '9634387768', 'pridekids2018@gmail.com', '2018-01-18', 'Arya nagar ', '45', '57', 250611, '', 'ao4i0p', '4', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 01:59:58'),
 (1077, '975691', '1071', 'Hamza Khan', 'stu00001063', '112', '37', '1', '1', 'Anjum', 'Sahir Khan', '0000000000', 'pridekids2018@gmail.com', '2013-03-14', '13-171 Patti Choudran', '45', '57', 250611, '', 'Dlu1IM', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '', '', '', '', '', '2022-11-30 02:07:03'),
 (1078, '975691', '1072', 'Vedant', 'stu00001064', '111', '37', '1', '1', 'Parul', 'Pravesh Kumar', '1111111111', 'pridekids2018@gmail.com', '2015-06-04', 'Palri', '45', '57', 250611, '', 'rXceMZ', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 02:10:16'),
 (1079, '975691', '1073', 'Maitri', 'stu00001065', '111', '37', '1', '2', 'Neha Jain', 'Rabin Jain', '8979987656', 'pridekids2018@gmail.com', '2015-04-16', 'Bada mardir', '45', '57', 256011, '', 'lY6nBC', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '', '', '', '', '', '2022-11-30 02:15:31'),
@@ -9202,11 +10050,11 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1092, '975691', '1086', 'advik Jain', 'stu00001078', '111', '37', '1', '1', 'priyanka jain', 'Mohit Jain', '9837367701', 'pridekids2018@gmail.com', '2015-03-01', '18/106 gadhi Chowk pachdara', '45', '57', 250611, '', 'E1tBML', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 09:20:57'),
 (1093, '975691', '1087', 'Mokshi Jain', 'stu00001079', '109', '37', '1', '2', 'ayushi jain', 'Ayush jain', '9634397768', 'pridekids2018@gmail.com', '2017-01-18', 'baraut', '45', '57', 250611, '', '7dDf4c', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 09:23:51'),
 (1094, '975691', '1088', 'Aadi Jain', 'stu00001080', '111', '37', '02', '1', 'sonali Jain', 'Gaurav Jain', '8126142543', 'pridekids2018@gmail.com', '2015-02-08', 'baraut', '45', '57', 250611, '', 'MuKDL1', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:17:17'),
-(1095, '975691', '1089', 'kamishka', 'stu00001081', '108', '37', '1', '2', '', 'Himanshu Malik', '9457030822', '', '2018-04-01', 'baraut', '45', '57', 250611, '', 'Q2KhHx', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:25:51'),
+(1095, '975691', '1089', 'kanishka', 'stu00001081', '108', '37', '1', '2', '', 'Himanshu Malik', '9457030822', '', '2018-04-01', 'baraut', '45', '57', 250611, 'student/', 'Q2KhHx', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:25:51'),
 (1096, '975691', '1090', 'Kavya ', 'stu00001082', '113', '37', '1', '1', 'Pooja', 'Neeraj', '9719359976', '', '2012-10-16', 'Gandhi Road ', '45', '57', 250611, 'student/', 'miE6OI', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:28:33'),
 (1097, '975691', '1091', 'Vadik Tomar', 'stu00001083', '110', '37', '1', '1', 'Anju Tomar', 'Kapil', '8077509074', '', '2016-03-14', 'Avas Vikas Colony', '45', '57', 250611, '', 'uPgUL3', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:31:21'),
 (1098, '975691', '1092', 'Saanvi', 'stu00001084', '108', '37', '1', '2', 'Rekha', 'Jitendra', '7300640359', 'pridekids2018@gmail.com', '2018-09-24', 'baghpat', '45', '57', 250611, '', 'E3P7dy', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:34:52'),
-(1099, '975691', '1093', 'Devemsh', 'stu00001085', '110', '37', '1', '1', 'Chhaui', 'Vikas', '9756866103', 'pridekids2018@gmail.com', '2016-07-23', '17/18 Patti Mehar', '45', '57', 250611, '', 'M8PahA', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:37:12'),
+(1099, '975691', '1093', 'Devensh', 'stu00001085', '110', '37', '1', '1', 'Chhaui', 'Vikas', '9756866103', 'pridekids2018@gmail.com', '2016-07-23', '17/18 Patti Mehar', '45', '57', 250611, 'student/', 'M8PahA', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:37:12'),
 (1100, '975691', '1094', 'Tejasvi Jain', 'stu00001086', '107', '37', '1', '2', '', 'Deepak Jain', '9045625800', 'pridekids2018@gmail.com', '2017-10-15', 'Shantinath mandir Wali Gali Railway Road', '45', '57', 250611, '', 'zoF0qa', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:39:56'),
 (1101, '975691', '1095', 'Mansi', 'stu00001087', '110', '37', '1', '2', 'Rekha', 'Jitendra', '7300640359', 'pridekids2018@gmail.com', '2015-11-01', 'baraut', '45', '57', 250611, '', 'E3P7dy', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:43:54'),
 (1102, '975691', '1096', 'Vedant Panwar', 'stu00001088', '107', '37', '1', '1', 'Anjali Panwar', 'Nikhil Panwar', '7017804607', 'pridekids2018@gmail.com', '2018-01-24', 'Shanti Puram Nehru Road ', '45', '57', 250611, '', 'aI0zDx', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 14:46:34'),
@@ -9217,17 +10065,17 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1107, '975691', '1101', 'Gaurangi Garg', 'stu00001093', '106', '37', '1', '2', 'Priya garg', 'shivam garg', '9719580170', 'pridekids2018@gmail.com', '2020-04-01', 'Shanti Puram Nehru Road ', '45', '57', 250611, '', 'NTpESZ', '1', NULL, NULL, NULL, NULL, '', '1', '2022-01-01', '', '', '', '', '', '2022-11-30 15:04:12'),
 (1108, '975691', '1102', 'Kavya ', 'stu00001094', '108', '37', '1', '2', 'nisha', 'Rahul', '9027269052', 'pridekids2018@gmail.com', '2017-07-03', 'baraut', '45', '57', 250611, '', 'd2HqRG', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 15:06:55'),
 (1109, '975691', '1103', 'Aris', 'stu00001095', '110', '37', '1', '1', 'Julie', 'Ajay', '8868071790', 'pridekids2018@gmail.com', '2016-05-12', 'Gandhi Road ', '45', '57', 250611, '', '07omj1', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-11-30 15:10:35'),
-(1110, '178621', '1104', 'Ikra ', 'stu00001096', '75', '26', '13', '2', 'khroon ', 'Mustakeem ', '7088805137', '', '2016-10-02', 'Rashid colony ', '41', '36', 250609, '', '7oy41Y', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-10', '40', '', '', '', '', '2022-12-01 03:43:35'),
-(1111, '178621', '1105', 'Sidra ', 'stu00001097', '75', '26', '14', '2', 'sanya ', 'shuaib ', '8279465467', '', '2017-06-10', 'rashid colony', '41', '36', 250609, '', 'WV6xpy', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-12', '41', '', '', '', '', '2022-12-01 03:45:57'),
-(1112, '178621', '1106', 'Ziya ', 'stu00001098', '75', '26', '15', '2', 'Abida ', 'Sajid ', '9899731374', '', '2014-09-26', 'Rashid colony baghpat ', '41', '36', 250609, '', 'wfUoq2', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-17', '42', '', '', '', '', '2022-12-01 03:48:14'),
-(1113, '178621', '1107', 'Aarish ', 'stu00001099', '75', '26', '16', '1', 'Nasreen ', 'Arif Malik ', '9548807299', '', '2017-09-08', 'Rashid colony ', '41', '36', 250609, '', '9euZJK', '1', NULL, NULL, NULL, NULL, '', '3', '2022-08-17', '43', '', '', '', '', '2022-12-01 03:50:39'),
-(1114, '178621', '1108', 'Umera ', 'stu00001100', '75', '26', '17', '2', 'Nagma ', 'Shanawaz ', '7906171686', '', '2017-03-04', 'Old Town ', '41', '36', 250609, '', 'n6A7av', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-25', '44', '', '', '', '', '2022-12-01 03:53:34'),
+(1110, '178621', '1104', 'Ikra ', 'stu00001096', '75', '26', '13', '2', 'khroon ', 'Mustakeem ', '7088805137', '', '2016-10-02', 'Rashid colony ', '41', '36', 250609, 'student/', '7oy41Y', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-10', '41', '', '', '', '', '2022-12-01 03:43:35'),
+(1111, '178621', '1105', 'Sidra ', 'stu00001097', '75', '26', '14', '2', 'sanya ', 'shuaib ', '8279465467', '', '2017-06-10', 'rashid colony', '41', '36', 250609, 'student/', 'WV6xpy', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-12', '42', '', '', '', '', '2022-12-01 03:45:57'),
+(1112, '178621', '1106', 'Ziya ', 'stu00001098', '75', '26', '15', '2', 'Abida ', 'Sajid ', '9899731374', '', '2014-09-26', 'Rashid colony baghpat ', '41', '36', 250609, 'student/', 'wfUoq2', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-17', '43', '', '', '', '', '2022-12-01 03:48:14'),
+(1113, '178621', '1107', 'Aarish ', 'stu00001099', '75', '26', '16', '1', 'Nasreen ', 'Arif Malik ', '9548807299', '', '2017-09-08', 'Rashid colony ', '41', '36', 250609, 'student/', '9euZJK', '1', NULL, NULL, NULL, NULL, '', '3', '2022-08-17', '44', '', '', '', '', '2022-12-01 03:50:39'),
+(1114, '178621', '1108', 'Umera ', 'stu00001100', '75', '26', '17', '2', 'Nagma ', 'Shanawaz ', '7906171686', '', '2017-03-04', 'Old Town ', '41', '36', 250609, 'student/student/', 'n6A7av', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-25', '45', '', '', '', '', '2022-12-01 03:53:34'),
 (1115, '975691', '1109', 'Avika maitray', 'stu00001101', '110', '37', '1', '2', 'Soniya', 'Nitin Kumar', '8218729722', 'pridekids2018@gmail.com', '2016-09-10', 'shivPuri Railway Road', '45', '57', 250611, '', '0x9BZ1', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 08:47:33'),
-(1116, '975691', '1110', 'Aarvi Jain', 'stu00001102', '112', '37', '1', '1', 'Prabha Jain', 'Rahul', '9927214597', 'pridekids2018@gmail.com', '2013-08-19', 'bijrol Road', '45', '57', 250611, '', 'SawnC6', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 08:56:26'),
-(1117, '975691', '1111', 'Nitya Ruhela', 'stu00001103', '109', '37', '1', '1', 'Nisha', 'Amit Kumar', '9027401863', 'pridekids2018@gmail.com', '2016-03-07', 'baraut', '45', '57', 250611, '', 'Mvh8Lo', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:00:17'),
-(1118, '975691', '1112', 'Kunjraj Kaushik', 'stu00001104', '108', '37', '1', '1', 'Sarita', 'Kuldeep sharma', '6397399395', 'pridekids2018@gmail.com', '2017-10-13', 'binauli road', '45', '57', 250611, '', 'XD5OI9', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:04:01'),
-(1119, '975691', '1113', 'Anabhay Gupta', 'stu00001105', '109', '37', '1', '1', 'Nidhi Varshey', 'Alok Kuamr', '6395560365', 'pridekids2018@gmail.com', '2017-03-06', 'Mansarovra Colony ', '45', '57', 250611, '', 'UZVMX5', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:06:31');
+(1116, '975691', '1110', 'Aarvi Jain', 'stu00001102', '112', '37', '1', '1', 'Prabha Jain', 'Rahul', '9927214597', 'pridekids2018@gmail.com', '2013-08-19', 'bijrol Road', '45', '57', 250611, '', 'SawnC6', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 08:56:26');
 INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `sr_number`, `cast_category`, `date_of_admission`, `admission_no`, `occupation`, `last_schoool_name`, `aadhar_no`, `residence_in_india_since`, `created_at`) VALUES
+(1117, '975691', '1111', 'Nitya Ruhela', 'stu00001103', '110', '37', '1', '1', 'Nisha', 'Amit Kumar', '9027401863', 'pridekids2018@gmail.com', '2016-03-07', 'baraut', '45', '57', 250611, 'student/', 'Mvh8Lo', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:00:17'),
+(1118, '975691', '1112', 'Kunjraj Kaushik', 'stu00001104', '108', '37', '1', '1', 'Sarita', 'Kuldeep sharma', '6397399395', 'pridekids2018@gmail.com', '2017-10-13', 'binauli road', '45', '57', 250611, '', 'XD5OI9', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:04:01'),
+(1119, '975691', '1113', 'Anabhay Gupta', 'stu00001105', '109', '37', '1', '1', 'Nidhi Varshey', 'Alok Kuamr', '6395560365', 'pridekids2018@gmail.com', '2017-03-06', 'Mansarovra Colony ', '45', '57', 250611, '', 'UZVMX5', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:06:31'),
 (1120, '975691', '1114', 'Nikunj jangra', 'stu00001106', '107', '37', '1', '1', 'Nainsi', 'Vivek Kumar', '9582971978', 'pridekids2018@gmail.com', '2018-05-08', 'Gurana Road Gali no-12', '45', '57', 250611, '', 'omYI08', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:08:44'),
 (1121, '975691', '1115', 'vyaan Tomar', 'stu00001107', '107', '37', '1', '1', 'Deepoa', 'vipin', '8379034033', 'pridekids2018@gmail.com', '2018-03-29', 'RailWay Road Gali No-18', '45', '57', 250611, '', 'tYU11f', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:10:58'),
 (1122, '975691', '1116', 'Siddhanth panwar', 'stu00001108', '107', '37', '1', '1', 'Shikha Panwar', 'Kapil panwar', '9548144740', 'pridekids2018@gmail.com', '2018-10-24', 'Shanti Puram Gali No-03 Nehru Road ', '45', '57', 250611, '', '7728mX', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-01 09:13:09'),
@@ -9257,11 +10105,11 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1146, '691309', '1140', 'Sakshi', 'stu00001132', '95', '27', '05', '2', 'Devikoor', 'Satish', '9627339515', '', '2010-01-24', 'Chhaprauli', '42', '40', 250617, '', 'PcBUZa', '1', NULL, NULL, NULL, NULL, '', '3', '', '0636', '', '', '', '', '2022-12-05 02:50:35'),
 (1147, '691309', '1141', 'Aman', 'stu00001133', '95', '27', '06', '1', 'Kavita', 'Neeraj', '9758872425', '', '2008-09-09', 'Sinauli', '42', '40', 250611, '', '7N50co', '1', NULL, NULL, NULL, NULL, '', '1', '', '0538', '', '', '', '', '2022-12-05 02:53:58'),
 (1148, '691309', '1142', 'Archit', 'stu00001134', '95', '27', '07', '1', 'Rita', 'Sandeep', '8126503188', '', '2011-12-30', 'Kakor', '42', '40', 250617, '', 'czr3b6', '1', NULL, NULL, NULL, NULL, '', '2', '', '0868', '', '', '', '', '2022-12-05 02:56:38'),
-(1149, '178621', '1143', 'Avni', 'stu00001135', '81', '26', '1', '2', 'Sangeeta', 'Rahul Kumar', '9568440686', '', '2012-04-20', 'Gaytripuram Baghpat', '41', '36', 250609, '', 'Ds2e2E', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '1', '', '', '443116880188', '', '2022-12-06 04:06:30'),
-(1150, '178621', '1144', 'Sofiya', 'stu00001136', '81', '26', '2', '2', 'Sanjida', 'Anish Khan', '8534808910', '', '2012-08-09', 'Mugalpura Baghpat', '41', '36', 250609, '', 'BGK6Pr', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '2', '', '', '435403714732', '', '2022-12-06 04:13:41'),
-(1151, '178621', '1145', 'Noorani  Jaha', 'stu00001137', '81', '26', '3', '2', 'Noorjaha', 'Sahjad', '9149264885', '', '2012-02-22', 'Rashid Colony', '41', '36', 250609, '', '9Kq9dV', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-12', '3', '', '', '667391517948', '', '2022-12-06 04:23:03'),
+(1149, '178621', '1143', 'Avni', 'stu00001135', '81', '26', '1', '2', 'Sangeeta', 'Rahul Kumar', '9568440686', '', '2012-04-20', 'Gaytripuram Baghpat', '41', '36', 250609, 'img-stu00001135-1670825722WhatsApp Image 2022-12-06 at 1.27.59 PM (1).jpeg', 'Ds2e2E', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '1', '', '', '443116880188', '', '2022-12-06 04:06:30'),
+(1150, '178621', '1144', 'Sofiya', 'stu00001136', '81', '26', '2', '2', 'Sanjida', 'Anish Khan', '8534808910', '', '2012-08-09', 'Mugalpura Baghpat', '41', '36', 250609, 'img-stu00001136-1670825684WhatsApp Image 2022-12-06 at 1.27.57 PM.jpeg', 'BGK6Pr', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '2', '', '', '435403714732', '', '2022-12-06 04:13:41'),
+(1151, '178621', '1145', 'Noorani  Jaha', 'stu00001137', '81', '26', '3', '2', 'Noorjaha', 'Sahjad', '9149264885', '', '2012-02-22', 'Rashid Colony', '41', '36', 250609, 'img-stu00001137-1670825592WhatsApp Image 2022-12-12 at 11.37.13 AM (1).jpeg', '9Kq9dV', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-12', '3', '', '', '667391517948', '', '2022-12-06 04:23:03'),
 (1152, '178621', '1146', 'Zoya', 'stu00001138', '81', '26', '4', '2', 'Nagma', 'Mehatab', '9897712791', '', '2014-01-15', 'Old town Baghpat', '41', '36', 250609, '', 'hgSnWk', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '4', '', '', '', '', '2022-12-06 04:30:55'),
-(1153, '178621', '1147', 'Aarish', 'stu00001139', '81', '26', '5', '1', 'Afshana', 'Gaffer Ali', '9528517322', '', '2011-01-06', 'Rashid Colony', '41', '36', 250609, '', 'DCx6B4', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '5', '', '', '', '', '2022-12-06 04:35:02'),
+(1153, '178621', '1147', 'Aarish', 'stu00001139', '81', '26', '5', '1', 'Afshana', 'Gaffer Ali', '9528517322', '', '2011-01-06', 'Rashid Colony', '41', '36', 250609, 'img-stu00001139-1670656454WhatsApp Image 2022-12-06 at 1.27.55 PM.jpeg', 'DCx6B4', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '5', '', '', '', '', '2022-12-06 04:35:02'),
 (1154, '178621', '1148', 'Suhail', 'stu00001140', '81', '26', '6', '1', 'Imraan', 'Shakil Ahmed', '8923948049', '', '2010-07-12', 'Rashid Colony Baghpat', '41', '36', 250609, 'img-stu00001140-1670314575WhatsApp Image 2022-12-06 at 1.27.56 PM.jpeg', 'nwW485', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '6', '', '', '9509101789422', '', '2022-12-06 04:42:25'),
 (1155, '178621', '1149', 'Sahil', 'stu00001141', '81', '26', '7', '1', 'Husainja', 'Aafjal', '8218563920', '', '2011-01-01', 'Rashid Colony Baghpat', '41', '36', 250609, 'img-stu00001141-1670314460WhatsApp Image 2022-12-06 at 1.27.56 PM (1).jpeg', 'X2nWtO', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-12', '7', '', '', '', '', '2022-12-06 04:47:26'),
 (1156, '178621', '1150', 'Raza', 'stu00001142', '81', '26', '9', '1', 'Noshaba', 'Imraan', '9897104174', '', '2010-10-23', 'Mugalpura Baghpat', '41', '36', 250609, 'img-stu00001142-1670314325WhatsApp Image 2022-12-06 at 1.27.57 PM (1).jpeg', 'MTXZIa', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '9', '', '', '533010126774', '', '2022-12-06 06:51:25'),
@@ -9277,7 +10125,157 @@ INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (1166, '975691', '1160', 'Abshita Kumari', 'stu00001152', '108', '37', '1', '1', 'sonika', 'Vijay', '3333333333', '', '2017-08-17', 'Gurana Road', '45', '57', 250611, '', '1pXb7z', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-06 10:09:45'),
 (1167, '623659', '1161', 'Gaurav Sharma', 'stu00001153', '121', '39', '8', '1', 'Vidisha Gupta', 'Shivmohan Gupta', '06397520221', 'gs27349gs@gmail.com', '2022-12-03', 'brt', '47', '63', 250611, '', 'xEJ9O1', '1', NULL, NULL, NULL, NULL, '1', '1', '2021-04-01', '145', 'Business', 'Play School', '147258369521', 'By Birth', '2022-12-07 02:42:17'),
 (1168, '623659', '1162', 'Abc', 'stu00001154', '121', '39', '1', '1', 'Krishna Jain', 'Sushil Jain', '06352455051', 'abc@gmail.com', '2022-12-07', 'Abcdef', '47', '63', 627272, '', 'z67Ui7', '1', NULL, NULL, NULL, NULL, '', '1', '2022-12-07', '36952', '', '', '', '', '2022-12-07 02:44:38'),
-(1169, '623659', '1163', 'pappu', 'stu00001155', '121', '39', '8', '1', 'Varsha Tomer', 'sattu', '06352455051', 'abc@gmail.com', '2022-12-07', 'Abcdef', '47', '63', 627272, 'student/', 'z67Ui7', '1', NULL, NULL, NULL, NULL, '255', '1', '2022-12-07', '25', 'Business', '', '', '', '2022-12-07 02:47:03');
+(1169, '623659', '1163', 'pappu', 'stu00001155', '121', '39', '8', '1', 'Varsha Tomer', 'sattu', '06352455051', 'abc@gmail.com', '2022-12-07', 'Abcdef', '47', '63', 627272, 'student/', 'z67Ui7', '1', NULL, NULL, NULL, NULL, '255', '1', '2022-12-07', '25', 'Business', '', '', '', '2022-12-07 02:47:03'),
+(1170, '178621', '1164', 'Shakib', 'stu00001156', '82', '26', '1', '1', 'Varisha', 'Jahid', '9917127683', '', '2009-09-14', 'Gaytripuram ', '41', '36', 250609, '', 'ELIw7N', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-06', '1', '', '', '', '', '2022-12-12 06:23:11'),
+(1171, '178621', '1165', 'Nikki', 'stu00001157', '82', '26', '2', '2', 'Aamna', 'Harun', '8057833493', '', '2012-01-01', 'Rashid Colony Baghpat', '41', '36', 250609, 'img-stu00001157-1670828467WhatsApp Image 2022-12-12 at 12.25.47 PM.jpeg', 'Y8tDi7', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '2', '', '', '637181844204', '', '2022-12-12 06:30:00'),
+(1172, '178621', '1166', 'Mahak', 'stu00001158', '82', '26', '3', '2', 'Shaima', 'Rashid', '6395102293', '', '2011-08-06', 'Rashid Colony', '41', '36', 250609, 'img-stu00001158-1670828435WhatsApp Image 2022-12-12 at 12.25.47 PM (1).jpeg', 'RhzWop', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '3', '', '', '322156915470', '', '2022-12-12 06:36:48'),
+(1173, '178621', '1167', 'Aanshika', 'stu00001159', '83', '26', '1', '2', 'Sangita', 'Rahul Kumar', '9536423397', '', '2010-07-18', 'Gaytripuram Baghpat', '41', '36', 250609, 'img-stu00001159-1670828408WhatsApp Image 2022-12-12 at 12.25.46 PM.jpeg', '2JSETq', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '1', '', '', '244420174049', '', '2022-12-12 06:40:40'),
+(1174, '178621', '1168', 'Cahat', 'stu00001160', '83', '26', '2', '1', 'Mohsina', 'Sahzad', '9897815040', '', '2009-06-26', 'Mugalpura Nai Basti', '41', '36', 250609, 'img-stu00001160-1670828375WhatsApp Image 2022-12-12 at 12.25.44 PM.jpeg', '5qimHC', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '2', '', '', '762212353568', '', '2022-12-12 06:44:25'),
+(1175, '178621', '1169', 'Zoya', 'stu00001161', '83', '26', '3', '2', 'Mohsina', 'Sahzad', '9897815040', '', '2011-11-05', 'Mugalpura Nai Basti', '41', '36', 250609, 'img-stu00001161-1670828312WhatsApp Image 2022-12-12 at 12.25.45 PM.jpeg', '5qimHC', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '3', '', '', '275760464410', '', '2022-12-12 06:47:37'),
+(1176, '178621', '1170', 'Akshra', 'stu00001162', '83', '26', '4', '2', 'Poonam', 'Deepak', '8218171583', '', '2010-12-08', 'Jhankar Gali Baghpat', '41', '36', 250609, '', '3M3lkC', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '4', '', '', '273582712687', '', '2022-12-12 06:53:36'),
+(1177, '975691', '1171', 'Vansh Saini', 'stu00001163', '111', '37', '1', '1', 'poonam', 'Rajendra Saini', '7777777777', '', '2015-07-28', 'Kue wali gali Nehru Road', '45', '57', 250611, 'student/', 'cv3wsP', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-12 12:10:33'),
+(1178, '975691', '1172', 'Vaidanshi Trapathi', 'stu00001164', '109', '37', '1', '1', 'Mamta traipathi', 'Ram Lakhan traipathi', '9027757438', '', '2020-04-01', 'baraut', '45', '57', 250611, 'student/', 'HxSBjp', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-12 12:13:43'),
+(1179, '975691', '1173', 'Aksh garg', 'stu00001165', '110', '37', '1', '1', 'Rupali', 'Kapil', '9927684194', 'pridekids2018@gmail.com', '2016-01-08', 'nehru Road ', '45', '57', 250611, 'student/', 'Mwm95j', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-12 12:16:03'),
+(1180, '975691', '1174', 'Yuvraj Malik', 'stu00001166', '110', '37', '1', '1', 'deepti', 'Avdesh malik', '9045189771', 'pridekids2018@gmail.com', '2016-07-28', 'baraut', '45', '57', 250611, 'student/', 'XvM6a3', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '', '', '', '', '', '2022-12-12 12:17:49'),
+(1181, '975691', '1175', 'Sara', 'stu00001167', '108', '37', '1', '2', 'reshu', 'Ajay Tomar', '66395982647', 'pridekids2018@gmail.com', '2017-06-20', 'gurana', '45', '62', 250611, 'student/', 'e519lA', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-12 12:19:34'),
+(1182, '975691', '1176', 'Sanvi', 'stu00001168', '108', '37', '1', '2', 'Rishu', 'Ajay Tomar', '6395982647', 'pridekids2018@gmail.com', '2017-06-20', 'baraut', '45', '57', 250611, 'student/', '8ELc3O', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-12 12:23:24'),
+(1183, '975691', '1177', 'Kirti', 'stu00001169', '111', '37', '1', '2', 'babita', 'Subhash Chand', '9837270130', '', '2022-04-01', 'baraut', '45', '57', 250611, 'student/', '8OzBio', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-12 12:25:25'),
+(1184, '975691', '1178', 'Habiba', 'stu00001170', '111', '37', '1', '1', 'Anjum', 'Shaid Khan', '8630454686', '', '2014-08-24', 'baraut', '45', '57', 250611, 'student/', 'J1V9XK', '1', NULL, NULL, NULL, NULL, '014', '1', '2022-04-01', '', 'vegetable shop', '', '', '', '2022-12-12 12:30:17'),
+(1185, '975691', '1179', 'Aishna ', 'stu00001171', '111', '37', '1', '2', 'priyanka', 'Ankit', '9319144160', 'pridekids2018@gmail.com', '2022-04-01', 'baraut', '45', '57', 250611, '', 'is2PaC', '1', NULL, NULL, NULL, NULL, '016', '1', '2022-04-01', '016', 'Shop Keepher', '', '', '', '2022-12-12 12:34:47'),
+(1186, '975691', '1180', 'Kreeti', 'stu00001172', '111', '37', '1', '1', '', 'Subhansh Chand', '7217357153', 'pridekids2018@gmail.com', '2014-05-30', 'baraut', '45', '57', 250611, '', 'S3bH2y', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '145', '', '', '', '', '2022-12-12 12:37:24'),
+(1187, '975691', '1181', 'vansh ruhella', 'stu00001173', '114', '37', '1', '1', 'Neetu ', 'anil Kumar', '8077923927', '', '2012-01-29', 'baraut', '45', '57', 250611, 'student/', 'X8sZIi', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '90', 'govt Job', '', '', '', '2022-12-12 12:40:21'),
+(1188, '975691', '1182', 'Vishish', 'stu00001174', '114', '37', '1', '1', 'Monika tomar', 'vinod tomar', '8937088745', 'pridekids2018@gmail.com', '2012-02-18', 'baraut', '45', '57', 250611, 'student/', 'ACUWFh', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '112', '', '', '', '', '2022-12-13 03:06:36'),
+(1189, '975691', '1183', 'shubhanshi', 'stu00001175', '109', '37', '1', '2', 'Niramya', 'Kuldeep Kumar', '9756270554', 'pridekids2018@gmail.com', '2016-10-28', 'baraut', '45', '57', 250611, '', 'AEgkLS', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '074', '', '', '', '', '2022-12-13 03:08:41'),
+(1190, '691309', '1184', 'Aarav', 'stu00001176', '93', '27', '01', '1', 'Jyoti', 'Rahul', '9571189677', '', '2022-12-01', 'Rathora', '42', '49', 250617, '', '2jRmX1', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-13 03:37:02'),
+(1191, '691309', '1185', 'Badri', 'stu00001177', '93', '27', '02', '1', 'Sangita', 'Sunil', '7037562036', '', '2020-02-22', 'Rathora', '42', '40', 250617, '', '9Ba8h3', '1', NULL, NULL, NULL, NULL, '', '1', '', '', '', '', '', '', '2022-12-13 03:38:56'),
+(1192, '691309', '1186', 'Harshit', 'stu00001178', '93', '27', '03', '1', 'Rinky', 'Devendra', '8394987992', '', '2020-02-02', 'Rathora', '42', '40', 250617, '', 'Tn46kF', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-13 03:55:46'),
+(1193, '975691', '1187', 'Abu Bakan', 'stu00001179', '108', '37', '1', '1', 'Anjum', 'Shaid Khan', '8630454686', 'pridekids2018@gmail.com', '2016-10-28', 'baraut', '45', '57', 250611, '', 'J1V9XK', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-14 03:49:28'),
+(1194, '975691', '1188', 'Virat', 'stu00001180', '107', '37', '1', '1', 'Mamta Sami', 'Sanky Sami', '9917086418', '', '2018-11-11', 'baraut', '45', '57', 250611, '', 'Y7VH2l', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-14 03:50:41'),
+(1195, '975691', '1189', 'vinayak Kahker', 'stu00001181', '109', '37', '1', '1', 'Asrha', 'mamib Khaker', '7454065213', '', '2019-04-01', 'baraut', '45', '57', 250611, '', 'R8g9AK', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '190', '', '', '', '', '2022-12-14 03:52:27'),
+(1196, '975691', '1190', 'Shoorya rathi', 'stu00001182', '110', '37', '1', '1', 'Pooja', 'Ajay Rathi', '84330897799', '', '2016-01-27', 'baraut', '45', '57', 250611, 'student/', '7p826T', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '063', '', '', '', '', '2022-12-14 03:54:07'),
+(1197, '975691', '1191', 'Vaishanvi khokher', 'stu00001183', '110', '37', '1', '2', 'Aasha', 'Mamish Khokhar', '7454065213', 'pridekids2018@gmail.com', '2016-02-07', 'baraut', '45', '57', 250611, '', 'R8g9AK', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '', '', '', '', '', '2022-12-14 03:55:29'),
+(1198, '975691', '1192', 'Aadi Jain', 'stu00001184', '111', '37', '1', '1', 'deepika', 'Ankit Jain', '8534047100', 'pridekids2018@gmail.com', '2013-05-31', 'baraut', '45', '57', 250611, 'student/', 'i38U7z', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '096', '', '', '', '', '2022-12-14 03:59:05'),
+(1199, '975691', '1193', 'vinayak', 'stu00001185', '114', '37', '1', '1', 'sangeeta', 'ashutab', '9310012931', '', '2022-02-03', 'baraut', '45', '57', 250611, 'student/', 'uQYnIt', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '81', '', '', '', '', '2022-12-14 04:00:49'),
+(1200, '975691', '1194', 'varnika', 'stu00001186', '114', '37', '1', '1', 'Neeta panwar', 'anil kumar', '9027096438', 'pridekids2018@gmail.com', '2012-12-05', 'baraut', '45', '57', 250611, 'student/', 'C7r3T9', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-01', '89', '', '', '', '', '2022-12-14 04:02:59'),
+(1201, '691309', '1195', 'Aryan', 'stu00001187', '95', '27', '08', '1', '', '', '9997938919', '', '2012-02-09', 'Badarkha', '42', '40', 250617, '', 'jXWYg9', '1', NULL, NULL, NULL, NULL, '', '2', '', '740', '', '', '', '', '2022-12-14 04:47:46'),
+(1202, '691309', '1196', 'Deepanshu', 'stu00001188', '95', '27', '09', '1', 'Mamta', 'Rajeev', '9634386041', '', '2010-01-24', 'Sinauli', '42', '40', 250611, '', 'ahIe31', '1', NULL, NULL, NULL, NULL, '', '2', '', '0542', '', '', '', '', '2022-12-14 04:50:16'),
+(1203, '691309', '1197', 'Harshit', 'stu00001189', '95', '27', '10', '1', 'Neha', 'Mohit', '7505300411', '', '2015-01-01', 'Chhaprauli', '42', '40', 250617, '', '0bVHxu', '1', NULL, NULL, NULL, NULL, '', '1', '', '', '', '', '', '', '2022-12-14 04:52:10'),
+(1204, '691309', '1198', 'Jayant', 'stu00001190', '95', '27', '11', '1', 'Alka', 'Devendra Maan', '8534803734', '', '2015-01-01', 'Sinauli', '42', '40', 250611, '', 'iIl4Yd', '1', NULL, NULL, NULL, NULL, '', '2', '', '0543', '', '', '', '', '2022-12-14 04:57:00'),
+(1205, '691309', '1199', 'Prince', 'stu00001191', '95', '27', '12', '1', 'Rekha', 'Jitendar', '8435026612', '', '2011-09-04', 'Malakpur', '42', '40', 250611, '', 'HPiXxJ', '1', NULL, NULL, NULL, NULL, '', '2', '', '0848', '', '', '', '', '2022-12-14 04:59:41'),
+(1206, '691309', '1200', 'Ujjawal', 'stu00001192', '95', '27', '13', '1', 'Sanju', 'Sandeep', '9719971215', '', '2007-02-13', 'Luhara', '42', '40', 250617, '', 'slKEu0', '1', NULL, NULL, NULL, NULL, '', '2', '', '0807', '', '', '', '', '2022-12-14 05:01:52'),
+(1207, '178621', '1201', 'Avni', 'stu00001193', '77', '26', '1', '2', 'Madhu', 'Kapil Dev', '9568293137', '', '2015-01-08', 'Mahaveer Wali Gali', '41', '36', 250609, '', '5B6jxG', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '1', '', '', '344065868415', '', '2022-12-14 06:12:26'),
+(1208, '178621', '1202', 'Aahad', 'stu00001194', '77', '26', '2', '1', 'Parveen', 'Shadab', '8126493629', '', '2014-01-29', 'Rashid', '41', '36', 250609, '', 'A5Lt43', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '2', '', '', '', '', '2022-12-14 06:23:32'),
+(1209, '178621', '1203', 'Aahad', 'stu00001195', '77', '26', '3', '1', 'Husainja', 'Aafjal', '8218563920', '', '2017-07-18', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'X2nWtO', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '3', '', '', '', '', '2022-12-14 06:29:52'),
+(1210, '178621', '1204', 'Aahad', 'stu00001196', '77', '26', '4', '1', 'yashmin', 'Momin', '9897105825', '', '2011-08-08', 'Mugalpura Baghpat', '41', '36', 250609, '', 'q9g40V', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '4', '', '', '', '', '2022-12-14 06:41:05'),
+(1211, '178621', '1205', 'Aarmaan', 'stu00001197', '77', '26', '5', '1', 'Shma', 'Aadil', '9760279505', '', '2014-12-07', 'Chamrwal Road', '41', '36', 250609, '', 'HBa9Lm', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '5', '', '', '', '', '2022-12-14 06:49:34'),
+(1212, '178621', '1206', 'Ashad', 'stu00001198', '77', '26', '9', '1', 'Bushra', 'Samshad', '9568692448', '', '2012-11-27', 'Rashid Colony Baghpat', '41', '36', 250609, '', '1Uwl9Y', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '9', '', '', '586505801792', '', '2022-12-14 07:21:55'),
+(1213, '178621', '1207', 'Anam', 'stu00001199', '77', '26', '10', '2', 'Bushra', 'Samshad', '9568692448', '', '2012-11-27', 'Rashid Colony Baghpat', '41', '36', 250609, '', '1Uwl9Y', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '10', '', '', '348200130088', '', '2022-12-14 07:28:02'),
+(1214, '178621', '1208', 'Deepa', 'stu00001200', '77', '26', '11', '2', 'Sunita', 'Parmod', '9012865012', '', '2013-03-24', 'Mahveer Wali Gali', '41', '36', 250609, '', 'tYXpzF', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '11', '', '', '641407829542', '', '2022-12-14 07:32:59'),
+(1215, '178621', '1209', 'Aazan', 'stu00001201', '77', '26', '7', '1', 'Tammna', 'Sakir', '8272026126', '', '2016-04-18', 'Mugalpura Baghpat', '41', '36', 250609, '', 'acY6x0', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '7', '', '', '667368054909', '', '2022-12-16 06:43:20'),
+(1216, '178621', '1210', 'Haider', 'stu00001202', '77', '26', '13', '1', 'Shabnam', 'Fakruddin', '9837864531', '', '2014-04-12', 'Rashid Colony', '41', '36', 250609, '', 'YzxwZ9', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '13', '', '', '', '', '2022-12-16 06:59:05'),
+(1217, '178621', '1211', 'Khushi', 'stu00001203', '77', '26', '14', '2', 'Reshma', 'Saluddin', '8218709102', '', '2014-01-30', 'Rashid Colony', '41', '36', 250609, '', 'au9Dj9', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '14', '', '', '249399383844', '', '2022-12-16 07:07:42'),
+(1218, '178621', '1212', 'Nekhil', 'stu00001204', '77', '26', '17', '1', 'Rekha', 'Kaaliram', '8279783435', '', '2009-08-31', 'Devi chok', '41', '36', 250609, '', 'Y06aI2', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '17', '', '', '808460016578', '', '2022-12-16 07:28:26'),
+(1219, '178621', '1213', 'Riya', 'stu00001205', '77', '26', '18', '2', 'Rubeena', 'Nadeem', '9149386656', '', '2013-11-04', 'Rashid Colony', '41', '36', 250609, '', 'MSTkb2', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '18', '', '', '', '', '2022-12-16 07:35:32'),
+(1220, '178621', '1214', 'Rihan', 'stu00001206', '77', '26', '19', '1', 'Mehrun', 'Abdulla', '9662588378', '', '2016-06-29', 'Rashid Colony', '41', '36', 250609, '', 'd4sBXZ', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '19', '', '', '881672507083', '', '2022-12-16 07:43:50'),
+(1221, '691309', '1215', 'Aditi', 'stu00001207', '96', '27', '01', '2', 'Alka', 'Anuj', '8006994444', '', '2009-08-20', 'Bacchor', '42', '40', 250617, '', 'x6g6D3', '1', NULL, NULL, NULL, NULL, '', '2', '', '0637', '', '', '', '', '2022-12-17 02:30:53'),
+(1222, '691309', '1216', 'Aparna', 'stu00001208', '96', '27', '02', '2', 'Annu', 'Vikas', '8755802796', '', '2010-07-01', 'Luhara', '42', '40', 250617, '', 'C8gPoq', '1', NULL, NULL, NULL, NULL, '', '2', '', '0732', '', '', '', '', '2022-12-17 02:33:01'),
+(1223, '691309', '1217', 'Aradhana', 'stu00001209', '96', '27', '03', '2', 'Sanjana', 'Ramkumar', '9068671288', '', '2010-10-07', 'Kakor', '42', '40', 250617, '', 'X64mNF', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 02:36:28'),
+(1224, '691309', '1218', 'Charil', 'stu00001210', '96', '27', '04', '2', 'Jyoti', 'Manoj', '7078046267', '', '2009-05-05', 'Badarkha', '42', '46', 250617, '', 'y398g0', '1', NULL, NULL, NULL, NULL, '', '2', '', '0358', '', '', '', '', '2022-12-17 02:39:53'),
+(1225, '691309', '1219', 'Nisha', 'stu00001211', '96', '27', '05', '2', 'Renu', 'Pradeep', '8171503245', '', '2008-07-24', 'Sinauli', '42', '39', 250611, '', '1dj2AU', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 02:42:04'),
+(1226, '691309', '1220', 'Srishti', 'stu00001212', '96', '27', '06', '2', 'Manoj', 'Mukesh Dutt Sharma', '7037185580', '', '2010-10-25', 'Sinauli', '42', '39', 250611, '', '70Q81s', '1', NULL, NULL, NULL, NULL, '', '1', '', '0424', '', '', '', '', '2022-12-17 02:45:22'),
+(1227, '691309', '1221', 'Tanisha', 'stu00001213', '96', '27', '07', '2', 'veenu', 'Satender ', '9627812579', '', '2009-06-24', 'Sinauli', '42', '39', 250611, '', 'haukzO', '1', NULL, NULL, NULL, NULL, '', '2', '', '0639', '', '', '', '', '2022-12-17 02:47:42'),
+(1228, '691309', '1222', 'Arjun', 'stu00001214', '96', '27', '08', '1', 'Kavita ', 'Sanjeev', '9756986410', '', '2009-09-16', 'Mukandpur', '42', '50', 250617, '', '0w2YnL', '4', NULL, NULL, NULL, NULL, '', '2', '', '0855', '', '', '', '', '2022-12-17 02:51:47'),
+(1229, '691309', '1223', 'Aaryan', 'stu00001215', '96', '27', '08', '1', 'Mukesh', 'Rakesh', '8923555496', '', '2010-11-15', 'Chhaprauli', '42', '40', 250617, '', 'KUQLl5', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 02:57:23'),
+(1230, '691309', '1224', 'Aayush', 'stu00001216', '96', '27', '09', '1', 'Monu', 'Anil', '9368737624', '', '2015-01-01', 'Kurri', '42', '40', 250617, '', 'ieb3YA', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 03:01:10'),
+(1231, '178621', '1225', 'Raiyaan', 'stu00001217', '77', '26', '20', '1', 'Gulista', 'Rashid', '9149380656', '', '2016-10-22', 'Mugalpura Basti', '41', '36', 250609, '', 'qsCGR2', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '20', '', '', '', '', '2022-12-17 03:54:56'),
+(1232, '178621', '1226', 'Raib', 'stu00001218', '77', '26', '21', '1', 'Nagma', 'Sameer Malik', '8126176186', '', '2012-12-19', 'Rashid Colony Baghpat', '41', '36', 250609, '', '8VM3Av', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '21', '', '', '', '', '2022-12-17 03:57:45'),
+(1233, '178621', '1227', 'Raza', 'stu00001219', '77', '26', '22', '1', 'Rizwana', 'Jubair', '8218857976', '', '2013-08-28', 'Old Town Baghpat', '41', '36', 250609, 'student/', 'MDHqs6', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '22', '', '', '541130647392', '', '2022-12-17 04:07:30'),
+(1234, '691309', '1228', 'Akshit', 'stu00001220', '96', '27', '11', '1', 'Sarita', 'Dharmendra', '9759329506', '', '2015-10-10', 'Kurri', '42', '40', 250617, '', 'n4C7NV', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 04:38:32'),
+(1235, '691309', '1229', 'Arjun', 'stu00001221', '96', '27', '12', '1', 'Kavita ', 'Sanjeev', '9756986410', '', '2010-11-15', 'Mukandpur', '42', '50', 250617, '', '0w2YnL', '1', NULL, NULL, NULL, NULL, '', '2', '', '0855', '', '', '', '', '2022-12-17 04:57:31'),
+(1236, '691309', '1230', 'Param', 'stu00001222', '96', '27', '13', '1', 'Mamta ', 'Pradeep', '6395876060', '', '2009-06-26', 'Kakor', '42', '44', 250617, '', '6n37Od', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 04:59:25'),
+(1237, '691309', '1231', 'Rihan', 'stu00001223', '96', '27', '14', '1', 'Massena', 'Yusuf', '6398098986', '', '2015-10-10', 'Chandenheri', '42', '41', 250617, '', '390oXH', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 05:02:59'),
+(1238, '691309', '1232', 'Sakasham ', 'stu00001224', '96', '27', '15', '1', 'Rinki', 'Devendra', '7505178030', '', '2010-08-29', 'Rathora', '42', '49', 250617, '', 'Hik2lE', '1', NULL, NULL, NULL, NULL, '', '2', '', '0849', '', '', '', '', '2022-12-17 05:06:35'),
+(1239, '178621', '1233', 'Suhana', 'stu00001225', '77', '26', '25', '2', 'Nafisha', 'Shezad', '8267929710', '', '2013-08-31', 'Rashid Colony', '41', '36', 250609, '', '973tC5', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '25', '', '', '', '', '2022-12-17 05:08:25'),
+(1240, '178621', '1234', 'Shifa', 'stu00001226', '77', '26', '26', '2', 'Sain', 'Yunus Malik', '8171446556', '', '2013-08-10', 'Old Town', '41', '36', 250609, 'student/', 'KoWt1J', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '26', '', '', '250266178269', '', '2022-12-17 05:11:05'),
+(1241, '691309', '1235', 'Surya Pratap', 'stu00001227', '96', '27', '16', '1', 'Mamta ', 'Sanjeev', '9312361214', '', '2015-10-10', 'Chhaprauli', '42', '37', 250617, '', 'Y9TvVC', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 05:12:03'),
+(1242, '178621', '1236', 'Vishvas', 'stu00001228', '77', '26', '28', '1', 'Manju', 'Rakesh', '7417311516', '', '2014-07-14', 'Hanuman Mandir', '41', '36', 250609, 'student/', 'bMDOIk', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '28', '', '', '809240236541', '', '2022-12-17 05:14:30'),
+(1243, '691309', '1237', 'Ujjwal', 'stu00001229', '96', '27', '17', '1', 'Sanjana', 'Ramkumar', '9760372243', '', '2008-04-29', 'Kakor', '42', '44', 250617, '', '0TFOQi', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-17 05:15:23'),
+(1244, '691309', '1238', 'Utsav', 'stu00001230', '96', '27', '18', '1', 'Veenu', 'Sudhir', '8881111345', '', '2011-07-15', 'Rathora', '42', '49', 250617, '', '0XT528', '1', NULL, NULL, NULL, NULL, '', '2', '', '0847', '', '', '', '', '2022-12-17 05:18:41'),
+(1245, '691309', '1239', 'Vaibhav', 'stu00001231', '96', '27', '19', '1', 'Deepa', 'Uddham', '8394090576', '', '2009-01-27', 'Sinauli', '42', '39', 250611, '', 'PXRpLi', '1', NULL, NULL, NULL, NULL, '', '2', '', '0557', '', '', '', '', '2022-12-17 05:20:56'),
+(1246, '691309', '1240', 'Vansh', 'stu00001232', '96', '27', '20', '1', 'Aasha', 'Pramod', '6396120575', '', '2008-06-21', 'Mukandpur', '42', '50', 250617, '', 'rM5ZJg', '1', NULL, NULL, NULL, NULL, '', '2', '', '0839', '', '', '', '', '2022-12-17 05:23:05'),
+(1247, '178621', '1241', 'Abdul Aziz', 'stu00001233', '78', '26', '2', '1', 'Tamanna', 'Sakir ', '8272026126', '', '2014-02-17', 'Mugalpura Baghpat', '41', '36', 250609, '', 'acY6x0', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '2', '', '', '233878086967', '', '2022-12-19 04:00:05'),
+(1248, '178621', '1242', 'Nabiya', 'stu00001234', '78', '26', '3', '2', 'Firdosh', 'Imraan', '8218556523', '', '2014-09-22', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'f6dM93', '1', NULL, NULL, NULL, NULL, '', '2', '2019-04-19', '3', '', '', '540077414817', '', '2022-12-19 04:04:29'),
+(1249, '178621', '1243', 'Aarhan', 'stu00001235', '78', '26', '4', '1', 'Mausina', 'Sehzad', '9897815040', '', '2014-10-20', 'Mugalpura Baghpat', '41', '36', 250609, '', '5qimHC', '1', NULL, NULL, NULL, NULL, '', '2', '2021-09-06', '4', '', '', '841280621811', '', '2022-12-19 04:09:22'),
+(1250, '178621', '1244', 'Sakshi', 'stu00001236', '78', '26', '5', '2', 'Manju', 'Jagroshan', '8445581295', '', '2014-01-05', 'Gaytripuram Baghpat ', '41', '36', 250609, '', 'oZOe0u', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-12', '5', '', '', '451010103148', '', '2022-12-19 04:12:43'),
+(1251, '178621', '1245', 'Nasreen', 'stu00001237', '78', '26', '6', '2', 'Mahrunisha', 'Abdulla', '9662588378', '', '2015-01-09', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'd4sBXZ', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '6', '', '', '656347878969', '', '2022-12-19 04:15:56'),
+(1252, '178621', '1246', 'Sahim', 'stu00001238', '78', '26', '7', '1', 'Sameena', 'Rafiq', '8475844437', '', '2015-01-08', 'Rashid Clony Baghpat', '41', '36', 250609, '', '2ixNDR', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '7', '', '', '', '', '2022-12-19 04:20:25'),
+(1253, '178621', '1247', 'Tulsi', 'stu00001239', '78', '26', '8', '2', 'Reeta', 'Sonu ', '9568293137', '', '2014-02-13', 'Mahveer Gali Baghpat', '41', '36', 250609, '', '5B6jxG', '1', NULL, NULL, NULL, NULL, '', '1', '2022-04-12', '8', '', '', '968355091235', '', '2022-12-19 04:24:52'),
+(1254, '178621', '1248', 'Uvesh', 'stu00001240', '78', '26', '9', '1', 'Afshana', 'Gaffar', '9528917322', '', '2014-01-25', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'Ha4Rv9', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '9', '', '', '', '', '2022-12-19 04:27:12'),
+(1255, '178621', '1249', 'Raza', 'stu00001241', '78', '26', '10', '1', 'Rizawana', 'Jabair', '8218857976', '', '2013-08-28', 'Old Town Baghpat', '41', '36', 250609, '', 'MDHqs6', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '10', '', '', '541130647392', '', '2022-12-19 04:36:39'),
+(1256, '178621', '1250', 'Utsav', 'stu00001242', '78', '26', '11', '1', 'Sanju', 'Viney', '9917154537', '', '2012-09-27', 'Rashid Colony Baghpat', '41', '36', 250609, 'student/', 'BdmON2', '1', NULL, NULL, NULL, NULL, '', '3', '2021-03-18', '11', '', '', '274276610771', '', '2022-12-19 04:54:20'),
+(1257, '178621', '1251', 'Aaysha', 'stu00001243', '78', '26', '12', '2', 'Afshana', 'Gaffar', '9528917322', '', '2012-07-26', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'Ha4Rv9', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '12', '', '', '', '', '2022-12-19 04:57:45'),
+(1258, '178621', '1252', 'Azim', 'stu00001244', '78', '26', '13', '1', 'Aabida', 'Sajid', '9899731374', '', '2011-12-02', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'wfUoq2', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-17', '13', '', '', '281935003189', '', '2022-12-19 05:00:59'),
+(1259, '691309', '1253', 'Siya', 'stu00001245', '94', '27', '02', '2', 'monika', 'Pawan', '6396839526', '', '2012-11-08', 'Bacchor', '42', '45', 250617, '', 'C4GmRZ', '1', NULL, NULL, NULL, NULL, '', '1', '', '0804', '', '', '', '', '2022-12-19 05:22:41'),
+(1260, '691309', '1254', 'Vanshika', 'stu00001246', '94', '27', '03', '2', 'Deepa', 'Uddham Singh', '8394090576', '', '2011-05-10', 'Sinauli', '42', '39', 250611, '', 'PXRpLi', '1', NULL, NULL, NULL, NULL, '', '2', '', '0607', '', '', '', '', '2022-12-19 05:26:42'),
+(1261, '691309', '1255', 'Ansh', 'stu00001247', '94', '27', '03', '1', 'Sony', 'Mukesh Khokhar', '9119022160', '', '2015-01-01', 'Rathora', '42', '49', 250617, '', '8SU7Tt', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 05:29:09'),
+(1262, '691309', '1256', 'Avish', 'stu00001248', '94', '27', '05', '1', 'Sangeeta', 'Sansbir', '8979227977', '', '2008-11-30', 'Halalpur', '42', '47', 250617, '', 'lUZ4fX', '1', NULL, NULL, NULL, NULL, '', '2', '', '0611', '', '', '', '', '2022-12-19 05:37:26'),
+(1263, '691309', '1257', 'Dev', 'stu00001249', '94', '27', '06', '1', 'Deepa', 'Devendra ', '6395669537', '', '2015-01-01', 'Kakour', '42', '44', 250617, '', '67apnP', '1', NULL, NULL, NULL, NULL, '', '1', '', '0896', '', '', '', '', '2022-12-19 05:45:04'),
+(1264, '691309', '1258', 'Deepak', 'stu00001250', '94', '27', '07', '1', 'Devikoor', 'Satish', '6398592960', '', '2012-11-08', 'Chhaprauli', '42', '37', 250617, '', 'FCYNve', '1', NULL, NULL, NULL, NULL, '', '3', '', '0618', '', '', '', '', '2022-12-19 05:47:58'),
+(1265, '691309', '1259', 'Divyanshu', 'stu00001251', '94', '27', '08', '1', 'Mamta ', 'Satender ', '7982442943', '', '2008-10-21', 'Badarkha', '42', '46', 250617, '', 'NzYmV0', '1', NULL, NULL, NULL, NULL, '', '2', '', '0710', '', '', '', '', '2022-12-19 06:01:42'),
+(1266, '691309', '1260', 'Lucky', 'stu00001252', '94', '27', '09', '1', 'Reena', 'Jaiveer', '6395585391', '', '2013-01-01', 'Badarkha', '42', '46', 250617, '', 'B9yzq6', '1', NULL, NULL, NULL, NULL, '', '2', '', '0619', '', '', '', '', '2022-12-19 06:05:47'),
+(1267, '691309', '1261', 'Nikhil', 'stu00001253', '94', '27', '10', '1', 'Malika', 'Ravindra', '9411987365', '', '2012-01-07', 'Rathora', '42', '49', 250617, '', 'nvM654', '1', NULL, NULL, NULL, NULL, '', '1', '', '0832', '', '', '', '', '2022-12-19 06:10:17'),
+(1268, '178621', '1262', 'Aaliya', 'stu00001254', '79', '26', '1', '1', 'Yasmeen', 'Momeen', '9897105825', '', '2012-03-11', 'Mugalpura Baghpat', '41', '36', 250609, 'student/', 'q9g40V', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '1', '', '', '890234050655', '', '2022-12-19 06:13:08'),
+(1269, '691309', '1263', 'Prince', 'stu00001255', '94', '27', '11', '1', 'Monika', 'Jitendra', '9756142678', '', '2010-09-10', 'Malakpur', '42', '38', 250611, '', '79zfld', '1', NULL, NULL, NULL, NULL, '', '2', '', '0712', '', '', '', '', '2022-12-19 06:16:57'),
+(1270, '178621', '1264', 'Aaysha', 'stu00001256', '79', '26', '2', '2', 'Husan', 'Afjal', '8218563920', '', '2013-01-01', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'X2nWtO', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '2', '', '', '678556008793', '', '2022-12-19 06:34:34'),
+(1271, '178621', '1265', 'Arsh', 'stu00001257', '79', '26', '3', '1', 'Raziya', 'Imraan', '9897840936', '', '2014-06-12', 'Rashid Colony Baghpat', '41', '36', 250609, '', '4rocQq', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '3', '', '', '', '', '2022-12-19 06:37:16'),
+(1272, '178621', '1266', 'Aahad', 'stu00001258', '79', '26', '4', '1', 'Imrana', 'Sakeel', '8923948049', '', '2013-05-15', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'nwW485', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '4', '', '', '228195097443', '', '2022-12-19 06:46:35'),
+(1273, '178621', '1267', 'Kanhaiya', 'stu00001259', '79', '26', '5', '1', 'Manju', 'Rakesh', '7417311516', '', '2012-02-01', 'Hanuman Mandir Baghpat', '41', '36', 250609, '', 'bMDOIk', '1', NULL, NULL, NULL, NULL, '', '2', '2021-09-01', '5', '', '', '778967314531', '', '2022-12-19 06:50:58'),
+(1274, '178621', '1268', 'Abdul Rehman', 'stu00001260', '79', '26', '8', '1', 'Kamarjaha', 'Sartaj', '9368419627', '', '2012-08-26', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'P7tEko', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '8', '', '', '', '', '2022-12-19 06:56:38'),
+(1275, '691309', '1269', 'Shivansh', 'stu00001261', '94', '27', '12', '1', 'Sangeeta', 'Omprakash', '8755549793', '', '2011-09-30', 'Sinauli', '42', '39', 250611, '', 'jSxgci', '1', NULL, NULL, NULL, NULL, '', '2', '', '0608', '', '', '', '', '2022-12-19 06:58:43'),
+(1276, '178621', '1270', 'Ansh', 'stu00001262', '79', '26', '9', '1', 'Shaina', 'Sajeed', '9528352106', '', '2011-08-01', 'Rashid Colony Baghpat', '41', '36', 250609, '', '4MJbr1', '1', NULL, NULL, NULL, NULL, '', '2', '2022-07-18', '9', '', '', '482512431526', '', '2022-12-19 07:00:14'),
+(1277, '178621', '1271', 'Fiza', 'stu00001263', '79', '26', '10', '2', 'Saheen', 'Wazid', '9634836178', '', '2012-08-07', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'tx5MVN', '1', NULL, NULL, NULL, NULL, '', '2', '2022-09-14', '10', '', '', '', '', '2022-12-19 07:05:38'),
+(1278, '691309', '1272', 'Shubham', 'stu00001264', '94', '27', '13', '1', 'Kusum', 'Sunil', '9758352268', '', '2015-01-01', 'Sinauli', '42', '39', 250611, '', '6W8Oje', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:07:20'),
+(1279, '691309', '1273', 'Vansh', 'stu00001265', '94', '27', '14', '1', 'Alka', 'Anuj', '8006994444', '', '2012-04-27', 'Bacchor', '42', '45', 250617, '', 'x6g6D3', '1', NULL, NULL, NULL, NULL, '', '1', '', '0800', '', '', '', '', '2022-12-19 07:09:53'),
+(1280, '178621', '1274', 'Priya', 'stu00001266', '80', '26', '1', '2', 'Manjulata', 'Jagroshan', '9837600720', '', '2012-03-03', 'Gaytripuram Baghpat', '41', '36', 250609, '', 'xtf9yV', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-01', '1', '', '', '352231389510', '', '2022-12-19 07:10:15'),
+(1281, '691309', '1275', 'Danish', 'stu00001267', '94', '27', '15', '1', 'Sameena', 'Sajid', '8958151014', '', '2014-03-02', 'Silana', '42', '51', 250617, '', 'kLal9b', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:11:48'),
+(1282, '178621', '1276', 'Rihan', 'stu00001268', '80', '26', '2', '1', 'Shama', 'Parvaj', '8630247674', '', '2012-09-06', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'qAiE1O', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '2', '', '', '560778161447', '', '2022-12-19 07:13:29'),
+(1283, '691309', '1277', 'Sonakshi', 'stu00001269', '91', '27', '01', '2', 'Neelam', 'Anil', '9758352268', '', '2018-01-01', 'Sinauli', '42', '39', 250611, '', '6W8Oje', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:14:31'),
+(1284, '691309', '1278', 'Aarav Khokhar', 'stu00001270', '91', '27', '02', '1', 'Sarika', 'Saurabh', '9627300707', '', '2018-01-01', 'Halalpur', '42', '47', 250617, '', 'tu4k2P', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:16:12'),
+(1285, '178621', '1279', 'Saad', 'stu00001271', '80', '26', '4', '1', 'Kehkasha', 'Shahid', '9136383839', '', '2012-12-12', 'Mugalpura Baghpat', '41', '36', 250609, '', '5A7Z37', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '4', '', '', '', '', '2022-12-19 07:20:46'),
+(1286, '178621', '1280', 'Sharik', 'stu00001272', '80', '26', '3', '1', 'Afshana', 'Babu', '8077779318', '', '2011-01-01', 'Paali Baghpat', '41', '36', 250609, '', 'Fl3TXq', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '3', '', '', '', '', '2022-12-19 07:22:47'),
+(1287, '178621', '1281', 'Hamza', 'stu00001273', '80', '26', '5', '1', 'Sabnam', 'Raju ', '8439337513', '', '2009-12-03', 'Old Town Bghpat', '41', '36', 250609, '', 'Budpvt', '1', NULL, NULL, NULL, NULL, '', '2', '2022-08-01', '5', '', '', '', '', '2022-12-19 07:25:08');
+INSERT INTO `students` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `roll_no`, `gender`, `mother_name`, `father_name`, `mobile`, `email`, `dob`, `address`, `state_id`, `city_id`, `pincode`, `image`, `password`, `status`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `sr_number`, `cast_category`, `date_of_admission`, `admission_no`, `occupation`, `last_schoool_name`, `aadhar_no`, `residence_in_india_since`, `created_at`) VALUES
+(1288, '691309', '1282', 'Daksh', 'stu00001274', '91', '27', '03', '1', 'Vinita', 'Sunil', '9557225153', '', '2018-01-01', 'Nangla', '42', '40', 250617, '', 'Uu35vK', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:46:16'),
+(1289, '691309', '1283', 'Shorya', 'stu00001275', '91', '27', '04', '1', 'Soniya', 'Pawan', '9690187743', '', '2018-01-01', 'Kurri', '42', '48', 250617, '', 't9GN2w', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:47:57'),
+(1290, '691309', '1284', 'Vansh', 'stu00001276', '91', '27', '05', '1', 'Varsha', 'Praveen', '9528043709', '', '2018-01-01', 'Halalpur', '42', '47', 250617, '', 'nxL258', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:49:15'),
+(1291, '691309', '1285', 'Virat', 'stu00001277', '91', '27', '06', '1', 'Anu', 'Vikas', '8755802796', '', '2018-01-01', 'Luhara', '42', '52', 250617, '', 'C8gPoq', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 07:50:42'),
+(1292, '691309', '1286', 'Akshit', 'stu00001278', '91', '27', '07', '1', 'Chandni', 'Arun', '7302194776', '', '2018-01-01', 'Nangla', '42', '40', 250617, '', 'l059HE', '1', NULL, NULL, NULL, NULL, '', '1', '', '', '', '', '', '', '2022-12-19 07:53:01'),
+(1293, '691309', '1287', 'Akshita', 'stu00001279', '92', '27', '01', '2', 'Neetu', 'Veershwar', '9968202315', '', '2018-01-01', 'Nangla', '42', '40', 250617, '', 'a9Mjb2', '1', NULL, NULL, NULL, NULL, '', '1', '', '', '', '', '', '', '2022-12-19 07:58:52'),
+(1294, '691309', '1288', 'Mishti', 'stu00001280', '91', '27', '02', '2', 'Reenu', 'Rahul', '9997763204', '', '2018-01-01', 'Kakor', '42', '44', 250617, '', 'soC2qa', '1', NULL, NULL, NULL, NULL, '', '2', '', '', '', '', '', '', '2022-12-19 08:08:20'),
+(1295, '178621', '1289', 'Alisha', 'stu00001281', '76', '26', '1', '2', 'Sahina', 'Mosin Malik', '7818857640', '', '2015-01-01', 'Rashid Colony', '41', '36', 250609, '', 'I9qW4Y', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '1', '', '', '595119015506', '', '2022-12-20 07:30:24'),
+(1296, '178621', '1290', 'Aafiya', 'stu00001282', '76', '26', '2', '2', 'Sahin', 'Yunus Malik ', '7818857640', '', '2015-05-29', 'Mugalpura Baghpat', '41', '36', 250609, '', 'I9qW4Y', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '2', '', '', '989596999779', '', '2022-12-20 07:33:40'),
+(1297, '178621', '1291', 'Inaya', 'stu00001283', '76', '26', '3', '2', 'Kausar Jha', 'Javed Ahmed', '9528131817', '', '2016-12-25', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'wIrKuU', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '3', '', '', '', '', '2022-12-20 07:38:53'),
+(1298, '178621', '1292', 'Tamana', 'stu00001284', '76', '26', '5', '2', 'Fatma', 'Irshad', '9557411038', '', '2015-12-07', 'Rashid Colony', '41', '36', 250609, '', 'X0ohf6', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '5', '', '', '261386902234', '', '2022-12-20 07:44:01'),
+(1299, '178621', '1293', 'Vivek', 'stu00001285', '76', '26', '6', '1', 'Manjulata', 'Jagroshan', '8445581295', '', '2015-09-19', 'Gaytripuram Baghpat', '41', '36', 250609, '', 'oZOe0u', '1', NULL, NULL, NULL, NULL, '', '3', '2022-04-01', '6', '', '', '539708560914', '', '2022-12-20 07:48:27'),
+(1300, '178621', '1294', 'Aalisha Mosin', 'stu00001286', '76', '26', '1', '2', 'Shaina', 'Mosin Malik', '8534808910', '', '2015-01-01', 'Rashid Colony', '41', '36', 250609, '', 'BGK6Pr', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-12', '1', '', '', '595119015506', '', '2023-01-21 04:39:53'),
+(1301, '178621', '1295', 'Aafiya', 'stu00001287', '76', '26', '2', '2', 'Sain', 'Yunus Malik', '7818857640', '', '2015-05-29', 'Mugalpura Baghpat', '41', '36', 250609, '', 'I9qW4Y', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '2', '', '', '989596999779', '', '2023-01-21 04:43:03'),
+(1302, '178621', '1296', 'Inaya', 'stu00001288', '76', '26', '3', '2', 'kausar Jha', 'Javed Ahemad', '9528131817', '', '2016-10-25', 'Rashid Colony', '41', '36', 250609, '', 'wIrKuU', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '3', '', '', '', '', '2023-01-21 04:49:51'),
+(1303, '178621', '1297', 'Salik', 'stu00001289', '76', '26', '4', '1', 'Gudoo', 'Aabid', '9557141038', '', '2015-01-31', 'Old Town Baghpat', '41', '36', 250609, '', '9e7qdv', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '4', '', '', '332028486825', '', '2023-01-21 05:13:15'),
+(1304, '178621', '1298', 'Tamanna', 'stu00001290', '76', '26', '5', '2', 'Fatma', 'Irshad', '9557411038', '', '2015-12-07', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'X0ohf6', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '5', '', '', '', '', '2023-01-21 05:20:16'),
+(1305, '178621', '1299', 'Tamanna', 'stu00001291', '76', '26', '5', '2', 'Reshma', 'Irshad', '9557141038', '', '2015-12-07', 'Rashid Colony Bghpat', '41', '36', 250609, '', '9e7qdv', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '5', '', '', '261386902234', '', '2023-01-21 05:23:41'),
+(1306, '178621', '1300', 'Tamanna', 'stu00001292', '76', '26', '5', '2', 'Reshma', 'Irshad', '9557411038', '', '2015-12-10', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'X0ohf6', '4', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '5', '', '', '261386902234', '', '2023-01-21 06:05:09'),
+(1307, '683611', '1301', 'pappu', 'stu00001293', '1', '1', '15', '1', 'adf', 'asdf', '1111111111', 'sattu@email.com', '2023-01-21', 'asdf', '1', '1', 147258, '', '3DJxC2', '1', NULL, NULL, NULL, NULL, 'asdf', '2', '2023-01-21', '01', 'asdf', 'asdf', 'asdf', 'asdf', '2023-01-21 06:25:45'),
+(1308, '178621', '1302', 'Zaid', 'stu00001294', '76', '26', '7', '1', 'Rijvana', 'Arif', '661838934075', '', '2016-09-03', 'Rashid Colony Baghpat', '41', '36', 250609, '', 'vRd5zG', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '7', '', '', '', '', '2023-01-21 06:32:59'),
+(1309, '178621', '1303', 'Shifa', 'stu00001295', '76', '26', '8', '2', 'Shaista', 'Naim', '7535910043', '', '2012-05-15', 'Old Town Baghpat', '41', '36', 205609, 'student/', '2GPHLZ', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '8', '', '', '436673831545', '', '2023-01-21 06:39:37'),
+(1310, '178621', '1304', 'Ayan', 'stu00001296', '76', '26', '9', '1', 'Shaista', 'Naim', '7535910043', '', '2013-02-11', 'Old Town Bahpat', '41', '36', 250609, 'student/', '2GPHLZ', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '9', '', '', '937979189044', '', '2023-01-21 06:42:29'),
+(1311, '178621', '1305', 'Aalisha', 'stu00001297', '76', '26', '10', '2', 'Sama', 'Aadil', '8630502017', '', '2016-12-17', 'Rashid Colony Bghpat ', '41', '36', 250609, '', '635GC7', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '10', '', '', '', '', '2023-01-21 07:01:00'),
+(1312, '178621', '1306', 'Farhan', 'stu00001298', '76', '26', '11', '1', 'Sama', 'Rahees', '8936928427', '', '2013-01-01', 'Mugalpura Baghpat', '41', '36', 250609, '', 'fOGmV4', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '11', '', '', '379675094392', '', '2023-01-21 07:05:07'),
+(1313, '178621', '1307', 'Zaid Sahil', 'stu00001299', '76', '26', '12', '1', 'Rabiya', 'Sahil', '8383027711', '', '2016-01-19', 'Delhi Road Baghpat', '41', '36', 250609, '', 'yTbZ99', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '12', '', '', '', '', '2023-01-21 07:08:23'),
+(1314, '178621', '1308', 'Talha', 'stu00001300', '76', '26', '13', '1', 'Sabnam', 'Raju', '8439337513', '', '2013-12-04', 'Old Town Baghpat', '41', '36', 250609, '', 'Budpvt', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '13', '', '', '', '', '2023-01-21 07:12:59'),
+(1315, '178621', '1309', 'Aayan ', 'stu00001301', '76', '26', '14', '1', 'Sahana', 'Sahid', '8439337513', '', '2010-05-10', 'Old Town Baghpat', '41', '36', 250609, '', 'Budpvt', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '14', '', '', '', '', '2023-01-21 07:15:38'),
+(1316, '178621', '1310', 'Hamza', 'stu00001302', '76', '26', '15', '1', 'Firdosh', 'Imran', '6396465436', '', '2016-08-13', 'Rashid Colony Baghpat', '41', '36', 250609, '', '9kICUy', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '15', '', '', '705746499087', '', '2023-01-21 07:17:59'),
+(1317, '178621', '1311', 'Mohammad', 'stu00001303', '76', '26', '16', '1', 'Mubashshira', 'Dilshad', '9568692448', '', '2014-11-15', 'Rashid Colony Baghpat', '41', '36', 250609, '', '1Uwl9Y', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '16', '', '', '202797825248', '', '2023-01-21 07:21:36'),
+(1318, '178621', '1312', 'Adina', 'stu00001304', '77', '26', '1', '2', 'Guddu', 'Aabid', '9368805426', '', '2013-05-03', 'Old Town Baghpat', '41', '36', 250609, '', '7GuRfx', '1', NULL, NULL, NULL, NULL, '', '2', '2022-04-01', '1', '', '', '985979223629', '', '2023-02-01 04:38:39');
 
 -- --------------------------------------------------------
 
@@ -10269,7 +11267,157 @@ INSERT INTO `student_history` (`id`, `schoolUniqueCode`, `student_id`, `old_sess
 (959, '623659', 0, 16, 16, 0, 0, NULL, 128, 39, 0, '2022-12-07', '1', '2022-12-06 15:30:31'),
 (960, '623659', 1167, NULL, 16, NULL, NULL, NULL, 121, 39, 0, '2021-04-01', '1', '2022-12-07 02:42:17'),
 (961, '623659', 1168, NULL, 16, NULL, NULL, NULL, 121, 39, 500, '2022-12-07', '1', '2022-12-07 02:44:38'),
-(962, '623659', 1169, NULL, 16, NULL, NULL, NULL, 121, 39, 0, '2022-12-07', '1', '2022-12-07 02:47:03');
+(962, '623659', 1169, NULL, 16, NULL, NULL, NULL, 121, 39, 0, '2022-12-07', '1', '2022-12-07 02:47:03'),
+(963, '178621', 1170, NULL, 8, NULL, NULL, NULL, 82, 26, 0, '2022-07-06', '1', '2022-12-12 06:23:11'),
+(964, '178621', 1171, NULL, 8, NULL, NULL, NULL, 82, 26, 0, '2022-04-12', '1', '2022-12-12 06:30:00'),
+(965, '178621', 1172, NULL, 8, NULL, NULL, NULL, 82, 26, 0, '2022-04-12', '1', '2022-12-12 06:36:48'),
+(966, '178621', 1173, NULL, 8, NULL, NULL, NULL, 83, 26, 0, '2022-04-12', '1', '2022-12-12 06:40:40'),
+(967, '178621', 1174, NULL, 8, NULL, NULL, NULL, 83, 26, 0, '2022-04-12', '1', '2022-12-12 06:44:25'),
+(968, '178621', 1175, NULL, 8, NULL, NULL, NULL, 83, 26, 0, '2022-04-12', '1', '2022-12-12 06:47:37'),
+(969, '178621', 1176, NULL, 8, NULL, NULL, NULL, 83, 26, 0, '2022-04-12', '1', '2022-12-12 06:53:36'),
+(970, '975691', 1177, NULL, 15, NULL, NULL, NULL, 109, 37, 0, '2022-04-01', '1', '2022-12-12 12:10:33'),
+(971, '975691', 1178, NULL, 15, NULL, NULL, NULL, 106, 37, 0, '2022-04-01', '1', '2022-12-12 12:13:43'),
+(972, '975691', 1179, NULL, 15, NULL, NULL, NULL, 107, 37, 0, '2022-04-01', '1', '2022-12-12 12:16:03'),
+(973, '975691', 1180, NULL, 15, NULL, NULL, NULL, 107, 37, 0, '2022-04-01', '1', '2022-12-12 12:17:49'),
+(974, '975691', 1181, NULL, 15, NULL, NULL, NULL, 107, 37, 0, '2022-04-01', '1', '2022-12-12 12:19:34'),
+(975, '975691', 1182, NULL, 15, NULL, NULL, NULL, 107, 37, 0, '2022-04-01', '1', '2022-12-12 12:23:24'),
+(976, '975691', 1183, NULL, 15, NULL, NULL, NULL, 107, 37, 0, '2022-04-01', '1', '2022-12-12 12:25:25'),
+(977, '975691', 1184, NULL, 15, NULL, NULL, NULL, 111, 37, 0, '2022-04-01', '1', '2022-12-12 12:30:17'),
+(978, '975691', 1185, NULL, 15, NULL, NULL, NULL, 111, 37, 0, '2022-04-01', '1', '2022-12-12 12:34:47'),
+(979, '975691', 1186, NULL, 15, NULL, NULL, NULL, 111, 37, 0, '2022-04-01', '1', '2022-12-12 12:37:24'),
+(980, '975691', 1187, NULL, 15, NULL, NULL, NULL, 114, 37, 0, '2022-04-01', '1', '2022-12-12 12:40:21'),
+(981, '975691', 1188, NULL, 15, NULL, NULL, NULL, 114, 37, 0, '2022-04-01', '1', '2022-12-13 03:06:36'),
+(982, '975691', 1189, NULL, 15, NULL, NULL, NULL, 109, 37, 0, '2022-04-01', '1', '2022-12-13 03:08:41'),
+(983, '691309', 1190, NULL, 9, NULL, NULL, NULL, 93, 27, 0, '1970-01-01', '1', '2022-12-13 03:37:02'),
+(984, '691309', 1191, NULL, 9, NULL, NULL, NULL, 93, 27, 0, '1970-01-01', '1', '2022-12-13 03:38:56'),
+(985, '691309', 1192, NULL, 9, NULL, NULL, NULL, 93, 27, 0, '1970-01-01', '1', '2022-12-13 03:55:46'),
+(986, '975691', 1193, NULL, 15, NULL, NULL, NULL, 108, 37, 0, '2022-04-01', '1', '2022-12-14 03:49:28'),
+(987, '975691', 1194, NULL, 15, NULL, NULL, NULL, 107, 37, 0, '2022-04-01', '1', '2022-12-14 03:50:41'),
+(988, '975691', 1195, NULL, 15, NULL, NULL, NULL, 109, 37, 0, '2022-04-01', '1', '2022-12-14 03:52:27'),
+(989, '975691', 1196, NULL, 15, NULL, NULL, NULL, 106, 37, 0, '2022-04-01', '1', '2022-12-14 03:54:07'),
+(990, '975691', 1197, NULL, 15, NULL, NULL, NULL, 110, 37, 0, '2022-04-01', '1', '2022-12-14 03:55:29'),
+(991, '975691', 1198, NULL, 15, NULL, NULL, NULL, 106, 37, 0, '2022-04-01', '1', '2022-12-14 03:59:05'),
+(992, '975691', 1199, NULL, 15, NULL, NULL, NULL, 114, 37, 0, '2022-04-01', '1', '2022-12-14 04:00:49'),
+(993, '975691', 1200, NULL, 15, NULL, NULL, NULL, 114, 37, 0, '2022-04-01', '1', '2022-12-14 04:02:59'),
+(994, '691309', 1201, NULL, 9, NULL, NULL, NULL, 95, 27, 0, '1970-01-01', '1', '2022-12-14 04:47:46'),
+(995, '691309', 1202, NULL, 9, NULL, NULL, NULL, 95, 27, 0, '1970-01-01', '1', '2022-12-14 04:50:16'),
+(996, '691309', 1203, NULL, 9, NULL, NULL, NULL, 95, 27, 0, '1970-01-01', '1', '2022-12-14 04:52:10'),
+(997, '691309', 1204, NULL, 9, NULL, NULL, NULL, 95, 27, 0, '1970-01-01', '1', '2022-12-14 04:57:01'),
+(998, '691309', 1205, NULL, 9, NULL, NULL, NULL, 95, 27, 0, '1970-01-01', '1', '2022-12-14 04:59:41'),
+(999, '691309', 1206, NULL, 9, NULL, NULL, NULL, 95, 27, 0, '1970-01-01', '1', '2022-12-14 05:01:52'),
+(1000, '178621', 1207, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 06:12:26'),
+(1001, '178621', 1208, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 06:23:32'),
+(1002, '178621', 1209, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 06:29:52'),
+(1003, '178621', 1210, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 06:41:05'),
+(1004, '178621', 1211, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-01', '1', '2022-12-14 06:49:34'),
+(1005, '178621', 1212, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 07:21:55'),
+(1006, '178621', 1213, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 07:28:02'),
+(1007, '178621', 1214, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-14 07:32:59'),
+(1008, '178621', 1215, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-16 06:43:20'),
+(1009, '178621', 1216, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-16 06:59:05'),
+(1010, '178621', 1217, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-01', '1', '2022-12-16 07:07:42'),
+(1011, '178621', 1218, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-16 07:28:26'),
+(1012, '178621', 1219, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-01', '1', '2022-12-16 07:35:32'),
+(1013, '178621', 1220, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-16 07:43:50'),
+(1014, '691309', 1221, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:30:53'),
+(1015, '691309', 1222, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:33:01'),
+(1016, '691309', 1223, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:36:28'),
+(1017, '691309', 1224, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:39:53'),
+(1018, '691309', 1225, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:42:04'),
+(1019, '691309', 1226, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:45:22'),
+(1020, '691309', 1227, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:47:42'),
+(1021, '691309', 1228, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:51:47'),
+(1022, '691309', 1229, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 02:57:23'),
+(1023, '691309', 1230, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 03:01:10'),
+(1024, '178621', 1231, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-17 03:54:56'),
+(1025, '178621', 1232, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-17 03:57:45'),
+(1026, '178621', 1233, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-17 04:07:30'),
+(1027, '691309', 1234, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 04:38:32'),
+(1028, '691309', 1235, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 04:57:31'),
+(1029, '691309', 1236, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 04:59:25'),
+(1030, '691309', 1237, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:02:59'),
+(1031, '691309', 1238, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:06:35'),
+(1032, '178621', 1239, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-17 05:08:25'),
+(1033, '178621', 1240, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-17 05:11:05'),
+(1034, '691309', 1241, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:12:03'),
+(1035, '178621', 1242, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-12', '1', '2022-12-17 05:14:30'),
+(1036, '691309', 1243, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:15:23'),
+(1037, '691309', 1244, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:18:41'),
+(1038, '691309', 1245, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:20:56'),
+(1039, '691309', 1246, NULL, 9, NULL, NULL, NULL, 96, 27, 0, '1970-01-01', '1', '2022-12-17 05:23:05'),
+(1040, '178621', 1247, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-12', '1', '2022-12-19 04:00:05'),
+(1041, '178621', 1248, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2019-04-19', '1', '2022-12-19 04:04:29'),
+(1042, '178621', 1249, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2021-09-06', '1', '2022-12-19 04:09:22'),
+(1043, '178621', 1250, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-12', '1', '2022-12-19 04:12:43'),
+(1044, '178621', 1251, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-12', '1', '2022-12-19 04:15:56'),
+(1045, '178621', 1252, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-01', '1', '2022-12-19 04:20:25'),
+(1046, '178621', 1253, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-12', '1', '2022-12-19 04:24:52'),
+(1047, '178621', 1254, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-01', '1', '2022-12-19 04:27:12');
+INSERT INTO `student_history` (`id`, `schoolUniqueCode`, `student_id`, `old_session_id`, `session_table_id`, `currentClassId`, `currentSessionId`, `permotion_date`, `class_id`, `section_id`, `fees_due`, `doa`, `status`, `created_at`) VALUES
+(1048, '178621', 1255, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-01', '1', '2022-12-19 04:36:39'),
+(1049, '178621', 1256, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2021-03-18', '1', '2022-12-19 04:54:20'),
+(1050, '178621', 1257, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-01', '1', '2022-12-19 04:57:45'),
+(1051, '178621', 1258, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-08-17', '1', '2022-12-19 05:00:59'),
+(1052, '691309', 1259, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 05:22:41'),
+(1053, '691309', 1260, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 05:26:42'),
+(1054, '691309', 1261, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 05:29:09'),
+(1055, '691309', 1262, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 05:37:26'),
+(1056, '691309', 1263, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 05:45:04'),
+(1057, '691309', 1264, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 05:47:58'),
+(1058, '691309', 1265, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 06:01:42'),
+(1059, '691309', 1266, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 06:05:47'),
+(1060, '691309', 1267, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 06:10:17'),
+(1061, '178621', 1268, NULL, 8, NULL, NULL, NULL, 78, 26, 0, '2022-04-01', '1', '2022-12-19 06:13:08'),
+(1062, '691309', 1269, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 06:16:57'),
+(1063, '178621', 1270, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2022-04-01', '1', '2022-12-19 06:34:34'),
+(1064, '178621', 1271, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2022-04-01', '1', '2022-12-19 06:37:16'),
+(1065, '178621', 1272, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2022-04-01', '1', '2022-12-19 06:46:35'),
+(1066, '178621', 1273, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2021-09-01', '1', '2022-12-19 06:50:58'),
+(1067, '178621', 1274, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2022-04-01', '1', '2022-12-19 06:56:38'),
+(1068, '691309', 1275, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 06:58:43'),
+(1069, '178621', 1276, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2022-07-18', '1', '2022-12-19 07:00:14'),
+(1070, '178621', 1277, NULL, 8, NULL, NULL, NULL, 79, 26, 0, '2022-09-14', '1', '2022-12-19 07:05:38'),
+(1071, '691309', 1278, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 07:07:20'),
+(1072, '691309', 1279, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 07:09:53'),
+(1073, '178621', 1280, NULL, 8, NULL, NULL, NULL, 80, 26, 0, '2022-04-01', '1', '2022-12-19 07:10:15'),
+(1074, '691309', 1281, NULL, 9, NULL, NULL, NULL, 94, 27, 0, '1970-01-01', '1', '2022-12-19 07:11:48'),
+(1075, '178621', 1282, NULL, 8, NULL, NULL, NULL, 80, 26, 0, '2022-04-01', '1', '2022-12-19 07:13:29'),
+(1076, '691309', 1283, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:14:31'),
+(1077, '691309', 1284, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:16:12'),
+(1078, '178621', 1285, NULL, 8, NULL, NULL, NULL, 80, 26, 0, '2022-04-01', '1', '2022-12-19 07:20:46'),
+(1079, '178621', 1286, NULL, 8, NULL, NULL, NULL, 80, 26, 0, '2022-04-01', '1', '2022-12-19 07:22:47'),
+(1080, '178621', 1287, NULL, 8, NULL, NULL, NULL, 80, 26, 0, '2022-08-01', '1', '2022-12-19 07:25:08'),
+(1081, '691309', 1288, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:46:16'),
+(1082, '691309', 1289, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:47:57'),
+(1083, '691309', 1290, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:49:15'),
+(1084, '691309', 1291, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:50:42'),
+(1085, '691309', 1292, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 07:53:01'),
+(1086, '691309', 1293, NULL, 9, NULL, NULL, NULL, 92, 27, 0, '1970-01-01', '1', '2022-12-19 07:58:52'),
+(1087, '691309', 1294, NULL, 9, NULL, NULL, NULL, 91, 27, 0, '1970-01-01', '1', '2022-12-19 08:08:20'),
+(1088, '178621', 1295, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2022-12-20 07:30:24'),
+(1089, '178621', 1296, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2022-12-20 07:33:40'),
+(1090, '178621', 1297, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2022-12-20 07:38:53'),
+(1091, '178621', 1298, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2022-12-20 07:44:01'),
+(1092, '178621', 1299, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2022-12-20 07:48:27'),
+(1093, '178621', 1300, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-12', '1', '2023-01-21 04:39:53'),
+(1094, '178621', 1301, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 04:43:03'),
+(1095, '178621', 1302, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 04:49:51'),
+(1096, '178621', 1303, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 05:13:15'),
+(1097, '178621', 1304, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 05:20:16'),
+(1098, '178621', 1305, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 05:23:41'),
+(1099, '178621', 1306, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 06:05:09'),
+(1100, '683611', 1307, NULL, 1, NULL, NULL, NULL, 1, 1, 0, '2023-01-21', '1', '2023-01-21 06:25:45'),
+(1101, '178621', 1308, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 06:32:59'),
+(1102, '178621', 1309, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 06:39:37'),
+(1103, '178621', 1310, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 06:42:29'),
+(1104, '178621', 1311, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:01:00'),
+(1105, '178621', 1312, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:05:07'),
+(1106, '178621', 1313, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:08:23'),
+(1107, '178621', 1314, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:12:59'),
+(1108, '178621', 1315, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:15:38'),
+(1109, '178621', 1316, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:17:59'),
+(1110, '178621', 1317, NULL, 8, NULL, NULL, NULL, 76, 26, 0, '2022-04-01', '1', '2023-01-21 07:21:36'),
+(1111, '178621', 1318, NULL, 8, NULL, NULL, NULL, 77, 26, 0, '2022-04-01', '1', '2023-02-01 04:38:39');
 
 -- --------------------------------------------------------
 
@@ -10415,25 +11563,25 @@ CREATE TABLE `teachers` (
 
 INSERT INTO `teachers` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, `class_id`, `section_id`, `gender`, `mother_name`, `father_name`, `mobile`, `password`, `auth_token`, `fcm_token`, `vechicle_type`, `driver_id`, `email`, `dob`, `doj`, `address`, `state_id`, `city_id`, `pincode`, `image`, `education`, `experience`, `cbse_id`, `status`, `created_at`) VALUES
 (1, '683611', '9', 'Shivani Sharma', 'tec00001', '8', '1', '2', 'Sunita Devi', 'Birju Sharma', '3216549875', '', NULL, NULL, NULL, NULL, 'shivani147@gmail.com', '1995-07-06', '2020-03-20', 'Nehru Road', '1', '1', '250611', 'img-tec00001-630-01873594en_Masterfile.jpg', NULL, NULL, NULL, '1', '2022-08-13 04:18:44'),
-(2, '683611', '10', 'Arjun Kapoor', 'tec00002', '14', '13', '1', 'Bano Kapoor', 'Amrith Kapoor', '9633695214', 'B2gD9t', 'N2wQyqkK72jmAHY4hT4OanioLc83fuWbsd2e1vxD', 'dWHx7ze1TiqD3uw_N2ydAd:APA91bEGEfDmzsfv9fjpVMKS7v-S0fcdcEmfZ6Nm4PREX9EKT9xDDNno-fdrFhhxi2kNfP7Mm79kcX4KV3Aj8VTtoiGYojV-xvT05mHgH_k8CZrqUPRk0b88HVH_AvXdAC_e134wJT8i', NULL, NULL, 'arjunK01@gmail.com', '1993-06-02', '2022-02-01', 'Near Nagar Palika', '1', '2', '250609', 'img-tec00002-Indian-school-t11791.jpg', NULL, NULL, NULL, '1', '2022-08-13 04:24:44'),
+(2, '683611', '10', 'Arjun Kapoor', 'tec00002', '14', '13', '1', 'Bano Kapoor', 'Amrith Kapoor', '9633695214', 'B2gD9t', 'kh3Ectwu4R3gVa5j4Lm0QqlbyFO5S28e676oD4rA', 'djfSA5HZR8GFPeypTSnkL2:APA91bH3P70L0wWjn95sNtdDBWzDElkCgKTCAU3jGrJtRXYISbNEfIU9uLIh7ZrRzp_1RaVNyfOwbY-0Z4RfI62RJqpcl5K2qVvOzu_bK8UgMYDZyzKrsf2e59SIfgIOEeIcvJC2vhvs', NULL, NULL, 'arjunK01@gmail.com', '1993-06-02', '2022-02-01', 'Near Nagar Palika', '1', '2', '250609', 'img-tec00002-Indian-school-t11791.jpg', NULL, NULL, NULL, '1', '2022-08-13 04:24:44'),
 (3, '683611', '', 'Jhonny', 'tec00003', '14', '13', '1', 'Kamla ', 'Vimal', '3692582154', 'D7wySb', 'ZNAzYkJ5RDxMcfIrHECyX6Ov5pbd1h47Ple6q9T3', 'cshrEuu7SJWv_fTbUiA8Ye:APA91bE0S9FaUIK7sAR7qWyGLXCHkXtUuutbvhzbJhk-s6ok-qNWcgaGT7-BfpyHJfd7cFSFxxnGDU0pKYZOJ1zn-_Q17pMH5drD4l5-lO-dymY2qbeATEUVgLxB_7ZUy_B6oEsdP83C', NULL, NULL, 'jhonnyjid@email.com', '2003-02-15', '2022-08-15', 'Patti Birapur', '2', '4', '110006', 'img-tec00003-portrait-young-male-teacher-background-school-blackboard-teacher-s-day-knowledge-day-back-to-school-study-159722312.jpg', NULL, NULL, NULL, '1', '2022-08-15 04:01:33'),
 (4, '683611', '15', 'Kavita Sharma', 'tec00004', '1', '1', '2', 'Banno Devi', 'Mamchand Sharma', '7894561230', 'S2YDAO', 'OMFlx9QyXi17rVK9fj8525JaTpP1LChR0tUb3vYI', 'ea98Bcc2QxKxA4A4PP0_j4:APA91bEh6968PM_Z-XqnPZzC78KSZudNkMg9fVgsCjXrUD5OicTfnv8qUUcQFjTEu85TCJBAhedM_iU4gdSliBwGoBfgHDQTflAxWJEL0Ea7L2mz7zCrWm2htdLAC5FYi__usyg0pIX4', NULL, NULL, 'kav@gmail.com', '1992-05-06', '2021-01-28', 'Gali MiraPur Baru Patti', '1', '1', '250611', 'img-tec00004-istockphoto-517042363-612x612.jpg', NULL, NULL, NULL, '1', '2022-08-28 03:17:57'),
 (5, '683611', '16', 'Sweaty Sharma', 'tec00005', '13', '1', '2', 'Rekha Devi', 'Bunty Sharma', '9151446619', '6Q0xT6', '2AMS8t5hvr365bfua985oUEWyFB9TxDHnR0zOqgL', 'eoN64gDbTqKZHFGr9dg5YI:APA91bH7gP9UFwxdZMFsI0E_ScV2OdrNR5vBs4ht91j9bkRtSfPiDTvIJMfuijMeTQNpFXgIoCxnWpgUSIrhOp-02YWvjXOHHh0GH0ZX10PGhLUkm8sZzLbmCm4-6WepjP5yoxSWXrNp', NULL, NULL, 'sweatyji11@gmail.com', '07/06/1994', '06/08/1904', 'Patti Chaudhran Gali Shivpuri', '1', '1', '250611', 'img-tec00005-istockphoto-1139495117-612x612.jpg', 'Msc Maths', '3', NULL, '1', '2022-08-28 04:08:01'),
-(6, '683611', '17', 'babita sharama', 'tec00006', '13', '2', '2', 'usha', 'prem', '9898989898', 'r63meF', 'VdvjAaTk80DYc668eIP4wog3yr2ZlWUm17pt5Nih', 'fJu5NXmOT5yHHMH4lXnnZh:APA91bGDo5Vc_tRFc-lnvb68EWoL00M3EFm-rzO7Byr0ehnpYToDcy19kYJ5pEkfgdH7nugLEzrtXrbedoxkzSc-z5DWbK61vsbwooiBvEmRl_vb0I1t_gPp8_eiclQlyji68Mz8mFI7', NULL, NULL, 'babita@gmail.com', '06/08/1999', '08/10/2022', 'A165 , 3rd floor', '2', '4', '110076', 'img-tec00006-Screenshot from 2022-08-18 18-35-25.png', '10th', '1', NULL, '1', '2022-08-30 14:42:38'),
+(6, '683611', '17', 'Miss Babita Kumari Sharma', 'tec00006', '13', '2', '2', 'Mrs Usha Devi Ji', 'Mr Prem Kumar Sharma', '9898989898', 'r63meF', 'A1h40fVN76v7RWDQdSjiC4tJ9aBkMP2r63Esnwxo', '', NULL, NULL, 'babita@gmail.com', '06/08/1999', '08/10/2022', 'House No 12-786 Street No 7th First Floor Near Leela Circle', '1', '13', '110076', 'img-tec00006-1677205260Indian simple girl profile picture11.jpg', '10th', '1', '', '1', '2022-08-30 14:42:38'),
 (7, '965316', '18', 'babita sharama', 'tec00007', '1', '1', '2', 'usha', 'prem', '08700671965', 'Jfkyig', 'bQVR07GX3wfYPO9yjueA778mzSv8NcLnJ2o9BH0U', NULL, NULL, NULL, 'nguptani30@gmail.com', '06/17/2020', '08/06/2022', 'E165 , 3rd floor', '2', '4', '110059', 'img-tec00007-Screenshot from 2022-08-18 14-17-24.png', NULL, NULL, NULL, '1', '2022-08-30 14:47:57'),
 (8, '724212', '19', 'Gaurav Jain', 'tec00008', '17', '18', '1', 'Krishna Jain', 'Sushil Kumar Jain', '9045308073', 'E60VYG', '7APlIKeyNV48gfBFO1ntCXdrpGQx1SJUmRE5v5ca', NULL, NULL, NULL, 'gaurav77@gmail.com', '07/28/1993', '11/01/2021', 'Bada Jain Mandir', '34', '19', '250611', 'img-tec00008-WhatsApp Image 2022-08-27 at 11.56.35.jpeg', NULL, NULL, NULL, '1', '2022-09-03 14:10:31'),
-(9, '683611', '20', 'Satyender Sir Ji', 'tec00009', '14', '13', '1', 'Falana', 'Dikana', '9638527418', '13860C', 'LO5E2mYJk3id8AT6xHG2va4z5cZp0Vq2BMCgSbUI', 'cE-gLQC0R-y57AsB7kKvdq:APA91bHOB5-hEvXPKKxK8aqt-Roh-ILdO4ILHITX15o_hLfHP7s5F6czY5fM2LW3hSSuyo2lmqqi-pWPEf2-QUmmFRN-uUmDvoPglOq41cfCk4H7a5CATyDizDv5XWu_3Kfe6-o3gMGO', 1, 10, 'sat@gmaul.co', '09/01/2022', '09/01/2022', 'Gali ka pata hi nhi h', '1', '1', '098765', 'img-tec00009-images (20).jpeg', '1', '0', NULL, '1', '2022-09-06 15:23:38'),
+(9, '683611', '20', 'Satyender Sir Ji', 'tec00009', '14', '13', '1', 'Falana', 'Dikana', '9638527418', '13860C', 'iZKjcu6yN9dAg4IJ83exQD6p5bOoXqYF842RsGLa', 'cq3KGA8sSiiQuIcw4ch2Us:APA91bFwX31W6lM6DsNsnO1stjdBFHCUMejOmf5JqCb-vb1znbdw9ZP406C4aSqYCi1iaLTGmWafC29wbJxo4x5pp6sQxIilkhLq7H2VLVfhp4QDMsAGK8_Zhp3dLmHSs7Sq22p8RItv', 1, 10, 'sat@gmaul.co', '09/01/2022', '09/01/2022', 'Gali ka pata hi nhi h', '1', '1', '098765', 'img-tec00009-images (20).jpeg', '1', '0', NULL, '1', '2022-09-06 15:23:38'),
 (10, '965316', '21', 'babita sharama', 'tec000010', '19', '19', '2', 'maharani', 'janardan', '8900671965', 'c9M6O5', NULL, NULL, NULL, NULL, 'babita@gmail.com', '11/04/2009', '08/10/2022', 'E165 , 3rd floor', '', '', '110059', '', 'bed', '1', NULL, '1', '2022-09-11 13:52:51'),
 (11, '683611', '22', 'Gaurav Jain', 'tec000011', '13', '1', '1', 'Krishna Jain', 'Sushil Jain', '9045308073', 'k9miEu', 'pky5l923JrZGwXFRMvgV17YmdH00n69W49IEt0jx', 'fQzJ73-YT96O5WRdEL94fX:APA91bHuHmiKYSXm2RQ9FJokJOLHp3yVBCX_N1eG30YxgYJOoGkUTyZlXLCAJdj_kITKEqkcXuZcCFCZhhyY_EJYVKSKROA-NOqwDD3oGOheQ7Pt6oPvZEbrrBEfnCz5-P49X85FmeGp', 1, 2, 'shrione77@gmail.com', '07/28/1993', '08/11/2021', 'Bada Jain Mandir', '1', '1', '250611', 'img-tec000011-1663837341WhatsApp Image 2022-09-22 at 14.30.51.jpeg', 'B. com', '1', NULL, '1', '2022-09-22 09:02:21'),
 (12, '683611', '23', 'Priyanka Gupta', 'tec000012', '13', '1', '2', 'Vidisha Gupta', 'Shivmohan Gupta', '9638521475', 'P7gi3o', '7W54NsjRdtFnwa0bfKxk4lvGBILSZAp3mX1iVq0P', 'cshrEuu7SJWv_fTbUiA8Ye:APA91bEC_QGdga1o0ZIMJtMMZknVGnS1YKgQ2_5aWBfvzT0IQ2H63SiFOQac7aCRrSwRs7CupbaSQDdqWZd17mRWHXrXaeB49xeDRrRAJBY73QXTdK12LdBGrSf73uLj2s15pcrhig0a', 1, 2, 'pri@gmail.com', '10/26/1994', '04/12/2022', 'Gurana Road Baraut', '1', '1', '250611', '', 'Bsc', '2', NULL, '1', '2022-09-22 09:09:52'),
 (13, '261027', '24', 'Mamta Ruhela', 'tec000013', '23', '21', '2', 'Kusum Devi', 'Karan Singh', '7534902463', '6KFv20', NULL, NULL, NULL, NULL, 'dgabaraut@gmail.com', '05/09/2014', '02/05/2022', 'BARAUT', '36', '24', '250611', 'img-tec000013-1665732687ankit.png', '', '0', NULL, '4', '2022-10-14 07:31:27'),
 (14, '261027', '25', 'Harendra Kumar', 'tec000014', '35', '21', '1', 'Omkali Devi', 'Inderpal Singh', '9756436205', 'YnPkwJ', 'RJZoc2yWSELVx1rju6tYKM0s9FD60He7nT51b175', 'cs3m9DmVSUaB0G4TxI2OFt:APA91bEwejkdK3kTqty2RDmhxt0uPCSO32cbj0yWGh7wEJWP_TanKqK5hKrwhzjGjRjA02myhHIhjJNzNmdvdXOIE7qBqJmiTfQloMdqarWfMmYMyhpmfCurA_bMbf7p4NGbX_6Xah4_', NULL, NULL, 'harendrat123@gmail.com', '08/01/1986', '04/01/2022', 'Jiwana, Kishanpaur Baral', '36', '24', '250611', 'img-tec000014-1666945402Harendra Kumar.jpg', 'M.A. (English), B.Ed.', '3', '', '1', '2022-10-15 08:08:35'),
-(15, '683611', '26', 'Gaurav Sharma', 'tec000015', '1', '1', '1', 'Vidisha Gupta', 'Sushil Jain', '06397520228', 'Dt8wYv', NULL, NULL, NULL, NULL, 'gs273g49@gmail.com', '2022-10-15', '2022-10-16', '12-190 gali maliyan patti chaudran', '1', '1', '250611', 'img-tec000015-1665989520istockphoto-517042363-612x612.jpg', '10th', '0', NULL, '1', '2022-10-16 11:55:32'),
+(15, '683611', '26', 'Gaurav Sharma', 'tec000015', '1', '1', '1', 'Vidisha Gupta', 'Sushil Jain', '06397520228', 'Dt8wYv', 'S0gdL2305V2vW0x2l0FI89JpmOubN1U4tZhBYMnk', '', NULL, NULL, 'gs273g49@gmail.com', '2022-10-15', '2022-10-16', '12-190 gali maliyan patti chaudran', '1', '1', '250611', 'img-tec000015-1665989520istockphoto-517042363-612x612.jpg', '10th', '0', NULL, '1', '2022-10-16 11:55:32'),
 (16, '261027', '27', 'BIRJESH', 'tec000016', '36', '21', '2', 'SUSHILA DEVI', 'BEER SEN MALIK', '6396999232', 'YxiBLt', NULL, NULL, NULL, NULL, 'brijeshtomaratbaraut@gmail.com', '1984-05-01', '2018-01-04', 'Baraut', '36', '24', '250611', 'img-tec000016-1665983730brijesh.jpg', 'M.A. (English), B.Ed.', '3', NULL, '1', '2022-10-17 05:15:30'),
 (17, '261027', '28', 'ARCHNA SHARMA', 'tec000017', '26', '21', '2', 'HEMLATA', 'BIJENDRA SHARMA', '7017105606', 'PJDlYF', NULL, NULL, NULL, NULL, 'dgabaraut@gmail.com', '1990-04-19', '2018-04-01', 'Baraut', '36', '24', '250611', 'img-tec000017-1666156773archna.jpg', 'M.A. (Education)', '3', '', '1', '2022-10-17 05:33:10'),
 (18, '261027', '29', 'RITU BALIYAN', 'tec000018', '34', '21', '2', 'BALESH DEVI', 'BIJENDRA SINGH', '6395508938', '7d3SXG', NULL, NULL, NULL, NULL, 'dgabaraut@gmail.com', '01/08/1990', '04/01/2018', 'Kandera', '36', '24', '250611', 'img-tec000018-1666156751RITU.jpg', 'M.A. (HINDI), M.Ed.', '3', '', '1', '2022-10-17 05:51:49'),
 (19, '261027', '30', 'Raj Kumar', 'tec000019', '32', '21', '1', 'Bhuro Devi', 'Pitam Singh', '9045550280', 'S146qG', NULL, NULL, NULL, NULL, 'dgabaraut@gmail.com', '1967-11-10', '2018-04-01', 'BARAUT', '36', '24', '250611', 'img-tec000019-1666156701RAJKUMAR.jpg', 'M.A. (HINDI), B.Ed.', '5', '', '1', '2022-10-17 06:27:58'),
-(20, '261027', '31', 'Swati', 'tec000020', '29', '21', '2', 'Ritu Tomar', 'Sanjeev Kumar Tomar', '7417105553', 'HqEDlC', 'gEe1sJUzrW6aCOovNb3Ztj97KXV2BM8fIw91Gli7', 'cR-k60ExR_mCFL_fkCK_3Q:APA91bFITh_Q3Gtt033f1SDyuh-SYbvUVfxOQMGsgAqODElix09JFMb-h5PJh-uUnFc6sQVsov-ut7rDOphG1iXPpMWCk1be-ErGVjk5i-zR2S5DjF--y5w-Q7Z_4wzh8pspT1a5y6Em', NULL, NULL, 'anglekaira2019@gmail.com', '1998-04-27', '2022-04-01', 'BARAUT', '36', '24', '250611', 'img-tec000020-1666156193swati.jpg', 'B.A. B.Ed.', '1', '', '1', '2022-10-19 05:03:35'),
+(20, '261027', '31', 'Swati', 'tec000020', '29', '21', '2', 'Ritu Tomar', 'Sanjeev Kumar Tomar', '7417105553', 'HqEDlC', 'kDn02gaZt1BK118eqY2EHs2JG52V3wT8LFpC7Q84', 'cR-k60ExR_mCFL_fkCK_3Q:APA91bFITh_Q3Gtt033f1SDyuh-SYbvUVfxOQMGsgAqODElix09JFMb-h5PJh-uUnFc6sQVsov-ut7rDOphG1iXPpMWCk1be-ErGVjk5i-zR2S5DjF--y5w-Q7Z_4wzh8pspT1a5y6Em', NULL, NULL, 'anglekaira2019@gmail.com', '1998-04-27', '2022-04-01', 'BARAUT', '36', '24', '250611', 'img-tec000020-1666156193swati.jpg', 'B.A. B.Ed.', '1', '', '1', '2022-10-19 05:03:35'),
 (21, '261027', '32', 'Tanu Khokhar', 'tec000021', '28', '21', '2', 'Kamlesh Devi', 'Rishi Pal ', '8057988101', 'z79QmE', NULL, NULL, NULL, NULL, 'tanurana1feb2020@gmail.com', '2000-08-26', '2022-04-01', 'BARAUT', '36', '24', '250611', 'img-tec000021-1666157449Tanu.jpg', 'B.A. B.Ed.', '0', '', '1', '2022-10-19 05:30:06'),
 (22, '261027', '33', 'Santosh Sharma', 'tec000022', '33', '21', '2', 'Nirmala Devi', 'Brihamdutt Sharma', '8218915606', 'WOuEB4', 'IS0BJ6aeEopGDmvKzZfn1O0ldtg95YXj7u04yAx1', 'fWGaencCS5SIICnD3_nsB2:APA91bFDmt7xIJ1HenFhtM6GLiqnJVtx5KnC6y80ibu0edIRyVcjbJJBfS-ZttU1xU4eh7CAqYZ_klh8tAYDV5f-WytUhIT307iZx74Fdrqw9pBg7F7Vhg5FVjb0yvje3BHVDK5IYUmD', NULL, NULL, 'toshibhardwaj1504@gmail.com', '0982-05-11', '2018-01-14', 'Baraut', '36', '24', '250611', 'img-tec000022-1666323315santosh.jpg', 'B.A. B.Ed.', '4', '', '1', '2022-10-21 03:35:15'),
 (23, '261027', '34', 'Amit Jangid', 'tec000023', '37', '21', '1', 'Kamlesh Devi', 'Shree Pal Singh', '7983650420', 'iBj1VT', NULL, NULL, NULL, NULL, 'dgabaraut@gmail.com', '1990-10-09', '2019-04-01', 'Ranchhar', '36', '24', '250611', 'img-tec000023-1666332248AMIT.jpg', 'M.Sc. B.Ed.', '3', '1216485', '1', '2022-10-21 06:04:08'),
@@ -10455,7 +11603,7 @@ INSERT INTO `teachers` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (39, '893133', '50', 'Miss.VARSHA SHARMA', 'tec000039', '62', '25', '2', 'Rajeshvati sharma', 'Brajmohan sharma', '7895511287', 'Y5Agtp', NULL, NULL, NULL, NULL, 'varshasharma@gmail.com', '2002-07-04', '2020-03-02', 'Azad Nagar Baraut', '40', '35', '250611', 'img-tec000039-1669178464IMG_20221123_101040.jpg', 'B.A.B.ed', '1', '', '1', '2022-11-23 04:41:04'),
 (40, '893133', '51', 'Mrs.KOMAL', 'tec000040', '57', '25', '2', 'Suman', 'Bhupendra', '7895645723', 'czXOP7', NULL, NULL, NULL, NULL, 'tanishtomar99@gmail.com', '1998-02-16', '2021-09-10', 'AZADNAGAR BARAUT', '40', '35', '250611', 'img-tec000040-1669178824IMG_20221123_101617.jpg', 'INTERMEDIATE ', '1', '007', '1', '2022-11-23 04:47:04'),
 (41, '893133', '52', 'Mr.OMDUTT JANGID', 'tec000041', '64', '25', '1', 'Vimla Devi', 'Harpal singh', '9870711735', 'Ify9Nn', NULL, NULL, NULL, NULL, 'omduttjangid100@gmail.com', '1998-09-12', '2020-11-10', 'Delhi Bus stand baraut', '40', '35', '250611', 'img-tec000041-1669179083IMG_20221123_102039.jpg', 'M.A.', '2', '007', '1', '2022-11-23 04:51:23'),
-(42, '893133', '53', 'Mr.ANKIT KUMAR', 'tec000042', '65', '25', '1', 'Omkali', 'Chatar singh', '8218424871', 'cptU9L', 'L0xJlOYad909I6eHU4y5punFi942AcqbftWZV3E8', 'fh7A2VH3R8WBYXn8a-KUdk:APA91bFKlVWxCk1iXcP1Exjzgt7KpMsld-6cXzYqMdI9i9bqgaGTdq2WeWguY3Litzv9cT4RmHXvhK6YCuFKmf9O9CADkb2ejrOf08DHXKa1_aVRhN3Om5KGYEv546fyMIZiENz6UGiJ', NULL, NULL, 'ankit821842@gmail.com', '1996-01-11', '2021-03-01', 'Surajpur Mahanwa Baghpat', '40', '35', '250601', 'img-tec000042-1669179672IMG_20221123_103040.jpg', 'B.A.B.ed', '2', '008', '1', '2022-11-23 05:01:12'),
+(42, '893133', '53', 'Mr.ANKIT KUMAR', 'tec000042', '65', '25', '1', 'Omkali', 'Chatar singh', '8218424871', 'cptU9L', 'NanIBSWTu6d5ZAUMrO40l7CvgLEVKf0z8099FmH6', '', NULL, NULL, 'ankit821842@gmail.com', '1996-01-11', '2021-03-01', 'Surajpur Mahanwa Baghpat', '40', '35', '250601', 'img-tec000042-1669179672IMG_20221123_103040.jpg', 'B.A.B.ed', '2', '008', '1', '2022-11-23 05:01:12'),
 (43, '893133', '54', 'Mr. AKHIL', 'tec000043', '63', '25', '1', 'Poonam', 'Rakesh Kumar', '7906607334', 'ifuYWe', NULL, NULL, NULL, NULL, 'akhilnewram01@gmail.c', '1999-10-12', '2022-04-12', 'AZADNAGAR BARAUT', '40', '35', '250611', 'img-tec000043-1669181240IMG_20221123_104602.jpg', 'M.A.B.Ed', '1', '009', '1', '2022-11-23 05:27:20'),
 (44, '893133', '55', 'AMIT KASHYAP', 'tec000044', '69', '25', '1', 'BHOPALI DEVI', 'CHANDRA PAL SINGH', '09557758062', '9HO1TM', 'iBlLVIfoeaE41ckzWd3nUxR3N48Qs7bOK12jtFA4', 'fz-ECFMGTXusRGxo8pMPN1:APA91bFvEUGnx-yBRR9kAM5HI1ykA7p1bOK1i1ML8a0sklJZu8dlt7PdiMUDfvu5Bbu4y3LNYqtVDwZSCFI-kPtQYC-q4vebLeneJTcYtxzQKjiCqPwCK2Z7ACo-EPSlFsRuQ2tBhpdb', NULL, NULL, 'amitkumar87951994@gmail.com', '1983-01-04', '2020-10-19', 'VPO JOHRI', '40', '35', '250345', 'img-tec000044-1669181530IMG_20221123_110139.jpg', 'M.A.B.Ed', '5', '010', '1', '2022-11-23 05:32:10'),
 (45, '691309', '56', 'Deshant Khokhar', 'tec000045', '86', '27', '1', 'xy', 'ab', '8979580500', 'wAYVMD', NULL, NULL, NULL, NULL, 'mdis.nangla@gmail.com', '2000-02-06', '2020-10-10', 'Baraut', '42', '37', '250611', '', 'B.ed', '2', '', '1', '2022-11-24 08:13:12'),
@@ -10469,7 +11617,18 @@ INSERT INTO `teachers` (`id`, `schoolUniqueCode`, `u_qr_id`, `name`, `user_id`, 
 (53, '625028', '64', 'Shana Khan', 'tec000053', '47', '24', '2', 'Sartaj', 'Sher Mohammad', '9999999999', 'HpGEv8', NULL, NULL, NULL, NULL, 'ruchiahlawat0@gmail.com', '2001-11-05', '2022-04-01', 'Baraut', '39', '33', '250611', '', 'BA MA BED', '0', '', '1', '2022-11-29 03:12:31'),
 (54, '625028', '65', 'Seema Malik', 'tec000054', '47', '24', '2', 'Urmila Devi', 'Virendra Malik', '9999999999', '9NrHxU', NULL, NULL, NULL, NULL, 'ruchiahlawat0@gmail.com', '1989-03-20', '2022-04-01', 'Baraut', '39', '33', '250611', '', 'BA BED', '0', '', '1', '2022-11-29 03:13:39'),
 (55, '625028', '66', 'Alka Chaudhary', 'tec000055', '47', '24', '2', '', 'Ankit Chaudhary', '9999999999', '5eRuk6', NULL, NULL, NULL, NULL, 'ruchiahlawat0@gmail.com', '1994-09-03', '2022-04-01', 'Baraut', '39', '33', '250611', '', 'BCom Bed', '0', '', '1', '2022-11-29 03:14:59'),
-(56, '623659', '67', 'Vedant', 'tec000056', '121', '39', '1', 'Ravita', 'Anuj jain', '7300941455', 'gFZWl7', NULL, NULL, NULL, NULL, 'anusharmaSaurav550@gmail.com', '2011-05-01', '2022-04-01', 'baraut', '47', '63', '250611', 'img-tec000056-1670410929IMG_20210125_160827.jpg', '', '0', '0256', '1', '2022-12-07 11:02:09');
+(56, '623659', '67', 'Vedant', 'tec000056', '121', '39', '1', 'Ravita', 'Anuj jain', '7300941455', 'gFZWl7', NULL, NULL, NULL, NULL, 'anusharmaSaurav550@gmail.com', '2011-05-01', '2022-04-01', 'baraut', '47', '63', '250611', 'img-tec000056-1670410929IMG_20210125_160827.jpg', '', '0', '0256', '1', '2022-12-07 11:02:09'),
+(57, '975691', '68', 'Richa choudhary', 'tec000057', '129', '37', '2', 'Anju chaudhary', 'Anuj Chikara', '8882996050', 'zp0JWf', '5HZ3jr08GmPwMfdNbsTqID28SRy42Q1e9vnFgzCW', 'd5YzFl3kRASyfLvbXg0Zkl:APA91bHWu2ZpZSeK9Oonz4enKrVeIlN2sSERaSE01bw7uk40lOZWDVonSWkLUM2fg6Nw9tcbfYsPbFvvXQ3r81rG8O7ye9Ytx03pU3GvcCgeWgGJe-4h63-smhpzO05uqLaHnepHPoBL', NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'barawad', '45', '60', '250611', 'teacher/teacher/', '', '0', '', '1', '2022-12-18 04:27:52'),
+(58, '975691', '69', 'madhu  Garg', 'tec000058', '129', '37', '2', '', 'Sunil Garg', '5555555555', 'kvcPZ8', 'S0l5Tnd7C6PH2U6Jj6YRB5XkzI018bK3p6Nq9vum', 'e0vlfJs9QWG6iF-4bndf_W:APA91bGy7ODhm5k5s7h9elx9Da6n3i0arkHResoeaMWUO2Ig9ob4RLun7up32A7lhNxK4FL7SGKnXSE5D9uokI-LSKKw3LMce4UP2LINJmnS17IEWDem3IyVC5kR6vROhUnexNc1YyV-', NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'nehru Road ', '45', '57', '250611', '', 'B.A', '5', '', '1', '2022-12-18 04:31:42'),
+(59, '975691', '70', 'Sharsti', 'tec000059', '110', '37', '2', 'Shevali Jain', 'sachin jain', '9149203033', 'uK3265', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2002-10-16', '2022-07-15', 'nehru Road ', '45', '57', '250611', '', 'B.Com', '1', '', '1', '2022-12-18 04:35:00'),
+(60, '975691', '71', 'Muskan', 'tec000060', '109', '37', '2', '', 'Meharban', '7701823579', '7H97FG', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'Dharmapura ', '45', '57', '250611', '', 'Bsc', '1', '', '1', '2022-12-18 04:36:57'),
+(61, '975691', '72', 'Apporva Jindal', 'tec000061', '114', '37', '2', '', 'manoj Jindal', '7310914354', 'HLTcDo', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'Nai Mandi', '45', '57', '250611', '', 'Bsc', '0', '', '1', '2022-12-18 04:39:32'),
+(62, '975691', '73', 'sakshi', 'tec000062', '129', '37', '2', 'parakashi', 'Ramesh Chander', '9012249567', '3i2gA0', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'gagan vihar gurana road', '45', '57', '250611', '', 'Bsc', '1', '', '4', '2022-12-18 04:42:48'),
+(63, '975691', '74', 'madhu', 'tec000063', '106', '37', '2', '', 'inderpal singh', '6938802485', 'T3X5dr', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'Gurana Road', '45', '57', '250611', '', 'B.ed M.sc', '0', '', '1', '2022-12-18 04:46:17'),
+(64, '975691', '75', 'meenakshi', 'tec000064', '107', '37', '2', '', 'pramod tomar', '9319383550', '0rkwGh', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'baraut', '45', '57', '250611', '', 'B.Com', '0', '', '4', '2022-12-18 04:48:27'),
+(65, '975691', '76', 'kashish Tomar', 'tec000065', '111', '37', '2', 'suresh', 'Subhash Chand', '9389844664', 'Sky8v5', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'baraut', '45', '57', '250611', '', 'Bsc', '0', '', '1', '2022-12-18 04:57:30'),
+(66, '975691', '77', 'Miskat', 'tec000066', '112', '37', '2', '', 'irshad', '9389921910', 'p93PG1', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'patti Chaudhran', '45', '57', '250611', '', 'Bsc', '0', '', '1', '2022-12-18 04:59:15'),
+(67, '975691', '78', 'Manju', 'tec000067', '107', '37', '2', '', 'Krishan', '9997232523', 'yt9kTQ', NULL, NULL, NULL, NULL, 'pridekids2018@gmail.com', '2022-12-18', '2022-12-18', 'Azadnagar Gali no.02', '45', '57', '250611', '', 'B.A', '0', '', '1', '2022-12-18 05:00:21');
 
 -- --------------------------------------------------------
 
@@ -10577,7 +11736,12 @@ INSERT INTO `token_filter` (`id`, `schoolUniqueCode`, `token`, `for_what`, `inse
 (51, '683611', 'token=ivd3Lwk8WEft64USFhlb3M2B8gX7uz1CYs7nTKVH-m-1654-y-3898-i--iId-2', 'Character Certificate', 2, '1', '2022-12-06 10:44:48'),
 (52, '683611', 'token=3nhC8ds2f4QSxE9b7AOFwLRJuHmpziy0o5vXrKP9-m-10-y-2022-i-3-iId-8', 'Salary Slip', 8, '1', '2022-12-06 10:45:33'),
 (53, '683611', 'token=xpnIvmXY9T8ulbW01Cw5iVEH2MhFUGsd792LRP3z-m-2422-y-1770-i-5-iId-7', 'Experience Letter', 7, '1', '2022-12-06 10:46:14'),
-(54, '623659', 'token=5dRz19fniZC9xbvFcNm3DGPIq0WBtQaghpJHSs4T', 'Fees Invoice', 38, '1', '2022-12-07 02:49:38');
+(54, '623659', 'token=5dRz19fniZC9xbvFcNm3DGPIq0WBtQaghpJHSs4T', 'Fees Invoice', 38, '1', '2022-12-07 02:49:38'),
+(55, '683611', 'token=e58Uio817p4OZj0Tt3SaysdCMXI23uGBYc9Lrnfm', 'Fees Invoice', 39, '1', '2023-01-20 08:26:42'),
+(56, '683611', 'token=l15IvSqB0gnL7bhfRV8xFoN2E60ZDa3pOeUkcH4Y', 'Fees Invoice', 40, '1', '2023-02-20 07:12:43'),
+(57, '683611', 'token=8RysKiU3Lj4DqAYlw1TGvMtQCoNZg8SJx06Fr48u', 'Fees Invoice', 41, '1', '2023-02-21 06:36:44'),
+(58, '683611', 'token=4VwKSkT2Yzl9h30vo6U7Z989x8itnDsL0IrXm1pG', 'Fees Invoice', 42, '1', '2023-02-21 06:36:44'),
+(59, '683611', 'token=5FU5aMglYDE8Twt9bJGVKZf06RIuc4zoA3SiPQ1N', 'Fees Invoice', 43, '1', '2023-02-21 06:36:44');
 
 -- --------------------------------------------------------
 
@@ -10619,7 +11783,12 @@ INSERT INTO `tthours` (`id`, `schoolUniqueCode`, `start_time`, `end_time`, `stat
 (19, '261027', '08:30:00', '09:05:00', '1', '2022-10-14 07:34:21'),
 (20, '261027', '09:05:00', '09:40:00', '1', '2022-10-14 07:34:58'),
 (21, '683611', '09:30:00', '10:00:00', '1', '2022-10-16 12:49:35'),
-(22, '763221', '08:00:00', '09:00:00', '1', '2022-11-02 09:58:23');
+(22, '763221', '08:00:00', '09:00:00', '1', '2022-11-02 09:58:23'),
+(23, '683611', '10:00:00', '10:30:00', '1', '2022-12-15 03:02:01'),
+(24, '683611', '10:30:00', '11:00:00', '1', '2022-12-15 03:02:10'),
+(25, '683611', '11:30:00', '12:00:00', '1', '2022-12-15 03:02:21'),
+(26, '683611', '12:30:00', '01:00:00', '1', '2022-12-15 03:02:30'),
+(27, '683611', '01:00:00', '01:30:00', '1', '2022-12-15 03:02:49');
 
 -- --------------------------------------------------------
 
@@ -10706,7 +11875,7 @@ INSERT INTO `users` (`id`, `schoolUniqueCode`, `name`, `email`, `password`, `use
 (80, '683611', 'T Sonu', 'tyagi@email.com', 'YVdpdzVYL0hkOFlSNG4vUmZOWUpjdz09', 'Vice Princ', '647DYQ4zIlqJsjGVFgM5uK0Nb1e2XoaCdc8wP9Hn', NULL, NULL, '1472583692', '4', '2022-10-14 11:20:12'),
 (81, '261027', 'KAVITA CHAUDHARY', 'dgabaraut@gmail.com', 'TExDYUxBa3JHdkJQWTZKQWxWTmptUT09', 'Accountant', 'rCmX6YkLjO14zaHJ10wgi24Ip3xDE9oMyPWnGf8F', NULL, NULL, '8865829566', '1', '2022-10-15 06:10:02'),
 (82, '261027', 'Jyoti ', 'kumarcaptan812@gmail.com', 'NUsrOERsV1FHSm84KzB1TUQvaFF5UT09', 'Staff', 'zCets1IBNk5O47up2HTx7v3wcg3K7y0LPq84SXDo', NULL, NULL, '9548569643', '1', '2022-10-15 06:17:53'),
-(83, '683611', 'Jhonny Staff Boy', 'jhonny@email.com', 'Skw3UWw2NjcwR0FJN0RuUG4weUlpUT09', 'Staff', 'q17WLkutrTBMx8gl8o32XNfYCiJASczHQe77p3Z9', 'u01p4Ry29lvcjrGLShFZ93P58A3Df07UJgQ2bImq', 'fJu5NXmOT5yHHMH4lXnnZh:APA91bGDo5Vc_tRFc-lnvb68EWoL00M3EFm-rzO7Byr0ehnpYToDcy19kYJ5pEkfgdH7nugLEzrtXrbedoxkzSc-z5DWbK61vsbwooiBvEmRl_vb0I1t_gPp8_eiclQlyji68Mz8mFI7', '1472583690', '1', '2022-10-28 04:22:50'),
+(83, '683611', 'Jhonny Staff Boy', 'jhonny@email.com', 'Skw3UWw2NjcwR0FJN0RuUG4weUlpUT09', 'Staff', 'q17WLkutrTBMx8gl8o32XNfYCiJASczHQe77p3Z9', 'kX0ynLv35J7xsKgRj6wPOU3hYH04TGDfz9FCN6t1', '', '1472583690', '1', '2022-10-28 04:22:50'),
 (84, '763221', 'Admin', 'Admin@email.com', 'U2UreU0xZ3hhS3RLN1hsUHZZNUhvdz09', 'Admin', 'Sci0pfHNVnoz015vt98G7BIDFmkxZ0QR74hsq5Eg', NULL, NULL, NULL, '1', '2022-11-01 06:01:18'),
 (85, '763221', 'Staff', 'Staff@email.com', 'RnJOY3J3bXZpbVQzY0ZPUVZ5MXYvdz09', 'Staff', 'BKWQ20vPg5VY5e8JNM1LUc6uSr7zAfhTkwpoaxH4', NULL, NULL, NULL, '1', '2022-11-01 06:01:18'),
 (86, '763221', 'Principal', 'Principal@email.com', 'Uks0OFZ2cTVOZTZrREY3MitZbDBsUT09', 'Principal', 'sBDJ9O1Zy2RakFrG7479Iv4Hzhwei1TP78lEfKtd', NULL, NULL, NULL, '1', '2022-11-01 06:01:18'),
@@ -10758,7 +11927,9 @@ INSERT INTO `users` (`id`, `schoolUniqueCode`, `name`, `email`, `password`, `use
 (152, '623659', 'Admin', 'Admin@email.com', 'VytWenlsZERhTHhQeUkzQnlqT3ladz09', 'Admin', 'v5u0JH0qe3yaMUsFXVDK6A1YtLZCjx7wO5pW3zn3', NULL, NULL, NULL, '1', '2022-12-02 04:24:11'),
 (153, '623659', 'Staff', 'Staff@email.com', 'MFdzTnJLSXBKZTd0ZjZkTnJHajZWZz09', 'Staff', '4kNwhsteCi1B29UWOVv4mY6yb7gnQ17lIru0Z07F', NULL, NULL, NULL, '1', '2022-12-02 04:24:11'),
 (154, '623659', 'Principal', 'Principal@email.com', 'MW1CNHR6ZDl1TW9BVUsrM2pXWS9nUT09', 'Principal', 'dnmzOD3PThRH4MpyWjNlIZb4UL261G6S1ovAt91X', NULL, NULL, NULL, '1', '2022-12-02 04:24:11'),
-(155, '623659', 'Digital Saurav Admin', 'anusharmaSaurav550@gmail.com', 'OHpQYTc3UmJBVXpvSUhCYWN4V3U5dz09', 'Admin', 'eXdNUqk3Kj9l1c0wha7Z2V6EDPA08mL6MpS5HgBx', NULL, NULL, NULL, '1', '2022-12-02 04:24:11');
+(155, '623659', 'Digital Saurav Admin', 'anusharmaSaurav550@gmail.com', 'OHpQYTc3UmJBVXpvSUhCYWN4V3U5dz09', 'Admin', 'eXdNUqk3Kj9l1c0wha7Z2V6EDPA08mL6MpS5HgBx', NULL, NULL, NULL, '1', '2022-12-02 04:24:11'),
+(158, '893133', 'Amit Staff', 'staff@amai.com', 'cVd2UE11RVN5ZzY0ejVWYjV0YjMxUT09', 'Staff', 'h0Sk8yBFz75G2liV813vHfnTREM46WNxaOKscw91', 'kG5dPhCxbzjv64a9T6ysY0HF8t7RlfepDrOi4WU6', '', '9999999999', '1', '2023-01-17 07:33:21'),
+(159, '893133', 'Test', 'test@email.com', 'd1QxUzVlWDk1Y05Xc1NVbElveWNJUT09', 'Staff', 'GMN2joP11Yyvk3plcf25g01TtOeJdS61QiB4LF8C', '8w94vVrSpnZ60Iac70dJ0CbAEPY1N5mTQqjMHlKL', 'd5YzFl3kRASyfLvbXg0Zkl:APA91bHWu2ZpZSeK9Oonz4enKrVeIlN2sSERaSE01bw7uk40lOZWDVonSWkLUM2fg6Nw9tcbfYsPbFvvXQ3r81rG8O7ye9Ytx03pU3GvcCgeWgGJe-4h63-smhpzO05uqLaHnepHPoBL', '6666666666', '1', '2023-01-17 07:38:48');
 
 -- --------------------------------------------------------
 
@@ -10843,6 +12014,12 @@ INSERT INTO `week` (`id`, `weekName`, `status`, `created_at`) VALUES
 -- Indexes for table `admin_panel_menu`
 --
 ALTER TABLE `admin_panel_menu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `adm_registration`
+--
+ALTER TABLE `adm_registration`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -11287,7 +12464,13 @@ ALTER TABLE `week`
 -- AUTO_INCREMENT for table `admin_panel_menu`
 --
 ALTER TABLE `admin_panel_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+
+--
+-- AUTO_INCREMENT for table `adm_registration`
+--
+ALTER TABLE `adm_registration`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `advancefeessystem`
@@ -11299,7 +12482,7 @@ ALTER TABLE `advancefeessystem`
 -- AUTO_INCREMENT for table `attendence`
 --
 ALTER TABLE `attendence`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=950;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1185;
 
 --
 -- AUTO_INCREMENT for table `attendenceteachers`
@@ -11341,13 +12524,13 @@ ALTER TABLE `check_salary_slip`
 -- AUTO_INCREMENT for table `city`
 --
 ALTER TABLE `city`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `classshedule`
@@ -11371,7 +12554,7 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `departure`
 --
 ALTER TABLE `departure`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=194;
 
 --
 -- AUTO_INCREMENT for table `designation`
@@ -11419,7 +12602,7 @@ ALTER TABLE `gatepass`
 -- AUTO_INCREMENT for table `get_digi_coin`
 --
 ALTER TABLE `get_digi_coin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2232;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2588;
 
 --
 -- AUTO_INCREMENT for table `gift`
@@ -11437,7 +12620,7 @@ ALTER TABLE `holiday_calendar`
 -- AUTO_INCREMENT for table `home_work`
 --
 ALTER TABLE `home_work`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `month`
@@ -11449,13 +12632,13 @@ ALTER TABLE `month`
 -- AUTO_INCREMENT for table `newfeeclasswise`
 --
 ALTER TABLE `newfeeclasswise`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=302;
 
 --
 -- AUTO_INCREMENT for table `newfeemaster`
 --
 ALTER TABLE `newfeemaster`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `newfeesdiscounts`
@@ -11467,19 +12650,19 @@ ALTER TABLE `newfeesdiscounts`
 -- AUTO_INCREMENT for table `newfeesgroups`
 --
 ALTER TABLE `newfeesgroups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `newfeessubmitmaster`
 --
 ALTER TABLE `newfeessubmitmaster`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `newfeestypes`
 --
 ALTER TABLE `newfeestypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `notificationmaster`
@@ -11491,7 +12674,7 @@ ALTER TABLE `notificationmaster`
 -- AUTO_INCREMENT for table `panel_menu_permission`
 --
 ALTER TABLE `panel_menu_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `preloader`
@@ -11503,7 +12686,7 @@ ALTER TABLE `preloader`
 -- AUTO_INCREMENT for table `push_notification`
 --
 ALTER TABLE `push_notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `qrcode_drivers`
@@ -11521,19 +12704,19 @@ ALTER TABLE `qrcode_schools`
 -- AUTO_INCREMENT for table `qrcode_students`
 --
 ALTER TABLE `qrcode_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1164;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1313;
 
 --
 -- AUTO_INCREMENT for table `qrcode_teachers`
 --
 ALTER TABLE `qrcode_teachers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `qrscanhistory`
 --
 ALTER TABLE `qrscanhistory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `questions_types`
@@ -11557,7 +12740,7 @@ ALTER TABLE `rating_and_reviews`
 -- AUTO_INCREMENT for table `redeem_gifts`
 --
 ALTER TABLE `redeem_gifts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `result`
@@ -11581,7 +12764,7 @@ ALTER TABLE `schoolmaster`
 -- AUTO_INCREMENT for table `school_sessions`
 --
 ALTER TABLE `school_sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `section`
@@ -11599,7 +12782,7 @@ ALTER TABLE `sec_exam_table`
 -- AUTO_INCREMENT for table `sem_exam`
 --
 ALTER TABLE `sem_exam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sem_exam_results`
@@ -11611,7 +12794,7 @@ ALTER TABLE `sem_exam_results`
 -- AUTO_INCREMENT for table `set_digi_coin`
 --
 ALTER TABLE `set_digi_coin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `srregister`
@@ -11635,7 +12818,7 @@ ALTER TABLE `staffattendance`
 -- AUTO_INCREMENT for table `state`
 --
 ALTER TABLE `state`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `studentbonafidecertificate`
@@ -11653,13 +12836,13 @@ ALTER TABLE `studentcharatercertificate`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1170;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1319;
 
 --
 -- AUTO_INCREMENT for table `student_history`
 --
 ALTER TABLE `student_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=963;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1112;
 
 --
 -- AUTO_INCREMENT for table `student_tc`
@@ -11677,7 +12860,7 @@ ALTER TABLE `subject`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `teachersubjects`
@@ -11689,19 +12872,19 @@ ALTER TABLE `teachersubjects`
 -- AUTO_INCREMENT for table `token_filter`
 --
 ALTER TABLE `token_filter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `tthours`
 --
 ALTER TABLE `tthours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `visitor_entry`

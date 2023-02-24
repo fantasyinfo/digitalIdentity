@@ -1015,6 +1015,8 @@ class APIModel extends CI_Model
   public function addHomeWork($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $homeWorkNote, $homeWorkDate, $homeWorkDueDate, $schoolUniqueCode, $document_image_name)
   {
     //$currentDate = date_create()->format('Y-m-d');
+    // check if homework is already added or not
+
     if ($loginuserType == 'Teacher') {
 
       $insertArr = [
@@ -1029,6 +1031,19 @@ class APIModel extends CI_Model
         "home_work_finish_date" => $homeWorkDueDate,
         "image" => $document_image_name
       ];
+
+      $sql = "SELECT h.id, s.subjectName FROM ".Table::homeWorkTable." h LEFT JOIN ".Table::subjectTable." s ON s.id = h.subject_id 
+      WHERE h.subject_id = '$subjectId' AND h.class_id = '$classId' AND h.section_id = '$sectionId' AND h.home_work_date = '$homeWorkDate' LIMIT 1 ";
+      $alreadyAdded = $this->db->query($sql)->result_array();
+
+   
+      if(isset($alreadyAdded[0])){
+        $msg = @$alreadyAdded[0]['subjectName'] . " Homework is already added for this class on date $homeWorkDate , please update that.";
+        return HelperClass::APIresponse(500,$msg);
+      }
+
+
+
 
       $insertId = $this->CrudModel->insert(Table::homeWorkTable, $insertArr);
       if (!empty($insertId)) {
@@ -1060,6 +1075,19 @@ class APIModel extends CI_Model
         "home_work_finish_date" => $homeWorkDueDate,
       ];
 
+      $sql = "SELECT h.id, s.subjectName FROM ".Table::homeWorkTable." h LEFT JOIN ".Table::subjectTable." s ON s.id = h.subject_id 
+      WHERE h.subject_id = '$subjectId' AND h.class_id = '$classId' AND h.section_id = '$sectionId' AND h.home_work_date = '$homeWorkDate' AND h.id != '$homeWorkId' LIMIT 1 ";
+      $alreadyAdded = $this->db->query($sql)->result_array();
+
+   
+      if(isset($alreadyAdded[0])){
+        $msg = @$alreadyAdded[0]['subjectName'] . " Homework is already added for this class on date $homeWorkDate , please update that.";
+        return HelperClass::APIresponse(500,$msg);
+      }
+
+
+
+
       $update = $this->CrudModel->update(Table::homeWorkTable, $updateArr, $homeWorkId);
       if (!empty($update)) {
         return true;
@@ -1082,13 +1110,20 @@ class APIModel extends CI_Model
     $dir = base_url() . HelperClass::homeworkImagePath;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
-    $d = $this->db->query($sql = "SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName,CONCAT('$dir',e.image) as image FROM " . Table::homeWorkTable . " e
+    $sql = "SELECT e.id as homeWorkId,
+    e.home_work_note,
+    DATE_FORMAT(e.home_work_date,'".HelperClass::dateFormatForAPIWithoutTime."') as home_work_date,
+    DATE_FORMAT(e.home_work_finish_date,'".HelperClass::dateFormatForAPIWithoutTime."') as home_work_finish_date,
+    ct.className,st.sectionName,subt.subjectName,CONCAT('$dir',e.image) as image FROM " . Table::homeWorkTable . " e
         INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
         INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
         INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
         WHERE e.class_id = '$classId' AND e.section_id = '$sectionId'  AND e.status = '1'
         AND e.home_work_date = '$date'
-        ")->result_array();
+        ";
+
+    $d = $this->db->query($sql)->result_array();
+
 
     if (!empty($d)) {
       return $d;
@@ -1234,7 +1269,8 @@ class APIModel extends CI_Model
     $dir = base_url() . HelperClass::homeworkImagePath;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
-    $d = $this->db->query("SELECT e.id as homeWorkId,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName FROM " . Table::homeWorkTable . " e
+
+    $d = $this->db->query("SELECT e.id as homeWorkId,IF(e.image != '' ,CONCAT('$dir',e.image),'') as image,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName,ct.id as classId,st.id as sectionId, subt.id as subjectId FROM " . Table::homeWorkTable . " e
       INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
       INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
       INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
@@ -1959,7 +1995,7 @@ class APIModel extends CI_Model
   }
   public function notificationsForAll($schoolUniqueCode)
   {
-    return $this->db->query("SELECT *,DATE_FORMAT(created_at, ".HelperClass::dateFormatForAPI.") as created_at FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC LIMIT 10")->result_array();
+    return $this->db->query("SELECT *,DATE_FORMAT(created_at, '".HelperClass::dateFormatForAPI."') as created_at FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC LIMIT 10")->result_array();
   }
 
   // leaderBoard

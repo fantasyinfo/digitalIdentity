@@ -46,6 +46,7 @@ class HelperClass
     const barCodeFilePath = 'assets/barcode/vendor/autoload.php';
 
     const dateFormatForAPI = '%a, %b %D | %r';
+    const dateFormatForAPIWithoutTime = '%a, %b %D';
     const monthsForSchool = [
         'January' => '1',
         'February' => '2',
