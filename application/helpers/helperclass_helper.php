@@ -45,6 +45,7 @@ class HelperClass
     const registrationImagePath = HelperClass::uploadImgDir.'registration/';
     const barCodeFilePath = 'assets/barcode/vendor/autoload.php';
 
+    const dateFormatForAPI = '%a, %b %D | %r';
     const monthsForSchool = [
         'January' => '1',
         'February' => '2',

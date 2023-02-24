@@ -424,7 +424,8 @@ $apiRoutesArr = [
     'studentNamesViaClassAndSectionId',
     'gatePassList',
     'testBoxCheck',
-    'markAttendance'
+    'markAttendance',
+    'showStudentFeesDetails',
 ];
 
 foreach ($apiRoutesArr as $apiRoute) {

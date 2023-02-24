@@ -1050,9 +1050,33 @@ public function updateHomeWork()
 		$studentId = (@$apiData['studentId'])?$apiData['studentId']:"";
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
-		$data = $this->APIModel->showStudentDetails($classId,$sectionId,$qrCode,$studentId,$schoolUniqueCode);
+		$session_table_id = $loginUser[0]['session_table_id'];
+		$data = $this->APIModel->showStudentDetails($classId,$sectionId,$qrCode,$studentId,$schoolUniqueCode,$session_table_id);
 		return HelperClass::APIresponse(200, 'Student Details.', $data);
 	}
+	public function showStudentFeesDetails()
+	{
+		$this->checkAPIRequest();
+		$apiData = $this->getAPIData();
+		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['classId']) || empty($apiData['sectionId']) || empty($apiData['loginUserId']) || empty($apiData['studentId']))
+		{
+			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
+		}
+
+		$authToken = $apiData['authToken'];
+		$loginuserType = $apiData['userType'];
+		$classId = $apiData['classId'];
+		$sectionId = $apiData['sectionId'];
+		$studentId = $apiData['studentId'];
+		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
+		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
+		$session_table_id = $loginUser[0]['session_table_id'];
+		$data = $this->APIModel->showStudentFeesDetails($studentId, $classId, $sectionId, $schoolUniqueCode, $session_table_id);
+		return HelperClass::APIresponse(200, 'Student Details.', $data);
+	}
+
+
+
 
 
 

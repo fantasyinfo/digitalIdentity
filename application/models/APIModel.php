@@ -3,6 +3,7 @@
 class APIModel extends CI_Model
 {
 
+
   public function __construct()
   {
     $this->load->database();
@@ -653,7 +654,7 @@ class APIModel extends CI_Model
   }
 
   // showStudentDetils
-  public function showStudentDetails($classId, $sectionId, $qrCode, $studentId, $schoolUniqueCode)
+  public function showStudentDetails($classId, $sectionId, $qrCode, $studentId, $schoolUniqueCode,$session_table_id)
   {
     $currentDate = date_create()->format('Y-m-d');
     $dir = base_url() . HelperClass::studentImagePath;
@@ -718,13 +719,177 @@ class APIModel extends CI_Model
 
       // fees data
       $returnArr['feesData'] = $this->StudentModel->checkFeesSubmitDetails($schoolUniqueCode, $d[0]['classId'], $d[0]['sectionId'], $d[0]['id']);
+
       $returnArr['feesDetails'] = $this->StudentModel->totalFeesDueToday($schoolUniqueCode, $d[0]['classId'], $d[0]['sectionId'], $d[0]['id']);
+
+      // $stuId, $classId, $sectionId, $schoolCode, $sessionId
+      $sessionId = $session_table_id;
+      // $returnArr['newFeesDetails'] = $this->CrudModel-->showStudentFeesViaIdClassAndSection($d[0]['id'], $d[0]['classId'], $d[0]['sectionId'], $schoolUniqueCode,$sessionId);
 
       return $returnArr;
     } else {
       return HelperClass::APIresponse(500, 'No Data Found for this Student.');
     }
   }
+
+
+  public function showStudentFeesDetails($stuId, $classId, $sectionId, $schoolCode, $sessionId)
+  {
+    $sendArr = [];
+    $dir = base_url() . HelperClass::studentImagePath;
+
+    $studentData = @$this->db->query("SELECT s.*,CONCAT('$dir',s.image) as image,cl.className,se.sectionName FROM " . Table::studentTable . " s
+    JOIN " . Table::classTable . " cl ON cl.id = s.class_id
+    JOIN " . Table::sectionTable . " se ON se.id = s.section_id
+    WHERE s.status = '1' AND s.schoolUniqueCode = '$schoolCode' AND s.id = '$stuId'")->result_array()[0];
+
+    $feesDetails = $this->db->query("SELECT DISTINCT(fee_group_id) FROM " . Table::newfeeclasswiseTable . " WHERE class_id = '$classId' AND section_id = '$sectionId' AND schoolUniqueCode = '$schoolCode' AND student_id = '$stuId'  GROUP BY fee_group_id")->result_array();
+
+    $gAmount = 0.00;
+    $gFine = 0.00;
+    $gdiscount = 0.00;
+    $gFine = 0.00;
+    $gFineD = 0.00;
+    $gPaid = 0.00;
+    $gBalance = 0.00;
+    $sendArr = [
+        'gAmount' => $gAmount,
+        'gFine' =>  $gFine,
+        'gdiscount' => $gdiscount,
+        'gFineD' => $gFineD,
+        'gPaid' => $gPaid,
+        'gBalance' => $gBalance
+    ];
+
+    $sendArr['deposits'] = [];
+    $todayDate = date('Y-m-d');
+
+    $j = 1;
+    $a = 1;
+    $b = 1;
+
+
+    foreach ($feesDetails as $f) {
+        $sqln = "SELECT nfm.id as fmtId, nfm.amount, nfm.fineType,nfm.finePercentage,nfm.fineFixAmount, nfm.dueDate,
+        nft.id as nftId, nft.feeTypeName, nft.shortCode, nfg.id as nfgId, nfg.feeGroupName FROM
+        " . Table::newfeemasterTable . " nfm 
+        JOIN " . Table::newfeestypesTable . " nft ON nft.id = nfm.newFeeType
+        JOIN " . Table::newfeesgroupsTable . " nfg ON nfg.id = nfm.newFeeGroupId
+        WHERE nfm.newFeeGroupId = '{$f['fee_group_id']}' ";
+
+        $groupWiseFeeDetails = $this->db->query($sqln)->result_array();
+        $fGN = @$groupWiseFeeDetails[0]['feeGroupName'];
+
+
+        foreach ($groupWiseFeeDetails as $gwf) {
+            // search student all depoists
+            $fineAmount = 0.00;
+            if ($todayDate > $gwf['dueDate']) {
+                if ($gwf['fineType'] == '1') {
+                    $fineAmount = 0.00;
+                } else if ($gwf['fineType'] == '2') {
+                    // percenrtage
+                    $fineAmount = ceil($gwf['amount'] * @$gwf['finePercentage'] / 100);
+                } else if ($gwf['fineType'] == '3') {
+                    // fixed amount
+                    $fineAmount = @$gwf['fineFixAmount'];
+                }
+            } else {
+                $fineAmount = 0.00;
+            }
+
+            if ($fineAmount == 0) {
+                $fShow = false;
+            } else {
+                $fShow = true;
+            }
+
+
+
+            $feesDeposits = $this->CrudModel->dbSqlQuery("SELECT * FROM " . Table::newfeessubmitmasterTable . " WHERE stuId = '$stuId' AND classId = '$classId' AND sectionId = '$sectionId' AND fmtId = '{$gwf['fmtId']}' AND nftId = '{$gwf['nftId']}' AND nfgId = '{$gwf['nfgId']}' AND status = '1' AND session_table_id = '$sessionId'");
+
+
+            $depositAmt = 0.00;
+            $fineAmt = 0.00;
+            $discountAmt = 0.00;
+            if (!empty($feesDeposits)) {
+
+
+                foreach ($feesDeposits as $fd) {
+                    $depositAmt = $depositAmt + $fd['depositAmount'];
+                    $fineAmt = $fineAmt + $fd['fine'];
+                    $discountAmt = $discountAmt + $fd['discount'];
+                    $b++;
+                }
+            }
+
+            $amountNow = $gwf['amount'] - $depositAmt;
+
+            $bstatusBalance = ($gwf['amount'] - $depositAmt) - $discountAmt;
+
+            $gAmount = $gAmount + $gwf['amount'];
+            $gFine = $gFine + $fineAmount;
+
+            $gdiscount = $gdiscount + $discountAmt;
+            $gFineD = $gFineD + $fineAmt;
+            $gPaid = $gPaid + $depositAmt;
+            if ($amountNow > 0) {
+                $bblance = $amountNow - $discountAmt;
+            } else {
+                $bblance = ($gwf['amount'] - $depositAmt) - $discountAmt;
+            }
+
+
+            $a = 1;
+            $depositAmt = 0.00;
+            $fineAmt = 0.00;
+            $discountAmt = 0.00;
+            $subArr = [];
+            if (!empty($feesDeposits)) {
+
+                foreach ($feesDeposits as $fd) {
+
+
+
+                    $depositAmt = @$depositAmt + $fd['depositAmount'];
+                    $fineAmt = @$fineAmt + $fd['fine'];
+                    $discountAmt = @$discountAmt + $fd['discount'];
+
+                    $paymentMode = ($fd['paymentMode'] == '1') ? 'Offline' : 'Online';
+
+                    $depositDate =  date('d-m-y', strtotime($fd['depositDate']));
+                    $invoiceId = $fd['invoiceId'];
+
+                    // $discount = $fd['discount'];
+                    // $fine = $fd['fine'];
+                    // $depositamount = $fd['depositAmount'];
+
+                    $subArr['depositAmount'] = $depositAmt;
+                    $subArr['fine'] = $fineAmt;
+                    $subArr['discount'] = $discountAmt;
+                    $subArr['paymentMode'] =  $paymentMode;
+                    $subArr['depositDate'] = $depositDate;
+                    $subArr['invoiceId'] = $invoiceId;
+                    array_push($sendArr['deposits'], $subArr);
+                }
+            }
+
+            $j++;
+        }
+    }
+    $sendArr['gAmount'] = $gAmount;
+    $sendArr['gFine'] =  $gFine;
+    $sendArr['gdiscount'] = $gdiscount;
+    $sendArr['gFineD'] = $gFineD;
+    $sendArr['gPaid'] = $gPaid;
+    $sendArr['gBalance'] = $gBalance;
+    $sendArr['totalPaidIncludingDiscounts'] = $sendArr['gPaid'] + $sendArr['gdiscount'];
+    $sendArr['totalDueNow'] = $sendArr['gAmount'] - $sendArr['totalPaidIncludingDiscounts'];
+
+
+
+    return $sendArr;
+}
 
 
 
@@ -755,7 +920,7 @@ class APIModel extends CI_Model
     if ($dateWithYear == null) {
       $dateWithYear = date('Y-m-01');
     }
-    return $returnArr = $this->StudentModel->showAttendenceData($studentId, $dateWithYear, $schoolUniqueCode);
+    return $returnArr = $this->StudentModel->showAttendenceData($studentId, $dateWithYear, $schoolUniqueCode,'showAll');
   }
   // add Exam
   public function addExam($loginUserId, $loginuserType, $classId, $sectionId, $subjectId, $examDate, $examName, $maxMarks, $minMarks, $schoolUniqueCode, $session_table_id)
@@ -1794,7 +1959,7 @@ class APIModel extends CI_Model
   }
   public function notificationsForAll($schoolUniqueCode)
   {
-    return $this->db->query("SELECT * FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC ")->result_array();
+    return $this->db->query("SELECT *,DATE_FORMAT(created_at, ".HelperClass::dateFormatForAPI.") as created_at FROM " . Table::pushNotificationTable . " WHERE status = '1' AND schoolUniqueCode = '$schoolUniqueCode' ORDER BY id DESC LIMIT 10")->result_array();
   }
 
   // leaderBoard

@@ -628,9 +628,18 @@ class StudentModel extends CI_Model
            return $returnArr;
     }
 
-    public function showAttendenceData($studentId,$dateWithYear,$schoolUniqueCode)
+    public function showAttendenceData($studentId,$dateWithYear,$schoolUniqueCode,$showAll)
     {
-      $d = $this->db->query("SELECT * FROM ".Table::attendenceTable." WHERE 
+        if(isset($showAll) && !empty($showAll) && $showAll === 'showAll'){
+              $d = $this->db->query("SELECT * FROM ".Table::attendenceTable." WHERE 
+      stu_id = '$studentId' AND
+      status = '1' AND 
+      schoolUniqueCode = '$schoolUniqueCode' 
+      AND attendenceStatus IS NOT NULL 
+      AND attendenceStatus != ''
+      ")->result_array();
+        }else{
+              $d = $this->db->query("SELECT * FROM ".Table::attendenceTable." WHERE 
       stu_id = '$studentId' AND
       status = '1' AND 
       schoolUniqueCode = '$schoolUniqueCode' 
@@ -639,6 +648,8 @@ class StudentModel extends CI_Model
       AND attendenceStatus IS NOT NULL 
       AND attendenceStatus != ''
       ")->result_array();
+        }
+    
 
         // echo $this->db->last_query(); die();
         $returnArr = [];
@@ -657,14 +668,14 @@ class StudentModel extends CI_Model
                     // absent
                     $subArr = [
                       'status' => '0',
-                      'dateTime' => date('d',strtotime($d[$i]['dateTime']))
+                      'dateTime' => date('Y-m-d',strtotime($d[$i]['dateTime']))
                     ];
                   }else if($d[$i]['attendenceStatus'] == '1')
                   {
                     //present
                     $subArr = [
                       'status' => '1',
-                      'dateTime' => date('d',strtotime($d[$i]['dateTime']))
+                      'dateTime' => date('Y-m-d',strtotime($d[$i]['dateTime']))
                     ];
                   }
                   array_push($returnArr['attendanceData'], $subArr);
