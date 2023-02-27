@@ -130,7 +130,7 @@ if(isset($_GET['markSunday']))
 
 // hide button 
 $alreadyMarkSunday = FALSE;
-$checkIsAlreadyMarkSunday = $this->db->query("SELECT count(1) as c FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND title = 'Sunday' AND session_table_id = '{$_SESSION['currentSession']}'")->result_array()[0]['c'];
+$checkIsAlreadyMarkSunday = $this->db->query("SELECT count(1) as c FROM ".Table::holidayCalendarTable." WHERE schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND title = 'Sunday' AND session_table_id = '{$_SESSION['currentSession']}' AND YEAR(event_date) = YEAR(".date('Y').")")->result_array()[0]['c'];
 
 if($checkIsAlreadyMarkSunday > 51)
 {

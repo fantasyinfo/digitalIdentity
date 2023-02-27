@@ -1143,7 +1143,6 @@ class APIModel extends CI_Model
     }
     $d = $this->db->query($sql = "SELECT * FROM " . Table::holidayCalendarTable . " e
           WHERE e.status = '1' AND e.schoolUniqueCode = '$schoolUniqueCode'
-          AND MONTH(e.event_date) = MONTH('$dateWithYear')
           AND YEAR(e.event_date) = YEAR('$dateWithYear')
           ")->result_array();
 
@@ -1154,7 +1153,7 @@ class APIModel extends CI_Model
     for ($i = 0; $i < $totalC; $i++) {
       $subArr = [];
       $subArr['date'] = date('d', strtotime($d[$i]['event_date']));
-      $subArr['event_date'] = date('d-m-Y', strtotime($d[$i]['event_date']));
+      $subArr['event_date'] = date('Y-m-d', strtotime($d[$i]['event_date']));
       $subArr['title'] = $d[$i]['title'];
       array_push($sendArr, $subArr);
     }
@@ -1270,11 +1269,11 @@ class APIModel extends CI_Model
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
 
-    $d = $this->db->query("SELECT e.id as homeWorkId,IF(e.image != '' ,CONCAT('$dir',e.image),'') as image,e.home_work_note,e.home_work_date,e.home_work_finish_date,ct.className,st.sectionName,subt.subjectName,ct.id as classId,st.id as sectionId, subt.id as subjectId FROM " . Table::homeWorkTable . " e
-      INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
-      INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
-      INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
-      WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.id = '$homeWorkId' AND e.status = '1'")->result_array();
+    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName, subt.id as subjectId FROM " . Table::examTable . " e
+    INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
+    INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
+    INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
+    WHERE e.class_id = '$classId' AND e.section_id = '$sectionId' $condition AND e.id = '$examId' AND e.status = '1'")->result_array();
 
     if (!empty($d)) {
       return $d;
