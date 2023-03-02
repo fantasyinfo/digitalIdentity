@@ -1295,7 +1295,7 @@ class APIModel extends CI_Model
     // $dir = base_url() . HelperClass::uploadImgDir;
     $condition = " AND e.schoolUniqueCode = '$schoolUniqueCode' ";
 
-    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName FROM " . Table::examTable . " e
+    $d = $this->db->query("SELECT e.id as examId,e.exam_name,e.max_marks,e.min_marks,e.date_of_exam,ct.className,st.sectionName,subt.subjectName, subt.id as subjectId FROM " . Table::examTable . " e
       INNER JOIN " . Table::classTable . " ct ON e.class_id = ct.id 
       INNER JOIN " . Table::sectionTable . " st ON e.section_id = st.id 
       INNER JOIN " . Table::subjectTable . " subt ON e.subject_id = subt.id 
@@ -2216,11 +2216,26 @@ class APIModel extends CI_Model
 
 
   // get driver lat lng
-  public function getDriverLatLng($studentId, $schoolUniqueCode)
+  public function getDriverLatLng($studentId, $schoolUniqueCode,$isTeaher)
   {
-    $d = $this->db->query("SELECT d.* FROM " . Table::driverTable . " d
+      
+      
+      if($isTeaher)
+      {
+            $sql= "SELECT d.* FROM " . Table::driverTable . " d
+    INNER JOIN " . Table::teacherTable . " s ON s.driver_id = d.id AND s.vechicle_type = d.vechicle_type
+    WHERE d.status = '1' AND d.schoolUniqueCode = '$schoolUniqueCode' AND s.id = '$studentId'";
+    
+      }else{
+          $sql = "SELECT d.* FROM " . Table::driverTable . " d
     INNER JOIN " . Table::studentTable . " s ON s.driver_id = d.id AND s.vechicle_type = d.vechicle_type
-    WHERE d.status = '1' AND d.schoolUniqueCode = '$schoolUniqueCode' AND s.id = '$studentId'")->result_array();
+    WHERE d.status = '1' AND d.schoolUniqueCode = '$schoolUniqueCode' AND s.id = '$studentId'";
+         
+      }
+      
+    
+        $d = $this->db->query($sql)->result_array();
+   
 
     if (!empty($d)) {
       return $d[0];

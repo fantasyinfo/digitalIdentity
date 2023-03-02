@@ -1668,19 +1668,26 @@ public function updateHomeWork()
 	{
 		$this->checkAPIRequest();
 		$apiData = $this->getAPIData();
-		if(empty($apiData['authToken']) || empty($apiData['userType']) || empty($apiData['studentId']))
+		if(empty($apiData['authToken']) || empty($apiData['userType']))
 		{
 			return HelperClass::APIresponse( 404, 'Please Enter All Parameters.');
 		}
 		$authToken = $apiData['authToken'];
 		$loginuserType = $apiData['userType'];
-		$studentId = $apiData['studentId'];
+		$studentId = @$apiData['studentId'];
+		$teacherId = @$apiData['teacherId'];
 	
 		$loginUser = $this->APIModel->validateLogin($authToken, $loginuserType);
 		$schoolUniqueCode =	$loginUser[0]['schoolUniqueCode'];
 		$loginUserIdFromDB = $loginUser[0]['login_user_id'];
+		
+		$isTeaher = false;
+		if(isset($teacherId)){
+		    $isTeaher = true;
+		    $studentId = $teacherId;
+		}
 	
-		$driverLatLng = $this->APIModel->getDriverLatLng($studentId,$schoolUniqueCode);
+		$driverLatLng = $this->APIModel->getDriverLatLng($studentId,$schoolUniqueCode,$isTeaher);
 		if (!$driverLatLng) {
 			return HelperClass::APIresponse(500, 'Driver Lat Lng Not Found.');
 		}else
