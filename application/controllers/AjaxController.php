@@ -457,6 +457,17 @@ class AjaxController extends CI_Controller
 			echo $this->CrudModel->showCityViaStateId($_POST['stateId'], $alreadyCityId);
 		}
 	}
+	public function showSectionViaClassId()
+	{
+		if (isset($_POST['classId'])) {
+			if (isset($_POST['alreadySectionId']) && $_POST['alreadySectionId'] != '' && $_POST['alreadySectionId'] != 0) {
+				$alreadySectionId = $_POST['alreadySectionId'];
+			} else {
+				$alreadySectionId = '';
+			}
+			echo $this->CrudModel->showSectionViaClassId($_POST['classId'], $alreadySectionId);
+		}
+	}
 
 	public function showAllSemExamsWithStudents()
 	{

@@ -133,6 +133,21 @@
     {
       $className = $_POST['className'];
       $classEditId = $_POST['updateclassId'];
+
+      $alreadyClass = $this->db->query("SELECT * FROM " . Table::classTable . " WHERE className = '$className'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}' AND id != '$classEditId' ")->result_array();
+
+
+      if(!empty($alreadyClass)){
+        $msgArr = [
+          'class' => 'danger',
+          'msg' => 'This Class is already inserted, Please Edit That',
+        ];
+        $this->session->set_userdata($msgArr);
+        header('Location: classMaster');
+        exit(0);
+      }
+
+
       $updateclass = $this->db->query("UPDATE " . Table::classTable . " SET className = '$className' WHERE id = '$classEditId'  AND schoolUniqueCode = '{$_SESSION['schoolUniqueCode']}'");
       if($updateclass)
       {

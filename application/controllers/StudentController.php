@@ -57,7 +57,7 @@ class StudentController extends CI_Controller
 			'adminPanelUrl' => $this->adminPanelURL,
 			'submitFormUrl' => base_url('student/saveStudent'),
 			'class' => $this->StudentModel->allClass($this->schoolUniqueCode),
-			'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
+			//'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
 			// 'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
 			'state' => $this->StudentModel->allState($this->schoolUniqueCode),
 		];
@@ -76,7 +76,7 @@ class StudentController extends CI_Controller
 			'adminPanelUrl' => $this->adminPanelURL,
 			'submitFormUrl' => base_url('student/updateStudent'),
 			'class' => $this->StudentModel->allClass($this->schoolUniqueCode),
-			'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
+			//'section' => $this->StudentModel->allSection($this->schoolUniqueCode),
 			// 'city' => $this->StudentModel->allCity($this->schoolUniqueCode),
 			'state' => $this->StudentModel->allState($this->schoolUniqueCode),
 		];

@@ -134,6 +134,7 @@ $masterRoutesArr = [
     'stateMaster',
     'classMaster',
     'sectionMaster',
+    'assignClassWithSection',
     'subjectMaster',
     'weekMaster',
     'hourMaster',
@@ -350,7 +351,8 @@ $ajaxRoutesArr = [
     'questionLists',
     'showBooksViaSubject',
     'loadQuestions',
-    'registrationLists'
+    'registrationLists',
+    'showSectionViaClassId',
 
 
 ];

@@ -48,11 +48,11 @@
                   <input type="hidden" name="user_id" class="form-control" id="name" value="<?= $sd['user_id']; ?>">
                   <?php
                   if (isset($sd['image'])) {
-                    $bExt = $dir = base_url() . HelperClass::uploadImgDir;
+                    $bExt = $dir = base_url() . HelperClass::studentImagePath ;
                     $imgDD = explode($bExt, $sd['image']);
                     //print_r($imgDD);
                   ?>
-                    <input type="hidden" name="image" class="form-control" id="name" value="<?= $imgDD[1]; ?>">
+                    <input type="hidden" name="image" class="form-control" id="name" value="<?= @$imgDD[1]; ?>">
 
                   <?php } ?>
 
@@ -108,7 +108,7 @@
                         <div class="row">
                           <div class="form-group col-md-3">
                             <label for="class">Select Class</label>
-                            <select class="form-control select2 select2-dark" name="class" data-dropdown-css-class="select2-dark" style="width: 100%;">
+                            <select class="form-control select2 select2-dark" name="class" data-dropdown-css-class="select2-dark" style="width: 100%;" onchange="loadSections()" id='classIdD'>
                               <?php
                               $selectedClass = '';
 
@@ -131,21 +131,22 @@
                           </div>
                           <div class="form-group col-md-3">
                             <label for="section">Select Section</label>
-                            <select class="form-control select2 select2-dark" name="section" data-dropdown-css-class="select2-dark" style="width: 100%;">
+                            <select class="form-control select2 select2-dark" name="section" data-dropdown-css-class="select2-dark" style="width: 100%;" id='sectionData'>
                               <?php
-                              if (isset($data['section']) && !empty($data['section'])) {
-                                $selectedSection = '';
-                                foreach ($data['section'] as $section) {
-                                  if ($section['id'] == $sd['section_id']) {
-                                    $selectedSection = 'selected';
-                                  } else {
-                                    $selectedSection = '';
-                                  }
+                              // if (isset($data['section']) && !empty($data['section'])) {
+                              //   $selectedSection = '';
+                              //   foreach ($data['section'] as $section) {
+                              //     if ($section['id'] == $sd['section_id']) {
+                              //       $selectedSection = 'selected';
+                              //     } else {
+                              //       $selectedSection = '';
+                              //     }
 
                               ?>
-                                  <option <?= $selectedSection ?> value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option>
-                              <?php }
-                              }
+                                  <!-- <option <?= $selectedSection ?> value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option> -->
+                              <?php
+                              //  }
+                              // }
                               ?>
                             </select>
                           </div>
@@ -243,6 +244,7 @@
                             <label for="city">Select Image</label>
                             <div class="input-group mt-2">
                               <div class="custom-file">
+
                                 <input type="file" class="custom-file-input" name="image" onchange="document.getElementById('img').src = window.URL.createObjectURL(this.files[0])">
                                 <label class="custom-file-label" for="img">Choose file</label>
                               </div>
@@ -311,13 +313,21 @@
   <!-- ./wrapper -->
   <script>
     var ajaxUrl = '<?= base_url() . 'ajax/showCityViaStateId' ?>';
+    var ajaxUrl1 = '<?= base_url() . 'ajax/showSectionViaClassId' ?>';
 
     // load default city
     let alreadyCityId = '<?= $sd['city_id']; ?>';
+    let alreadySectionId = '<?= $sd['section_id']; ?>';
+
+
+    console.log(322,alreadySectionId)
+
+
     showCity(alreadyCityId);
+    loadSections(alreadySectionId);
 
     function showCity(alreadyCityId = '') {
-      console.log(alreadyCityId);
+      
       $('#cityData option').remove();
       let stateId = $("#stateIdd").val();
       $.ajax({
@@ -331,6 +341,31 @@
         success: function(response) {
           response = $.parseJSON(response);
           $('#cityData').append(response);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+
+      });
+    }
+
+
+    function loadSections (alreadySectionId = '') {
+      console.log('loading sections')
+      $('#sectionData option').remove();
+      let classId = $("#classIdD").val();
+      $.ajax({
+        url: ajaxUrl1,
+        method: 'post',
+        processData: 'false',
+        data: {
+          classId: classId,
+          alreadySectionId: alreadySectionId
+        },
+        success: function(response) {
+          console.log(response);
+          response = $.parseJSON(response);
+          $('#sectionData').append(response);
         },
         error: function(error) {
           console.log(error);

@@ -2186,6 +2186,7 @@ class CrudModel extends CI_Model
         $this->tableName = $tableName;
         return $d = $this->db->query("SELECT id,className FROM " . $this->tableName . " WHERE status !='4' AND schoolUniqueCode = '$schoolUniqueCode'")->result_array();
     }
+
     public function allSection($tableName, $schoolUniqueCode)
     {
         $this->tableName = $tableName;
@@ -2227,6 +2228,32 @@ class CrudModel extends CI_Model
                     }
                 }
                 $html .= "<option " . $select . " value='" . $dd['id'] . "'>" . $dd['cityName'] . "</option>";
+            }
+            return json_encode($html);
+        }
+    }
+
+
+    public function showSectionViaClassId($classId, $alreadySectionId = '')
+    {
+        $schoolUniqueCode = $_SESSION['schoolUniqueCode'];
+
+        $d = $this->db->query("SELECT s.id,s.sectionName FROM " . Table::classWithSectionTable . " cs INNER JOIN ".Table::sectionTable." s ON cs.section_id = s.id
+        WHERE cs.class_id = '$classId' AND cs.status !='4' AND s.status != '4' AND cs.schoolUniqueCode = '$schoolUniqueCode'")->result_array();
+
+        $html = '';
+        $select = '';
+     
+        if (!empty($d)) {
+            foreach ($d as $dd) {
+                if (!empty($alreadySectionId)) {
+                    if ($dd['id'] == $alreadySectionId) {
+                        $select = 'selected';
+                    } else {
+                        $select = '';
+                    }
+                }
+                $html .= "<option " . $select . " value='" . $dd['id'] . "'>" . $dd['sectionName'] . "</option>";
             }
             return json_encode($html);
         }

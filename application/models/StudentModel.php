@@ -187,6 +187,7 @@ class StudentModel extends CI_Model
 
       $stuId = $post['stuId'];
 
+      
       $fileName = "";
       if(!empty($files['image']['tmp_name']))
       {
@@ -246,6 +247,7 @@ class StudentModel extends CI_Model
     public function allClass($schoolUniqueCode){
       return $this->CrudModel->allClass(Table::classTable,$schoolUniqueCode);
     }
+
     public function allSection($schoolUniqueCode){
       return $this->CrudModel->allSection(Table::sectionTable,$schoolUniqueCode);
     }

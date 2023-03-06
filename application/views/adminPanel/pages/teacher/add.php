@@ -80,7 +80,7 @@
                           </tr>
                           <tr>
                               <td> <label for="class">Select Class</label></td>
-                              <td><select class="form-control select2 select2-danger" name="class" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <td><select class="form-control select2 select2-danger" name="class" data-dropdown-css-class="select2-danger" style="width: 100%;" onchange="loadSections()" id='classIdD'>
                           <?php 
                           $selectedClass = '';
                           
@@ -98,16 +98,18 @@
                           </tr>
                           <tr>
                               <td><label for="section">Select Section</label></td>
-                              <td> <select class="form-control select2 select2-danger" name="section" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                              <td> <select class="form-control select2 select2-danger" name="section" data-dropdown-css-class="select2-danger" style="width: 100%;" id='sectionData'>
                           <?php 
-                          if(isset($data['section']) && !empty($data['section']))
-                          {
-                            $selectedSection = '';
-                            foreach($data['section'] as $section)
-                            {?>
-                                <option  value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option>
-                           <?php }
-                          }
+                          // if(isset($data['section']) && !empty($data['section']))
+                          // {
+                          //   $selectedSection = '';
+                          //   foreach($data['section'] as $section)
+                          //   {
+                              ?>
+                                <!-- <option  value="<?= $section['id'] ?>"><?= $section['sectionName'] ?></option> -->
+                           <?php
+                          //   }
+                          // }
                           ?>
                         </select></td>
                           </tr>
@@ -254,10 +256,10 @@
   <!-- ./wrapper -->
   <script>
        var ajaxUrl = '<?= base_url() . 'ajax/showCityViaStateId' ?>';
-
+       var ajaxUrl1 = '<?= base_url() . 'ajax/showSectionViaClassId' ?>';
 // load default city
   showCity();
-
+  loadSections();
   function showCity()
     {
 
@@ -281,6 +283,30 @@
           }
 
         });
+    }
+
+
+    
+   function loadSections () {
+      $('#sectionData option').remove();
+      let classId = $("#classIdD").val();
+      $.ajax({
+        url: ajaxUrl1,
+        method: 'post',
+        processData: 'false',
+        data: {
+          classId: classId,
+        },
+        success: function(response) {
+          console.log(response);
+          response = $.parseJSON(response);
+          $('#sectionData').append(response);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+
+      });
     }
 
   </script>
